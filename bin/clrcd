@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Author: Bruce Tesar
+# Command line program for running RCD on a file of ERCs.
+
+require 'optparse'
+
+# define variables for option values
+erc_filename = nil
+
+# define the allowed command line options
+opts = OptionParser.new
+opts.on("-e FILENAME", "ERCs filename") {|val| erc_filename = val}
+opts.on("-?", "-h", "--help", "list the command line options") {puts opts.to_s}
+
+# parse the actual command line, and report any unused arguments
+rest = opts.parse(ARGV)
+puts "Unused arguments: #{rest.join(", ")}" unless rest.empty?
+
+puts "ERCs filename is #{erc_filename}" unless erc_filename.nil?
