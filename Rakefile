@@ -93,8 +93,8 @@ end
 # Cucumber Tasks
 # **************
 
-Cucumber::Rake::Task.new do |t|
-  t.cucumber_opts = '--format pretty'
+Cucumber::Rake::Task.new(:cucumber_text, 'Run Cucumber with text output') do |t|
+  t.cucumber_opts = '-f progress'
 end
 
 Cucumber::Rake::Task.new(:cucumber_html, 'Generate cucumber HTML') do |t|
