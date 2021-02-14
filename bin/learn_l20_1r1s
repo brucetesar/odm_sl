@@ -31,7 +31,7 @@ File.open(data_file, 'rb') do |fin|
 end
 
 # If the correct language wasn't found, write an error message and exit.
-unless (label == target_label) then
+unless label == target_label
   puts "Language #{target_label} not found in file #{data_file}."
   puts 'No learning performed; the program will now exit.'
   exit
