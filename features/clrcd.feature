@@ -20,5 +20,18 @@ Feature: clcrd
     When I run `clrcd -e support1.csv`
     Then it should pass with:
       """
-      {0:Con1} >> {1:Con2}
+      Consistent
+      [0:Con1] [1:Con2]
+      """
+
+  Scenario: Empty support
+    Given a file named "empty_support.csv" with:
+      """
+      ,Con1,Con2
+      """
+    When I run `clrcd -e empty_support.csv`
+    Then it should pass with:
+      """
+      Consistent
+      [0:Con1 1:Con2]
       """

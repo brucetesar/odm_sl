@@ -10,6 +10,7 @@ require_relative '../lib/odl/resolver'
 require 'optparse'
 require 'csv_input'
 require 'otgeneric/erc_reader'
+require 'rcd_runner'
 
 # define variables for option values
 erc_filename = nil
@@ -17,7 +18,7 @@ list_options = false
 
 # define the allowed command line options
 opts = OptionParser.new
-opts.on("-e FILENAME", "ERCs filename") {|val| erc_filename = val}
+opts.on("-e FILENAME", "ERCs filename") {|val| erc_filename = val.strip}
 opts.on("-?", "-h", "--help", "list the command line options")\
   {list_options = true}
 
@@ -32,16 +33,22 @@ if list_options
   exit
 end
 
-# If an input filename has not been provided, inform the user of
-# its necessity, and exit.
-if erc_filename.nil?
-  puts "An input filename must be specified with -e"
-  puts opts.to_s
-  exit
-end
+#TODO check for file existence
 
+# Read the ERCs from the specified CSV file.
 infile_content = CsvInput.new(erc_filename)
 ereader = OTGeneric::ErcReader.new
 erc_list = ereader.arrays_to_erc_list(infile_content.headers,
                                       infile_content.data)
-# TODO: feed the erc_list to RCD, print out the hierarchy
+
+# Run RCD (default bias all constraints as high as possible).
+rcd_runner = RcdRunner.new
+rcd_result = rcd_runner.run_rcd(erc_list)
+
+# Print (to STDOUT) the consistency and the hierarchy itself.
+if rcd_result.consistent?
+  puts "Consistent"
+else
+  puts "Inconsistent"
+end
+puts rcd_result.hierarchy.to_s # explicit to_s necessary, for some reason.
