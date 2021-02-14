@@ -4,18 +4,44 @@
 # Author: Bruce Tesar
 # Command line program for running RCD on a file of ERCs.
 
+# The resolver adds <project>/lib to the $LOAD_PATH.
+require_relative '../lib/odl/resolver'
+
 require 'optparse'
+require 'csv_input'
+require 'otgeneric/erc_reader'
 
 # define variables for option values
 erc_filename = nil
+list_options = false
 
 # define the allowed command line options
 opts = OptionParser.new
 opts.on("-e FILENAME", "ERCs filename") {|val| erc_filename = val}
-opts.on("-?", "-h", "--help", "list the command line options") {puts opts.to_s}
+opts.on("-?", "-h", "--help", "list the command line options")\
+  {list_options = true}
 
 # parse the actual command line, and report any unused arguments
 rest = opts.parse(ARGV)
 puts "Unused arguments: #{rest.join(", ")}" unless rest.empty?
 
-puts "ERCs filename is #{erc_filename}" unless erc_filename.nil?
+# If the "list options" option is specified, print out the options
+# to STDOUT and exit (ignore any other options).
+if list_options
+  puts opts.to_s
+  exit
+end
+
+# If an input filename has not been provided, inform the user of
+# its necessity, and exit.
+if erc_filename.nil?
+  puts "An input filename must be specified with -e"
+  puts opts.to_s
+  exit
+end
+
+infile_content = CsvInput.new(erc_filename)
+ereader = OTGeneric::ErcReader.new
+erc_list = ereader.arrays_to_erc_list(infile_content.headers,
+                                      infile_content.data)
+# TODO: feed the erc_list to RCD, print out the hierarchy
