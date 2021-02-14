@@ -1,27 +1,29 @@
 # Author: Bruce Tesar
 
-require 'otgeneric/erc_conversion'
+require 'rspec'
+require 'otgeneric/erc_reader'
 
-RSpec.describe(OTGeneric::Erc_conversion,"OTGeneric::Erc_conversion.arrays_to_erc_list") do
+RSpec.describe 'OTGeneric::ErcReader' do
   context "given a header array and an array with 2 ERCs" do
     before(:example) do
       headers = ['','Con1','Con2','Con3']
       data = [['E1','W','L','W'],['E2','e','W','L']]
-      @erc_conversion = OTGeneric::Erc_conversion.arrays_to_erc_list(headers, data)
+      erc_reader = OTGeneric::ErcReader.new
+      @erc_list = erc_reader.arrays_to_erc_list(headers, data)
     end
     it "returns an erc list with 3 constraints" do
-      expect(@erc_conversion.constraint_list.size).to eq(3)
+      expect(@erc_list.constraint_list.size).to eq(3)
     end
     it "returns a constraint list of ['Con1', 'Con2', 'Con3']" do
-      con_names = @erc_conversion.constraint_list.map{|c| c.name}
+      con_names = @erc_list.constraint_list.map{|c| c.name}
       expect(con_names).to contain_exactly('Con1','Con2','Con3')
     end
     it "returns an erc list with 2 ERCs" do
-      expect(@erc_conversion.size).to eq(2)
+      expect(@erc_list.size).to eq(2)
     end
     context "the first returned ERC" do
       before(:example) do
-        @erc1 = @erc_conversion.to_a[0]
+        @erc1 = @erc_list.to_a[0]
       end
       it "is of class Erc" do
         expect(@erc1).to be_an_instance_of(Erc)
@@ -40,7 +42,7 @@ RSpec.describe(OTGeneric::Erc_conversion,"OTGeneric::Erc_conversion.arrays_to_er
     end
     context "the second returned ERC" do
       before(:example) do
-        @erc2 = @erc_conversion.to_a[1]
+        @erc2 = @erc_list.to_a[1]
       end
       it "has label E2" do
         expect(@erc2.label).to eq('E2')
