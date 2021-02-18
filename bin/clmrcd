@@ -9,17 +9,20 @@ require_relative '../lib/odl/resolver'
 
 require 'optparse'
 require 'csv_input'
-# require 'otgeneric/erc_reader'
+require 'otgeneric/comp_list_reader'
 # require 'rcd_runner'
 
 # define variables for option values
 comp_filename = nil
+winners_filename = nil
 list_options = false
 
 # define the allowed command line options
 opts = OptionParser.new
 opts.on("-c", "--comp_file FILENAME", "Competitions filename")\
   {|val| comp_filename = val.strip}
+opts.on("-w", "--winner_file FILENAME", "Winners filename")\
+  {|val| winners_filename = val.strip}
 opts.on("-?", "-h", "--help", "list the command line options")\
   {list_options = true}
 
@@ -43,8 +46,28 @@ if comp_filename.nil?
   exit
 end
 
+# If list options were not required, but a filename for the winners
+# was not provided with -w, inform the user that they must provide
+# a filename, and exit.
+if winners_filename.nil?
+  puts "A filename for the winners must be given using option -w."
+  puts "To see all options, run: clmrcd -?"
+  exit
+end
+
 # Read the competitions from the specified CSV file.
-infile_content = CsvInput.new(comp_filename)
-# ereader = OTGeneric::ErcReader.new
-# erc_list = ereader.arrays_to_erc_list(infile_content.headers,
-#                                       infile_content.data)
+comp_content = CsvInput.new(comp_filename)
+clreader = OTGeneric::CompListReader.new
+# comp_list = clreader.arrays_to_comp_list(comp_content.headers,
+#                                          comp_content.data)
+
+# Read the winners form the specified CSV file.
+winner_content = CsvInput.new(winners_filename)
+# wreader = OTGeneric::WinnerListReader.new
+# winner_list = wreader.arrays_to_winner_list(winner_content.headers,
+#                                             winner_content.data)
+
+# Run MRCD
+
+# Print (to STDOUT) the consistency and the hierarchy itself.
+puts "clmrcd is under construction."

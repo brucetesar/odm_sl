@@ -19,3 +19,21 @@ Feature: clmrcd
       To see all options, run: clmrcd -?
       """
 
+  Scenario: A single competition with two candidates
+    Given a file named "competitions.csv" with:
+      """
+      input,output,Con1,Con2
+      in1,out1,1,0
+      in1,out2,0,1
+      """
+    Given a file named "winner.csv" with:
+      """
+      input,output
+      in1,out1
+      """
+    When I run `clmrcd -c competitions.csv -w winner.csv`
+    Then it should pass with:
+      """
+      Consistent
+      [0:Con1] [1:Con2]
+      """
