@@ -1,4 +1,4 @@
-Feature: clcrd
+Feature: clrcd
 
   As a user
   I want to run RCD from the command line
