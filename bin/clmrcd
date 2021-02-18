@@ -1,0 +1,50 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Author: Bruce Tesar
+# Command line program for running MRCD on a file of competitions.
+
+# The resolver adds <project>/lib to the $LOAD_PATH.
+require_relative '../lib/odl/resolver'
+
+require 'optparse'
+require 'csv_input'
+# require 'otgeneric/erc_reader'
+# require 'rcd_runner'
+
+# define variables for option values
+comp_filename = nil
+list_options = false
+
+# define the allowed command line options
+opts = OptionParser.new
+opts.on("-c", "--comp_file FILENAME", "Competitions filename")\
+  {|val| comp_filename = val.strip}
+opts.on("-?", "-h", "--help", "list the command line options")\
+  {list_options = true}
+
+# parse the actual command line, and report any unused arguments
+rest = opts.parse(ARGV)
+puts "Unused arguments: #{rest.join(", ")}" unless rest.empty?
+
+# If the "list options" option is specified, print out the options
+# to STDOUT and exit (ignore any other options).
+if list_options
+  puts opts.to_s
+  exit
+end
+
+# If list options were not required, but a filename for the competitions
+# was not provided with -c, inform the user that they must provide
+# a filename, and exit.
+if comp_filename.nil?
+  puts "A filename for the competitions must be given using option -c."
+  puts "To see all options, run: clmrcd -?"
+  exit
+end
+
+# Read the competitions from the specified CSV file.
+infile_content = CsvInput.new(comp_filename)
+# ereader = OTGeneric::ErcReader.new
+# erc_list = ereader.arrays_to_erc_list(infile_content.headers,
+#                                       infile_content.data)
