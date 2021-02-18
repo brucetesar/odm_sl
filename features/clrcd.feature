@@ -11,6 +11,14 @@ Feature: clcrd
       Usage: clrcd [options]
       """
 
+  Scenario: No input filename given
+    When I run `clrcd`
+    Then it should pass with:
+      """
+      A filename for the ERCs must be given using option -e.
+      To see all options, run: clrcd -?
+      """
+
   Scenario: Two constraints one ERC
     Given a file named "support1.csv" with:
       """

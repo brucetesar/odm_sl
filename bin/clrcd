@@ -33,7 +33,14 @@ if list_options
   exit
 end
 
-#TODO check for file existence
+# If list options were not required, but a filename for the ERCS
+# was not provided with -e, inform the user that they must provide
+# a filename, and exit.
+if erc_filename.nil?
+  puts "A filename for the ERCs must be given using option -e."
+  puts "To see all options, run: clrcd -?"
+  exit
+end
 
 # Read the ERCs from the specified CSV file.
 infile_content = CsvInput.new(erc_filename)
