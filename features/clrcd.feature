@@ -35,3 +35,16 @@ Feature: clcrd
       Consistent
       [0:Con1 1:Con2]
       """
+
+  Scenario: Inconsistent ERCs
+    Given a file named "inconsistent_support.csv" with:
+      """
+      ,Con1,Con2
+      erc1,W,L
+      erc2,L,W
+      """
+    When I run `clrcd -e inconsistent_support.csv`
+    Then it should pass with:
+      """
+      Inconsistent
+      """
