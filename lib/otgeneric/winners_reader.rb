@@ -43,6 +43,7 @@ module OTGeneric
       end
       match_comp
     end
+    protected :find_competition_for_input
 
     # Find the candidate corresponding to the _output_.
     # Return the candidate.
@@ -57,5 +58,6 @@ module OTGeneric
       end
       winner
     end
+    protected :find_candidate_for_output
   end
 end
