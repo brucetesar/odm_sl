@@ -2,7 +2,7 @@
 # Author: Bruce Tesar
 
 require 'constraint'
-# require 'otgeneric/candidate_reader'
+require 'otgeneric/candidate_reader'
 
 module OTGeneric
 
@@ -17,8 +17,7 @@ module OTGeneric
     #++
     def initialize(cand_reader: nil)
       @cand_reader = cand_reader
-      # TODO: create, invoke actual CandidateReader class
-      # @cand_reader ||= OTGeneric::CandidateReader.new
+      @cand_reader ||= OTGeneric::CandidateReader.new
     end
 
     # Takes an array of column headers +headers+, and an array of arrays
@@ -26,8 +25,10 @@ module OTGeneric
     def arrays_to_comp_list(headers, data)
       @cand_reader.constraints = convert_headers_to_constraints(headers)
       all_candidates = convert_data_to_candidates(data)
-      # TODO: sort candidates by input, create separate competitions
-      [all_candidates]
+      # sort candidates by input, create separate competitions
+      all_cand_sorted = all_candidates.sort_by {|cand| cand.input.to_s }
+      comps_enum = all_cand_sorted.chunk {|cand| cand.input }
+      comps_enum.map {|chunk| chunk[1] }
     end
 
     # Converts the header row of array representation of candidates.
