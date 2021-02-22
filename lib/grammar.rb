@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
-#
 
 require_relative 'erc_list'
 require_relative 'lexicon'
@@ -29,7 +30,7 @@ class Grammar
   # The system parameter is mandatory.
   # Raises an exception if no system parameter is provided.
   def initialize(system: nil, erc_list: nil, lexicon: Lexicon.new)
-    if system.nil? then
+    if system.nil?
       raise "Grammar.new must be given a system parameter."
     end
     @system = system
@@ -43,7 +44,7 @@ class Grammar
   # Returns a reference to self (the grammar).
   def add_erc(erc)
     erc_list.add(erc)
-    return self
+    self
   end
 
   # Returns true if the ERC list is currently consistent; false otherwise.
@@ -56,13 +57,14 @@ class Grammar
   # and the duplicate lexical entries contain duplicates of the underlying
   # forms but references to the very same morpheme objects.
   def dup
-    return self.class.new(erc_list: erc_list.dup, lexicon: lexicon.dup, system: system)
+    self.class.new(erc_list: erc_list.dup, lexicon: lexicon.dup,
+                   system: system)
   end
 
   # Returns a copy of the grammar, with a copy of the ERC list, and
   # a reference to the very same lexicon object.
   def dup_same_lexicon
-    return self.class.new(erc_list: erc_list.dup, lexicon: lexicon, system: system)
+    self.class.new(erc_list: erc_list.dup, lexicon: lexicon, system: system)
   end
 
   # Returns the underlying form for the given morpheme, as stored in
@@ -78,5 +80,4 @@ class Grammar
   def parse_output(out)
     system.parse_output(out, lexicon)
   end
-
-end # class Grammar
+end

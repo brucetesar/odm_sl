@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
 
 require 'grammar'
@@ -5,7 +7,7 @@ require 'grammar'
 RSpec.describe Grammar do
   context "Grammar.new, when no system specified," do
     it "raises an exception" do
-      expect{Grammar.new()}.to raise_exception("Grammar.new must be given a system parameter.")
+      expect{Grammar.new}.to raise_exception("Grammar.new must be given a system parameter.")
     end
   end
   
