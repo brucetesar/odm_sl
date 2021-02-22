@@ -117,7 +117,7 @@ class Rcd
     # NOTE: resist the temptation to identify the newly explained ERCs,
     # and then remove them from unexplained ERC list. That kind of
     # removal involves comparing for equality, and a list of ERCs can
-    # end up containing ERC objects and Win_lose_pair objects, making
+    # end up containing ERC objects and WinLosePair objects, making
     # equality tests complicated. Partitioning on the basis of
     # #explained? avoids #eql? comparisons.
     #

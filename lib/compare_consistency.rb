@@ -22,7 +22,7 @@ class CompareConsistency
   # used for testing.
   #++
   def initialize(erc_list_class: ErcList,
-                 win_lose_pair_class: Win_lose_pair)
+                 win_lose_pair_class: WinLosePair)
     @erc_list_class = erc_list_class
     @win_lose_pair_class = win_lose_pair_class
   end

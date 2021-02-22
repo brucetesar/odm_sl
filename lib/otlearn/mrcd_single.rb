@@ -30,7 +30,7 @@ module OTLearn
     # :call-seq:
     #   MrcdSingle.new(winner, grammar, selector) -> mrcdsingle
     #   MrcdSingle.new(winner, grammar, selector, wl_pair_class: my_pair_class) -> mrcdsingle
-    def initialize(winner, grammar, selector, wl_pair_class: Win_lose_pair)
+    def initialize(winner, grammar, selector, wl_pair_class: WinLosePair)
       @winner = winner
       @grammar = grammar.dup_same_lexicon
       @added_pairs = []

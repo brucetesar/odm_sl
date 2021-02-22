@@ -12,7 +12,7 @@ RSpec.describe "OTLearn::wlp_winners()" do
   context "given a single WL pair" do
     before do
       @win1 = instance_double(Candidate)
-      pair1 = instance_double(Win_lose_pair)
+      pair1 = instance_double(WinLosePair)
       allow(pair1).to receive(:winner).and_return(@win1)
       @wlp_list = instance_double(ErcList)
       allow(@wlp_list).to receive(:each).and_yield(pair1)
@@ -27,9 +27,9 @@ RSpec.describe "OTLearn::wlp_winners()" do
     before(:example) do
       @win1 = instance_double(Candidate)
       @win2 = instance_double(Candidate)
-      pair1 = instance_double(Win_lose_pair)
-      pair2 = instance_double(Win_lose_pair)
-      pair3 = instance_double(Win_lose_pair)
+      pair1 = instance_double(WinLosePair)
+      pair2 = instance_double(WinLosePair)
+      pair3 = instance_double(WinLosePair)
       allow(pair1).to receive(:winner).and_return(@win1)
       allow(pair2).to receive(:winner).and_return(@win2)
       allow(pair3).to receive(:winner).and_return(@win1)

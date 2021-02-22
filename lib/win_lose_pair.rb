@@ -1,5 +1,4 @@
 # Author: Bruce Tesar
-#
  
 require_relative 'erc'
 require_relative 'candidate'
@@ -12,11 +11,12 @@ require 'forwardable'
 # ==== Instance Methods delegated to class Erc
 # 
 # w?, l?, e?, constraint_list, hash,
-# triv_invalid?, triv_valid?, prefs_to_s  
-
-class Win_lose_pair
+# triv_invalid?, triv_valid?, prefs_to_s
+class WinLosePair
   extend Forwardable
 
+  # Specify the methods to be automatically delegated to the Erc
+  # object referenced in @erc.
   def_delegators :@erc, :w?, :l?, :e?, :constraint_list, :hash
   def_delegators :@erc, :triv_invalid?, :triv_valid?
   def_delegators :@erc, :prefs_to_s
@@ -37,7 +37,7 @@ class Win_lose_pair
   #
   # RuntimeError - if +winner+ and +loser+ do not have the same input.
   def initialize(winner, loser, label="")
-    if (winner.input != loser.input) then
+    if winner.input != loser.input
       raise("The winner and loser do not have the same input.")
     end
     @winner = winner
@@ -67,15 +67,15 @@ private # the following methods are private, and can only be called from
   
   # For each constraint, determine if it prefers the winner, the loser,
   # or neither, and set the erc appropriately.
-  # Called by the constructor +Win_lose_pair.new+.
+  # Called by the constructor +WinLosePair.new+.
   def set_constraint_preferences
     constraint_list.each do |con|
-      if @winner.get_viols(con) < @loser.get_viols(con) then
+      if @winner.get_viols(con) < @loser.get_viols(con)
         set_w(con)
-      elsif @winner.get_viols(con) > @loser.get_viols(con) then
+      elsif @winner.get_viols(con) > @loser.get_viols(con)
         set_l(con)
       end  # Constraints are e by default in ercs.
     end
   end
   
-end # class Win_lose_pair
+end # class WinLosePair

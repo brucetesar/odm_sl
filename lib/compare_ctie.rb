@@ -39,7 +39,7 @@ class CompareCtie
   # :call-seq:
   #   CompareCtie.new(ranker) -> comparer
   def initialize(ranker, stratum_comparer: CompareStratumCtie.new,
-                 win_lose_pair_class: Win_lose_pair)
+                 win_lose_pair_class: WinLosePair)
     @ranker = ranker
     @stratum_comparer = stratum_comparer
     @win_lose_pair_class = win_lose_pair_class

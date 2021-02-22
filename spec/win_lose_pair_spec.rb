@@ -2,7 +2,7 @@
 
 require 'win_lose_pair'
 
-RSpec.describe Win_lose_pair do
+RSpec.describe WinLosePair do
   before(:each) do
     @constraint_list = ["C1","C2"]
     @winner = double("Winner")
@@ -16,7 +16,7 @@ RSpec.describe Win_lose_pair do
     allow(@loser).to receive(:label).and_return("lose-label")
     allow(@loser).to receive(:get_viols).with("C1").and_return(1)
     allow(@loser).to receive(:get_viols).with("C2").and_return(2)
-    @win_lose_pair = Win_lose_pair.new(@winner, @loser)
+    @win_lose_pair = WinLosePair.new(@winner, @loser)
   end
 
   it "returns the winner" do
@@ -63,7 +63,7 @@ RSpec.describe Win_lose_pair do
       allow(@loser).to receive(:get_viols).with("C2").and_return(2)
     end
     it "raises a RuntimeError" do
-      expect{Win_lose_pair.new(@winner, @loser)}.to \
+      expect{WinLosePair.new(@winner, @loser)}.to \
         raise_error(RuntimeError, "The winner and loser do not have the same input.")
     end
   end

@@ -53,7 +53,7 @@ class ErcList
   #--
   # The +wlpair_class+ is a dependency injection for testing.
   def self.new_from_competition(winner, competition,
-                                wlpair_class: Win_lose_pair)
+                                wlpair_class: WinLosePair)
     wl_list = new
     # Exclude the winner from the list of loser candidates
     losers = competition.reject { |candidate| candidate == winner }
