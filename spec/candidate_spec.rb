@@ -27,6 +27,17 @@ RSpec.describe Candidate do
     it 'returns the constraint list' do
       expect(@candidate.constraint_list).to eq @constraint_list
     end
+    it 'returns the default morphword' do
+      expect(@candidate.morphword).to eq ""
+    end
+    context "when the morphword is set to a string" do
+      before(:example) do
+        @candidate.morphword = 'test_morphword'
+      end
+      it 'returns the set value for morphword' do
+        expect(@candidate.morphword).to eq 'test_morphword'
+      end
+    end
   end
 
   context 'with two constraints' do

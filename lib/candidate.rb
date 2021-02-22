@@ -11,6 +11,9 @@ class Candidate
   # The output form
   attr_accessor :output
 
+  # The morphword (default value is an empty string)
+  attr_accessor :morphword
+
   # The candidate is initialized with violation counts assigned for any of
   # the constraints. At the least, violation counts must be
   # subsequently assigned to each constraint via set_viols().
@@ -29,6 +32,7 @@ class Candidate
     @output = output
     @constraints = constraints.to_a # make sure the list is an array.
     @violations = {}
+    @morphword = "" # default value of the morphword
   end
 
   # Returns a copy of the candidate, containing duplicates of the
@@ -94,7 +98,6 @@ class Candidate
     return false unless input == other.input
     return false unless output == other.output
     return false unless ident_viols?(other)
-
     true
   end
 
@@ -105,7 +108,6 @@ class Candidate
     return false unless input.eql? other.input
     return false unless output.eql? other.output
     return false unless ident_viols?(other)
-
     true
   end
 
