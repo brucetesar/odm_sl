@@ -10,6 +10,7 @@ require_relative '../lib/odl/resolver'
 require 'optparse'
 require 'csv_input'
 require 'otgeneric/comp_list_reader'
+require 'otgeneric/winners_reader'
 # require 'rcd_runner'
 
 # define variables for option values
@@ -58,14 +59,14 @@ end
 # Read the competitions from the specified CSV file.
 comp_content = CsvInput.new(comp_filename)
 clreader = OTGeneric::CompListReader.new
-# comp_list = clreader.arrays_to_comp_list(comp_content.headers,
-#                                          comp_content.data)
+comp_list = clreader.arrays_to_comp_list(comp_content.headers,
+                                         comp_content.data)
 
 # Read the winners form the specified CSV file.
 winner_content = CsvInput.new(winners_filename)
-# wreader = OTGeneric::WinnerListReader.new
-# winner_list = wreader.arrays_to_winner_list(winner_content.headers,
-#                                             winner_content.data)
+wreader = OTGeneric::WinnersReader.new
+wreader.competitions = comp_list
+winner_list = wreader.convert_array_to_winners(winner_content.data)
 
 # Run MRCD
 

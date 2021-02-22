@@ -26,12 +26,12 @@ Feature: clmrcd
       in1,out1,1,0
       in1,out2,0,1
       """
-    Given a file named "winner.csv" with:
+    Given a file named "winners.csv" with:
       """
       input,output
       in1,out1
       """
-    When I run `clmrcd -c competitions.csv -w winner.csv`
+    When I run `clmrcd -c competitions.csv -w winners.csv`
     Then it should pass with:
       """
       Consistent
