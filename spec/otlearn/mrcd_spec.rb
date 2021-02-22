@@ -6,20 +6,19 @@ require 'rspec'
 require 'otlearn/mrcd'
 
 RSpec.describe 'MRCD' do
-  let(:grammar) { double('grammar') }
-  let(:dup_grammar) { double('dup_grammar') }
+  let(:param_erc_list) { double('param_erc_list') }
+  let(:erc_list) { double('erc_list') }
   let(:selector) { double('selector') }
   let(:single_mrcd_class) { double('single MRCD class') }
   before(:each) do
-    allow(grammar).to receive(:dup_same_lexicon).and_return(dup_grammar)
+    allow(param_erc_list).to receive(:dup).and_return(erc_list)
   end
 
   context 'with an empty word list' do
     before(:each) do
       @word_list = []
-      allow(dup_grammar).to receive(:consistent?).and_return(true)
-      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
-      @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
+      allow(erc_list).to receive(:consistent?).and_return(true)
+      @mrcd = OTLearn::Mrcd.new(@word_list, param_erc_list, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
     it 'should not have any changes to the ranking information' do
@@ -37,9 +36,8 @@ RSpec.describe 'MRCD' do
       @word_list = [winner]
       allow(single_mrcd_class).to receive(:new).and_return(mrcd_single)
       allow(mrcd_single).to receive(:added_pairs).and_return([])
-      allow(dup_grammar).to receive(:consistent?).and_return(true)
-      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
-      @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
+      allow(erc_list).to receive(:consistent?).and_return(true)
+      @mrcd = OTLearn::Mrcd.new(@word_list, param_erc_list, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
     it 'should not have any changes to the ranking information' do
@@ -64,10 +62,9 @@ RSpec.describe 'MRCD' do
         receive(:new).and_return(mrcd_single1, mrcd_single2)
       allow(mrcd_single1).to receive(:added_pairs).and_return([new_pair])
       allow(mrcd_single2).to receive(:added_pairs).and_return([])
-      allow(dup_grammar).to receive(:consistent?).and_return(true)
-      allow(dup_grammar).to receive(:add_erc).with(new_pair)
-      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
-      @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
+      allow(erc_list).to receive(:consistent?).and_return(true)
+      allow(erc_list).to receive(:add).with(new_pair)
+      @mrcd = OTLearn::Mrcd.new(@word_list, param_erc_list, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
     it 'has changes to the ranking information' do
@@ -107,17 +104,16 @@ RSpec.describe 'MRCD' do
       allow(mrcd_single4).to receive(:added_pairs).and_return([])
       allow(mrcd_single5).to receive(:added_pairs).and_return([])
       allow(mrcd_single6).to receive(:added_pairs).and_return([])
-      allow(dup_grammar).to receive(:consistent?).and_return(true)
-      allow(dup_grammar).to receive(:add_erc).with(new_pair1)
-      allow(dup_grammar).to receive(:add_erc).with(new_pair2)
-      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
-      @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
+      allow(erc_list).to receive(:consistent?).and_return(true)
+      allow(erc_list).to receive(:add).with(new_pair1)
+      allow(erc_list).to receive(:add).with(new_pair2)
+      @mrcd = OTLearn::Mrcd.new(@word_list, param_erc_list, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
     it 'has changes to the ranking information' do
       expect(@mrcd.any_change?).to be true
     end
-    it 'has a consistent grammar' do
+    it 'is consistent' do
       expect(@mrcd.consistent?).to be true
     end
     it 'returns 2 new pairs' do
@@ -144,17 +140,16 @@ RSpec.describe 'MRCD' do
                                                            mrcd_single2)
       allow(mrcd_single1).to receive(:added_pairs).and_return([new_pair1])
       allow(mrcd_single2).to receive(:added_pairs).and_return([])
-      allow(dup_grammar).to\
+      allow(erc_list).to\
         receive(:consistent?).and_return(true, false, false)
-      allow(dup_grammar).to receive(:add_erc).with(new_pair1)
-      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
-      @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
+      allow(erc_list).to receive(:add).with(new_pair1)
+      @mrcd = OTLearn::Mrcd.new(@word_list, param_erc_list, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
     it 'has changes to the ranking information' do
       expect(@mrcd.any_change?).to be true
     end
-    it 'has an inconsistent grammar' do
+    it 'is inconsistent' do
       expect(@mrcd.consistent?).to be false
     end
     it 'returns 1 new pair' do

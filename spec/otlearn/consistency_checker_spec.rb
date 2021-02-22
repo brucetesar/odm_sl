@@ -9,11 +9,13 @@ RSpec.describe 'OTLearn::ConsistencyChecker' do
   let(:output) { double('output') }
   let(:word) { double('word') }
   let(:grammar) { double('grammar') }
+  let(:erc_list) { double('ERC list') }
   let(:mrcd_class) { double('MRCD class') }
   let(:mrcd_result) { double('MRCD result') }
   let(:loser_selector) { double('loser selector') }
   before(:example) do
     allow(grammar).to receive(:parse_output).and_return(word)
+    allow(grammar).to receive(:erc_list).and_return(erc_list)
     allow(word).to receive(:mismatch_input_to_output!).and_return(word)
     allow(mrcd_class).to receive(:new).and_return(mrcd_result)
     @checker = OTLearn::ConsistencyChecker.new(mrcd_class: mrcd_class)
@@ -26,9 +28,9 @@ RSpec.describe 'OTLearn::ConsistencyChecker' do
       allow(mrcd_result).to receive(:consistent?).and_return(true)
       @result = @checker.consistent?(word_list, grammar)
     end
-    it 'calls Mrcd on the word list and grammar' do
+    it 'calls Mrcd on the word list and ERC list' do
       expect(mrcd_class).to\
-        have_received(:new).with(word_list, grammar, loser_selector)
+        have_received(:new).with(word_list, erc_list, loser_selector)
     end
     it 'indicates consistency' do
       expect(@result).to be true
@@ -40,9 +42,9 @@ RSpec.describe 'OTLearn::ConsistencyChecker' do
       allow(mrcd_result).to receive(:consistent?).and_return(false)
       @result = @checker.consistent?(word_list, grammar)
     end
-    it 'calls Mrcd on the word list and grammar' do
+    it 'calls Mrcd on the word list and ERC list' do
       expect(mrcd_class).to\
-        have_received(:new).with(word_list, grammar, loser_selector)
+        have_received(:new).with(word_list, erc_list, loser_selector)
     end
     it 'indicates inconsistency' do
       expect(@result).to be false
@@ -61,9 +63,9 @@ RSpec.describe 'OTLearn::ConsistencyChecker' do
     it 'creates a mismatched input word for each output' do
       expect(word).to have_received(:mismatch_input_to_output!)
     end
-    it 'calls Mrcd on the word list and grammar' do
+    it 'calls Mrcd on the word list and ERC list' do
       expect(mrcd_class).to\
-        have_received(:new).with([word], grammar, loser_selector)
+        have_received(:new).with([word], erc_list, loser_selector)
     end
     it 'indicates consistency' do
       expect(@result).to be true
@@ -81,9 +83,9 @@ RSpec.describe 'OTLearn::ConsistencyChecker' do
     it 'creates a mismatched input word for each output' do
       expect(word).to have_received(:mismatch_input_to_output!)
     end
-    it 'calls Mrcd on the word list and grammar' do
+    it 'calls Mrcd on the word list and ERC list' do
       expect(mrcd_class).to\
-        have_received(:new).with([word], grammar, loser_selector)
+        have_received(:new).with([word], erc_list, loser_selector)
     end
     it 'indicates inconsistency' do
       expect(@result).to be false

@@ -54,7 +54,8 @@ module OTLearn
     def consistent?(word_list, grammar)
       default_loser_selector(grammar.system) if @loser_selector.nil?
       # Use Mrcd to determine collective consistency.
-      mrcd_result = @mrcd_class.new(word_list, grammar, @loser_selector)
+      mrcd_result = @mrcd_class.new(word_list, grammar.erc_list,
+                                    @loser_selector)
       mrcd_result.consistent?
     end
 

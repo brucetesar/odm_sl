@@ -28,7 +28,8 @@ module OTLearn
     #   run(word_list, grammar) -> mrcd
     def run(word_list, grammar)
       default_loser_selector(grammar.system) if @loser_selector.nil?
-      mrcd_result = @mrcd_class.new(word_list, grammar, @loser_selector)
+      mrcd_result = @mrcd_class.new(word_list, grammar.erc_list,
+                                    @loser_selector)
       mrcd_result.added_pairs.each { |pair| grammar.add_erc(pair) }
       mrcd_result
     end

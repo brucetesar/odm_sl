@@ -6,18 +6,18 @@ require 'win_lose_pair'
 require 'otlearn/mrcd_single'
 
 module OTLearn
-  # An Mrcd object contains the results of applying MultiRecursive Constraint
-  # Demotion to a given list of words with respect to a given grammar.
-  # The word list and grammar are provided as arguments to the
+  # An Mrcd object contains the results of applying MultiRecursive
+  # Constraint Demotion to a given list of words with respect to a given
+  # ERC list. The word list and ERC list are provided as arguments to the
   # constructor, Mrcd#new. The MRCD algorithm is immediately executed
   # as part of construction of the Mrcd object.
   #
-  # Both the word list and the grammar passed to the constructor
+  # Both the word list and the ERC list passed to the constructor
   # are duplicated internally prior to use, so that the original objects
   # passed in are not affected by the operations of Mrcd.
   # A method will return a list of the winner-loser pairs constructed and
   # added. If the caller wants to accept the results of MRCD, it should
-  # append the list of added winner-loser pairs to its own grammar's support.
+  # append the list of added winner-loser pairs to its own support.
   #
   # Once an Mrcd object has been constructed, it should be treated only
   # as a source of results; no further computation can be initiated on
@@ -25,58 +25,56 @@ module OTLearn
   # to the original word list, and can obtain via Mrcd#added_pairs the
   # winner-loser pairs that were additionally constructed by MRCD.
   class Mrcd
-    # The winner-loser pairs added to the grammar by this execution of Mrcd.
+    # The winner-loser pairs added by this execution of Mrcd.
     attr_reader :added_pairs
 
     # Returns a new Mrcd object containing the results of executing
     # MultiRecursive Constraint Demotion (MRCD) on +word_list+ starting
-    # from +grammar+. Both +word_list+ and +grammar+ are duplicated
+    # from +erc_list+. Both +word_list+ and +erc_list+ are duplicated
     # internally before use.
     # ==== Parameters
-    # * word_list - list of words to be used as winners (positive data)
-    # * grammar - the grammar to use in learning (not modified internally)
+    # * word_list - list of words to be used as winners
+    # * erc_list - the prior ranking information to use in learning
     # * selector - loser selection object.
     # :call-seq:
-    #   Mrcd.new(word_list, grammar, selector) -> mrcd
+    #   Mrcd.new(word_list, erc_list, selector) -> mrcd
     #--
     # * single_mrcd_class - dependency injection parameter for testing.
-    def initialize(word_list, grammar, selector,
+    def initialize(word_list, erc_list, selector,
                    single_mrcd_class: OTLearn::MrcdSingle)
-      # Make a duplicate copy of each word, so that components of Win-Lose
-      # pairs cannot be altered externally.
-      @word_list = word_list.map { |word| word.dup }
-      # Duplicate the grammar, so that no changes due to MRCD are
-      # propagated to the original parameter, and so that the internal
-      # grammar cannot be altered externally.
-      @grammar = grammar.dup_same_lexicon
+      # Make working copies of the word and ERC lists.
+      @word_list = word_list.dup
+      @erc_list = erc_list.dup
       @selector = selector # loser selector
       @single_mrcd_class = single_mrcd_class
       @added_pairs = []
+      # Run MRCD, and record any change (new WL pairs added)
       @any_change = run_mrcd
     end
 
-    # Returns true if the internal grammar is consistent, false otherwise.
+    # Returns true if the internal ERC list is consistent, false otherwise.
     def consistent?
-      @grammar.consistent?
+      @erc_list.consistent?
     end
 
-    # Returns true if any change at all was made to the grammar
-    # by MRCD. Returns false otherwise.
+    # Returns true if any ERCs were added to the ERC list by MRCD.
+    # Returns false otherwise.
     def any_change?
       @any_change
     end
 
     # Runs MRCD on the given word list, making repeated passes through
-    # the word list until pass is completed without change to the grammar.
-    # Returns true if any change at all is made to the grammar
-    # (any new winner-loser pairs are added), and false otherwise.
+    # the word list until pass is completed without generating any
+    # further winner-loser pairs (ERCs).
+    # Returns true if any new winner-loser pairs were added;
+    # false otherwise.
     def run_mrcd
-      any_change = false # initialize grammar change flag
+      any_change = false # initialize the change flag
       loop do
         change_on_pass = word_list_pass
         any_change = true if change_on_pass
-        # quit if the grammar has become inconsistent
-        break unless @grammar.consistent?
+        # quit if the ERC list has become inconsistent
+        break unless consistent?
         # repeat until a pass with no change
         break unless change_on_pass
       end
@@ -87,23 +85,23 @@ module OTLearn
     # Runs a single pass through the word list. Each word is treated as
     # a winner, and MRCD (via MrcdSingle) is run on that winner.
     # Any additionally constructed winner-loser pairs are added to both
-    # the grammar and the list of added winner-loser pairs.
-    # Returns a boolean indicating if the grammar was changed during
-    # the class, i.e., if a new winner-loser pair was created and added.
+    # the main ERC list and the list of only added pairs.
+    # Returns a boolean indicating if at least one new winner-loser pair
+    # was created and added.
     def word_list_pass
       change = false
       @word_list.each do |winner|
         # run MRCD on the winner
-        mrcd_single = @single_mrcd_class.new(winner, @grammar.erc_list,
+        mrcd_single = @single_mrcd_class.new(winner, @erc_list,
                                              @selector)
         # retrieve any added winner-loser pairs
         local_added_pairs = mrcd_single.added_pairs
         change = true unless local_added_pairs.empty?
         local_added_pairs.each do |p|
           @added_pairs << p
-          @grammar.add_erc(p)
+          @erc_list.add(p)
         end
-        break unless @grammar.consistent?
+        break unless consistent?
       end
       change
     end
