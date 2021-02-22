@@ -94,7 +94,8 @@ module OTLearn
       change = false
       @word_list.each do |winner|
         # run MRCD on the winner
-        mrcd_single = @single_mrcd_class.new(winner, @grammar, @selector)
+        mrcd_single = @single_mrcd_class.new(winner, @grammar.erc_list,
+                                             @selector)
         # retrieve any added winner-loser pairs
         local_added_pairs = mrcd_single.added_pairs
         change = true unless local_added_pairs.empty?

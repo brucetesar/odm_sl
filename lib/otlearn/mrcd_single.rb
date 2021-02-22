@@ -8,12 +8,13 @@ module OTLearn
   
   # An MrcdSingle object contains the results of applying
   # MultiRecursive Constraint Demotion to a single winner, with respect
-  # to a given grammar and a given loser selection routine.
-  # It does not modify the grammar passed into the constructor.
-  # Methods of the object will indicate if MRCD resulted in an (in)consistent
-  # grammar, and return a list of the winner-loser pairs constructed and
-  # added. If the caller wants to accept the results of MRCD, it should
-  # append the list of added winner-loser pairs to its own grammar's support.
+  # to a given ERC list and a given loser selection routine.
+  # It does not modify the ERC list passed into the constructor.
+  # Methods of the object will indicate if MRCD resulted in an
+  # (in)consistent ERC list, and return a list of the winner-loser pairs
+  # constructed and added. If the caller wants to accept the results of
+  # MRCD, it should append the list of added winner-loser pairs to its
+  # own grammar's support.
   class MrcdSingle
     
     # Returns a new MrcdSingle object.
@@ -21,25 +22,26 @@ module OTLearn
     # ==== Parameters
     # 
     # * +winner+ - the candidate the learner is attempting to make optimal.
-    # * +grammar+ - the grammar being tested. This grammar is first
-    #   duplicated internally, and so is not modified; the internal duplicate
-    #   may have additional winner-loser pairs added to it.
+    # * +erc_list+ - the ERC list being tested. This list is first
+    #   duplicated internally, and so is not modified; the internal
+    #   duplicate may have additional winner-loser pairs added to it.
     # * +selector+ - the loser selector (given a winner and an ERC list).
-    # * +wl_pair_class+ - dependency injection parameter for testing.
     #
     # :call-seq:
-    #   MrcdSingle.new(winner, grammar, selector) -> mrcdsingle
-    #   MrcdSingle.new(winner, grammar, selector, wl_pair_class: my_pair_class) -> mrcdsingle
-    def initialize(winner, grammar, selector, wl_pair_class: WinLosePair)
+    #   MrcdSingle.new(winner, erc_list, selector) -> mrcdsingle
+    #--
+    # * +wl_pair_class+ - dependency injection parameter for testing.
+    #   MrcdSingle.new(winner, erc_list, selector, wl_pair_class: my_pair_class) -> mrcdsingle
+    def initialize(winner, erc_list, selector, wl_pair_class: WinLosePair)
       @winner = winner
-      @grammar = grammar.dup_same_lexicon
+      @erc_list = erc_list.dup
       @added_pairs = []
       @selector = selector
       @wl_pair_class = wl_pair_class
       run_mrcd_single
     end
     
-    # Returns the additional winner-loser pairs added to the grammar
+    # Returns the additional winner-loser pairs added to the ERC list
     # in order to make the winner optimal.
     def added_pairs
       @added_pairs
@@ -50,25 +52,25 @@ module OTLearn
       @winner
     end
     
-    # Returns true if the internal grammar is consistent, false otherwise.
+    # Returns true if the internal ERC list is consistent, false otherwise.
     def consistent?
-      @grammar.consistent?
+      @erc_list.consistent?
     end
     
-    # Runs MRCD on the winner, using the given grammar and loser selector.
+    # Runs MRCD on the winner, using the given ERC list and loser selector.
     # Called automatically by the constructor.
     def run_mrcd_single
-      loser = @selector.select_loser(@winner, @grammar.erc_list)
+      loser = @selector.select_loser(@winner, @erc_list)
       until loser.nil? do
         # Create a new WL pair.
         new_pair = @wl_pair_class.new(@winner, loser)
         new_pair.label = @winner.morphword.to_s
-        # Add the new pair to the list and the grammar.
+        # Add the new pair to the added pairs list and the ERC list.
         @added_pairs << new_pair
-        @grammar.add_erc(new_pair)
-        # break out of the loop if the grammar is inconsistent
-        break unless @grammar.consistent?
-        loser = @selector.select_loser(@winner, @grammar.erc_list)
+        @erc_list.add(new_pair)
+        # break out of the loop if the ERC list is inconsistent
+        break unless @erc_list.consistent?
+        loser = @selector.select_loser(@winner, @erc_list)
       end
       true
     end

@@ -18,6 +18,7 @@ RSpec.describe 'MRCD' do
     before(:each) do
       @word_list = []
       allow(dup_grammar).to receive(:consistent?).and_return(true)
+      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
       @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
@@ -37,6 +38,7 @@ RSpec.describe 'MRCD' do
       allow(single_mrcd_class).to receive(:new).and_return(mrcd_single)
       allow(mrcd_single).to receive(:added_pairs).and_return([])
       allow(dup_grammar).to receive(:consistent?).and_return(true)
+      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
       @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
@@ -64,6 +66,7 @@ RSpec.describe 'MRCD' do
       allow(mrcd_single2).to receive(:added_pairs).and_return([])
       allow(dup_grammar).to receive(:consistent?).and_return(true)
       allow(dup_grammar).to receive(:add_erc).with(new_pair)
+      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
       @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
@@ -107,6 +110,7 @@ RSpec.describe 'MRCD' do
       allow(dup_grammar).to receive(:consistent?).and_return(true)
       allow(dup_grammar).to receive(:add_erc).with(new_pair1)
       allow(dup_grammar).to receive(:add_erc).with(new_pair2)
+      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
       @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
@@ -143,6 +147,7 @@ RSpec.describe 'MRCD' do
       allow(dup_grammar).to\
         receive(:consistent?).and_return(true, false, false)
       allow(dup_grammar).to receive(:add_erc).with(new_pair1)
+      allow(dup_grammar).to receive(:erc_list).and_return('erc_list')
       @mrcd = OTLearn::Mrcd.new(@word_list, grammar, selector,
                                 single_mrcd_class: single_mrcd_class)
     end
