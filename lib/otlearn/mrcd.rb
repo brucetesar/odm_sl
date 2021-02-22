@@ -48,37 +48,34 @@ module OTLearn
       @selector = selector # loser selector
       @single_mrcd_class = single_mrcd_class
       @added_pairs = []
-      # Run MRCD, and record any change (new WL pairs added)
-      @any_change = run_mrcd
+      run_mrcd
     end
 
-    # Returns true if the internal ERC list is consistent, false otherwise.
+    # Returns true if the internal ERC list is consistent,
+    # false otherwise.
     def consistent?
       @erc_list.consistent?
     end
 
-    # Returns true if any ERCs were added to the ERC list by MRCD.
+    # Returns true if any ERCs were added by MRCD.
     # Returns false otherwise.
     def any_change?
-      @any_change
+      !@added_pairs.empty?
     end
 
     # Runs MRCD on the given word list, making repeated passes through
     # the word list until pass is completed without generating any
     # further winner-loser pairs (ERCs).
-    # Returns true if any new winner-loser pairs were added;
-    # false otherwise.
+    # Returns true.
     def run_mrcd
-      any_change = false # initialize the change flag
       loop do
         change_on_pass = word_list_pass
-        any_change = true if change_on_pass
         # quit if the ERC list has become inconsistent
         break unless consistent?
         # repeat until a pass with no change
         break unless change_on_pass
       end
-      any_change
+      true # arbitrary, to have a predictable return value
     end
     private :run_mrcd
 
