@@ -22,11 +22,12 @@ module OTGeneric
     # Converts the header row of array representation of ERCs, ignores
     # the first cell (the column of ERC labels), and for each subsequent
     # value creates a Constraint object. Returns an array of constraints.
+    # The ID for each constraint is set to nil, effectively removing it.
     def convert_headers_to_constraints(headers)
       constraints = []
       con_headers = headers[1..-1] # all but first cell
-      con_headers.each_with_index do |head, i|
-        con = Constraint.new(head, i, Constraint::MARK)
+      con_headers.each do |head|
+        con = Constraint.new(head, nil, Constraint::MARK)
         constraints << con
       end
       constraints

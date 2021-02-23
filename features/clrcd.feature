@@ -29,7 +29,7 @@ Feature: clrcd
     Then it should pass with:
       """
       Consistent
-      [0:Con1] [1:Con2]
+      [Con1] [Con2]
       """
 
   Scenario: Empty support
@@ -41,7 +41,7 @@ Feature: clrcd
     Then it should pass with:
       """
       Consistent
-      [0:Con1 1:Con2]
+      [Con1 Con2]
       """
 
   Scenario: Inconsistent ERCs
