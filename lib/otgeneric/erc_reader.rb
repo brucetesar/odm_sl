@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
 
 require 'constraint'
@@ -7,11 +9,9 @@ require 'erc_list'
 # table-like files, where all constraint names and candidate contents are
 # listed out as strings.
 module OTGeneric
-  
   # Contains methods for converting an ERC list from an "array of strings"
   # representation to an ErcList/Erc object representation.
   class ErcReader
-    
     # Takes an array of column headers +headers+, and an array of arrays
     # +data+, and returns an equivalent ErcList of ERCs.
     def arrays_to_erc_list(headers, data)
@@ -21,14 +21,24 @@ module OTGeneric
 
     # Converts the header row of array representation of ERCs, ignores
     # the first cell (the column of ERC labels), and for each subsequent
-    # value creates a Constraint object. Returns an array of constraints.
-    # The ID for each constraint is set to nil, effectively removing it.
+    # value creates a Constraint object.
+    # If a constraint's name begins with "F:", then it is set as a
+    # Faithfulness constraint; otherwise, it is set as a Markedness
+    # constraint.
+    # The ID for each constraint is set to nil, so it doesn't appear when
+    # #to_s is called..
+    # Returns an array of constraints.
     def convert_headers_to_constraints(headers)
       constraints = []
       con_headers = headers[1..-1] # all but first cell
       con_headers.each do |head|
-        con = Constraint.new(head, nil, Constraint::MARK)
-        constraints << con
+        # A Faith constraint starts with "F:"
+        con_type = if /^F:/ =~ head
+                     Constraint::FAITH
+                   else
+                     Constraint::MARK
+                   end
+        constraints << Constraint.new(head, nil, con_type)
       end
       constraints
     end
