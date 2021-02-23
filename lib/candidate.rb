@@ -20,10 +20,10 @@ class Candidate
   #
   # ==== Parameters
   #
-  # * +input+ - the input structure
-  # * +output+ - the output structure
-  # * +constraints+ - a list of the constraint objects for the system; must
-  #   be convertible to Array via +constraints.to_a+.
+  # * input - the input structure
+  # * output - the output structure
+  # * constraints - a list of the constraint objects for the system; must
+  #   be convertible to an Array via #to_a.
   #
   # :call-seq:
   #   Candidate.new(input, output, constraints) -> candidate
@@ -32,7 +32,7 @@ class Candidate
     @output = output
     @constraints = constraints.to_a # make sure the list is an array.
     @violations = {}
-    @morphword = "" # default value of the morphword
+    @morphword = '' # default value of the morphword
   end
 
   # Returns a copy of the candidate, containing duplicates of the
@@ -98,6 +98,7 @@ class Candidate
     return false unless input == other.input
     return false unless output == other.output
     return false unless ident_viols?(other)
+
     true
   end
 
@@ -108,6 +109,7 @@ class Candidate
     return false unless input.eql? other.input
     return false unless output.eql? other.output
     return false unless ident_viols?(other)
+
     true
   end
 

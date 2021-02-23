@@ -8,7 +8,6 @@ module OTGeneric
   # The candidate objects are retrieved from the externally supplied
   # attribute _competitions_.
   class WinnersReader
-
     # The list of competitions, each containing a list of candidates.
     attr_accessor :competitions
 
@@ -36,7 +35,7 @@ module OTGeneric
     # If _competitions_ does not contain a competition for _input_,
     # raise an exception.
     def find_competition_for_input(input, competitions)
-      match_comp = competitions.find {|comp| comp[0].input == input}
+      match_comp = competitions.find { |comp| comp[0].input == input }
       if match_comp.nil?
         msg = "Winner has input #{input}, but there is no such competition."
         raise msg
@@ -50,10 +49,10 @@ module OTGeneric
     # If _competition_ does not contain a candidate for _output_,
     # raise an exception.
     def find_candidate_for_output(output, competition)
-      winner = competition.find {|cand| cand.output == output}
+      winner = competition.find { |cand| cand.output == output }
       if winner.nil?
         msg1 = "Winner has input #{competition[0].input} output #{output},"
-        msg2 = "but there is no such candidate."
+        msg2 = 'but there is no such candidate.'
         raise "#{msg1} #{msg2}"
       end
       winner

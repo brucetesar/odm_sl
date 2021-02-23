@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
- 
+
 require_relative 'erc'
 require_relative 'candidate'
 require 'forwardable'
@@ -7,9 +9,9 @@ require 'forwardable'
 # A winner-loser pair has a winner, a loser, and the resulting erc.
 # Once created, the winner, loser, and constraint preferences cannot
 # be modified.
-# 
+#
 # ==== Instance Methods delegated to class Erc
-# 
+#
 # w?, l?, e?, constraint_list, hash,
 # triv_invalid?, triv_valid?, prefs_to_s
 class WinLosePair
@@ -32,13 +34,13 @@ class WinLosePair
 
   # Stores +winner+ and +loser+, and computes the preference between the two
   # for each constraint.
-  # 
+  #
   # ==== Exceptions
   #
   # RuntimeError - if +winner+ and +loser+ do not have the same input.
-  def initialize(winner, loser, label="")
+  def initialize(winner, loser, label = '')
     if winner.input != loser.input
-      raise("The winner and loser do not have the same input.")
+      raise('The winner and loser do not have the same input.')
     end
     @winner = winner
     @loser = loser
@@ -54,17 +56,18 @@ class WinLosePair
     "#{label} #{@winner.input} #{@winner.output} #{@loser.output} #{prefs_to_s}"
   end
 
-private # the following methods are private, and can only be called from 
-        # within the object itself; in this case, called by initialize().
+  # the following methods are private, and can only be called from
+  # within the object itself; in this case, called by initialize().
+  private
 
   def set_w(con)
     @erc.set_w(con)
   end
-  
+
   def set_l(con)
     @erc.set_l(con)
   end
-  
+
   # For each constraint, determine if it prefers the winner, the loser,
   # or neither, and set the erc appropriately.
   # Called by the constructor +WinLosePair.new+.
@@ -74,8 +77,8 @@ private # the following methods are private, and can only be called from
         set_w(con)
       elsif @winner.get_viols(con) > @loser.get_viols(con)
         set_l(con)
-      end  # Constraints are e by default in ercs.
+      end
+      # Constraints are e by default in ercs.
     end
   end
-  
-end # class WinLosePair
+end

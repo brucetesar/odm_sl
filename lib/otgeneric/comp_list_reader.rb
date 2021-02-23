@@ -1,11 +1,11 @@
 # frozen_string_literal: true
+
 # Author: Bruce Tesar
 
 require 'constraint'
 require 'otgeneric/candidate_reader'
 
 module OTGeneric
-
   # Contains methods for converting a competition list from an
   # array of strings representation to an array of competitions.
   class CompListReader
@@ -26,9 +26,9 @@ module OTGeneric
       @cand_reader.constraints = convert_headers_to_constraints(headers)
       all_candidates = convert_data_to_candidates(data)
       # sort candidates by input, create separate competitions
-      all_cand_sorted = all_candidates.sort_by {|cand| cand.input.to_s }
-      comps_enum = all_cand_sorted.chunk {|cand| cand.input }
-      comps_enum.map {|chunk| chunk[1] }
+      all_cand_sorted = all_candidates.sort_by { |cand| cand.input.to_s }
+      comps_enum = all_cand_sorted.chunk(&:input)
+      comps_enum.map { |chunk| chunk[1] }
     end
 
     # Converts the header row of array representation of candidates.

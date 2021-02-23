@@ -115,7 +115,7 @@ class Constraint
   # by a colon, followed by the constraint's name.
   def to_s
     if @id.nil?
-      "#{@name}"
+      @name.to_s
     else
       "#{@id}:#{@name}"
     end

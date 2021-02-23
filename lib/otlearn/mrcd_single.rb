@@ -2,10 +2,9 @@
 
 # Author: Bruce Tesar
 
-require_relative "../win_lose_pair"
+require 'win_lose_pair'
 
 module OTLearn
-  
   # An MrcdSingle object contains the results of applying
   # MultiRecursive Constraint Demotion to a single winner, with respect
   # to a given ERC list and a given loser selection routine.
@@ -16,21 +15,27 @@ module OTLearn
   # MRCD, it should append the list of added winner-loser pairs to its
   # own grammar's support.
   class MrcdSingle
-    
+    # Returns the additional winner-loser pairs added to the ERC list
+    # in order to make the winner optimal.
+    attr_reader :added_pairs
+
+    # Returns the winner that MrcdSingle attempted to make optimal.
+    attr_reader :winner
+
     # Returns a new MrcdSingle object.
     #
     # ==== Parameters
-    # 
-    # * +winner+ - the candidate the learner is attempting to make optimal.
-    # * +erc_list+ - the ERC list being tested. This list is first
+    #
+    # * winner - the candidate the learner is attempting to make optimal.
+    # * erc_list - the ERC list being tested. This list is first
     #   duplicated internally, and so is not modified; the internal
     #   duplicate may have additional winner-loser pairs added to it.
-    # * +selector+ - the loser selector (given a winner and an ERC list).
+    # * selector - the loser selector (given a winner and an ERC list).
     #
     # :call-seq:
     #   MrcdSingle.new(winner, erc_list, selector) -> mrcdsingle
     #--
-    # * +wl_pair_class+ - dependency injection parameter for testing.
+    # * wl_pair_class - dependency injection parameter for testing.
     #   MrcdSingle.new(winner, erc_list, selector, wl_pair_class: my_pair_class) -> mrcdsingle
     def initialize(winner, erc_list, selector, wl_pair_class: WinLosePair)
       @winner = winner
@@ -40,28 +45,17 @@ module OTLearn
       @wl_pair_class = wl_pair_class
       run_mrcd_single
     end
-    
-    # Returns the additional winner-loser pairs added to the ERC list
-    # in order to make the winner optimal.
-    def added_pairs
-      @added_pairs
-    end
-    
-    # Returns the winner that MrcdSingle attempted to make optimal.
-    def winner
-      @winner
-    end
-    
+
     # Returns true if the internal ERC list is consistent, false otherwise.
     def consistent?
       @erc_list.consistent?
     end
-    
+
     # Runs MRCD on the winner, using the given ERC list and loser selector.
     # Called automatically by the constructor.
     def run_mrcd_single
       loser = @selector.select_loser(@winner, @erc_list)
-      until loser.nil? do
+      until loser.nil?
         # Create a new WL pair.
         new_pair = @wl_pair_class.new(@winner, loser)
         new_pair.label = @winner.morphword.to_s
@@ -70,11 +64,11 @@ module OTLearn
         @erc_list.add(new_pair)
         # break out of the loop if the ERC list is inconsistent
         break unless @erc_list.consistent?
+
         loser = @selector.select_loser(@winner, @erc_list)
       end
       true
     end
     protected :run_mrcd_single
-    
-  end # class MrcdSingle
+  end
 end

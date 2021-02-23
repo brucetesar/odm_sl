@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
 #
 # Tests learning on language L20 of the SL system.
@@ -19,12 +21,12 @@ target_label = 'LgL20'
 
 # Set the source of learning data (input file name)
 data_path = File.expand_path('sl', ODL::DATA_DIR)
-data_file = File.join(data_path,'outputs_typology_1r1s.mar')
+data_file = File.join(data_path, 'outputs_typology_1r1s.mar')
 # Read L20 (label and outputs) from the SL languages data file.
 label = nil
 outputs = nil
 File.open(data_file, 'rb') do |fin|
-  until fin.eof do
+  until fin.eof
     label, outputs = Marshal.load(fin)
     break if label == target_label
   end
@@ -51,10 +53,9 @@ result = lang_sim.learn(outputs, grammar)
 sim_image = OTLearn::LanguageLearningImageMaker.new.get_image(result)
 
 # Write the results to a CSV file, with the language label as the filename.
-out_file = File.join(out_filepath,"#{label}.csv")
+out_file = File.join(out_filepath, "#{label}.csv")
 csv = CsvOutput.new(sim_image)
 csv.write_to_file(out_file)
 # Report to STDOUT if language was not successfully learned
-unless result.learning_successful?
-  puts "#{label} not learned."
-end
+
+puts "#{label} not learned." unless result.learning_successful?

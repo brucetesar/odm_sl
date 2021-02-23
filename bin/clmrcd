@@ -11,7 +11,6 @@ require 'optparse'
 require 'csv_input'
 require 'otgeneric/comp_list_reader'
 require 'otgeneric/winners_reader'
-# require 'rcd_runner'
 
 # define variables for option values
 comp_filename = nil
@@ -20,16 +19,16 @@ list_options = false
 
 # define the allowed command line options
 opts = OptionParser.new
-opts.on("-c", "--comp_file FILENAME", "Competitions filename")\
-  {|val| comp_filename = val.strip}
-opts.on("-w", "--winner_file FILENAME", "Winners filename")\
-  {|val| winners_filename = val.strip}
-opts.on("-?", "-h", "--help", "list the command line options")\
-  {list_options = true}
+opts.on('-c', '--comp_file FILENAME', 'Competitions filename')\
+  { |val| comp_filename = val.strip }
+opts.on('-w', '--winner_file FILENAME', 'Winners filename')\
+  { |val| winners_filename = val.strip }
+opts.on('-?', '-h', '--help', 'list the command line options')\
+  { list_options = true }
 
 # parse the actual command line, and report any unused arguments
 rest = opts.parse(ARGV)
-puts "Unused arguments: #{rest.join(", ")}" unless rest.empty?
+puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 
 # If the "list options" option is specified, print out the options
 # to STDOUT and exit (ignore any other options).
@@ -42,8 +41,8 @@ end
 # was not provided with -c, inform the user that they must provide
 # a filename, and exit.
 if comp_filename.nil?
-  puts "A filename for the competitions must be given using option -c."
-  puts "To see all options, run: clmrcd -?"
+  puts 'A filename for the competitions must be given using option -c.'
+  puts 'To see all options, run: clmrcd -?'
   exit
 end
 
@@ -51,8 +50,8 @@ end
 # was not provided with -w, inform the user that they must provide
 # a filename, and exit.
 if winners_filename.nil?
-  puts "A filename for the winners must be given using option -w."
-  puts "To see all options, run: clmrcd -?"
+  puts 'A filename for the winners must be given using option -w.'
+  puts 'To see all options, run: clmrcd -?'
   exit
 end
 
@@ -71,4 +70,4 @@ winner_list = wreader.convert_array_to_winners(winner_content.data)
 # Run MRCD
 
 # Print (to STDOUT) the consistency and the hierarchy itself.
-puts "clmrcd is under construction."
+puts 'clmrcd is under construction.'

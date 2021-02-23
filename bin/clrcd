@@ -18,13 +18,13 @@ list_options = false
 
 # define the allowed command line options
 opts = OptionParser.new
-opts.on("-e FILENAME", "ERCs filename") {|val| erc_filename = val.strip}
-opts.on("-?", "-h", "--help", "list the command line options")\
-  {list_options = true}
+opts.on('-e FILENAME', 'ERCs filename') { |val| erc_filename = val.strip }
+opts.on('-?', '-h', '--help', 'list the command line options')\
+  { list_options = true }
 
 # parse the actual command line, and report any unused arguments
 rest = opts.parse(ARGV)
-puts "Unused arguments: #{rest.join(", ")}" unless rest.empty?
+puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 
 # If the "list options" option is specified, print out the options
 # to STDOUT and exit (ignore any other options).
@@ -37,8 +37,8 @@ end
 # was not provided with -e, inform the user that they must provide
 # a filename, and exit.
 if erc_filename.nil?
-  puts "A filename for the ERCs must be given using option -e."
-  puts "To see all options, run: clrcd -?"
+  puts 'A filename for the ERCs must be given using option -e.'
+  puts 'To see all options, run: clrcd -?'
   exit
 end
 
@@ -54,8 +54,8 @@ rcd_result = rcd_runner.run_rcd(erc_list)
 
 # Print (to STDOUT) the consistency and the hierarchy itself.
 if rcd_result.consistent?
-  puts "Consistent"
+  puts 'Consistent'
 else
-  puts "Inconsistent"
+  puts 'Inconsistent'
 end
 puts rcd_result.hierarchy.to_s # explicit to_s necessary, for some reason.
