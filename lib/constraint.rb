@@ -6,14 +6,15 @@
 # evaluation procedure for assigning violations to candidates.
 # Only the name is compared when constraints are compared for equality.
 # The id is an abbreviated label used for constructing labels for
-# complex objects.
+# complex objects. If nil is provided as the ID parameter, then no ID
+# is used.
 #
 # Constraints are used as keys for hashes (e.g., in ercs), so they should
 # not be altered once constructed. It is a good idea to freeze the
 # constraint objects once they have been created.
 # Ideally, any OT system or analysis should have just a single object for
-# each constraint, with all constraint-referring objects containing references
-# to those same constraints.
+# each constraint, with all constraint-referring objects containing
+# references to those same constraints.
 class Constraint
   # the markedness constraint type constant
   MARK  = :markedness
@@ -48,7 +49,7 @@ class Constraint
     # The name should never change, so calculate the hash value of the
     # name once and store it.
     @hash_value = @name.hash
-    @id = id.to_s
+    @id = id.to_s unless id.nil?
     check_constraint_type(type)
     # store the evaluation function (passed as a code block)
     @eval_function = eval
@@ -113,6 +114,10 @@ class Constraint
   # Returns a string consisting of the constraint's id, followed
   # by a colon, followed by the constraint's name.
   def to_s
-    "#{@id}:#{@name}"
+    if @id.nil?
+      "#{@name}"
+    else
+      "#{@id}:#{@name}"
+    end
   end
 end

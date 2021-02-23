@@ -62,6 +62,23 @@ RSpec.describe Constraint do
     end
   end
 
+  context 'A new constraint with nil for ID' do
+    before(:example) do
+      @constraint = Constraint.new('FullName', nil, Constraint::FAITH) do
+        return 0
+      end
+    end
+    it 'returns its name' do
+      expect(@constraint.name).to eq 'FullName'
+    end
+    it 'returns nil for the ID' do
+      expect(@constraint.id).to be_nil
+    end
+    it 'returns a to_s string without any ID' do
+      expect(@constraint.to_s).to eq 'FullName'
+    end
+  end
+
   context '' do
     before(:example) do
       @buddy1 = Constraint.new('buddy', 'b', Constraint::MARK)
