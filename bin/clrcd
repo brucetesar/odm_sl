@@ -11,14 +11,30 @@ require 'optparse'
 require 'csv_input'
 require 'otgeneric/erc_reader'
 require 'rcd_runner'
+require 'ranking_bias_all_high'
+require 'otlearn/ranking_bias_some_low'
+require 'otlearn/faith_low'
+require 'otlearn/mark_low'
 
 # define variables for option values
 erc_filename = nil
 list_options = false
+ranking_bias = RankingBiasAllHigh.new # default if no option specified
 
 # define the allowed command line options
 opts = OptionParser.new
 opts.on('-e FILENAME', 'ERCs filename') { |val| erc_filename = val.strip }
+opts.on('-b BIAS', '--bias BIAS', 'ranking bias', '  fl = faith low',
+        '  ml = mark low', '  ah = all high (DEFAULT)')\
+  do |val|
+    ranking_bias = if val == 'fl'
+                     OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
+                   elsif val == 'ml'
+                     OTLearn::RankingBiasSomeLow.new(OTLearn::MarkLow.new)
+                   else
+                     RankingBiasAllHigh.new
+                   end
+  end
 opts.on('-?', '-h', '--help', 'list the command line options')\
   { list_options = true }
 
@@ -48,8 +64,8 @@ ereader = OTGeneric::ErcReader.new
 erc_list = ereader.arrays_to_erc_list(infile_content.headers,
                                       infile_content.data)
 
-# Run RCD (default bias all constraints as high as possible).
-rcd_runner = RcdRunner.new
+# Run RCD with specified ranking bias
+rcd_runner = RcdRunner.new(ranking_bias)
 rcd_result = rcd_runner.run_rcd(erc_list)
 
 # Print (to STDOUT) the consistency and the hierarchy itself.
@@ -58,4 +74,4 @@ if rcd_result.consistent?
 else
   puts 'Inconsistent'
 end
-puts rcd_result.hierarchy.to_s # explicit to_s necessary, for some reason.
+puts rcd_result.hierarchy.to_s

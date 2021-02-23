@@ -56,3 +56,42 @@ Feature: clrcd
       """
       Inconsistent
       """
+
+  Scenario: A faith-low ranking bias
+    Given a file named "support2.csv" with:
+      """
+      ,Con1,Con2,F:Con3
+      erc1,W,L,W
+      """
+    When I run `clrcd --bias fl -e support2.csv`
+    Then it should pass with:
+      """
+      Consistent
+      [Con1] [Con2] [F:Con3]
+      """
+
+  Scenario: An all-high ranking bias with faithfulness constraints
+    Given a file named "support3.csv" with:
+      """
+      ,Con1,Con2,F:Con3
+      erc1,W,L,W
+      """
+    When I run `clrcd -b ah -e support3.csv`
+    Then it should pass with:
+      """
+      Consistent
+      [Con1 F:Con3] [Con2]
+      """
+
+  Scenario: A mark-low ranking bias
+    Given a file named "support4.csv" with:
+      """
+      ,Con1,Con2,F:Con3
+      erc1,W,L,W
+      """
+    When I run `clrcd -b ml -e support4.csv`
+    Then it should pass with:
+      """
+      Consistent
+      [F:Con3] [Con1 Con2]
+      """
