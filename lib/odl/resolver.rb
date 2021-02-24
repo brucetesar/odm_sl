@@ -2,15 +2,15 @@
 
 # Author: Bruce Tesar
 #
-# This file resolves file references for the project by adding the root
-# directory for /lib to the load path.
-# To work properly, this file should itself reside in the top /lib directory.
-# It can be accessed relatively from /bin scripts.
+# This file resolves file references for the project by adding the
+# project's lib/ directory to the load path.
+# To work properly, this file should itself reside in directory
+# lib/odl/.
+# It can be accessed relatively from bin/ scripts.
 
 # A module for constants with project-wide scope.
-# TODO: make ODL the top-level namespace for all of the source files in /lib.
+# TODO: make ODL the top-level namespace for all of the source files in lib/.
 module ODL
-
   # Constant for the lib directory (containing all the core source files).
   #--
   # __dir__ returns the path of the directory containing the current source
