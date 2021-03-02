@@ -11,10 +11,25 @@ require 'optparse'
 require 'csv_input'
 require 'otgeneric/comp_list_reader'
 require 'otgeneric/winners_reader'
+require 'otgeneric/system'
+require 'ranking_bias_all_high'
+require 'otlearn/ranking_bias_some_low'
+require 'otlearn/faith_low'
+require 'otlearn/mark_low'
+require 'otlearn/mrcd'
+require 'rcd_runner'
+require 'ranker'
+require 'compare_pool'
+require 'compare_ctie'
+require 'compare_consistency'
+require 'loser_selector'
+require 'loser_selector_from_gen'
 
 # define variables for option values
 comp_filename = nil
 winners_filename = nil
+bias_value = nil
+compare_option_value = nil
 list_options = false
 
 # define the allowed command line options
@@ -23,6 +38,12 @@ opts.on('-c', '--comp_file FILENAME', 'Competitions filename')\
   { |val| comp_filename = val.strip }
 opts.on('-w', '--winner_file FILENAME', 'Winners filename')\
   { |val| winners_filename = val.strip }
+opts.on('-b', '--bias BIAS', 'ranking bias', '  fl = faith low',
+        '  ml = mark low', '  ah = all high (DEFAULT)')\
+  { |val| bias_value = val }
+opts.on('-l', '--loser_selection TYPE', 'Type of loser selection',
+        '  pool', '  ctie', '  consistent')\
+  { |val| compare_option_value = val }
 opts.on('-?', '-h', '--help', 'list the command line options')\
   { list_options = true }
 
@@ -42,7 +63,7 @@ end
 # a filename, and exit.
 if comp_filename.nil?
   puts 'A filename for the competitions must be given using option -c.'
-  puts 'To see all options, run: clmrcd -?'
+  puts 'To see all options, run: clmrcd -h'
   exit
 end
 
@@ -51,8 +72,31 @@ end
 # a filename, and exit.
 if winners_filename.nil?
   puts 'A filename for the winners must be given using option -w.'
-  puts 'To see all options, run: clmrcd -?'
+  puts 'To see all options, run: clmrcd -h'
   exit
+end
+
+# Establish the ranking bias
+ranking_bias = if bias_value == 'fl'
+                 OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
+               elsif bias_value == 'ml'
+                 OTLearn::RankingBiasSomeLow.new(OTLearn::MarkLow.new)
+               else
+                 RankingBiasAllHigh.new
+               end
+ranker = Ranker.new(RcdRunner.new(ranking_bias))
+
+# Construct the comparer
+comparer = if compare_option_value == 'pool'
+             ComparePool.new(ranker)
+           elsif compare_option_value == 'ctie'
+             CompareCtie.new(ranker)
+           elsif compare_option_value == 'consistent'
+             CompareConsistency.new
+           end
+if comparer.nil?
+  msg = 'Must specify a valid loser selection type'
+  raise msg
 end
 
 # Read the competitions from the specified CSV file.
@@ -67,7 +111,19 @@ wreader = OTGeneric::WinnersReader.new
 wreader.competitions = comp_list
 winner_list = wreader.convert_array_to_winners(winner_content.data)
 
+# Construct Loser Selector
+system = OTGeneric::System.new(comp_list)
+basic_selector = LoserSelector.new(comparer)
+loser_selector = LoserSelectorFromGen.new(system, basic_selector)
+
 # Run MRCD
+mrcd_result = OTLearn::Mrcd.new(winner_list, ErcList.new, loser_selector)
 
 # Print (to STDOUT) the consistency and the hierarchy itself.
-puts 'clmrcd is under construction.'
+if mrcd_result.consistent?
+  puts 'Consistent'
+else
+  puts 'Inconsistent'
+end
+ercs = ErcList.new.add_all(mrcd_result.added_pairs)
+puts ranker.get_hierarchy(ercs).to_s
