@@ -13,15 +13,22 @@ require 'candidate'
 require 'erc'
 require 'erc_list'
 
+# Abbreviatory constants for constraint types
 MARK = Constraint::MARK
 FAITH = Constraint::FAITH
 
+# Uses parallel arrays of constraints and violation counts, and
+# assign _candidate_ the corresponding violation count for each
+# constraint.
 def assign_violations(candidate, constraint_list, violation_list)
   constraint_list.each_with_index do |con, idx|
     candidate.set_viols(con, violation_list[idx])
   end
 end
 
+# Returns a new Erc. Uses parallel arrays of constraints and
+# constraint evaluations (W, L, e), and assigns to the new ERC
+# the corresponding evaluation for each constraint.
 def construct_erc(constraint_list, evaluation_list)
   erc = Erc.new(constraint_list)
   constraint_list.each_with_index do |con, idx|
@@ -61,7 +68,8 @@ RSpec.describe 'loser selection', :integration do
       erc1 = construct_erc(@constraint_list, [:W, :L, :e, :e])
       erc2 = construct_erc(@constraint_list, [:e, :W, :L, :e])
       erc3 = construct_erc(@constraint_list, [:e, :e, :W, :L])
-      @erc_list = ErcList.new.add_all([erc1, erc2, erc3])
+      @erc_list = ErcList.new(constraint_list: @constraint_list)\
+                         .add_all([erc1, erc2, erc3])
       assign_violations(@winner, @constraint_list, [0, 2, 1, 0])
       assign_violations(@cand1, @constraint_list, [0, 1, 0, 2])
       assign_violations(@cand2, @constraint_list, [1, 1, 1, 1])
@@ -86,7 +94,8 @@ RSpec.describe 'loser selection', :integration do
       erc1 = construct_erc(@constraint_list, [:W, :L, :e, :e])
       erc2 = construct_erc(@constraint_list, [:e, :W, :L, :e])
       erc3 = construct_erc(@constraint_list, [:e, :e, :W, :L])
-      @erc_list = ErcList.new.add_all([erc1, erc2, erc3])
+      @erc_list = ErcList.new(constraint_list: @constraint_list)\
+                         .add_all([erc1, erc2, erc3])
       assign_violations(@winner, @constraint_list, [0, 2, 1, 0])
       assign_violations(@cand1, @constraint_list, [2, 1, 0, 0])
       assign_violations(@cand2, @constraint_list, [1, 1, 1, 1])
@@ -112,7 +121,8 @@ RSpec.describe 'loser selection', :integration do
       # c1 is only high-ranked by default
       erc1 = construct_erc(@constraint_list, [:e, :W, :L, :e])
       erc2 = construct_erc(@constraint_list, [:e, :e, :W, :L])
-      @erc_list = ErcList.new.add_all([erc1, erc2])
+      @erc_list = ErcList.new(constraint_list: @constraint_list)\
+                         .add_all([erc1, erc2])
       # winner has fewer violations of {c1,c2}, but more of {c2}
       assign_violations(@winner, @constraint_list, [0, 1, 1, 0])
       assign_violations(@cand1, @constraint_list, [2, 0, 1, 0])
@@ -138,7 +148,8 @@ RSpec.describe 'loser selection', :integration do
       # c1 is only high-ranked by default
       erc1 = construct_erc(@constraint_list, [:e, :W, :L, :e])
       erc2 = construct_erc(@constraint_list, [:e, :e, :W, :L])
-      @erc_list = ErcList.new.add_all([erc1, erc2])
+      @erc_list = ErcList.new(constraint_list: @constraint_list)\
+                         .add_all([erc1, erc2])
       # winner has fewer violations of {c1,c2}, but more of {c2}
       assign_violations(@winner, @constraint_list, [0, 1, 1, 0])
       assign_violations(@cand1, @constraint_list, [0, 1, 1, 0])
@@ -164,7 +175,8 @@ RSpec.describe 'loser selection', :integration do
       # Rcd will give {c1,c2,c3} >> {c4}
       # c1 is only high-ranked by default
       erc1 = construct_erc(@constraint_list, [:e, :e, :W, :L])
-      @erc_list = ErcList.new.add_all([erc1])
+      @erc_list = ErcList.new(constraint_list: @constraint_list)\
+                         .add_all([erc1])
       # winner has fewer violations of {c1,c2}, but more of {c2}
       assign_violations(@winner, @constraint_list, [0, 1, 1, 0])
       assign_violations(@cand1, @constraint_list, [0, 1, 1, 1])

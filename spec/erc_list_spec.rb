@@ -285,7 +285,9 @@ RSpec.describe ErcList do
       @rcd_runner = double('RCD runner')
       rcd_result = instance_double(Rcd)
       allow(rcd_result).to receive(:consistent?).and_return(true)
-      @erc_list = ErcList.new(rcd_runner: @rcd_runner).add(@erc_consistent)
+      @erc_list =
+        ErcList.new(constraint_list: con_list, rcd_runner: @rcd_runner)\
+               .add(@erc_consistent)
       allow(@rcd_runner).to receive(:run_rcd).with(@erc_list)\
                                              .and_return(rcd_result)
     end
