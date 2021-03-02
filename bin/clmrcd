@@ -24,6 +24,7 @@ require 'compare_ctie'
 require 'compare_consistency'
 require 'loser_selector'
 require 'loser_selector_from_gen'
+require 'rcd_image_maker'
 
 # define variables for option values
 comp_filename = nil
@@ -84,7 +85,8 @@ ranking_bias = if bias_value == 'fl'
                else
                  RankingBiasAllHigh.new
                end
-ranker = Ranker.new(RcdRunner.new(ranking_bias))
+rcd_runner = RcdRunner.new(ranking_bias)
+ranker = Ranker.new(rcd_runner)
 
 # Construct the comparer
 comparer = if compare_option_value == 'pool'
@@ -117,7 +119,8 @@ basic_selector = LoserSelector.new(comparer)
 loser_selector = LoserSelectorFromGen.new(system, basic_selector)
 
 # Run MRCD
-mrcd_result = OTLearn::Mrcd.new(winner_list, ErcList.new, loser_selector)
+erc_list = ErcList.new(constraint_list: system.constraints)
+mrcd_result = OTLearn::Mrcd.new(winner_list, erc_list, loser_selector)
 
 # Print (to STDOUT) the consistency and the hierarchy itself.
 if mrcd_result.consistent?
@@ -126,4 +129,7 @@ else
   puts 'Inconsistent'
 end
 ercs = ErcList.new.add_all(mrcd_result.added_pairs)
-puts ranker.get_hierarchy(ercs).to_s
+rcd_result = rcd_runner.run_rcd(ercs)
+puts rcd_result.hierarchy.to_s
+image_maker = RcdImageMaker.new
+puts image_maker.get_image(rcd_result).to_a.to_s

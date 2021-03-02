@@ -44,3 +44,15 @@ Feature: clmrcd
       Consistent
       [Con1] [Con2]
       """
+    When I run `clmrcd -l pool -c competitions.csv -w winners.csv -b fl`
+    Then it should pass with:
+      """
+      Consistent
+      [Con1] [Con2]
+      """
+    When I run `clmrcd -l ctie -c competitions.csv -w winners.csv -b fl`
+    Then it should pass with:
+      """
+      Consistent
+      [Con1] [Con2]
+      """
