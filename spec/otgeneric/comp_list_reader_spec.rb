@@ -5,7 +5,6 @@ require 'otgeneric/comp_list_reader'
 
 RSpec.describe 'OTGeneric::CompListReader' do
   let(:candidate_reader) { double('candidate_reader') }
-  let(:clist) { double('constraint list') }
   context 'Given a header array and an array with two competitors' do
     let(:row1) { double('data row 1') }
     let(:row2) { double('data row 2') }
@@ -20,9 +19,6 @@ RSpec.describe 'OTGeneric::CompListReader' do
         .with(row1).and_return(cand11)
       allow(candidate_reader).to receive(:convert_array_to_candidate)\
         .with(row2).and_return(cand12)
-      allow(cand11).to receive(:constraint_list).and_return(clist)
-      allow(cand12).to receive(:constraint_list).and_return(clist)
-      allow(clist).to receive(:size).and_return(3)
       allow(cand11).to receive(:input).and_return('in1')
       allow(cand12).to receive(:input).and_return('in1')
       # construct the comp_list reader
@@ -42,14 +38,6 @@ RSpec.describe 'OTGeneric::CompListReader' do
       end
       it 'has two candidates' do
         expect(@comp.size).to eq 2
-      end
-      context 'the first candidate' do
-        before(:example) do
-          @cand = @comp[0]
-        end
-        it 'has three constraints' do
-          expect(@cand.constraint_list.size).to eq 3
-        end
       end
     end
   end
@@ -80,12 +68,6 @@ RSpec.describe 'OTGeneric::CompListReader' do
         .with(row4).and_return(cand21)
       allow(candidate_reader).to receive(:convert_array_to_candidate)\
         .with(row5).and_return(cand22)
-      allow(cand11).to receive(:constraint_list).and_return(clist)
-      allow(cand12).to receive(:constraint_list).and_return(clist)
-      allow(cand13).to receive(:constraint_list).and_return(clist)
-      allow(cand21).to receive(:constraint_list).and_return(clist)
-      allow(cand22).to receive(:constraint_list).and_return(clist)
-      allow(clist).to receive(:size).and_return(3)
       allow(cand11).to receive(:input).and_return('in1')
       allow(cand12).to receive(:input).and_return('in1')
       allow(cand13).to receive(:input).and_return('in1')

@@ -38,9 +38,14 @@ module OTGeneric
     def convert_headers_to_constraints(headers)
       constraints = []
       con_headers = headers[2..-1] # all but first two cells
-      con_headers.each_with_index do |head, i|
-        con = Constraint.new(head, i, Constraint::MARK)
-        constraints << con
+      con_headers.each do |head|
+        # A Faith constraint starts with "F:"
+        con_type = if /^F:/ =~ head
+                     Constraint::FAITH
+                   else
+                     Constraint::MARK
+                   end
+        constraints << Constraint.new(head, nil, con_type)
       end
       constraints
     end
