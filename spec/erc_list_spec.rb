@@ -6,7 +6,7 @@ require 'erc'
 require 'erc_list'
 
 RSpec.describe ErcList do
-  context 'A newly created ErcList' do
+  context 'A newly created ErcList with no constraints' do
     before(:example) do
       @erc_list = ErcList.new
     end
@@ -59,27 +59,58 @@ RSpec.describe ErcList do
     end
   end
 
-  context 'An ErcList provided with a list of constraints' do
+  context 'An empty ErcList provided with a list of constraints' do
+    let(:con_list) { ['C1', 'C2'] }
     before(:example) do
-      @erc_list = ErcList.new(constraint_list: ['C1', 'C2'])
+      @erc_list = ErcList.new(constraint_list: con_list)
     end
     it 'returns a list of the same constraints' do
-      expect(@erc_list.constraint_list).to contain_exactly('C1', 'C2')
+      expect(@erc_list.constraint_list).to contain_exactly(*con_list)
     end
     it 'raises a RuntimeError when an ERC with different constraints is added' do
       erc_diff = instance_double(Erc, 'erc_diff')
       allow(erc_diff).to receive(:constraint_list).and_return(['C3', 'C4'])
       expect { @erc_list.add(erc_diff) }.to raise_exception(RuntimeError)
     end
+    it 'responds to find_all() with an empty ErcList' do
+      expect(@erc_list.find_all { true }).to be_empty
+    end
+    it 'responds to find_all() with an ErcList that includes the constraints' do
+      found = @erc_list.find_all { true }
+      expect(found.constraint_list).to contain_exactly(*con_list)
+    end
+    it 'responds to reject() with an empty ErcList' do
+      expect(@erc_list.reject { true }).to be_empty
+    end
+    it 'responds to reject() with an ErcList that includes the constraints' do
+      found = @erc_list.reject { true }
+      expect(found.constraint_list).to contain_exactly(*con_list)
+    end
+    it 'responds to partition() with two empty ErcLists' do
+      true_list, false_list = @erc_list.partition { true }
+      expect(true_list).to be_empty
+      expect(false_list).to be_empty
+    end
+    it 'responds to partion() with a truelist that includes the constraints' do
+      # ErcList#partition returns two values, we only care about the first.
+      true_list, = @erc_list.partition { true }
+      expect(true_list.constraint_list).to contain_exactly(*con_list)
+    end
+    it 'responds to partion() with a falselist that includes the constraints' do
+      # ErcList#partition returns two values, we only care about the second.
+      _, false_list = @erc_list.partition { true }
+      expect(false_list.constraint_list).to contain_exactly(*con_list)
+    end
   end
 
   context 'An ErcList with one added erc' do
+    let(:con_list) { ['C1', 'C2'] }
+    let(:erc1) { double('erc1') }
     before(:example) do
-      @erc_list = ErcList.new
-      @erc1 = double('erc1')
-      allow(@erc1).to receive(:constraint_list).and_return(['C1', 'C2'])
-      allow(@erc1).to receive(:test_cond).and_return(true)
-      @erc_list.add(@erc1)
+      @erc_list = ErcList.new(constraint_list: con_list)
+      allow(erc1).to receive(:constraint_list).and_return(con_list)
+      allow(erc1).to receive(:test_cond).and_return(true)
+      @erc_list.add(erc1)
     end
     it 'is not empty' do
       expect(@erc_list.empty?).not_to be true
@@ -88,58 +119,58 @@ RSpec.describe ErcList do
       expect(@erc_list.size).to eq(1)
     end
     it 'returns the constraints of the erc' do
-      expect(@erc_list.constraint_list).to contain_exactly('C1', 'C2')
+      expect(@erc_list.constraint_list).to contain_exactly(*con_list)
     end
     it 'returns true when #any? is satisfied by the erc' do
-      expect(@erc_list.any? { |e| e.test_cond }).to be true
+      expect(@erc_list.any?(&:test_cond)).to be true
     end
     it "returns false when #any? isn't satisfied by the erc" do
-      expect(@erc_list.any? { |e| e.nil? }).to be false
+      expect(@erc_list.any?(&:nil?)).to be false
     end
     it 'returns block-satisfying members for #find_all' do
-      found = @erc_list.find_all { |e| e.test_cond }
-      expect(found.to_a).to contain_exactly(@erc1)
+      found = @erc_list.find_all(&:test_cond)
+      expect(found.to_a).to contain_exactly(erc1)
     end
     it 'returns an ErcList for #find_all' do
-      found = @erc_list.find_all { |e| e.test_cond }
+      found = @erc_list.find_all(&:test_cond)
       expect(found).to be_an_instance_of(ErcList)
     end
     it 'returns block-violating members for #reject' do
-      found = @erc_list.reject { |e| e.test_cond }
+      found = @erc_list.reject(&:test_cond)
       expect(found.to_a).to be_empty
     end
     it 'returns an ErcList for #reject' do
-      found = @erc_list.reject { |e| e.test_cond }
+      found = @erc_list.reject(&:test_cond)
       expect(found).to be_an_instance_of(ErcList)
     end
     it 'partitions into one satisfying ERC and no other ERCs' do
-      true_list, false_list = @erc_list.partition { |e| e.test_cond }
-      expect(true_list.to_a).to contain_exactly(@erc1)
+      true_list, false_list = @erc_list.partition(&:test_cond)
+      expect(true_list.to_a).to contain_exactly(erc1)
       expect(false_list.to_a).to be_empty
     end
     it 'partitions into two ErcList objects' do
-      true_list, false_list = @erc_list.partition { |e| e.test_cond }
+      true_list, false_list = @erc_list.partition(&:test_cond)
       expect(true_list).to be_an_instance_of(ErcList)
       expect(false_list).to be_an_instance_of(ErcList)
     end
     it 'returns a duplicate with a list independent of the original' do
       dup_list = @erc_list.dup
       erc_new = instance_double(Erc, 'new erc')
-      allow(erc_new).to receive(:constraint_list).and_return(['C1', 'C2'])
+      allow(erc_new).to receive(:constraint_list).and_return(con_list)
       dup_list.add(erc_new)
-      expect(@erc_list.to_a).to contain_exactly(@erc1)
-      expect(dup_list.to_a).to contain_exactly(@erc1, erc_new)
+      expect(@erc_list.to_a).to contain_exactly(erc1)
+      expect(dup_list.to_a).to contain_exactly(erc1, erc_new)
     end
     it 'converts to an equivalent array via #to_ary' do
-      expect(@erc_list.to_ary).to eq [@erc1]
+      expect(@erc_list.to_ary).to eq [erc1]
     end
 
     context 'and a second erc with the same constraints is added' do
+      let(:erc2) { double('erc2') }
       before(:example) do
-        @erc2 = double('erc2')
-        allow(@erc2).to receive(:constraint_list).and_return(['C2', 'C1'])
-        allow(@erc2).to receive(:test_cond).and_return(false)
-        @erc_list.add(@erc2)
+        allow(erc2).to receive(:constraint_list).and_return(['C2', 'C1'])
+        allow(erc2).to receive(:test_cond).and_return(false)
+        @erc_list.add(erc2)
       end
       it 'has size 2' do
         expect(@erc_list.size).to eq(2)
@@ -148,19 +179,19 @@ RSpec.describe ErcList do
         expect(@erc_list.constraint_list).to contain_exactly('C1', 'C2')
       end
       it 'returns true when #any? is satisfied by one of the ercs' do
-        expect(@erc_list.any? { |e| e.test_cond }).to be true
+        expect(@erc_list.any?(&:test_cond)).to be true
       end
       it "returns false when #any? isn't satisfied by any of the ercs" do
-        expect(@erc_list.any? { |e| e.nil? }).to be false
+        expect(@erc_list.any?(&:nil?)).to be false
       end
       it 'returns an array with block-satisfying members for #find_all' do
-        found = @erc_list.find_all { |e| e.test_cond }
-        expect(found.to_a).to contain_exactly(@erc1)
+        found = @erc_list.find_all(&:test_cond)
+        expect(found.to_a).to contain_exactly(erc1)
       end
       it 'partitions into one satisfying ERC and one other ERC' do
-        true_list, false_list = @erc_list.partition { |e| e.test_cond }
-        expect(true_list.to_a).to contain_exactly(@erc1)
-        expect(false_list.to_a).to contain_exactly(@erc2)
+        true_list, false_list = @erc_list.partition(&:test_cond)
+        expect(true_list.to_a).to contain_exactly(erc1)
+        expect(false_list.to_a).to contain_exactly(erc2)
       end
     end
 
@@ -187,22 +218,25 @@ RSpec.describe ErcList do
   end
 
   context 'An empty ErcList, when ERCS are added from a list' do
+    let(:con_list) { ['C1', 'C2'] }
+    let(:con_list_diff) { ['C1', 'C4'] }
     before(:example) do
       @erc_orig = instance_double(Erc)
       @erc_same = instance_double(Erc)
       @erc_diff = instance_double(Erc)
       @erc_again = instance_double(Erc)
-      allow(@erc_orig).to receive(:constraint_list).and_return(['C1', 'C2'])
-      allow(@erc_same).to receive(:constraint_list).and_return(['C1', 'C2'])
-      allow(@erc_diff).to receive(:constraint_list).and_return(['C1', 'C4'])
-      allow(@erc_again).to receive(:constraint_list).and_return(['C1', 'C2'])
+      allow(@erc_orig).to receive(:constraint_list).and_return(con_list)
+      allow(@erc_same).to receive(:constraint_list).and_return(con_list)
+      allow(@erc_diff).to receive(:constraint_list).and_return(con_list_diff)
+      allow(@erc_again).to receive(:constraint_list).and_return(con_list)
       @generic_list = double('generic_list')
     end
     context 'of homo-constraint ercs' do
       before(:example) do
         allow(@generic_list).to receive(:each).and_yield(@erc_orig)
                                               .and_yield(@erc_same)
-        @new_erc_list = ErcList.new.add_all(@generic_list)
+        @new_erc_list =
+          ErcList.new(constraint_list: con_list).add_all(@generic_list)
       end
       it 'contains the same number of ercs' do
         expect(@new_erc_list.size).to eq(2)
@@ -222,8 +256,10 @@ RSpec.describe ErcList do
                                               .and_yield(@erc_diff)
       end
       it 'raises a RuntimeError' do
-        expect { ErcList.new.add_all(@generic_list) }.to \
-          raise_error(RuntimeError)
+        expect\
+          do
+            ErcList.new(constraint_list: con_list).add_all(@generic_list)
+          end.to raise_error(RuntimeError)
       end
     end
   end
@@ -231,8 +267,9 @@ RSpec.describe ErcList do
   # Testing #consistent?
 
   context 'with no ERCs added' do
+    let(:con_list) { ['C1'] }
     before(:example) do
-      @erc_list = ErcList.new
+      @erc_list = ErcList.new(constraint_list: con_list)
     end
     it 'responds that it is consistent' do
       expect(@erc_list.consistent?).to be true
@@ -240,10 +277,11 @@ RSpec.describe ErcList do
   end
 
   context 'with one consistent ERC added' do
+    let(:con_list) { ['C1', 'C2'] }
     before(:example) do
       @erc_consistent = instance_double(Erc)
       allow(@erc_consistent).to receive(:constraint_list)\
-        .and_return(['C1', 'C2'])
+        .and_return(con_list)
       @rcd_runner = double('RCD runner')
       rcd_result = instance_double(Rcd)
       allow(rcd_result).to receive(:consistent?).and_return(true)
@@ -257,14 +295,17 @@ RSpec.describe ErcList do
   end
 
   context 'with one inconsistent ERC added' do
+    let(:con_list) { ['C1', 'C2'] }
     before(:example) do
       @erc_consistent = instance_double(Erc)
       allow(@erc_consistent).to receive(:constraint_list)\
-        .and_return(['C1', 'C2'])
+        .and_return(con_list)
       @rcd_runner = double('RCD runner')
       rcd_result = instance_double(Rcd)
       allow(rcd_result).to receive(:consistent?).and_return(false)
-      @erc_list = ErcList.new(rcd_runner: @rcd_runner).add(@erc_consistent)
+      @erc_list =
+        ErcList.new(constraint_list: con_list, rcd_runner: @rcd_runner)\
+               .add(@erc_consistent)
       allow(@rcd_runner).to receive(:run_rcd).with(@erc_list)\
                                              .and_return(rcd_result)
     end

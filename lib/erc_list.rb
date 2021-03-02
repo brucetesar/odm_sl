@@ -72,14 +72,17 @@ class ErcList
   # Raises a RuntimeError if +erc+ does not have exactly the same constraints
   # as used in the list.
   def add(erc)
-    # check that the new ERC uses exactly the same constraints used in the list.
-    # if constraints haven't been provided, then nothing to check
+    # Check that the new ERC uses exactly the same constraints used in the
+    # list. If constraints haven't been provided, then nothing to check.
+    error_prefix = 'ErcList#add: '
     unless constraint_list.empty?
       unless erc.constraint_list.size == constraint_list.size
-        raise 'ErcList#add: cannot add an ERC with a different number of constraints'
+        msg = 'cannot add an ERC with a different number of constraints'
+        raise "#{error_prefix}#{msg}"
       end
       unless erc.constraint_list.all? { |con| constraint_list.include?(con) }
-        raise 'ErcList#add: cannot add an ERC with different constraints'
+        msg = 'cannot add an ERC with different constraints'
+        raise "#{error_prefix}#{msg}"
       end
     end
     # append the new ERC to the list, and return self (the ErcList).
@@ -107,7 +110,7 @@ class ErcList
   #   find_all{|obj| block} -> ErcList
   def find_all(&block)
     satisfies = @list.find_all(&block)
-    new_el = ErcList.new
+    new_el = ErcList.new(constraint_list: constraint_list)
     satisfies.each { |e| new_el.add(e) }
     new_el
   end
@@ -119,7 +122,7 @@ class ErcList
   #   reject{|obj| block} -> ErcList
   def reject(&block)
     not_satisfies = @list.reject(&block)
-    new_el = ErcList.new
+    new_el = ErcList.new(constraint_list: constraint_list)
     not_satisfies.each { |e| new_el.add(e) }
     new_el
   end
@@ -133,7 +136,8 @@ class ErcList
   #   partition{|obj| block} -> [true-ErcList, false-ErcList]
   def partition(&block)
     true_list, false_list = @list.partition(&block)
-    [ErcList.new.add_all(true_list), ErcList.new.add_all(false_list)]
+    [ErcList.new(constraint_list: constraint_list).add_all(true_list),
+     ErcList.new(constraint_list: constraint_list).add_all(false_list)]
   end
 
   # Returns an array containing the ERCs of the ERC list.
@@ -159,7 +163,7 @@ class ErcList
   # adding or removing ERCs from the duplicate will not affect the original.
   # The ERC objects themselves are <em>not</em> duplicated.
   def dup
-    ErcList.new(constraint_list: @constraint_list, rcd_runner: @rcd_runner) \
+    ErcList.new(constraint_list: @constraint_list, rcd_runner: @rcd_runner)\
            .add_all(self)
   end
 
