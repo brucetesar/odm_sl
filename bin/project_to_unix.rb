@@ -23,12 +23,11 @@ end
 SOURCE = ODL::PROJECT_DIR
 target_relative_path = File.join(SOURCE, '../odm_sl_unix')
 TARGET = File.expand_path(target_relative_path)
-Dir.mkdir TARGET unless Dir.exist? TARGET
 
-# Delete any existing files in the target directory tree.
-Find.find(TARGET) do |path|
-  File.delete path if File.file?(path)
-end
+# Delete any existing directory tree at that path, and then
+# (re)create the root directory for the tree.
+FileUtils.rm_r TARGET if Dir.exist? TARGET
+Dir.mkdir TARGET
 
 # Traverse source tree
 Find.find(SOURCE) do |path|
@@ -47,18 +46,19 @@ Find.find(SOURCE) do |path|
   Find.prune if File.basename(path) == 'README'
   Find.prune if File.basename(path) == 'Rakefile'
   Find.prune if File.basename(path) =~ /[.]bat$/
+  Find.prune if path =~ /bin\/main\.rb$/
   # Translate the path to the target
   target_path = path.gsub(SOURCE, TARGET)
   if File.directory?(path)
-    # If a directory, a target counterpart exists.
+    # If a directory, a target counterpart should be created.
     Dir.mkdir(target_path) unless Dir.exist?(target_path)
-  else
-    # If the path is not a directory, then it must be a file.
+  elsif File.file?(path)
+    # If neither a directory nor a file, don't copy it.
     # Read the file in binary mode into an ASCII-8BIT string.
     content_string = IO.read(path, mode: 'rb')
     # Transcode the string into unix line terminator format.
     trans_string = string2unix(content_string)
-    # Write the transcoded string to the target directory.
+    # Write the transcoded string to the target file.
     IO.write(target_path, trans_string, mode: 'wb')
   end
 end
