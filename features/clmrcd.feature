@@ -38,19 +38,19 @@ Feature: clmrcd
       input,output
       in1,out1
       """
-    When I run `clmrcd -l consistent -c competitions.csv -w winners.csv`
+    When I run `clmrcd -c competitions.csv -w winners.csv -l consistent`
     Then it should pass with:
       """
       Consistent
       [Con1] [Con2]
       """
-    When I run `clmrcd -l pool -c competitions.csv -w winners.csv -b fl`
+    When I run `clmrcd -c competitions.csv -w winners.csv -l pool -b fl`
     Then it should pass with:
       """
       Consistent
       [Con1] [Con2]
       """
-    When I run `clmrcd -l ctie -c competitions.csv -w winners.csv -b fl`
+    When I run `clmrcd -c competitions.csv -w winners.csv -l ctie -b fl`
     Then it should pass with:
       """
       Consistent
@@ -72,7 +72,7 @@ Feature: clmrcd
       in1,out1
       in2,out2
       """
-    When I run `clmrcd -l ctie -b fl -c competitions.csv -w winners.csv`
+    When I run `clmrcd -c competitions.csv -w winners.csv -l ctie -b fl`
     Then it should pass with:
       """
       Consistent
@@ -94,7 +94,7 @@ Feature: clmrcd
       in1,out1
       in2,out2
       """
-    When I run `clmrcd -l ctie -b fl -c competitions.csv -w winners.csv -r report.csv`
+    When I run `clmrcd -c competitions.csv -w winners.csv -l ctie -b fl -r report.csv`
     Then it should pass with:
       """
       Consistent
