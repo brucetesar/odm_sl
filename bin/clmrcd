@@ -9,6 +9,7 @@ require_relative '../lib/odl/resolver'
 
 require 'optparse'
 require 'csv_input'
+require 'csv_output'
 require 'otgeneric/comp_list_reader'
 require 'otgeneric/winners_reader'
 require 'otgeneric/system'
@@ -29,6 +30,7 @@ require 'rcd_image_maker'
 # define variables for option values
 comp_filename = nil
 winners_filename = nil
+report_filename = nil
 bias_value = nil
 compare_option_value = nil
 list_options = false
@@ -45,6 +47,8 @@ opts.on('-b', '--bias BIAS', 'ranking bias', '  fl = faith low',
 opts.on('-l', '--loser_selection TYPE', 'Type of loser selection',
         '  pool', '  ctie', '  consistent')\
   { |val| compare_option_value = val }
+opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
+  { |val| report_filename = val }
 opts.on('-?', '-h', '--help', 'list the command line options')\
   { list_options = true }
 
@@ -65,7 +69,7 @@ end
 if comp_filename.nil?
   puts 'A filename for the competitions must be given using option -c.'
   puts 'To see all options, run: clmrcd -h'
-  exit
+  exit(1) # return failure error code
 end
 
 # If list options were not required, but a filename for the winners
@@ -74,7 +78,7 @@ end
 if winners_filename.nil?
   puts 'A filename for the winners must be given using option -w.'
   puts 'To see all options, run: clmrcd -h'
-  exit
+  exit(1) # return failure error code
 end
 
 # Establish the ranking bias
@@ -82,8 +86,11 @@ ranking_bias = if bias_value == 'fl'
                  OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
                elsif bias_value == 'ml'
                  OTLearn::RankingBiasSomeLow.new(OTLearn::MarkLow.new)
-               else
+               elsif bias_value == 'ah' || bias_value.nil?
                  RankingBiasAllHigh.new
+               else
+                 puts "Invalid bias value #{bias_value}"
+                 exit(1) # return failure error code
                end
 rcd_runner = RcdRunner.new(ranking_bias)
 ranker = Ranker.new(rcd_runner)
@@ -95,11 +102,13 @@ comparer = if compare_option_value == 'pool'
              CompareCtie.new(ranker)
            elsif compare_option_value == 'consistent'
              CompareConsistency.new
+           elsif compare_option_value.nil?
+             puts 'Must specify a valid loser selection type with -l'
+             exit(1) # return failure error code
+           else
+             puts "Invalid loser selection type #{compare_option_value}"
+             exit(1) # return failure error code
            end
-if comparer.nil?
-  msg = 'Must specify a valid loser selection type'
-  raise msg
-end
 
 # Read the competitions from the specified CSV file.
 comp_content = CsvInput.new(comp_filename)
@@ -128,8 +137,16 @@ if mrcd_result.consistent?
 else
   puts 'Inconsistent'
 end
-ercs = ErcList.new.add_all(mrcd_result.added_pairs)
+ercs = ErcList.new(constraint_list: system.constraints)\
+              .add_all(mrcd_result.added_pairs)
 rcd_result = rcd_runner.run_rcd(ercs)
 puts rcd_result.hierarchy.to_s
-image_maker = RcdImageMaker.new
-puts image_maker.get_image(rcd_result).to_a.to_s
+
+# If a report filename was given, write a CSV image of the support
+# to that file.
+unless report_filename.nil?
+  image_maker = RcdImageMaker.new
+  report_image = image_maker.get_image(rcd_result)
+  csv_output = CsvOutput.new(report_image)
+  csv_output.write_to_file(report_filename)
+end
