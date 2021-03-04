@@ -13,7 +13,7 @@ Feature: clrcd
 
   Scenario: No input filename given
     When I run `clrcd`
-    Then it should pass with:
+    Then it should fail with:
       """
       A filename for the ERCs must be given using option -e.
       To see all options, run: clrcd -?

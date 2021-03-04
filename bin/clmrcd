@@ -60,7 +60,7 @@ puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 # to STDOUT and exit (ignore any other options).
 if list_options
   puts opts.to_s
-  exit
+  exit(0)
 end
 
 # If list options were not required, but a filename for the competitions

@@ -46,7 +46,7 @@ puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 # to STDOUT and exit (ignore any other options).
 if list_options
   puts opts.to_s
-  exit
+  exit(0)
 end
 
 # If list options were not required, but a filename for the ERCS
@@ -55,7 +55,7 @@ end
 if erc_filename.nil?
   puts 'A filename for the ERCs must be given using option -e.'
   puts 'To see all options, run: clrcd -?'
-  exit
+  exit(1)
 end
 
 # Read the ERCs from the specified CSV file.
