@@ -39,8 +39,9 @@ class CompareConsistency
     return :IDENT_VIOLATIONS if first.ident_viols?(second)
 
     # Construct an internal ErcList, and copy ranking_info into it.
-    # Better than #dup: don't assume ranking_info is class ErcList.
-    ercs = @erc_list_class.new.add_all(ranking_info)
+    # Better than #dup: doesn't assume ranking_info is class ErcList.
+    ercs = @erc_list_class.new(constraint_list: first.constraint_list)\
+                          .add_all(ranking_info)
     # construct a WL pair with second as the winner
     test_erc = @win_lose_pair_class.new(second, first)
     ercs.add(test_erc)

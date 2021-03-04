@@ -10,19 +10,21 @@ require 'compare_consistency'
 RSpec.describe 'CompareConsistency' do
   let(:winner) { double('winner') }
   let(:competitor) { double('competitor') }
+  let(:con_list) { double('constraint list') }
   let(:param_ercs) { double('parameter Ercs') }
   let(:erc_list_class) { double('erc_list_class') }
   let(:erc_list) { instance_double(ErcList, 'erc_list') }
   let(:win_lose_pair_class) { double('win_lose_pair_class') }
   let(:wl_pair) { instance_double(WinLosePair, 'wl_pair') }
   before(:example) do
-    allow(erc_list_class).to receive(:new).and_return(erc_list)
+    allow(winner).to receive(:constraint_list).and_return(con_list)
+    allow(erc_list_class).to receive(:new).with(constraint_list: con_list).and_return(erc_list)
     allow(win_lose_pair_class).to receive(:new).with(competitor, winner).and_return(wl_pair)
     allow(erc_list).to receive(:add_all).with(param_ercs).and_return(erc_list)
     allow(erc_list).to receive(:add).with(wl_pair).and_return(erc_list)
-    @comparer = CompareConsistency.new(
-      erc_list_class: erc_list_class,
-      win_lose_pair_class: win_lose_pair_class)
+    @comparer =
+      CompareConsistency.new(erc_list_class: erc_list_class,
+                             win_lose_pair_class: win_lose_pair_class)
   end
 
   context 'given a consistent competitor' do
