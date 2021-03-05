@@ -17,6 +17,9 @@ class ErcList
   # Methods delegated to object (@list) of class Array.
   def_delegators :@list, :empty?, :size, :any?, :each, :each_with_index
 
+  # The constraints used in the ERC list.
+  attr_reader :constraint_list
+
   # An optional label. Defaults to the empty string ''.
   attr_accessor :label
 
@@ -50,6 +53,7 @@ class ErcList
   # The +wlpair_class+ is a dependency injection for testing.
   def self.new_from_competition(winner, competition,
                                 wlpair_class: WinLosePair)
+    # create a new ERC list with constraints from the winner.
     wl_list = new(winner.constraint_list)
     # Exclude the winner from the list of loser candidates
     losers = competition.reject { |candidate| candidate == winner }
@@ -69,17 +73,15 @@ class ErcList
   # as used in the list.
   def add(erc)
     # Check that the new ERC uses exactly the same constraints used in the
-    # list. If constraints haven't been provided, then nothing to check.
+    # list.
     error_prefix = 'ErcList#add: '
-    unless constraint_list.empty?
-      unless erc.constraint_list.size == constraint_list.size
-        msg = 'cannot add an ERC with a different number of constraints'
-        raise "#{error_prefix}#{msg}"
-      end
-      unless erc.constraint_list.all? { |con| constraint_list.include?(con) }
-        msg = 'cannot add an ERC with different constraints'
-        raise "#{error_prefix}#{msg}"
-      end
+    unless erc.constraint_list.size == constraint_list.size
+      msg = 'cannot add an ERC with a different number of constraints'
+      raise "#{error_prefix}#{msg}"
+    end
+    unless erc.constraint_list.all? { |con| constraint_list.include?(con) }
+      msg = 'cannot add an ERC with different constraints'
+      raise "#{error_prefix}#{msg}"
     end
     # append the new ERC to the list, and return self (the ErcList).
     @list << erc
@@ -159,15 +161,8 @@ class ErcList
   # adding or removing ERCs from the duplicate will not affect the original.
   # The ERC objects themselves are <em>not</em> duplicated.
   def dup
-    ErcList.new(@constraint_list, rcd_runner: @rcd_runner)\
+    ErcList.new(constraint_list, rcd_runner: @rcd_runner)\
            .add_all(self)
-  end
-
-  # Returns a list of the constraints used in the list. If no constraints were
-  # provided to the constructor, and no ERCs have been added, then an empty
-  # array is returned.
-  def constraint_list
-    @constraint_list
   end
 
   # Returns true if the list of ERCs is consistent; false otherwise.
