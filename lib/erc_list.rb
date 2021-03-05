@@ -7,7 +7,7 @@ require 'rcd_runner'
 require 'win_lose_pair'
 
 # An ErcList is a list of ERC-like objects. All ERCs in the list must respond
-# to #constraint_list with a list of the very same constraints.
+# to #constraint_list with the same constraints as the ErcList has.
 # ---
 # === Methods delegated to object of class Array
 # #empty?, #size, #any?, #each, #each_with_index
@@ -20,23 +20,19 @@ class ErcList
   # An optional label. Defaults to the empty string ''.
   attr_accessor :label
 
-  # Returns an empty ErcList. It can optionally be passed a list of
-  # constraints. If a constraint list is not provided at object construction,
-  # then the constraints of the first ERC added will determine
-  # the constraint list.
-  #
-  # Providing a list of constraints at construction time:
-  # * Allows added ERCs to be checked to make sure their constraints match.
-  # * Makes it easy to apply RCD to an empty ErcList.
+  # Returns an empty ErcList. A _constraint_list_ must be provided.
   #
   # :call-seq:
-  #   ErcList.new() -> ErcList
-  #   ErcList.new(constraint_list: my_constraints) -> ErcList
+  #   ErcList.new(my_constraints) -> ErcList
   #--
+  # If the parameter _constraint_list_ is not mandatory upon construction,
+  # there is the risk of running RCD on an empty ErcList and getting
+  # a hierarchy with no constraints in it.
+  #
   # The +rcd_runner+ parameter is a dependency injection for testing.
   # The runner is only used for testing consistency, so the default with
   # a bias towards all constraints ranked as high as possible used.
-  def initialize(constraint_list: nil, rcd_runner: RcdRunner.new)
+  def initialize(constraint_list, rcd_runner: RcdRunner.new)
     @list = []
     @constraint_list = constraint_list
     @rcd_runner = rcd_runner
@@ -54,7 +50,7 @@ class ErcList
   # The +wlpair_class+ is a dependency injection for testing.
   def self.new_from_competition(winner, competition,
                                 wlpair_class: WinLosePair)
-    wl_list = new
+    wl_list = new(winner.constraint_list)
     # Exclude the winner from the list of loser candidates
     losers = competition.reject { |candidate| candidate == winner }
     # Create a new winner-loser pair for each loser
@@ -110,7 +106,7 @@ class ErcList
   #   find_all{|obj| block} -> ErcList
   def find_all(&block)
     satisfies = @list.find_all(&block)
-    new_el = ErcList.new(constraint_list: constraint_list)
+    new_el = ErcList.new(constraint_list)
     satisfies.each { |e| new_el.add(e) }
     new_el
   end
@@ -122,7 +118,7 @@ class ErcList
   #   reject{|obj| block} -> ErcList
   def reject(&block)
     not_satisfies = @list.reject(&block)
-    new_el = ErcList.new(constraint_list: constraint_list)
+    new_el = ErcList.new(constraint_list)
     not_satisfies.each { |e| new_el.add(e) }
     new_el
   end
@@ -136,8 +132,8 @@ class ErcList
   #   partition{|obj| block} -> [true-ErcList, false-ErcList]
   def partition(&block)
     true_list, false_list = @list.partition(&block)
-    [ErcList.new(constraint_list: constraint_list).add_all(true_list),
-     ErcList.new(constraint_list: constraint_list).add_all(false_list)]
+    [ErcList.new(constraint_list).add_all(true_list),
+     ErcList.new(constraint_list).add_all(false_list)]
   end
 
   # Returns an array containing the ERCs of the ERC list.
@@ -163,7 +159,7 @@ class ErcList
   # adding or removing ERCs from the duplicate will not affect the original.
   # The ERC objects themselves are <em>not</em> duplicated.
   def dup
-    ErcList.new(constraint_list: @constraint_list, rcd_runner: @rcd_runner)\
+    ErcList.new(@constraint_list, rcd_runner: @rcd_runner)\
            .add_all(self)
   end
 
@@ -171,10 +167,7 @@ class ErcList
   # provided to the constructor, and no ERCs have been added, then an empty
   # array is returned.
   def constraint_list
-    return @constraint_list unless @constraint_list.nil?
-    return [] if @list.empty?
-
-    @constraint_list = @list[0].constraint_list
+    @constraint_list
   end
 
   # Returns true if the list of ERCs is consistent; false otherwise.

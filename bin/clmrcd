@@ -128,7 +128,7 @@ basic_selector = LoserSelector.new(comparer)
 loser_selector = LoserSelectorFromGen.new(system, basic_selector)
 
 # Run MRCD
-erc_list = ErcList.new(constraint_list: system.constraints)
+erc_list = ErcList.new(system.constraints)
 mrcd_result = OTLearn::Mrcd.new(winner_list, erc_list, loser_selector)
 
 # Print (to STDOUT) the consistency and the hierarchy itself.
@@ -137,8 +137,7 @@ if mrcd_result.consistent?
 else
   puts 'Inconsistent'
 end
-ercs = ErcList.new(constraint_list: system.constraints)\
-              .add_all(mrcd_result.added_pairs)
+ercs = ErcList.new(system.constraints).add_all(mrcd_result.added_pairs)
 rcd_result = rcd_runner.run_rcd(ercs)
 puts rcd_result.hierarchy.to_s
 

@@ -18,7 +18,7 @@ RSpec.describe 'CompareConsistency' do
   let(:wl_pair) { instance_double(WinLosePair, 'wl_pair') }
   before(:example) do
     allow(winner).to receive(:constraint_list).and_return(con_list)
-    allow(erc_list_class).to receive(:new).with(constraint_list: con_list).and_return(erc_list)
+    allow(erc_list_class).to receive(:new).with(con_list).and_return(erc_list)
     allow(win_lose_pair_class).to receive(:new).with(competitor, winner).and_return(wl_pair)
     allow(erc_list).to receive(:add_all).with(param_ercs).and_return(erc_list)
     allow(erc_list).to receive(:add).with(wl_pair).and_return(erc_list)

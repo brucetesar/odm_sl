@@ -56,7 +56,7 @@ RSpec.describe 'FactorialTypology' do
           false
         end
       end
-      allow(erc_list_class).to receive(:new).with(constraint_list: con_list)\
+      allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
       contenders1 = [cand1, cand2]
@@ -97,7 +97,7 @@ RSpec.describe 'FactorialTypology' do
           false
         end
       end
-      allow(erc_list_class).to receive(:new).with(constraint_list: con_list)\
+      allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
       contenders1 = [cand2]
@@ -149,7 +149,7 @@ RSpec.describe 'FactorialTypology' do
       allow(cand12).to receive(:constraint_list).and_return(con_list)
       allow(cand21).to receive(:constraint_list).and_return(con_list)
       allow(cand22).to receive(:constraint_list).and_return(con_list)
-      allow(erc_list_class).to receive(:new).with(constraint_list: con_list)\
+      allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand11, cand12]
       contenders1 = [cand11, cand12]
@@ -199,7 +199,7 @@ RSpec.describe 'FactorialTypology' do
           false
         end
       end
-      allow(erc_list_class).to receive(:new).with(constraint_list: con_list)\
+      allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
       contenders1 = [cand1, cand2]

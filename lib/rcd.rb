@@ -135,7 +135,7 @@ class Rcd
 
   # Returns a list of all the ERCs, as an ErcList object.
   def erc_list
-    new_erc_list = ErcList.new(constraint_list: constraint_list)
+    new_erc_list = ErcList.new(constraint_list)
     new_erc_list.add_all(@ercs)
     new_erc_list
   end

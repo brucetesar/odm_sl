@@ -14,8 +14,9 @@ RSpec.describe Grammar do
   context "A new Grammar, with only the system specified," do
     let(:sys){double('system')}
     let(:morph){double('morph')}
+    let(:con_list) { [:con1] }
     before(:example) do
-      allow(sys).to receive(:constraints).and_return([])
+      allow(sys).to receive(:constraints).and_return(con_list)
       @grammar = Grammar.new(system: sys)
     end
     it "returns a reference to system" do
@@ -23,6 +24,9 @@ RSpec.describe Grammar do
     end
     it "returns an empty ERC list" do
       expect(@grammar.erc_list).to be_empty
+    end
+    it "returns an ERC list with the same constraints" do
+      expect(@grammar.erc_list.constraint_list).to eq con_list
     end
     it "returns an empty lexicon" do
       expect(@grammar.lexicon.size).to eq(0)

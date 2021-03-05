@@ -2,23 +2,24 @@
 
 # Author: Bruce Tesar
 
+require 'rspec'
 require 'erc'
 require 'erc_list'
 
 RSpec.describe ErcList do
-  context 'A newly created ErcList with no constraints' do
+  context 'A new ErcList' do
+    let(:con_list) { ['C1', 'C2'] }
     before(:example) do
-      @erc_list = ErcList.new
+      @erc_list = ErcList.new(con_list)
     end
-
     it 'is empty' do
       expect(@erc_list.empty?).to be true
     end
     it 'has size 0' do
-      expect(@erc_list.size).to eq(0)
+      expect(@erc_list.size).to eq 0
     end
-    it 'returns an empty list of constraints' do
-      expect(@erc_list.constraint_list).to be_empty
+    it 'returns a list of the constraints' do
+      expect(@erc_list.constraint_list).to contain_exactly(*con_list)
     end
     it 'converts to an empty array' do
       expect(@erc_list.to_a).to be_empty
@@ -28,44 +29,6 @@ RSpec.describe ErcList do
     end
     it 'returns an empty label' do
       expect(@erc_list.label).to eq('')
-    end
-    context 'when the label is set to LABEL' do
-      before do
-        @erc_list.label = 'LABEL'
-      end
-      it 'returns the label LABEL' do
-        expect(@erc_list.label).to eq('LABEL')
-      end
-    end
-    context 'when duplicated' do
-      before(:example) do
-        @erc_list_dup = @erc_list.dup
-      end
-      it 'returns an empty list of constraints' do
-        expect(@erc_list_dup.constraint_list).to be_empty
-      end
-      context 'and then an erc is added' do
-        let(:erc1) { double('erc1') }
-        let(:con_list) { ['C1', 'C2'] }
-        before(:example) do
-          allow(erc1).to receive(:constraint_list).and_return(con_list)
-          allow(erc1).to receive(:test_cond).and_return(true)
-          @erc_list_dup.add(erc1)
-        end
-        it 'returns a constraint list with two constraints' do
-          expect(@erc_list_dup.constraint_list.size).to eq 2
-        end
-      end
-    end
-  end
-
-  context 'An empty ErcList provided with a list of constraints' do
-    let(:con_list) { ['C1', 'C2'] }
-    before(:example) do
-      @erc_list = ErcList.new(constraint_list: con_list)
-    end
-    it 'returns a list of the same constraints' do
-      expect(@erc_list.constraint_list).to contain_exactly(*con_list)
     end
     it 'raises a RuntimeError when an ERC with different constraints is added' do
       erc_diff = instance_double(Erc, 'erc_diff')
@@ -101,13 +64,29 @@ RSpec.describe ErcList do
       _, false_list = @erc_list.partition { true }
       expect(false_list.constraint_list).to contain_exactly(*con_list)
     end
+    context 'when the label is set' do
+      before do
+        @erc_list.label = 'LABEL'
+      end
+      it 'returns the label' do
+        expect(@erc_list.label).to eq('LABEL')
+      end
+    end
+    context 'when duplicated' do
+      before(:example) do
+        @erc_list_dup = @erc_list.dup
+      end
+      it 'the duplicate returns the list of constraints' do
+        expect(@erc_list_dup.constraint_list).to eq con_list
+      end
+    end
   end
 
   context 'An ErcList with one added erc' do
     let(:con_list) { ['C1', 'C2'] }
     let(:erc1) { double('erc1') }
     before(:example) do
-      @erc_list = ErcList.new(constraint_list: con_list)
+      @erc_list = ErcList.new(con_list)
       allow(erc1).to receive(:constraint_list).and_return(con_list)
       allow(erc1).to receive(:test_cond).and_return(true)
       @erc_list.add(erc1)
@@ -236,7 +215,7 @@ RSpec.describe ErcList do
         allow(@generic_list).to receive(:each).and_yield(@erc_orig)
                                               .and_yield(@erc_same)
         @new_erc_list =
-          ErcList.new(constraint_list: con_list).add_all(@generic_list)
+          ErcList.new(con_list).add_all(@generic_list)
       end
       it 'contains the same number of ercs' do
         expect(@new_erc_list.size).to eq(2)
@@ -258,7 +237,7 @@ RSpec.describe ErcList do
       it 'raises a RuntimeError' do
         expect\
           do
-            ErcList.new(constraint_list: con_list).add_all(@generic_list)
+            ErcList.new(con_list).add_all(@generic_list)
           end.to raise_error(RuntimeError)
       end
     end
@@ -269,7 +248,7 @@ RSpec.describe ErcList do
   context 'with no ERCs added' do
     let(:con_list) { ['C1'] }
     before(:example) do
-      @erc_list = ErcList.new(constraint_list: con_list)
+      @erc_list = ErcList.new(con_list)
     end
     it 'responds that it is consistent' do
       expect(@erc_list.consistent?).to be true
@@ -286,7 +265,7 @@ RSpec.describe ErcList do
       rcd_result = instance_double(Rcd)
       allow(rcd_result).to receive(:consistent?).and_return(true)
       @erc_list =
-        ErcList.new(constraint_list: con_list, rcd_runner: @rcd_runner)\
+        ErcList.new(con_list, rcd_runner: @rcd_runner)\
                .add(@erc_consistent)
       allow(@rcd_runner).to receive(:run_rcd).with(@erc_list)\
                                              .and_return(rcd_result)
@@ -306,7 +285,7 @@ RSpec.describe ErcList do
       rcd_result = instance_double(Rcd)
       allow(rcd_result).to receive(:consistent?).and_return(false)
       @erc_list =
-        ErcList.new(constraint_list: con_list, rcd_runner: @rcd_runner)\
+        ErcList.new(con_list, rcd_runner: @rcd_runner)\
                .add(@erc_consistent)
       allow(@rcd_runner).to receive(:run_rcd).with(@erc_list)\
                                              .and_return(rcd_result)
@@ -335,6 +314,7 @@ RSpec.describe 'ErcList.new_from_competition' do
     allow(con_list).to receive(:size).and_return(2)
     allow(con_list).to receive(:empty?).and_return(false)
     allow(con_list).to receive(:all?).and_return(true)
+    allow(winner).to receive(:constraint_list).and_return(con_list)
   end
   context 'given a competition of size 2' do
     let(:loser1) { double('loser1') }

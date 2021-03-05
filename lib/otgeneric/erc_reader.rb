@@ -47,7 +47,7 @@ module OTGeneric
     # Converts each data row to an Erc object. Returns an ErcList of
     # the ERCs.
     def convert_data_to_ercs(data, constraints)
-      erc_list = ErcList.new(constraint_list: constraints)
+      erc_list = ErcList.new(constraints)
       data.each do |row|
         erc = Erc.new(constraints)
         erc.label = row[0]
