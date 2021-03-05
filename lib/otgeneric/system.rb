@@ -14,16 +14,15 @@ module OTGeneric
     # comp_list - a list of the competitions of the system.
     #
     # :call-seq:
-    #   System.new() -> System
-    #   System.new(competition_list) -> System
+    #   System.new(competition_list) -> system
     def initialize(comp_list)
       @comp_list = comp_list
-      @constraints = @comp_list[0][0].constraint_list
+      @constraints = @comp_list.first.first.constraint_list
     end
 
-    # Returns the competition for _input_.
+    # Returns the competition (array of candidates) for _input_.
     # :call-seq:
-    #   gen(input) -> competition (array of candidates)
+    #   gen(input) -> competition
     def gen(input)
       @comp_list.find { |comp| comp[0].input == input }
     end

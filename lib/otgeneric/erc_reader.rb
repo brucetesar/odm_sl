@@ -12,8 +12,15 @@ module OTGeneric
   # Contains methods for converting an ERC list from an "array of strings"
   # representation to an ErcList/Erc object representation.
   class ErcReader
-    # Takes an array of column headers +headers+, and an array of arrays
-    # +data+, and returns an equivalent ErcList of ERCs.
+    # Returns a new ErcReader object.
+    # :call-seq:
+    #   ErcReader.new -> reader
+    def initialize
+      super
+    end
+
+    # Takes an array of column headers _headers_, and an array of arrays
+    # _data_, and returns an equivalent ErcList of ERCs.
     def arrays_to_erc_list(headers, data)
       constraints = convert_headers_to_constraints(headers)
       convert_data_to_ercs(data, constraints)

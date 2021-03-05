@@ -12,6 +12,9 @@ module OTGeneric
     attr_accessor :constraints
 
     # Returns a new CandidateReader object.
+    #
+    # :call-seq:
+    #   CandidateReader.new -> reader
     def initialize
       # Initialize the list of constraints to an empty array.
       @constraints = []

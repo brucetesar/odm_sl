@@ -19,9 +19,10 @@ def string2unix(str)
   univ_str.encode(str.encoding, lf_newline: true)
 end
 
-# Define source and target project directories
+# The source project directory
 SOURCE = ODL::PROJECT_DIR
 target_relative_path = File.join(SOURCE, '../odm_sl_unix')
+# The target project directory
 TARGET = File.expand_path(target_relative_path)
 
 # Delete any existing directory tree at that path, and then

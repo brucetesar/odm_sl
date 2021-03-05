@@ -12,6 +12,8 @@ module OTGeneric
     attr_accessor :competitions
 
     # Returns a new WinnersReader object.
+    # :call-seq:
+    #   WinnersReader.new -> reader
     def initialize
       @competitions = []
     end

@@ -20,8 +20,8 @@ module OTGeneric
       @cand_reader ||= OTGeneric::CandidateReader.new
     end
 
-    # Takes an array of column headers +headers+, and an array of arrays
-    # +data+, and returns an equivalent Array of Arrays of Candidates.
+    # Takes an array of column headers _headers_, and an array of arrays
+    # _data_, and returns an equivalent Array of Arrays of Candidates.
     def arrays_to_comp_list(headers, data)
       @cand_reader.constraints = convert_headers_to_constraints(headers)
       all_candidates = convert_data_to_candidates(data)
@@ -51,7 +51,7 @@ module OTGeneric
     end
     protected :convert_headers_to_constraints
 
-    # Converts each data row to a Candidate object.
+    # Converts each row of _data_ to a Candidate object.
     # Returns an array of the candidates.
     def convert_data_to_candidates(data)
       candidates = []

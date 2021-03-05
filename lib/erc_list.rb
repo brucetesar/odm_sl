@@ -6,11 +6,11 @@ require 'forwardable'
 require 'rcd_runner'
 require 'win_lose_pair'
 
-# An ErcList is a list of ERC-like objects. All ERCs in the list must respond
-# to #constraint_list with the same constraints as the ErcList has.
+# An ErcList is a list of ERC-like objects. All ERCs in the list must
+# respond to constraint_list with the same constraints as the ErcList has.
 # ---
 # === Methods delegated to object of class Array
-# #empty?, #size, #any?, #each, #each_with_index
+# empty?, size, any?, each, each_with_index
 class ErcList
   extend Forwardable
 
@@ -26,13 +26,13 @@ class ErcList
   # Returns an empty ErcList. A _constraint_list_ must be provided.
   #
   # :call-seq:
-  #   ErcList.new(my_constraints) -> ErcList
+  #   ErcList.new(constraint_list) -> erc_list
   #--
-  # If the parameter _constraint_list_ is not mandatory upon construction,
+  # If the parameter constraint_list is not mandatory upon construction,
   # there is the risk of running RCD on an empty ErcList and getting
   # a hierarchy with no constraints in it.
   #
-  # The +rcd_runner+ parameter is a dependency injection for testing.
+  # The rcd_runner parameter is a dependency injection for testing.
   # The runner is only used for testing consistency, so the default with
   # a bias towards all constraints ranked as high as possible used.
   def initialize(constraint_list, rcd_runner: RcdRunner.new)
@@ -44,13 +44,13 @@ class ErcList
     @consistency_test = nil
   end
 
-  # Creates an Erc list containing winner-loser pairs with the +winner+ and
-  # each loser of the +competition+.
+  # Creates an Erc list containing winner-loser pairs with the _winner_ and
+  # each loser of the _competition_.
   #
   # :call-seq:
   #   ErcList.new_from_competition(winner, competition) -> ErcList
   #--
-  # The +wlpair_class+ is a dependency injection for testing.
+  # The wlpair_class is a dependency injection for testing.
   def self.new_from_competition(winner, competition,
                                 wlpair_class: WinLosePair)
     # create a new ERC list with constraints from the winner.
@@ -65,12 +65,12 @@ class ErcList
     wl_list
   end
 
-  # Adds +erc+ to self.
-  # +erc+ must respond to #constraint_list.
+  # Adds _erc_ to self.
+  # _erc_ must respond to #constraint_list.
   # Returns a reference to self.
   #
-  # Raises a RuntimeError if +erc+ does not have exactly the same constraints
-  # as used in the list.
+  # Raises a RuntimeError if _erc_ does not have exactly the same
+  # constraints as used in the list.
   def add(erc)
     # Check that the new ERC uses exactly the same constraints used in the
     # list.
@@ -90,11 +90,11 @@ class ErcList
     self
   end
 
-  # Adds all ERCs of +list+ to self.
-  # +list+ must respond to #each.
+  # Adds all ERCs of _list_ to self.
+  # _list_ must respond to #each.
   # Returns a reference to self.
   #
-  # Raises a RuntimeError if any of the ERCS in +list+ does not have exactly
+  # Raises a RuntimeError if any of the ERCS in _list_ does not have exactly
   # the same constraints as used in the list.
   def add_all(list)
     list.each { |e| add(e) }
