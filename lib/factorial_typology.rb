@@ -78,19 +78,23 @@ class FactorialTypology
 
   # Computes the factorial typology, returning an array of Erc lists.
   def compute_typology
-    # Construct initial language list with a single empty language
+    # Construct initial language list with a single empty language,
+    # using the constraints of the first candidate of the first competition.
     con_list = contender_comp_list.first.first.constraint_list
     lang_list = [@erc_list_class.new(con_list)]
     # Iterate over the competitions
     contender_comp_list.each do |competition|
-      lang_list_new = [] # will receive languages with winners from comp added
-      lang_list.each do |lang| # for each prior language
-        # test each candidate as a possible winner with the existing language.
-        competition.each do |winner| # test each candidate as a winner
+      lang_list_new = []
+      lang_list.each do |lang|
+        # test each candidate as a possible winner with the existing
+        # language.
+        competition.each do |winner|
           lang_new = lang.dup
-          new_pairs = @erc_list_class.new_from_competition(winner, competition)
+          new_pairs = @erc_list_class.new_from_competition(winner,
+                                                           competition)
           lang_new.add_all(new_pairs)
-          # If the new language is consistent, add it to the new language list.
+          # If the new language is consistent, add it to the new
+          # language list.
           lang_list_new << lang_new if lang_new.consistent?
         end
       end

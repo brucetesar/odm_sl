@@ -23,20 +23,20 @@ class Grammar
   # :call-seq:
   #   Grammar.new(system: mysystem) -> Grammar
   #   Grammar.new(system: mysystem, erc_list: mylist, lexicon: mylexicon) -> Grammar
-  # 
+  #
   # The first form returns a grammar with an empty ERC list and an empty lexicon.
   # The second form returns a grammar with ERC list +mylist+ and lexicon +mylexicon+.
   #
   # The system parameter is mandatory.
   # Raises an exception if no system parameter is provided.
   def initialize(system: nil, erc_list: nil, lexicon: Lexicon.new)
-    if system.nil?
-      raise "Grammar.new must be given a system parameter."
-    end
+    raise 'Grammar.new must be given a system parameter.' if system.nil?
+
     @system = system
+    # If no ERC list was provided, create an empty one.
     @erc_list = erc_list
     @erc_list ||= ErcList.new(@system.constraints)
-    self.label = "Grammar"
+    self.label = 'Grammar'
     @lexicon = lexicon
   end
 

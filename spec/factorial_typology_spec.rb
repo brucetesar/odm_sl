@@ -215,12 +215,12 @@ RSpec.describe 'FactorialTypology' do
         .with(cand2, contenders1).and_return([:erc2])
     end
     it 'raises an exception' do
-      expect {
+      expect do
         FactorialTypology.new(@comp_list,
                               erc_list_class: erc_list_class,
                               hbound_filter: hbound_filter,
                               viol_analyzer_class: analyzer_class)
-      }.to raise_error(RuntimeError)
+      end.to raise_error(RuntimeError)
     end
   end
 end
