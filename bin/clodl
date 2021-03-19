@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Author: Bruce Tesar
+# Command line program for running ODL on a specified language of SL.
+
+# The resolver adds <project>/lib to the $LOAD_PATH.
+require_relative '../lib/odl/resolver'
+
+require 'optparse'
+require 'sl/system'
+require 'sl/data'
+require 'factorial_typology'
+require 'grammar'
+require 'otlearn/data_manip'
+require 'otlearn/language_learning'
+require 'otlearn/language_learning_image_maker'
+require 'csv_output'
+
+# define variables for option values
+label = nil
+report_filename = nil
+list_options = false
+
+# define the allowed command line options
+opts = OptionParser.new
+opts.on('-la', '--language LABEL', 'language label')\
+  { |val| label = val.strip }
+opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
+  { |val| report_filename = val }
+opts.on('-?', '-h', '--help', 'list the command line options')\
+  { list_options = true }
+
+# parse the actual command line, and report any unused arguments
+rest = opts.parse(ARGV)
+puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
+
+# If the "list options" option is specified, print out the options
+# to STDOUT and exit (ignore any other options).
+if list_options
+  puts opts.to_s
+  exit(0)
+end
+
+# If a language label was not provided with --language,
+# inform the user that they must provide a label, and exit.
+if label.nil?
+  puts 'A label for the language to be learned must be given using'
+  puts 'option --language.'
+  puts 'To see all options, run: clodl -h'
+  exit(1) # return failure error code
+end
+
+# If a report filename was not provided with -r,
+# inform the user that they must provide a filename, and exit.
+if report_filename.nil?
+  puts 'A report filename must be given using option --report.'
+  puts 'To see all options, run: clodl -h'
+  exit(1) # return failure error code
+end
+
+# Generate the language typology.
+competition_list = SL.generate_competitions_1r1s
+ft_result = FactorialTypology.new(competition_list)
+lang_list = ft_result.factorial_typology
+
+# Find the requested language.
+lang = lang_list.find { |l| l.label == label }
+if lang.nil?
+  puts "Language #{label} was not found in the typology."
+  exit(1)
+end
+outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
+
+# Run learning on the language.
+grammar = Grammar.new(system: SL::System.instance)
+grammar.label = label
+lang_sim = OTLearn::LanguageLearning.new
+result = lang_sim.learn(outputs, grammar)
+
+# Display if learning was successful to STDOUT.
+if result.learning_successful?
+  puts "#{label} learned."
+else
+  puts "#{label} not learned."
+end
+
+# Write the results to the output file.
+sim_image = OTLearn::LanguageLearningImageMaker.new.get_image(result)
+csv_output = CsvOutput.new(sim_image)
+csv_output.write_to_file(report_filename)
