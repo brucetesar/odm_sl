@@ -23,7 +23,7 @@ require 'ranker'
 require 'compare_pool'
 require 'compare_ctie'
 require 'compare_consistency'
-require 'loser_selector'
+require 'loser_selector_from_competition'
 require 'loser_selector_from_gen'
 require 'rcd_image_maker'
 
@@ -124,7 +124,7 @@ winner_list = wreader.convert_array_to_winners(winner_content.data)
 
 # Construct Loser Selector
 system = OTGeneric::System.new(comp_list)
-basic_selector = LoserSelector.new(comparer)
+basic_selector = LoserSelectorFromCompetition.new(comparer)
 loser_selector = LoserSelectorFromGen.new(system, basic_selector)
 
 # Run MRCD

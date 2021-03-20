@@ -7,7 +7,7 @@ require 'ranker'
 require 'compare_pool'
 require 'compare_ctie'
 require 'compare_consistency'
-require 'loser_selector'
+require 'loser_selector_from_competition'
 require 'constraint'
 require 'candidate'
 require 'erc'
@@ -37,6 +37,8 @@ def construct_erc(constraint_list, evaluation_list)
       erc.set_w(con)
     when :L
       erc.set_l(con)
+    when :e
+      # no need to explicitly set the default 'e' value
     end
   end
   erc
@@ -46,11 +48,12 @@ RSpec.describe 'loser selection', :integration do
   before(:example) do
     rcd_ranker = Ranker.new # default of RCD
     pool_comparer = ComparePool.new(rcd_ranker)
-    @pool_selector = LoserSelector.new(pool_comparer)
+    @pool_selector = LoserSelectorFromCompetition.new(pool_comparer)
     ctie_comparer = CompareCtie.new(rcd_ranker)
-    @ctie_selector = LoserSelector.new(ctie_comparer)
+    @ctie_selector = LoserSelectorFromCompetition.new(ctie_comparer)
     consistency_comparer = CompareConsistency.new
-    @consistency_selector = LoserSelector.new(consistency_comparer)
+    @consistency_selector =
+      LoserSelectorFromCompetition.new(consistency_comparer)
 
     @c1 = Constraint.new('c1', 1, MARK)
     @c2 = Constraint.new('c2', 2, MARK)

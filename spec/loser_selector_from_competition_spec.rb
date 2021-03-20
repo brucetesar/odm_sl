@@ -3,14 +3,14 @@
 # Author: Bruce Tesar
 
 require 'rspec'
-require 'loser_selector'
+require 'loser_selector_from_competition'
 
-RSpec.describe 'LoserSelector' do
+RSpec.describe 'LoserSelectorFromCompetition' do
   let(:winner) { double('winner') }
   let(:ranking_info) { double('ranking info') }
   let(:comparer) { double('comparer') }
   before(:each) do
-    @selector = LoserSelector.new(comparer)
+    @selector = LoserSelectorFromCompetition.new(comparer)
   end
 
   context 'given a competition with only the winner' do

@@ -3,7 +3,7 @@
 # Author: Bruce Tesar
 
 require 'compare_consistency'
-require 'loser_selector'
+require 'loser_selector_from_competition'
 require 'loser_selector_from_gen'
 require 'otlearn/grammar_test_result'
 
@@ -74,7 +74,7 @@ module OTLearn
 
     # Constructs the default loser selector.
     def default_loser_selector(system)
-      basic_selector = LoserSelector.new(CompareConsistency.new)
+      basic_selector = LoserSelectorFromCompetition.new(CompareConsistency.new)
       @loser_selector =
         LoserSelectorFromGen.new(system, basic_selector)
     end
