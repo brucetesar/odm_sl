@@ -15,7 +15,8 @@ RSpec.describe 'LoserSelectorFromGen' do
   before(:each) do
     allow(winner).to receive(:input).and_return(input)
     allow(system).to receive(:gen).with(input).and_return(competition)
-    allow(selector).to receive(:select_loser).and_return(loser_result)
+    allow(selector).to receive(:select_loser_from_competition)\
+      .and_return(loser_result)
     @gselector = LoserSelectorFromGen.new(system, selector)
   end
 
@@ -28,7 +29,7 @@ RSpec.describe 'LoserSelectorFromGen' do
       expect(system).to have_received(:gen).with(input)
     end
     it 'calls the selector with the generated competition' do
-      expect(selector).to have_received(:select_loser) \
+      expect(selector).to have_received(:select_loser_from_competition)\
         .with(winner, competition, ranking_info)
     end
     it 'returns the loser/nil returned by the selector' do

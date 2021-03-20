@@ -38,7 +38,8 @@ class LoserSelectorFromGen
   def select_loser(winner, ranking_info)
     # Obtain the competition from GEN.
     competition = @system.gen(winner.input)
-    # Return whatever @selector.select_loser returns.
-    @selector.select_loser(winner, competition, ranking_info)
+    # Return whatever @selector.select_loser_from_competition returns.
+    @selector.select_loser_from_competition(winner, competition,
+                                            ranking_info)
   end
 end

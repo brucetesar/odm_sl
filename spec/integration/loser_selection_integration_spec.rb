@@ -79,16 +79,22 @@ RSpec.describe 'loser selection', :integration do
       @competition = [@cand2, @winner, @cand1]
     end
     it 'Pool selects cand1' do
-      loser = @pool_selector.select_loser(@winner, @competition, @erc_list)
+      loser =
+        @pool_selector.select_loser_from_competition(@winner, @competition,
+                                                     @erc_list)
       expect(loser).to eq @cand1
     end
     it 'Ctie selects cand1' do
-      loser = @ctie_selector.select_loser(@winner, @competition, @erc_list)
+      loser =
+        @ctie_selector.select_loser_from_competition(@winner, @competition,
+                                                     @erc_list)
       expect(loser).to eq @cand1
     end
     it 'Consistency selects cand1' do
       loser =
-        @consistency_selector.select_loser(@winner, @competition, @erc_list)
+        @consistency_selector.select_loser_from_competition(@winner,
+                                                            @competition,
+                                                            @erc_list)
       expect(loser).to eq @cand1
     end
   end
@@ -105,16 +111,22 @@ RSpec.describe 'loser selection', :integration do
       @competition = [@cand2, @winner, @cand1]
     end
     it 'Pool selects no loser' do
-      loser = @pool_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @pool_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to be_nil
     end
     it 'Ctie selects no loser' do
-      loser = @ctie_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @ctie_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to be_nil
     end
     it 'Consistency selects no loser' do
       loser =
-        @consistency_selector.select_loser(@winner, @competition, @erc_list)
+        @consistency_selector.select_loser_from_competition(@winner,
+                                                            @competition,
+                                                            @erc_list)
       expect(loser).to be_nil
     end
   end
@@ -132,16 +144,22 @@ RSpec.describe 'loser selection', :integration do
       @competition = [@winner, @cand1]
     end
     it 'Pool selects no loser' do
-      loser = @pool_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @pool_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to be_nil
     end
     it 'Ctie selects cand1' do
-      loser = @ctie_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @ctie_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to eq @cand1
     end
     it 'Consistency selects cand1' do
       loser =
-        @consistency_selector.select_loser(@winner, @competition, @erc_list)
+        @consistency_selector.select_loser_from_competition(@winner,
+                                                            @competition,
+                                                            @erc_list)
       expect(loser).to eq @cand1
     end
   end
@@ -160,16 +178,22 @@ RSpec.describe 'loser selection', :integration do
       @competition = [@cand1, @winner, @cand2]
     end
     it 'Pool selects cand2' do
-      loser = @pool_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @pool_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to eq @cand2
     end
     it 'Ctie selects cand2' do
-      loser = @ctie_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @ctie_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to eq @cand2
     end
     it 'Consistency selects cand2' do
       loser =
-        @consistency_selector.select_loser(@winner, @competition, @erc_list)
+        @consistency_selector.select_loser_from_competition(@winner,
+                                                            @competition,
+                                                            @erc_list)
       expect(loser).to eq @cand2
     end
   end
@@ -186,16 +210,22 @@ RSpec.describe 'loser selection', :integration do
       @competition = [@cand1, @winner]
     end
     it 'Pool selects no loser' do
-      loser = @pool_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @pool_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to be nil
     end
     it 'Ctie selects no loser' do
-      loser = @ctie_selector.select_loser(@winner, @competition, @erc_list)
+      loser = @ctie_selector.select_loser_from_competition(@winner,
+                                                           @competition,
+                                                           @erc_list)
       expect(loser).to be nil
     end
     it 'Consistency selects no loser' do
       loser =
-        @consistency_selector.select_loser(@winner, @competition, @erc_list)
+        @consistency_selector.select_loser_from_competition(@winner,
+                                                            @competition,
+                                                            @erc_list)
       expect(loser).to be nil
     end
   end

@@ -19,7 +19,7 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, winner, ranking_info) \
         .and_return(:IDENT_VIOLATIONS)
-      @loser = @selector.select_loser(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
     end
     it 'returns nil' do
       expect(@loser).to be nil
@@ -36,7 +36,7 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, moreh, ranking_info) \
         .and_return(:SECOND)
-      @loser = @selector.select_loser(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
     end
     it 'returns the competitor' do
       expect(@loser).to eq moreh
@@ -53,7 +53,7 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, lessh, ranking_info) \
         .and_return(:FIRST)
-      @loser = @selector.select_loser(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
     end
     it 'returns nil' do
       expect(@loser).to be nil
@@ -70,7 +70,7 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, ident_viols, ranking_info) \
         .and_return(:IDENT_VIOLATIONS)
-      @loser = @selector.select_loser(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
     end
     it 'returns nil' do
       expect(@loser).to be nil
@@ -95,7 +95,7 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, lessh, ranking_info) \
         .and_return(:FIRST)
-      @loser = @selector.select_loser(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
     end
     it 'returns the competitor' do
       expect(@loser).to eq moreh1

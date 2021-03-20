@@ -4,7 +4,8 @@
 
 # Selects an informative loser for the winner, if one can be found within
 # the competition, relative to the provided ranking information. A loser
-# is selected by calling LoserSelectorFromCompetition#select_loser.
+# is selected by calling
+# LoserSelectorFromCompetition#select_loser_from_competition.
 #
 # The comparer is assumed to always respond to the method
 # #more_harmonic(winner, competitor, ranking_info) with one of the
@@ -36,8 +37,8 @@ class LoserSelectorFromCompetition
   # If no informative loser is found, it returns nil.
   #
   # :call-seq:
-  #   select_loser(winner, competition, ranking_info) -> candidate or nil
-  def select_loser(winner, competition, ranking_info)
+  #   select_loser_from_competition(winner, competition, ranking_info) -> candidate or nil
+  def select_loser_from_competition(winner, competition, ranking_info)
     competition.each do |candidate|
       compare_code = @comparer.more_harmonic(winner, candidate,
                                              ranking_info)
