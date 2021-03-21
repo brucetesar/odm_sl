@@ -13,17 +13,13 @@ require 'compare_ctie'
 require 'compare_consistency'
 
 # A factory class for constructing comparer objects according to various
-# specifications.
+# specifications. Will also return Rcd_Runner objects corresponding
+# to the ranking bias specifications.
 class ComparerFactory
-  # The RCD runner corresponding to the learning bias. Nil if no
-  # learning bias has been set.
-  attr_reader :rcd_runner
-
   # Returns a new ComparerFactory object.
   def initialize
     @ranking_bias = nil
     @compare_type = nil
-    @rcd_runner = nil
   end
 
   # Sets the factory to use the all high ranking bias.
@@ -67,13 +63,10 @@ class ComparerFactory
   # if a ranking bias is specified, whether or not a ranking bias
   # is needed by the comparer.
   def create_comparer
-    ranker = construct_ranker unless @ranking_bias.nil?
     if @compare_type == :pool
-      no_bias_error('Pool') if @ranking_bias.nil?
-      ComparePool.new(ranker)
+      ComparePool.new(Ranker.new(rcd_runner))
     elsif @compare_type == :ctie
-      no_bias_error('Ctie') if @ranking_bias.nil?
-      CompareCtie.new(ranker)
+      CompareCtie.new(Ranker.new(rcd_runner))
     elsif @compare_type == :consistent
       CompareConsistency.new
     else
@@ -81,24 +74,27 @@ class ComparerFactory
     end
   end
 
-  # Construct and return a ranker object using current
-  # factory settings for ranking bias.
-  def construct_ranker
+  # The RCD runner corresponding to the learning bias. Nil if no
+  # ranking bias has been set.
+  def rcd_runner
     bias = if @ranking_bias == :faith_low
              OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
            elsif @ranking_bias == :mark_low
              OTLearn::RankingBiasSomeLow.new(OTLearn::MarkLow.new)
            elsif @ranking_bias == :all_high
              RankingBiasAllHigh.new
+           else
+             no_bias_error
            end
-    @rcd_runner = RcdRunner.new(bias)
-    Ranker.new(@rcd_runner)
+    RcdRunner.new(bias)
   end
-  protected :construct_ranker
 
-  def no_bias_error(compare_type)
-    msg1 = "ComparerFactory: compare type #{compare_type}"
-    msg2 = 'but no bias type specified.'
+  # Raises an exception indicating that a bias type is required
+  # but has not been specified.
+  def no_bias_error
+    msg1 = 'ComparerFactory#rcd_runner:'
+    msg2 = 'but no valid ranking bias has been set.'
     raise "#{msg1} #{msg2}"
   end
+  protected :no_bias_error
 end

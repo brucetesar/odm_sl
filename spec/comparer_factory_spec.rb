@@ -19,6 +19,9 @@ RSpec.describe 'ComparerFactory' do
     it 'returns a comparer' do
       expect(@comparer).to respond_to(:more_harmonic)
     end
+    it 'returns an rcd_runner' do
+      expect(@factory.rcd_runner).to respond_to(:run_rcd)
+    end
   end
   context 'set for Pool with a mark-low bias' do
     before(:example) do
@@ -29,6 +32,9 @@ RSpec.describe 'ComparerFactory' do
     it 'returns a comparer' do
       expect(@comparer).to respond_to(:more_harmonic)
     end
+    it 'returns an rcd_runner' do
+      expect(@factory.rcd_runner).to respond_to(:run_rcd)
+    end
   end
   context 'set for Consistent' do
     before(:example) do
@@ -38,9 +44,23 @@ RSpec.describe 'ComparerFactory' do
     it 'returns a comparer' do
       expect(@comparer).to respond_to(:more_harmonic)
     end
+    it 'with no ranking bias rcd_runner raises an exception' do
+      expect { @factory.rcd_runner }.to raise_error(RuntimeError)
+    end
+    context 'and then a ranking bias is set' do
+      before(:example) do
+        @factory.all_high
+      end
+      it 'returns an rcd_runner' do
+        expect(@factory.rcd_runner).to respond_to(:run_rcd)
+      end
+    end
   end
   context 'no compare type is set' do
-    it 'raises an exception' do
+    it 'rcd_runner raises an exception' do
+      expect { @factory.rcd_runner }.to raise_error(RuntimeError)
+    end
+    it 'create_comparer raises an exception' do
       expect { @factory.create_comparer }.to raise_error(RuntimeError)
     end
   end
