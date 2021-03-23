@@ -113,7 +113,7 @@ class Erc
   # and that result is combined with the hash value for @l_cons via
   # bit-wise EXCLUSIVE OR.
   def hash
-    (@w_cons.hash << 1) ^ (@l_cons.hash)
+    (@w_cons.hash << 1) ^ @l_cons.hash
   end
 
   # Returns the ERC's list of constraints.
@@ -132,17 +132,14 @@ class Erc
     end
   end
 
-  # Convert only the constraint preference values to a string.
-  # Useful for representing the prefs separately from the label.
-  def prefs_to_s
+  # Convert the constraint preference values to a string with
+  # constraint names.
+  #
+  # Example: 'C1:W C2:e C3:L'
+  def to_s
     prefs_s = ''
     @constraints.each { |c| prefs_s += " #{c}:#{pref_to_s(c)}" }
-    prefs_s.lstrip! # remove the leading space from the string
-  end
-
-  # A string representation of the label and the constraint preferences.
-  def to_s
-    "#{@label} #{prefs_to_s}"
+    prefs_s.lstrip # remove the leading space from the string
   end
 
   # Expands the erc with respect to the constraints preferring the loser,
