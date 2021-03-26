@@ -2,37 +2,42 @@
 
 # Author: Bruce Tesar
 
-# This class is an "adapter" class, in that it adapts a
-# LoserSelectorFromCompetition object, which requires that a competition
-# be provided, to situations in which the competition is implicitly
-# assumed to be the product of GEN being applied to the input of the
-# winner.
+require 'loser_selector_from_competition'
+
+# An object of this class selects an informative loser, if one exists,
+# for a given winner relative to given ranking information.
+# It is based on the linguistic system's GEN, meaning that it searches
+# the entire space of candidates, as provided by GEN, for the input
+# of the winner.
 #
-# An object of this class is constructed with provided system and
-# selector objects, and when it receives the method call
-# #select_loser(winner, ranking_info),
+# A LoserSelectorFromGen is constructed with provided system and
+# comparer objects, and uses the comparer to build a loser selector
+# that operates over an entire competition (list of candidates).
+# When it receives the method call #select_loser(winner, ranking_info),
 # it calls the system's GEN with the input of the winner, and then feeds
-# that competition (along with the winner and rank_info) to the selector,
-# returning the selector's result.
+# that competition (along with the winner and rank_info) to the
+# constructed selector, returning the selector's result.
 class LoserSelectorFromGen
   # Constructs a new LoserSelectorFromGen object, given a _system_ and
-  # a loser _selector_.
+  # a _comparer_.
   #
   # === Parameters
   # * _system_ - provides access to GEN for the linguistic system.
-  # * _selector_ - a loser_selector object that expects to be provided
-  #   with a list of candidates from which to select a loser.
+  # * _comparer_ - compares two candidates with respect to ranking
+  #   information.
   # :call-seq:
-  #   LoserSelectorFromGen.new(system, selector) -> selector_from_gen
-  def initialize(system, selector)
+  #   LoserSelectorFromGen.new(system, comparer) -> selector
+  #--
+  # selector_class is a dependency injection used for testing.
+  def initialize(system, comparer,
+                 selector_class: LoserSelectorFromCompetition)
     @system = system
-    @selector = selector
+    @selector = selector_class.new(comparer)
   end
 
-  # Returns the informative loser from among the competition generated
+  # Returns the informative loser from among the candidates generated
   # by GEN for the winner's input. Returns nil if no informative loser
   # is found.
-  #
   # :call-seq:
   #   select_loser(winner, ranking_info) -> candidate or nil
   def select_loser(winner, ranking_info)

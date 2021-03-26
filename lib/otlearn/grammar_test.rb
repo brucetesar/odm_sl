@@ -3,7 +3,6 @@
 # Author: Bruce Tesar
 
 require 'compare_consistency'
-require 'loser_selector_from_competition'
 require 'loser_selector_from_gen'
 require 'otlearn/grammar_test_result'
 
@@ -27,6 +26,8 @@ module OTLearn
     attr_accessor :loser_selector
 
     # Returns a new GrammarTest object.
+    # :call-seq:
+    #   GrammarTest.new -> tester
     def initialize
       @loser_selector = nil
     end
@@ -55,6 +56,8 @@ module OTLearn
       # If no loser selector was passed in, build the default one.
       default_loser_selector(grammar.system) if @loser_selector.nil?
       # Initialize lists for failed and successful winners
+      # TODO: change @failed_winners, @success_winners to local vars,
+      #       remove obsolete method #freeze_results.
       @failed_winners = []
       @success_winners = []
       # Parse each output, to create a test instance of the word.
@@ -74,18 +77,17 @@ module OTLearn
 
     # Constructs the default loser selector.
     def default_loser_selector(system)
-      basic_selector = LoserSelectorFromCompetition.new(CompareConsistency.new)
       @loser_selector =
-        LoserSelectorFromGen.new(system, basic_selector)
+        LoserSelectorFromGen.new(system, CompareConsistency.new)
     end
     private :default_loser_selector
 
     # Freeze the test results, so they cannot be accidentally altered later.
     def freeze_results(failed_winners, success_winners, grammar)
       grammar.freeze
-      failed_winners.each { |fw| fw.freeze }
+      failed_winners.each(&:freeze)
       failed_winners.freeze
-      success_winners.each { |sw| sw.freeze }
+      success_winners.each(&:freeze)
       success_winners.freeze
     end
     private :freeze_results

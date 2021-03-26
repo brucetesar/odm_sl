@@ -15,7 +15,6 @@ require 'otgeneric/winners_reader'
 require 'otgeneric/system'
 require 'otlearn/mrcd'
 require 'comparer_factory'
-require 'loser_selector_from_competition'
 require 'loser_selector_from_gen'
 require 'rcd_image_maker'
 
@@ -120,8 +119,7 @@ comparer = comp_factory.create_comparer
 
 # Construct Loser Selector
 system = OTGeneric::System.new(comp_list)
-basic_selector = LoserSelectorFromCompetition.new(comparer)
-loser_selector = LoserSelectorFromGen.new(system, basic_selector)
+loser_selector = LoserSelectorFromGen.new(system, comparer)
 
 # Run MRCD
 erc_list = ErcList.new(system.constraints)

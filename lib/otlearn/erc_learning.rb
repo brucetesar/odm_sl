@@ -4,7 +4,6 @@
 
 require 'otlearn/mrcd'
 require 'compare_consistency'
-require 'loser_selector_from_competition'
 require 'loser_selector_from_gen'
 
 module OTLearn
@@ -17,6 +16,10 @@ module OTLearn
     attr_accessor :loser_selector
 
     # Returns a new ErcLearning object.
+    # :call-seq:
+    #   ErcLearning.new -> learner
+    #--
+    # mrcd_class is a dependency injection used for testing.
     def initialize(mrcd_class: Mrcd)
       @loser_selector = nil
       @mrcd_class = mrcd_class
@@ -36,9 +39,8 @@ module OTLearn
 
     # Constructs the default loser selector.
     def default_loser_selector(system)
-      basic_selector = LoserSelectorFromCompetition.new(CompareConsistency.new)
       @loser_selector =
-        LoserSelectorFromGen.new(system, basic_selector)
+        LoserSelectorFromGen.new(system, CompareConsistency.new)
     end
     private :default_loser_selector
   end

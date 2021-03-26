@@ -4,7 +4,6 @@
 
 require 'otlearn/mrcd'
 require 'compare_consistency'
-require 'loser_selector_from_competition'
 require 'loser_selector_from_gen'
 
 module OTLearn
@@ -61,8 +60,8 @@ module OTLearn
 
     # Constructs the default loser selector.
     def default_loser_selector(system)
-      basic_selector = LoserSelectorFromCompetition.new(CompareConsistency.new)
-      @loser_selector = LoserSelectorFromGen.new(system, basic_selector)
+      @loser_selector =
+        LoserSelectorFromGen.new(system, CompareConsistency.new)
     end
     private :default_loser_selector
   end
