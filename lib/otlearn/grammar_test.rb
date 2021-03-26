@@ -8,16 +8,16 @@ require 'otlearn/grammar_test_result'
 
 module OTLearn
   # A GrammarTest object holds the results of the evaluation of a set
-  # of grammatical outputs with respect to a grammar. The tests are initiated
-  # by creating a GrammarTest; the constructor takes a list of outputs and
-  # a grammar as parameters.
+  # of grammatical outputs with respect to a grammar. The tests are
+  # initiated by creating a GrammarTest; the constructor takes a list of
+  # outputs and a grammar as parameters.
   #
   # Each word is evaluated with a mismatched input: each unset feature is
   # set to the value opposite its surface realization in the word. If
-  # a word with a mismatched input is still optimal for the current grammar,
-  # then there is nothing more to be learned about the grammar from the word:
-  # by output-drivenness, all viable inputs for the word map to the correct
-  # output.
+  # a word with a mismatched input is still optimal for the current
+  # grammar, then there is nothing more to be learned about the grammar
+  # from the word: by output-drivenness, all viable inputs for the word map
+  # to the correct output.
   #
   # This class assumes that all of the unset features are binary; see the
   # documentation for Word#mismatch_input_to_output!.
@@ -56,10 +56,8 @@ module OTLearn
       # If no loser selector was passed in, build the default one.
       default_loser_selector(grammar.system) if @loser_selector.nil?
       # Initialize lists for failed and successful winners
-      # TODO: change @failed_winners, @success_winners to local vars,
-      #       remove obsolete method #freeze_results.
-      @failed_winners = []
-      @success_winners = []
+      failed_winners = []
+      success_winners = []
       # Parse each output, to create a test instance of the word.
       output_list.each do |output|
         word = grammar.parse_output(output)
@@ -67,12 +65,12 @@ module OTLearn
         loser = @loser_selector.select_loser(word, grammar.erc_list)
         # If no loser was found, then the word is optimal, and a success.
         if loser.nil?
-          @success_winners << word
+          success_winners << word
         else
-          @failed_winners << word
+          failed_winners << word
         end
       end
-      GrammarTestResult.new(@failed_winners, @success_winners, grammar)
+      GrammarTestResult.new(failed_winners, success_winners, grammar)
     end
 
     # Constructs the default loser selector.
@@ -81,15 +79,5 @@ module OTLearn
         LoserSelectorFromGen.new(system, CompareConsistency.new)
     end
     private :default_loser_selector
-
-    # Freeze the test results, so they cannot be accidentally altered later.
-    def freeze_results(failed_winners, success_winners, grammar)
-      grammar.freeze
-      failed_winners.each(&:freeze)
-      failed_winners.freeze
-      success_winners.each(&:freeze)
-      success_winners.freeze
-    end
-    private :freeze_results
   end
 end
