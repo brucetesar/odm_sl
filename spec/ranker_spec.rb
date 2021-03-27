@@ -18,6 +18,7 @@ RSpec.describe 'Ranker' do
 
   context 'when called with ercs' do
     before(:example) do
+      allow(rcd_obj).to receive(:consistent?).and_return(true)
       @hierarchy = @ranker.get_hierarchy(ercs)
     end
     it 'creates a new RCD object with the ercs' do
@@ -25,6 +26,15 @@ RSpec.describe 'Ranker' do
     end
     it 'returns the hierarchy produced by RCD' do
       expect(@hierarchy).to eq rcd_hierarchy
+    end
+  end
+
+  context 'when called with inconsistent ercs' do
+    before(:example) do
+      allow(rcd_obj).to receive(:consistent?).and_return(false)
+    end
+    it 'raises a RuntimeError' do
+      expect { @ranker.get_hierarchy(ercs) }.to raise_error(RuntimeError)
     end
   end
 end
