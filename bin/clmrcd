@@ -131,8 +131,7 @@ if mrcd_result.consistent?
 else
   puts 'Inconsistent'
 end
-ercs = ErcList.new(system.constraints).add_all(mrcd_result.added_pairs)
-rcd_result = comp_factory.rcd_runner.run_rcd(ercs)
+rcd_result = comp_factory.rcd_runner.run_rcd(mrcd_result.erc_list)
 puts rcd_result.hierarchy.to_s
 
 # If a report filename was given, write a CSV image of the support
