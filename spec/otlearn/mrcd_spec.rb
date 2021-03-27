@@ -7,16 +7,21 @@ require 'otlearn/mrcd'
 
 RSpec.describe 'MRCD' do
   let(:param_erc_list) { double('param_erc_list') }
+  let(:prior_ercs) { double('prior_ercs') }
   let(:erc_list) { double('erc_list') }
   let(:selector) { double('selector') }
   let(:single_mrcd_class) { double('single MRCD class') }
   before(:each) do
-    allow(param_erc_list).to receive(:dup).and_return(erc_list)
+    allow(param_erc_list).to receive(:dup).and_return(prior_ercs, erc_list)
+    allow(prior_ercs).to receive(:freeze).and_return(prior_ercs)
+    allow(erc_list).to receive(:freeze).and_return(erc_list)
   end
 
   context 'with an empty word list' do
     before(:each) do
       @word_list = []
+      allow(prior_ercs).to receive(:empty?).and_return(true)
+      allow(erc_list).to receive(:empty?).and_return(true)
       allow(erc_list).to receive(:consistent?).and_return(true)
       @mrcd = OTLearn::Mrcd.new(@word_list, param_erc_list, selector,
                                 single_mrcd_class: single_mrcd_class)
@@ -24,8 +29,23 @@ RSpec.describe 'MRCD' do
     it 'should not have any changes to the ranking information' do
       expect(@mrcd.any_change?).not_to be true
     end
-    it 'returns no new pairs' do
+    it 'returns an empty new pairs list' do
       expect(@mrcd.added_pairs).to be_empty
+    end
+    it 'returns an empty prior ercs list' do
+      expect(@mrcd.prior_ercs).to be_empty
+    end
+    it 'returns an empty total ERC list' do
+      expect(@mrcd.erc_list).to be_empty
+    end
+    it 'freezes the prior ercs list' do
+      expect(@mrcd.prior_ercs).to have_received(:freeze)
+    end
+    it 'freezes the added pairs list' do
+      expect(@mrcd.added_pairs).to be_frozen
+    end
+    it 'freezes the erc list' do
+      expect(@mrcd.erc_list).to have_received(:freeze)
     end
   end
 
