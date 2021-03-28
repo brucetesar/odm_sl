@@ -16,6 +16,15 @@ module OTLearn
   # grammar (which will likely be altered during the course of learning).
   # The method #learn returns a learning result object.
   #
+  # The major components of the learner can be assigned externally via
+  # the attributes:
+  # * ph_learner - phonotactic learner
+  # * sf_learner - single form learner
+  # * cp_learner - contrast pair learner
+  # * in_learner - induction learner
+  # Any components not set externally will be assigned a default object
+  # the first time \#learn is called.
+  #
   # The learning proceeds in the following stages, in order:
   # * Phonotactic learning.
   # * Repeat until the language is learned or no further change can be made.
@@ -31,7 +40,7 @@ module OTLearn
     # Phonotactic learner
     attr_accessor :ph_learner
 
-    # Single-form learner
+    # Single form learner
     attr_accessor :sf_learner
 
     # Contrast pair learner
@@ -47,11 +56,11 @@ module OTLearn
     # warn_output is a dependency injection used for testing. It is
     # the IO channel to which warnings are written (normally $stderr).
     def initialize(warn_output: $stderr)
-      # Set the default values for the learning step objects
-      @ph_learner = PhonotacticLearning.new
-      @sf_learner = SingleFormLearning.new
-      @cp_learner = ContrastPairLearning.new
-      @in_learner = InductionLearning.new
+      # Initialize the learning step object variables.
+      @ph_learner = nil
+      @sf_learner = nil
+      @cp_learner = nil
+      @in_learner = nil
       # The default output channel for warnings is $stderr.
       @warn_output = warn_output
     end
@@ -75,6 +84,7 @@ module OTLearn
     # proceeds to paradigmatic learning.
     # Returns true if learning was successful, false otherwise.
     def execute_learning(output_list, grammar)
+      optional_defaults
       @step_list << @ph_learner.run(output_list, grammar)
       paradigmatic_loop(output_list, grammar) unless last_step.all_correct?
       last_step.all_correct?
@@ -108,6 +118,18 @@ module OTLearn
       @step_list[-1]
     end
     private :last_step
+
+    # Checks each of the learner components. For each component,
+    # if a learner object has not been assigned externally,
+    # assign the default. Returns true.
+    def optional_defaults
+      @ph_learner ||= PhonotacticLearning.new
+      @sf_learner ||= SingleFormLearning.new
+      @cp_learner ||= ContrastPairLearning.new
+      @in_learner ||= InductionLearning.new
+      true # arbitrary return value
+    end
+    private :optional_defaults
 
     # Calls provided block, and rescues an exception if one arises.
     # Returns the value returned by block if no exception is raised,
