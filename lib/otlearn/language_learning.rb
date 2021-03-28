@@ -87,19 +87,18 @@ module OTLearn
     # * contrast pair learning
     # * if no contrast pair, induction learning
     def paradigmatic_loop(output_list, grammar)
-      loop do
+      # Loop until learning is complete.
+      until last_step.all_correct?
         @step_list << @sf_learner.run(output_list, grammar)
         break if last_step.all_correct?
 
         @step_list << @cp_learner.run(output_list, grammar)
+        next if last_step.changed?
+
         # If CP learning failed, try induction learning.
-        unless last_step.changed?
-          @step_list << @in_learner.run(output_list, grammar)
-          # CP and induction learning failed, so quit looping
-          break unless last_step.changed?
-        end
-        # Stop looping if learning is complete
-        break if last_step.all_correct?
+        @step_list << @in_learner.run(output_list, grammar)
+        # If CP and induction failed, quit looping.
+        break unless last_step.changed?
       end
     end
     private :paradigmatic_loop
