@@ -18,6 +18,12 @@ require 'loser_selector_from_competition'
 # that competition (along with the winner and rank_info) to the
 # constructed selector, returning the selector's result.
 class LoserSelectorFromGen
+  # The linguistic system providing the GEN function.
+  attr_reader :system
+
+  # the comparer for comparing pairs of candidates.
+  attr_reader :comparer
+
   # Constructs a new LoserSelectorFromGen object, given a _system_ and
   # a _comparer_.
   #
@@ -32,6 +38,7 @@ class LoserSelectorFromGen
   def initialize(system, comparer,
                  selector_class: LoserSelectorFromCompetition)
     @system = system
+    @comparer = comparer
     @selector = selector_class.new(comparer)
   end
 

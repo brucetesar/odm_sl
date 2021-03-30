@@ -26,6 +26,15 @@ RSpec.describe 'LoserSelectorFromGen' do
                                selector_class: selector_comp_class)
   end
 
+  context 'given a newly created selector' do
+    it 'contains the supplied gen' do
+      expect(@gselector.system).to eq system
+    end
+    it 'contains the supplied comparer' do
+      expect(@gselector.comparer).to eq comparer
+    end
+  end
+
   context 'given a winner and ranking information' do
     let(:ranking_info) { double('ranking_info') }
     before(:each) do
