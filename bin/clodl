@@ -16,6 +16,8 @@ require 'otlearn/data_manip'
 require 'otlearn/language_learning'
 require 'otlearn/language_learning_image_maker'
 require 'csv_output'
+require 'comparer_factory'
+require 'otlearn/phonotactic_learning_factory'
 
 # define variables for option values
 label = nil
@@ -72,10 +74,25 @@ if lang.nil?
 end
 outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
 
+# Construct the comparer factory
+comparer_factory = ComparerFactory.new
+
+# Construct the phonotactic learner
+comparer_factory.consistent
+comparer_factory.faith_low
+learn_comparer = comparer_factory.create_comparer
+test_comparer = comparer_factory.create_comparer
+ph_factory = OTLearn::PhonotacticLearningFactory.new
+ph_factory.system = SL::System.instance
+ph_factory.learning_comparer = learn_comparer
+ph_factory.testing_comparer = test_comparer
+ph_learner = ph_factory.build
+
 # Run learning on the language.
 grammar = Grammar.new(system: SL::System.instance)
 grammar.label = label
 lang_sim = OTLearn::LanguageLearning.new
+lang_sim.ph_learner = ph_learner
 result = lang_sim.learn(outputs, grammar)
 
 # Display if learning was successful to STDOUT.
