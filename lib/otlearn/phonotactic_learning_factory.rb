@@ -52,8 +52,6 @@ module OTLearn
       @testing_comparer = nil
     end
 
-    # TODO: standardize factories to use method name #build
-
     # Returns an OTLearn::PhonotacticLearning object matching
     # the factory-specified settings.
     #

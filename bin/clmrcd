@@ -115,7 +115,7 @@ wreader.competitions = comp_list
 winner_list = wreader.convert_array_to_winners(winner_content.data)
 
 # Create a comparer object with the factory settings.
-comparer = comp_factory.create_comparer
+comparer = comp_factory.build
 
 # Construct Loser Selector
 system = OTGeneric::System.new(comp_list)

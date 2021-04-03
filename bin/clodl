@@ -78,10 +78,9 @@ outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
 comparer_factory = ComparerFactory.new
 
 # Construct the phonotactic learner
-comparer_factory.consistent
-comparer_factory.faith_low
-learn_comparer = comparer_factory.create_comparer
-test_comparer = comparer_factory.create_comparer
+comparer_factory.consistent.faith_low
+learn_comparer = comparer_factory.build
+test_comparer = comparer_factory.build
 ph_factory = OTLearn::PhonotacticLearningFactory.new
 ph_factory.system = SL::System.instance
 ph_factory.learning_comparer = learn_comparer

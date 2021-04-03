@@ -14,7 +14,7 @@ RSpec.describe 'ComparerFactory' do
     before(:example) do
       @factory.faith_low
       @factory.ctie
-      @comparer = @factory.create_comparer
+      @comparer = @factory.build
     end
     it 'returns a comparer' do
       expect(@comparer).to respond_to(:more_harmonic)
@@ -27,7 +27,7 @@ RSpec.describe 'ComparerFactory' do
     before(:example) do
       @factory.mark_low
       @factory.pool
-      @comparer = @factory.create_comparer
+      @comparer = @factory.build
     end
     it 'returns a comparer' do
       expect(@comparer).to respond_to(:more_harmonic)
@@ -39,7 +39,7 @@ RSpec.describe 'ComparerFactory' do
   context 'set for Consistent' do
     before(:example) do
       @factory.consistent
-      @comparer = @factory.create_comparer
+      @comparer = @factory.build
     end
     it 'returns a comparer' do
       expect(@comparer).to respond_to(:more_harmonic)
@@ -60,8 +60,8 @@ RSpec.describe 'ComparerFactory' do
     it 'rcd_runner raises an exception' do
       expect { @factory.rcd_runner }.to raise_error(RuntimeError)
     end
-    it 'create_comparer raises an exception' do
-      expect { @factory.create_comparer }.to raise_error(RuntimeError)
+    it 'build raises an exception' do
+      expect { @factory.build }.to raise_error(RuntimeError)
     end
   end
   context 'set for CTie but no bias type is set' do
@@ -69,7 +69,7 @@ RSpec.describe 'ComparerFactory' do
       @factory.ctie
     end
     it 'raises an exception' do
-      expect { @factory.create_comparer }.to raise_error(RuntimeError)
+      expect { @factory.build }.to raise_error(RuntimeError)
     end
   end
   context 'set for Pool but no bias type is set' do
@@ -77,7 +77,43 @@ RSpec.describe 'ComparerFactory' do
       @factory.pool
     end
     it 'raises an exception' do
-      expect { @factory.create_comparer }.to raise_error(RuntimeError)
+      expect { @factory.build }.to raise_error(RuntimeError)
+    end
+  end
+  context 'with Pool and faith_low set on the same line' do
+    before(:example) do
+      @factory.pool.faith_low
+      @comparer = @factory.build
+    end
+    it 'returns a comparer' do
+      expect(@comparer).to respond_to(:more_harmonic)
+    end
+    it 'returns an rcd_runner' do
+      expect(@factory.rcd_runner).to respond_to(:run_rcd)
+    end
+  end
+  context 'with CTie and mark_low set on the same line' do
+    before(:example) do
+      @factory.mark_low.ctie
+      @comparer = @factory.build
+    end
+    it 'returns a comparer' do
+      expect(@comparer).to respond_to(:more_harmonic)
+    end
+    it 'returns an rcd_runner' do
+      expect(@factory.rcd_runner).to respond_to(:run_rcd)
+    end
+  end
+  context 'with consistent and all_high set on the same line' do
+    before(:example) do
+      @factory.consistent.all_high
+      @comparer = @factory.build
+    end
+    it 'returns a comparer' do
+      expect(@comparer).to respond_to(:more_harmonic)
+    end
+    it 'returns an rcd_runner' do
+      expect(@factory.rcd_runner).to respond_to(:run_rcd)
     end
   end
 end
