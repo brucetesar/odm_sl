@@ -15,6 +15,26 @@ require 'compare_consistency'
 # A factory class for constructing comparer objects according to various
 # specifications. Will also return Rcd_Runner objects corresponding
 # to the ranking bias specifications.
+# === Factory Settings
+# * compare type - a valid compare type must be set prior to
+#   building a comparer, by calling one of the compare type methods:
+#   pool, ctie, consistent
+# * ranking bias - if a compare type of pool or ctie is used, or an
+#   rcd runner is going to be built, then a ranking bias must be set,
+#   by calling one of the bias methods: all_high, faith_low, mark_low
+# === Build Outline
+# If the compare type is consistent, then a new CompareConsistency
+# object is returned. CompareConsistency does not use parsing for loser
+# selection, so no ranking bias is needed.
+#
+# If the compare type is pool or ctie, parsing is used for loser
+# selection, and a ranking bias is required.
+# * An appropriate ranking bias object is created.
+# * An RCD runner, of class RcdRunner, is created, using the ranking
+#   bias object.
+# * A ranker, of class Ranker, is created, using the RCD runner.
+# * An appropriate comparer object is built and returned, using
+#   the ranker.
 class ComparerFactory
   # Returns a new ComparerFactory object.
   # :call-seq:
