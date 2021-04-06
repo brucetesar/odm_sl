@@ -46,11 +46,7 @@ module OTLearn
     # Returns a new SingleFormLearningFactory object.
     # :call-seq:
     #   SingleFormLearningFactory.new -> factory
-    def initialize
-      @system = nil
-      @learning_comparer = nil
-      @testing_comparer = nil
-    end
+    def initialize; end
 
     # Returns an OTLearn::SingleFormLearning object matching
     # the factory-specified settings.
@@ -59,9 +55,9 @@ module OTLearn
     # have not been provided.
     def build
       check_factory_settings
-      learn_selector = create_loser_selector(@learning_comparer)
+      learn_selector = create_loser_selector(learning_comparer)
       para_erc_learner = create_para_erc_learner(learn_selector)
-      test_selector = create_loser_selector(@testing_comparer)
+      test_selector = create_loser_selector(testing_comparer)
       tester = create_grammar_tester(test_selector)
       sf_learner = SingleFormLearning.new
       sf_learner.para_erc_learner = para_erc_learner
@@ -97,7 +93,7 @@ module OTLearn
     private :create_para_erc_learner
 
     def create_loser_selector(comparer)
-      LoserSelectorFromGen.new(@system, comparer)
+      LoserSelectorFromGen.new(system, comparer)
     end
     private :create_loser_selector
 
