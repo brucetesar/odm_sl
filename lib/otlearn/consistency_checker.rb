@@ -3,7 +3,7 @@
 # Author: Bruce Tesar
 
 require 'otlearn/mrcd'
-require 'compare_consistency'
+require 'comparer_factory'
 require 'loser_selector_from_gen'
 
 module OTLearn
@@ -12,8 +12,25 @@ module OTLearn
   # is consistent with the prior ERCs of the grammar and makes each of
   # the words optimal, then the words are collectively consistent with
   # the grammar.
+  #
+  # Once a ConsistencyChecker is created, it has two execution entry
+  # points:
+  # * _consistent?_ evaluates a list of fully-determined words, assumed to
+  #   have values assigned to all of their input features.
+  # * _mismatch_consistent?_ evaluates a list of outputs, by creating,
+  #   for each output, the word with the maximum mismatched input,
+  #   meaning that each unset feature for a word is assigned an input
+  #   value opposite of its output realization for that word.
+  #
+  # Because it is only checking consistency, finding a single hierarchy in
+  # which all of the words are simultaneously optimal is sufficient. Thus,
+  # ordinarily a loser selector that uses the Pool comparison method and
+  # the all-high ranking bias is sufficient (and more efficient). That is
+  # the default; the attribute _loser_selector_ need only be assigned
+  # externally if you wish to do something different.
   class ConsistencyChecker
-    # Selects informative ERCs; used by Mrcd.
+    # Selects informative losers; used by Mrcd. Default: Pool with the
+    # all-high ranking bias.
     attr_accessor :loser_selector
 
     # Returns a new ConsistencyChecker object.
@@ -58,10 +75,13 @@ module OTLearn
       mrcd_result.consistent?
     end
 
-    # Constructs the default loser selector.
+    # Constructs the default loser selector, which uses the Pool comparsion
+    # method and the all-high ranking bias.
     def default_loser_selector(system)
-      @loser_selector =
-        LoserSelectorFromGen.new(system, CompareConsistency.new)
+      factory = ComparerFactory.new
+      factory.pool.all_high
+      comparer = factory.build
+      @loser_selector = LoserSelectorFromGen.new(system, comparer)
     end
     private :default_loser_selector
   end
