@@ -79,10 +79,13 @@ outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
 # Construct the comparer factory
 comparer_factory = ComparerFactory.new
 
+# Construct the testing comparer
+comparer_factory.consistent.faith_low
+test_comparer = comparer_factory.build
+
 # Construct the phonotactic learner
 comparer_factory.consistent.faith_low
 learn_comparer = comparer_factory.build
-test_comparer = comparer_factory.build
 ph_factory = OTLearn::PhonotacticLearningFactory.new
 ph_factory.system = SL::System.instance
 ph_factory.learning_comparer = learn_comparer
@@ -92,8 +95,6 @@ ph_learner = ph_factory.build
 # Construct the single form learner
 comparer_factory.consistent.mark_low
 learn_comparer = comparer_factory.build
-comparer_factory.consistent.faith_low
-test_comparer = comparer_factory.build
 sf_factory = OTLearn::SingleFormLearningFactory.new
 sf_factory.system = SL::System.instance
 sf_factory.learning_comparer = learn_comparer
@@ -103,8 +104,6 @@ sf_learner = sf_factory.build
 # Construct the contrast pair learner
 comparer_factory.consistent.mark_low
 learn_comparer = comparer_factory.build
-comparer_factory.consistent.faith_low
-test_comparer = comparer_factory.build
 cp_factory = OTLearn::ContrastPairLearningFactory.new
 cp_factory.system = SL::System.instance
 cp_factory.learning_comparer = learn_comparer
