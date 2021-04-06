@@ -19,6 +19,7 @@ require 'csv_output'
 require 'comparer_factory'
 require 'otlearn/phonotactic_learning_factory'
 require 'otlearn/single_form_learning_factory'
+require 'otlearn/contrast_pair_learning_factory'
 
 # define variables for option values
 label = nil
@@ -99,12 +100,24 @@ sf_factory.learning_comparer = learn_comparer
 sf_factory.testing_comparer = test_comparer
 sf_learner = sf_factory.build
 
+# Construct the contrast pair learner
+comparer_factory.consistent.mark_low
+learn_comparer = comparer_factory.build
+comparer_factory.consistent.faith_low
+test_comparer = comparer_factory.build
+cp_factory = OTLearn::ContrastPairLearningFactory.new
+cp_factory.system = SL::System.instance
+cp_factory.learning_comparer = learn_comparer
+cp_factory.testing_comparer = test_comparer
+cp_learner = cp_factory.build
+
 # Run learning on the language.
 grammar = Grammar.new(system: SL::System.instance)
 grammar.label = label
 lang_sim = OTLearn::LanguageLearning.new
 lang_sim.ph_learner = ph_learner
 lang_sim.sf_learner = sf_learner
+lang_sim.cp_learner = cp_learner
 result = lang_sim.learn(outputs, grammar)
 
 # Display if learning was successful to STDOUT.
