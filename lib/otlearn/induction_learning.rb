@@ -34,7 +34,6 @@ module OTLearn
       @grammar_tester = GrammarTest.new
       @fsf_learner = FewestSetFeatures.new
       @mmr_learner = MaxMismatchRanking.new
-      @step_type = INDUCTION
     end
 
     # Runs induction learning, and returns an induction learning step.
@@ -44,7 +43,7 @@ module OTLearn
     #   run(output_list, grammar) -> step
     def run(output_list, grammar)
       # Test the winners to see which ones currently fail
-      prior_result = @grammar_tester.run(output_list, grammar)
+      prior_result = grammar_tester.run(output_list, grammar)
       failed_winners = prior_result.failed_winners.map(&:output)
       # If there are no failed winners, raise an exception, because
       # induction learning shouldn't be called unless there are failed
@@ -55,7 +54,7 @@ module OTLearn
 
       # Collect those winners that are mismatch consistent with the grammar.
       consistent_list = failed_winners.select do |output|
-        @consistency_checker.mismatch_consistent?([output], grammar)
+        consistency_checker.mismatch_consistent?([output], grammar)
       end
       # If there are no consistent failed winners, run FSF.
       # Otherwise, run MMR.
@@ -65,8 +64,8 @@ module OTLearn
                   @mmr_learner.run(consistent_list, grammar)
                 end
       changed = substep.changed?
-      @test_result = @grammar_tester.run(output_list, grammar)
-      InductionStep.new(substep, @test_result, changed)
+      test_result = grammar_tester.run(output_list, grammar)
+      InductionStep.new(substep, test_result, changed)
     end
   end
 end
