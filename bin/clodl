@@ -22,6 +22,8 @@ label = nil
 report_filename = nil
 list_options = false
 para_bias_string = nil
+comp_learn_string = nil
+comp_test_string = nil
 
 # define the allowed command line options
 opts = OptionParser.new
@@ -31,6 +33,10 @@ opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
   { |val| report_filename = val }
 opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias')\
   { |val| para_bias_string = val }
+opts.on('-cl', '--clearn TYPE', 'Learning compare type')\
+  { |val| comp_learn_string = val }
+opts.on('-ct', '--ctest TYPE', 'Testing compare type')\
+  { |val| comp_test_string = val }
 opts.on('-h', '--help', 'list the command line options')\
   { list_options = true }
 
@@ -56,10 +62,6 @@ def check_required_arg(arg, option_string)
   exit(1) # return failure error code
 end
 
-check_required_arg(label, '--language')
-check_required_arg(report_filename, '--report')
-check_required_arg(para_bias_string, '--para_bias')
-
 # Checks if the provided argument is one of the allowed values.
 # If not, print an error message, and exit with an error code.
 def check_arg_value(arg, values, option_string)
@@ -70,12 +72,20 @@ def check_arg_value(arg, values, option_string)
   exit(1) # return failure error code
 end
 
-para_bias_values = %w[all_high faith_low mark_low]
-check_arg_value(para_bias_string, para_bias_values, '--para_bias')
+check_required_arg(label, '--language')
+check_required_arg(report_filename, '--report')
 
-# Prepend para_ to the bias string, and convert the result to a symbol.
-# The prepended string is the name of the method for the learning factory.
+bias_values = %w[all_high faith_low mark_low]
+check_required_arg(para_bias_string, '--para_bias')
+check_arg_value(para_bias_string, bias_values, '--para_bias')
+# Prepend para_ to the bias, forming the name of the factory method.
 para_bias = "para_#{para_bias_string}".to_sym
+
+comp_type_values = %w[pool ctie consistent]
+check_required_arg(comp_learn_string, '--clearn')
+check_arg_value(comp_learn_string, comp_type_values, '--clearn')
+# Prepend learn_ to the comp type, forming the name of the factory method.
+comp_learn_type = "learn_#{comp_learn_string}".to_sym
 
 # Generate the language typology.
 competition_list = SL.generate_competitions_1r1s
@@ -92,8 +102,9 @@ outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
-factory.learn_consistent.test_consistent
+factory.test_consistent
 factory.send(para_bias)
+factory.send(comp_learn_type)
 factory.system = SL::System.instance
 lang_sim = factory.build
 
