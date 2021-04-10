@@ -45,34 +45,34 @@ if list_options
   exit(0)
 end
 
-# If a language label was not provided with --language,
-# inform the user that they must provide a label, and exit.
-if label.nil?
-  puts 'ERROR: missing command line option --language.'
+# Checks if the provided argument is missing (nil). If it is,
+# print an error message including the missing option,
+# and exit with an error code.
+def check_required_arg(arg, option_string)
+  return unless arg.nil?
+
+  puts "ERROR: missing command line option #{option_string}."
   puts 'To see all options, run: clodl -h'
   exit(1) # return failure error code
 end
 
-# If a report filename was not provided with -r,
-# inform the user that they must provide a filename, and exit.
-if report_filename.nil?
-  puts 'ERROR: missing command line option --report.'
-  puts 'To see all options, run: clodl -h'
+check_required_arg(label, '--language')
+check_required_arg(report_filename, '--report')
+check_required_arg(para_bias_string, '--para_bias')
+
+# Checks if the provided argument is one of the allowed values.
+# If not, print an error message, and exit with an error code.
+def check_arg_value(arg, values, option_string)
+  return if values.member?(arg)
+
+  puts "ERROR: invalid #{option_string} value #{arg}."
+  puts "Value must be one of #{values.join(', ')}"
   exit(1) # return failure error code
 end
 
-# Process the command line argument for paradigmatic ranking bias.
-if para_bias_string.nil?
-  puts 'ERROR: missing command line option --para_bias.'
-  puts 'To see all options, run: clodl -h'
-  exit(1) # return failure error code
-end
 para_bias_values = %w[all_high faith_low mark_low]
-unless para_bias_values.member?(para_bias_string)
-  puts "ERROR: invalid --para_bias value #{para_bias_string}."
-  puts "para_bias must be one of #{para_bias_values.join(', ')}"
-  exit(1) # return failure error code
-end
+check_arg_value(para_bias_string, para_bias_values, '--para_bias')
+
 # Prepend para_ to the bias string, and convert the result to a symbol.
 # The prepended string is the name of the method for the learning factory.
 para_bias = "para_#{para_bias_string}".to_sym

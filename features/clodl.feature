@@ -41,6 +41,14 @@ Feature: clodl
       ERROR: missing command line option --para_bias.
       """
 
+  Scenario: Invalid paradigmatic ranking bias given
+    When I run `clodl -l L20 -r report.csv -p invalid_bias`
+    Then it should fail with:
+      """
+      ERROR: invalid --para_bias value invalid_bias.
+      Value must be one of all_high, faith_low, mark_low
+      """
+
   Scenario: Run on LgL20
     When I run `clodl -l L20 -r report.csv -p mark_low`
     Then it should pass with:
