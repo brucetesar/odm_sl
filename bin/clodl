@@ -13,14 +13,9 @@ require 'sl/data'
 require 'factorial_typology'
 require 'grammar'
 require 'otlearn/data_manip'
-require 'otlearn/language_learning'
+require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_image_maker'
 require 'csv_output'
-require 'comparer_factory'
-require 'otlearn/phonotactic_learning_factory'
-require 'otlearn/single_form_learning_factory'
-require 'otlearn/contrast_pair_learning_factory'
-require 'otlearn/induction_learning_factory'
 
 # define variables for option values
 label = nil
@@ -29,7 +24,7 @@ list_options = false
 
 # define the allowed command line options
 opts = OptionParser.new
-opts.on('-la', '--language LABEL', 'language label')\
+opts.on('-l', '--language LABEL', 'language label')\
   { |val| label = val.strip }
 opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
   { |val| report_filename = val }
@@ -77,57 +72,15 @@ if lang.nil?
 end
 outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
 
-# Construct the comparer factory
-comparer_factory = ComparerFactory.new
-
-# Construct the testing comparer
-comparer_factory.consistent.faith_low
-test_comparer = comparer_factory.build
-
-# Construct the phonotactic learner
-comparer_factory.consistent.faith_low
-learn_comparer = comparer_factory.build
-ph_factory = OTLearn::PhonotacticLearningFactory.new
-ph_factory.system = SL::System.instance
-ph_factory.learning_comparer = learn_comparer
-ph_factory.testing_comparer = test_comparer
-ph_learner = ph_factory.build
-
-# Construct the single form learner
-comparer_factory.consistent.mark_low
-learn_comparer = comparer_factory.build
-sf_factory = OTLearn::SingleFormLearningFactory.new
-sf_factory.system = SL::System.instance
-sf_factory.learning_comparer = learn_comparer
-sf_factory.testing_comparer = test_comparer
-sf_learner = sf_factory.build
-
-# Construct the contrast pair learner
-comparer_factory.consistent.mark_low
-learn_comparer = comparer_factory.build
-cp_factory = OTLearn::ContrastPairLearningFactory.new
-cp_factory.system = SL::System.instance
-cp_factory.learning_comparer = learn_comparer
-cp_factory.testing_comparer = test_comparer
-cp_learner = cp_factory.build
-
-# Construct the induction learner
-comparer_factory.consistent.mark_low
-learn_comparer = comparer_factory.build
-in_factory = OTLearn::InductionLearningFactory.new
-in_factory.system = SL::System.instance
-in_factory.learning_comparer = learn_comparer
-in_factory.testing_comparer = test_comparer
-in_learner = in_factory.build
+# Configure the learner factory and build the learner
+factory = OTLearn::LanguageLearningFactory.new
+factory.learn_consistent.test_consistent.para_mark_low
+factory.system = SL::System.instance
+lang_sim = factory.build
 
 # Run learning on the language.
-grammar = Grammar.new(system: SL::System.instance)
+grammar = Grammar.new(system: factory.system)
 grammar.label = label
-lang_sim = OTLearn::LanguageLearning.new
-lang_sim.ph_learner = ph_learner
-lang_sim.sf_learner = sf_learner
-lang_sim.cp_learner = cp_learner
-lang_sim.in_learner = in_learner
 result = lang_sim.learn(outputs, grammar)
 
 # Display if learning was successful to STDOUT.
