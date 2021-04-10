@@ -34,7 +34,7 @@ module OTLearn
   # The factory takes the provided components and builds the intermediate
   # components needed by OTLearn::LanguageLearning objects.
   # * A phonotactic learner, class OTLearn::PhonotacticLearning.
-  # * A single form learner, class OTLearn::SingleFormErcLearning.
+  # * A single form learner, class OTLearn::SingleFormLearning.
   # * A contrast pair learner, class OTLearn::ContrastPairLearning.
   # * An induction learner, class OTLearn::InductionLearning.
   # * Finally, an OTLearn::LanguageLearning object is created.
@@ -89,7 +89,7 @@ module OTLearn
     # which could be optimal consistent with the learner's support
     # is returned).
     def learn_consistent
-      @learn_type = :ctie
+      @learn_type = :consistent
       self
     end
 
