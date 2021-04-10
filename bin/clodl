@@ -87,6 +87,11 @@ check_arg_value(comp_learn_string, comp_type_values, '--clearn')
 # Prepend learn_ to the comp type, forming the name of the factory method.
 comp_learn_type = "learn_#{comp_learn_string}".to_sym
 
+check_required_arg(comp_test_string, '--ctest')
+check_arg_value(comp_test_string, comp_type_values, '--ctest')
+# Prepend test_ to the comp type, forming the name of the factory method.
+comp_test_type = "test_#{comp_learn_string}".to_sym
+
 # Generate the language typology.
 competition_list = SL.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
@@ -102,9 +107,9 @@ outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
-factory.test_consistent
 factory.send(para_bias)
 factory.send(comp_learn_type)
+factory.send(comp_test_type)
 factory.system = SL::System.instance
 lang_sim = factory.build
 
