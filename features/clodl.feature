@@ -15,8 +15,7 @@ Feature: clodl
     When I run `clodl`
     Then it should fail with:
       """
-      A label for the language to be learned must be given using
-      option --language.
+      ERROR: missing command line option --language.
       To see all options, run: clodl -h
       """
 
@@ -24,7 +23,7 @@ Feature: clodl
     When I run `clodl --language L20`
     Then it should fail with:
       """
-      A report filename must be given using option --report.
+      ERROR: missing command line option --report.
       To see all options, run: clodl -h
       """
 

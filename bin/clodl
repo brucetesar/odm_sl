@@ -48,8 +48,7 @@ end
 # If a language label was not provided with --language,
 # inform the user that they must provide a label, and exit.
 if label.nil?
-  puts 'A label for the language to be learned must be given using'
-  puts 'option --language.'
+  puts 'ERROR: missing command line option --language.'
   puts 'To see all options, run: clodl -h'
   exit(1) # return failure error code
 end
@@ -57,7 +56,7 @@ end
 # If a report filename was not provided with -r,
 # inform the user that they must provide a filename, and exit.
 if report_filename.nil?
-  puts 'A report filename must be given using option --report.'
+  puts 'ERROR: missing command line option --report.'
   puts 'To see all options, run: clodl -h'
   exit(1) # return failure error code
 end
