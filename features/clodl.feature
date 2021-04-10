@@ -5,7 +5,7 @@ Feature: clodl
   So that I can see the course of learning and ultimate result
 
   Scenario: Print the command line options
-    When I run `clodl -?`
+    When I run `clodl -h`
     Then it should pass with:
       """
       Usage: clodl [options]

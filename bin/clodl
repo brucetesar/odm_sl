@@ -28,7 +28,7 @@ opts.on('-l', '--language LABEL', 'language label')\
   { |val| label = val.strip }
 opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
   { |val| report_filename = val }
-opts.on('-?', '-h', '--help', 'list the command line options')\
+opts.on('-h', '--help', 'list the command line options')\
   { list_options = true }
 
 # parse the actual command line, and report any unused arguments
