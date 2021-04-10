@@ -29,14 +29,21 @@ Feature: clodl
       """
 
   Scenario: Run with an invalid language label
-    When I run `clodl --language Invalid -r report.csv`
+    When I run `clodl -l Invalid -r report.csv -p all_high`
     Then it should fail with:
       """
       Language Invalid was not found in the typology.
       """
 
+  Scenario: No paradigmatic ranking bias given
+    When I run `clodl -l L20 -r report.csv`
+    Then it should fail with:
+      """
+      ERROR: missing command line option --para_bias.
+      """
+
   Scenario: Run on LgL20
-    When I run `clodl --language L20 -r report.csv`
+    When I run `clodl -l L20 -r report.csv -p mark_low`
     Then it should pass with:
       """
       L20 learned.

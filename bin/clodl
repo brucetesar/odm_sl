@@ -21,6 +21,7 @@ require 'csv_output'
 label = nil
 report_filename = nil
 list_options = false
+para_bias_string = nil
 
 # define the allowed command line options
 opts = OptionParser.new
@@ -28,6 +29,8 @@ opts.on('-l', '--language LABEL', 'language label')\
   { |val| label = val.strip }
 opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
   { |val| report_filename = val }
+opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias')\
+  { |val| para_bias_string = val }
 opts.on('-h', '--help', 'list the command line options')\
   { list_options = true }
 
@@ -59,6 +62,22 @@ if report_filename.nil?
   exit(1) # return failure error code
 end
 
+# Process the command line argument for paradigmatic ranking bias.
+if para_bias_string.nil?
+  puts 'ERROR: missing command line option --para_bias.'
+  puts 'To see all options, run: clodl -h'
+  exit(1) # return failure error code
+end
+para_bias_values = %w[all_high faith_low mark_low]
+unless para_bias_values.member?(para_bias_string)
+  puts "ERROR: invalid --para_bias value #{para_bias_string}."
+  puts "para_bias must be one of #{para_bias_values.join(', ')}"
+  exit(1) # return failure error code
+end
+# Prepend para_ to the bias string, and convert the result to a symbol.
+# The prepended string is the name of the method for the learning factory.
+para_bias = "para_#{para_bias_string}".to_sym
+
 # Generate the language typology.
 competition_list = SL.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
@@ -74,7 +93,8 @@ outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
-factory.learn_consistent.test_consistent.para_mark_low
+factory.learn_consistent.test_consistent
+factory.send(para_bias)
 factory.system = SL::System.instance
 lang_sim = factory.build
 
