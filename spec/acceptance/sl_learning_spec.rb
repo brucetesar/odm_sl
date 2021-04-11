@@ -13,7 +13,7 @@ require 'otlearn/language_learning_image_maker'
 require 'grammar'
 require 'csv_output'
 
-def read_languages_from_file(data_file)
+def run_languages(data_file)
   File.open(data_file, 'rb') do |fin|
     until fin.eof
       label, outputs = Marshal.load(fin)
@@ -22,28 +22,32 @@ def read_languages_from_file(data_file)
   end
 end
 
+def prep_output_dir(dir, pattern)
+  Dir.mkdir dir unless Dir.exist? dir
+  files = Dir.glob(File.join(dir, pattern))
+  files.each { |fn| File.delete(fn) }
+end
+
 RSpec.describe 'Running ODL on SL', :acceptance do
   before(:context) do
+    # Set up directory paths
     data_dir = File.join(ODL::DATA_DIR, 'sl')
+    data_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
     @expected_dir =
       File.join(ODL::PROJECT_DIR, 'test', 'fixtures', 'sl_learning')
     @generated_dir = File.join(ODL::TEMP_DIR, 'sl_learning')
-    if Dir.exist? @generated_dir
-      csv_files = Dir.glob("#{@generated_dir}/*.csv")
-      csv_files.each { |fn| File.delete(fn) }
-    else
-      Dir.mkdir @generated_dir
-    end
-    data_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
+    prep_output_dir(@generated_dir, '*.csv')
+    # Configure and build the learner
     factory = OTLearn::LanguageLearningFactory.new
     factory.para_mark_low.learn_consistent.test_consistent
     factory.system = SL::System.instance
-    lang_sim = factory.build
+    learner = factory.build
     image_maker = OTLearn::LanguageLearningImageMaker.new
-    read_languages_from_file(data_file) do |label, outputs|
+    # Run learning on all of the languages
+    run_languages(data_file) do |label, outputs|
       grammar = Grammar.new(system: SL::System.instance)
       grammar.label = label
-      result = lang_sim.learn(outputs, grammar)
+      result = learner.learn(outputs, grammar)
       sim_image = image_maker.get_image(result)
       out_file = File.join(@generated_dir, "#{label}.csv")
       csv = CsvOutput.new(sim_image)
