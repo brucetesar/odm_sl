@@ -7,18 +7,48 @@
 
 require_relative '../../lib/odl/resolver'
 
+require 'otlearn/language_learning_factory'
+require 'sl/system'
+require 'otlearn/language_learning_image_maker'
+require 'grammar'
+require 'csv_output'
+
+def read_languages_from_file(data_file)
+  File.open(data_file, 'rb') do |fin|
+    until fin.eof
+      label, outputs = Marshal.load(fin)
+      yield label, outputs
+    end
+  end
+end
+
 RSpec.describe 'Running ODL on SL', :acceptance do
   before(:context) do
-    project_dir = ODL::PROJECT_DIR
-    @expected_dir = File.join(project_dir, 'test', 'fixtures', 'sl_learning')
-    @generated_dir = File.join(project_dir, 'temp', 'sl_learning')
-    # The executable dir must be a relative path, otherwise a bunch of
-    # warnings are generated about redefining constants when the load
-    # command is executed. Maybe the paths fed to the require statements
-    # look different with an absolute path, and require fails to recognize
-    # that a file has already been required?
-    executable_dir = File.join('bin', 'sl')
-    load "#{executable_dir}/learn_typology_1r1s.rb"
+    data_dir = File.join(ODL::DATA_DIR, 'sl')
+    @expected_dir =
+      File.join(ODL::PROJECT_DIR, 'test', 'fixtures', 'sl_learning')
+    @generated_dir = File.join(ODL::TEMP_DIR, 'sl_learning')
+    if Dir.exist? @generated_dir
+      csv_files = Dir.glob("#{@generated_dir}/*.csv")
+      csv_files.each { |fn| File.delete(fn) }
+    else
+      Dir.mkdir @generated_dir
+    end
+    data_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
+    factory = OTLearn::LanguageLearningFactory.new
+    factory.para_mark_low.learn_consistent.test_consistent
+    factory.system = SL::System.instance
+    lang_sim = factory.build
+    image_maker = OTLearn::LanguageLearningImageMaker.new
+    read_languages_from_file(data_file) do |label, outputs|
+      grammar = Grammar.new(system: SL::System.instance)
+      grammar.label = label
+      result = lang_sim.learn(outputs, grammar)
+      sim_image = image_maker.get_image(result)
+      out_file = File.join(@generated_dir, "#{label}.csv")
+      csv = CsvOutput.new(sim_image)
+      csv.write_to_file(out_file)
+    end
   end
 
   (1..24).each do |num|
