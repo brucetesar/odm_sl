@@ -56,8 +56,16 @@ RSpec.describe OTLearn::MmrImageMaker do
   end
 
   context 'given an MMR step without a newly set feature' do
+    let(:failed_winner_morphword) { 'failed_winner_morphword' }
+    let(:failed_winner_input) { 'failed_winner_input' }
+    let(:failed_winner_output) { 'failed_winner_output' }
     before(:each) do
       allow(mmr_step).to receive(:changed?).and_return(false)
+      allow(mmr_step).to receive(:failed_winner).and_return(failed_winner)
+      allow(failed_winner).to\
+        receive(:morphword).and_return(failed_winner_morphword)
+      allow(failed_winner).to receive(:input).and_return(failed_winner_input)
+      allow(failed_winner).to receive(:output).and_return(failed_winner_output)
       @mmr_image = @mmr_image_maker.get_image(mmr_step)
     end
     it 'indicates the type of substep' do
@@ -68,8 +76,20 @@ RSpec.describe OTLearn::MmrImageMaker do
       expect(@mmr_image).to\
         have_received(:[]=).with(2, 1, 'Grammar Changed: FALSE')
     end
-    it 'does not append a subsheet' do
-      expect(@mmr_image).not_to have_received(:append).with(subsheet)
+    it 'appends the subsheet' do
+      expect(@mmr_image).to have_received(:append).with(subsheet)
+    end
+    it 'indicates the morphword of the failed winner used' do
+      expect(subsheet).to\
+        have_received(:[]=).with(1, 3, failed_winner_morphword)
+    end
+    it 'indicates the input of the failed winner used' do
+      expect(subsheet).to\
+        have_received(:[]=).with(1, 4, failed_winner_input)
+    end
+    it 'indicates the output of the failed winner used' do
+      expect(subsheet).to\
+        have_received(:[]=).with(1, 5, failed_winner_output)
     end
   end
 end

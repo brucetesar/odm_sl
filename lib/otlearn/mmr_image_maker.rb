@@ -10,7 +10,7 @@ module OTLearn
   class MmrImageMaker
     # Returns a new image maker for Max Mismatch Ranking.
     #--
-    # +sheet_class+ is a dependency injection used for testing.
+    # _sheet_class_ is a dependency injection used for testing.
     #++
     # :call-seq:
     #   MmrImageMaker.new -> image_maker
@@ -26,7 +26,7 @@ module OTLearn
       sheet[1, 1] = 'Max Mismatch Ranking'
       # indicate if the grammar was changed
       sheet[2, 1] = "Grammar Changed: #{mmr_step.changed?.to_s.upcase}"
-      add_failed_winner_info(mmr_step, sheet) if mmr_step.changed?
+      add_failed_winner_info(mmr_step, sheet)
       sheet
     end
 
