@@ -8,6 +8,7 @@
 require_relative '../lib/odl/resolver'
 
 require 'optparse'
+require 'arg_checker'
 require 'sl/system'
 require 'sl/data'
 require 'factorial_typology'
@@ -47,43 +48,23 @@ if list_options
   exit(0)
 end
 
-# TODO: relocate these methods to somewhere sharable.
-# Checks if the provided argument is missing (nil). If it is,
-# print an error message including the missing option,
-# and exit with an error code.
-def check_required_arg(arg, option_string)
-  return unless arg.nil?
-
-  puts "ERROR: missing command line option #{option_string}."
-  puts 'To see all options, run: clodl -h'
-  exit(1) # return failure error code
-end
-
-# Checks if the provided argument is one of the allowed values.
-# If not, print an error message, and exit with an error code.
-def check_arg_value(arg, values, option_string)
-  return if values.member?(arg)
-
-  puts "ERROR: invalid #{option_string} value #{arg}."
-  puts "Value must be one of #{values.join(', ')}"
-  exit(1) # return failure error code
-end
-
+# Define the possible values for certain argument types
 bias_values = %w[all_high faith_low mark_low]
-check_required_arg(para_bias_string, '--para_bias')
-check_arg_value(para_bias_string, bias_values, '--para_bias')
-# Prepend para_ to the bias, forming the name of the factory method.
-para_bias = "para_#{para_bias_string}".to_sym
-
 comp_type_values = %w[pool ctie consistent]
-check_required_arg(lcomp_string, '--lcomp')
-check_arg_value(lcomp_string, comp_type_values, '--lcomp')
-# Prepend learn_ to the comp type, forming the name of the factory method.
-lcomp_type = "learn_#{lcomp_string}".to_sym
 
-check_required_arg(tcomp_string, '--tcomp')
-check_arg_value(tcomp_string, comp_type_values, '--tcomp')
-# Prepend test_ to the comp type, forming the name of the factory method.
+# Check the values of the mandatory command line arguments.
+arg_checker = ArgChecker.new
+exit(1) unless arg_checker.arg_valid?(para_bias_string, bias_values,
+                                      '--para_bias')
+exit(1) unless arg_checker.arg_valid?(lcomp_string, comp_type_values,
+                                      '--lcomp')
+exit(1) unless arg_checker.arg_valid?(tcomp_string, comp_type_values,
+                                      '--tcomp')
+
+# Convert the argument value strings to the names of corresponding
+# setting methods for an OTLearn::LanguageLearningFactory.
+para_bias = "para_#{para_bias_string}".to_sym
+lcomp_type = "learn_#{lcomp_string}".to_sym
 tcomp_type = "test_#{tcomp_string}".to_sym
 
 # Read the languages from the data file. If the data file doesn't
