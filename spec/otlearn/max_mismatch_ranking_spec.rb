@@ -44,13 +44,22 @@ RSpec.describe OTLearn::MaxMismatchRanking do
   context 'with a consistent failed winner yielding no new ranking info' do
     before(:example) do
       allow(mrcd_result).to receive(:any_change?).and_return(false)
+      allow(mrcd_result).to receive(:added_pairs).and_return([])
+      @max_mismatch_ranking = OTLearn::MaxMismatchRanking.new
+      @max_mismatch_ranking.erc_learner = erc_learner
+      @mmr_step = @max_mismatch_ranking.run(failed_winner_list, grammar)
     end
-    it 'should raise an exception' do
-      expect do
-        @max_mismatch_ranking = OTLearn::MaxMismatchRanking.new
-        @max_mismatch_ranking.erc_learner = erc_learner
-        @mmr_step = @max_mismatch_ranking.run(failed_winner_list, grammar)
-      end.to raise_error(RuntimeError)
+    it 'returns an empty list of new pairs' do
+      expect(@mmr_step.newly_added_wl_pairs).to be_empty
+    end
+    it 'indicates no change has occurred' do
+      expect(@mmr_step.changed?).to be false
+    end
+    it 'runs the ERC learner' do
+      expect(erc_learner).to have_received(:run).with([mismatch], grammar)
+    end
+    it 'determines the failed winner' do
+      expect(@mmr_step.failed_winner).to eq(mismatch)
     end
   end
 end

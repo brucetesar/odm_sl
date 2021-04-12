@@ -2,7 +2,6 @@
 
 # Author: Morgan Moyer / Bruce Tesar
 
-require 'otlearn/mmr_exceptions'
 require 'otlearn/erc_learning'
 require 'otlearn/mmr_substep'
 
@@ -59,9 +58,9 @@ module OTLearn
       mrcd_result = @erc_learner.run([failed_winner], grammar)
       changed = mrcd_result.any_change?
       unless changed
-        msg1 = 'A failed consistent winner'
+        msg1 = 'MMR: A failed consistent winner'
         msg2 = 'did not provide new ranking information.'
-        raise MMREx.new(failed_winner), "#{msg1} #{msg2}"
+        puts "#{msg1} #{msg2}"
       end
       newly_added_wl_pairs = mrcd_result.added_pairs
       MmrSubstep.new(newly_added_wl_pairs, failed_winner, changed)

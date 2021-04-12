@@ -140,8 +140,6 @@ module OTLearn
       handle_exception(rterror_msg(e, label))
     rescue LearnEx => e
       handle_exception(learnex_msg(e, label))
-    rescue MMREx => e
-      handle_exception(mmrex_msg(e, label))
     end
     private :error_protected_execution
 
@@ -175,14 +173,5 @@ module OTLearn
       "#{label}: #{msg1}\n#{msg2}:\n#{msg3}"
     end
     private :learnex_msg
-
-    # Returns the warning message for a MMREx exception, which is
-    # raised by MaxMismatchRanking (MMR).
-    def mmrex_msg(exception, label)
-      msg1 = "MMR: #{exception.message}"
-      msg2 = "Failed Winner: #{exception.failed_winner}"
-      "#{label}: #{msg1}\n#{msg2}"
-    end
-    private :mmrex_msg
   end
 end
