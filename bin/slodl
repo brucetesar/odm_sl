@@ -11,7 +11,6 @@ require 'optparse'
 require 'sl/system'
 require 'sl/data'
 require 'factorial_typology'
-require 'grammar'
 require 'otlearn/data_manip'
 require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_image_maker'
@@ -22,6 +21,7 @@ list_options = false
 para_bias_string = nil
 lcomp_string = nil
 tcomp_string = nil
+out_dir = '.'  # default is current working directory
 
 # define the allowed command line options
 opts = OptionParser.new
@@ -31,6 +31,8 @@ opts.on('-l', '--lcomp TYPE', 'Learning compare type')\
   { |val| lcomp_string = val }
 opts.on('-t', '--tcomp TYPE', 'Testing compare type')\
   { |val| tcomp_string = val }
+opts.on('-o', '--out_dir DIR', 'output directory name')\
+  { |val| out_dir = val }
 opts.on('-h', '--help', 'list the command line options')\
   { list_options = true }
 
@@ -84,8 +86,21 @@ check_arg_value(tcomp_string, comp_type_values, '--tcomp')
 # Prepend test_ to the comp type, forming the name of the factory method.
 tcomp_type = "test_#{tcomp_string}".to_sym
 
-# TODO: check for datafile existence in wd, generate if not present.
-data_file = File.join(ODL::DATA_DIR, 'sl', 'outputs_typology_1r1s.mar')
+# Read the languages from the data file. If the data file doesn't
+# exist in the current working directory, create a new one.
+data_file = 'outputs_typology_1r1s.mar'
+unless File.exist?(data_file)
+  puts 'Regenerating the typology data file.'
+  competition_list = SL.generate_competitions_1r1s
+  ft_result = FactorialTypology.new(competition_list)
+  lang_list = ft_result.factorial_typology
+  File.open(data_file, 'wb') do |f|
+    lang_list.each do |lang|
+      outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
+      Marshal.dump(["Lg#{lang.label}", outputs], f)
+    end
+  end
+end
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
@@ -100,10 +115,10 @@ puts 'Learning the SL typology.'
 image_maker = OTLearn::LanguageLearningImageMaker.new
 runner = OTLearn::LanguageLearningRunner.new(factory.system, learner,
                                              image_maker)
+runner.prep_output_dir(out_dir, '*.csv')
 runner.run_languages(data_file) do |label, outputs|
   result = runner.run(label, outputs)
-  # TODO: specify the output dir as a command line option. BE SURE to prep it.
-  runner.write(result, '.')
+  runner.write(result, out_dir)
   puts "#{label} not learned." unless result.learning_successful?
 end
 puts 'SL learning is finished.'
