@@ -20,21 +20,15 @@ RSpec.describe 'OTLearn::InductionLearningFactory' do
       @factory.testing_comparer = testing_comparer
       @in_learn = @factory.build
     end
-    it 'creates an MMR learner with the learning comparer' do
+    it 'creates an MMR learner with the testing comparer' do
       erc_learner = @in_learn.mmr_learner.erc_learner
-      learn_loser_selector = erc_learner.loser_selector
-      # If a loser selector isn't externally provided to erc learner,
-      # the default isn't assigned until ErcLearning#run is called.
-      expect(learn_loser_selector).not_to be_nil
-      learn_comparer = learn_loser_selector.comparer
-      expect(learn_comparer).to eq learning_comparer
+      loser_selector = erc_learner.loser_selector
+      comparer = loser_selector.comparer
+      expect(comparer).to eq testing_comparer
     end
     it 'creates an FSF learner with the learning comparer' do
       para_erc_learner = @in_learn.fsf_learner.para_erc_learner
       learn_loser_selector = para_erc_learner.erc_learner.loser_selector
-      # If a loser selector isn't externally provided to erc learner,
-      # the default isn't assigned until ErcLearning#run is called.
-      expect(learn_loser_selector).not_to be_nil
       learn_comparer = learn_loser_selector.comparer
       expect(learn_comparer).to eq learning_comparer
     end

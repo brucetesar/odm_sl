@@ -14,23 +14,23 @@ module OTLearn
   # has been constructed.
   # === Required Components
   # * system - a linguistic system object.
-  # * learning_comparer - the comparer (of candidates) used in
-  #   loser selection during actual induction learning.
-  # * testing_comparer - the comparer (of candidates) used in
-  #   loser selection during grammar testing at the end of
-  #   induction learning.
+  # * learning_comparer - the comparer (of candidates) used in loser
+  #   selection for Fewest Set Features.
+  # * testing_comparer - the comparer (of candidates) used in loser
+  #   selection during Max Mismatch Ranking and grammar testing at the
+  #   end of induction learning.
   # === Build Outline
   # The factory takes the components provided via the attributes
   # and builds the intermediate components needed by
   # OTLearn::InductionLearning objects.
   # * A learning loser selector, class LoserSelectorFromGen,
   #   is created with _system_ and _learning_comparer_.
-  # * An paradigm ERC learner, class OTLearn::ParadigmErcLearning,
-  #   is created with the learning loser selector.
-  # * An ERC learner, class OTLearn::ErcLearning,
+  # * A paradigm ERC learner, class OTLearn::ParadigmErcLearning,
   #   is created with the learning loser selector.
   # * A testing loser selector, class LoserSelectorFromGen,
   #   is created with _system_ and _testing_comparer_.
+  # * An ERC learner, class OTLearn::ErcLearning,
+  #   is created with the testing loser selector.
   # * A grammar tester, class OTLearn::GrammarTest, is created with
   #   the testing loser selector.
   # * An FSF learner, class OTLearn::FewestSetFeatures, is created with
@@ -66,7 +66,8 @@ module OTLearn
       check_factory_settings
       learn_selector = create_loser_selector(learning_comparer)
       test_selector = create_loser_selector(testing_comparer)
-      fsf_learner, mmr_learner = create_learning_components(learn_selector)
+      fsf_learner, mmr_learner = create_learning_components(learn_selector,
+                                                            test_selector)
       # Assign the induction learning components
       in_learner = InductionLearning.new
       in_learner.fsf_learner = fsf_learner
@@ -76,12 +77,12 @@ module OTLearn
     end
 
     # Creates the Fewest Set Features learner and the Max Mismatch Ranking
-    # learner, both using the same loser selector.
-    def create_learning_components(selector)
+    # learner.
+    def create_learning_components(learn_selector, test_selector)
       fsf_learner = FewestSetFeatures.new
-      fsf_learner.para_erc_learner = create_para_erc_learner(selector)
+      fsf_learner.para_erc_learner = create_para_erc_learner(learn_selector)
       mmr_learner = MaxMismatchRanking.new
-      mmr_learner.erc_learner = create_erc_learner(selector)
+      mmr_learner.erc_learner = create_erc_learner(test_selector)
       [fsf_learner, mmr_learner]
     end
     private :create_learning_components
