@@ -10,7 +10,7 @@ module OTLearn
   class FsfImageMaker
     # Returns a new image maker for Fewest Set Features.
     #--
-    # +sheet_class+ is a dependency injection used for testing.
+    # _sheet_class_ is a dependency injection used for testing.
     #++
     # :call-seq:
     #   FsfImageMaker.new -> image_maker
@@ -34,10 +34,14 @@ module OTLearn
     def add_failed_winner_info(step, sheet)
       failed_winner = step.failed_winner
       subsheet = @sheet_class.new
-      subsheet[1, 2] = 'Failed Winner'
-      subsheet[1, 3] = failed_winner.morphword.to_s
-      subsheet[1, 4] = failed_winner.input.to_s
-      subsheet[1, 5] = failed_winner.output.to_s
+      if failed_winner.nil?
+        subsheet[1, 2] = 'No failed winner set a feature.'
+      else
+        subsheet[1, 2] = 'Failed Winner'
+        subsheet[1, 3] = failed_winner.morphword.to_s
+        subsheet[1, 4] = failed_winner.input.to_s
+        subsheet[1, 5] = failed_winner.output.to_s
+      end
       sheet.append(subsheet)
     end
     private :add_failed_winner_info

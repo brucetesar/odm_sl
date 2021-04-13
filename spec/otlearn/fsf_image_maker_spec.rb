@@ -14,7 +14,6 @@ RSpec.describe OTLearn::FsfImageMaker do
   let(:sheet) { double('sheet') }
   let(:subsheet) { double('subsheet') }
   before(:each) do
-    allow(fsf_step).to receive(:failed_winner).and_return(failed_winner)
     allow(failed_winner).to\
       receive(:morphword).and_return(failed_winner_morphword)
     allow(failed_winner).to receive(:input).and_return(failed_winner_input)
@@ -27,6 +26,7 @@ RSpec.describe OTLearn::FsfImageMaker do
   end
   context 'given a step with a newly set feature' do
     before(:each) do
+      allow(fsf_step).to receive(:failed_winner).and_return(failed_winner)
       allow(fsf_step).to receive(:changed?).and_return(true)
       @fsf_image = @fsf_image_maker.get_image(fsf_step)
     end
@@ -57,6 +57,7 @@ RSpec.describe OTLearn::FsfImageMaker do
 
   context 'given a step without a newly set feature' do
     before(:each) do
+      allow(fsf_step).to receive(:failed_winner).and_return(nil)
       allow(fsf_step).to receive(:changed?).and_return(false)
       @fsf_image = @fsf_image_maker.get_image(fsf_step)
     end
@@ -71,16 +72,20 @@ RSpec.describe OTLearn::FsfImageMaker do
     it 'appends the subsheet' do
       expect(@fsf_image).to have_received(:append).with(subsheet)
     end
-    it 'indicates the morphword of the failed winner used' do
+    it 'indicates that no failed winner set a feature' do
       expect(subsheet).to\
+        have_received(:[]=).with(1, 2, 'No failed winner set a feature.')
+    end
+    it 'does not indicate the morphword of a failed winner' do
+      expect(subsheet).not_to\
         have_received(:[]=).with(1, 3, failed_winner_morphword)
     end
-    it 'indicates the input of the failed winner used' do
-      expect(subsheet).to\
+    it 'does not indicate the input of a failed winner' do
+      expect(subsheet).not_to\
         have_received(:[]=).with(1, 4, failed_winner_input)
     end
-    it 'indicates the output of the failed winner used' do
-      expect(subsheet).to\
+    it 'does not indicate the output of a failed winner' do
+      expect(subsheet).not_to\
         have_received(:[]=).with(1, 5, failed_winner_output)
     end
   end
