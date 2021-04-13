@@ -12,23 +12,32 @@ module OTLearn
   # using required components. The required components must be
   # provided via attribute assignment after the initial object
   # has been constructed.
+  #
+  # Both MMR and FSF, the two major components of induction learning,
+  # operate over select winners that failing in grammar testing.
+  # Because those winners are failing when using the testing comparer,
+  # MMR and FSF both use the testing comparer, to avoid the problem of
+  # having a winner fail in grammar testing, but not fail for induction
+  # learning due to use of a different comparer.
+  #
   # === Required Components
   # * system - a linguistic system object.
   # * learning_comparer - the comparer (of candidates) used in loser
-  #   selection for Fewest Set Features.
+  #   selection for paradigmatic learning generally. NOTE: this is
+  #   currently not used with induction learning, but is included
+  #   here to maintain interface consistency with other major
+  #   learning components.
   # * testing_comparer - the comparer (of candidates) used in loser
-  #   selection during Max Mismatch Ranking and grammar testing at the
-  #   end of induction learning.
+  #   selection during grammar testing at the end of induction learning.
+  #   ALSO used for loser selection with MMR and FSF.
   # === Build Outline
   # The factory takes the components provided via the attributes
   # and builds the intermediate components needed by
   # OTLearn::InductionLearning objects.
-  # * A learning loser selector, class LoserSelectorFromGen,
-  #   is created with _system_ and _learning_comparer_.
-  # * A paradigm ERC learner, class OTLearn::ParadigmErcLearning,
-  #   is created with the learning loser selector.
   # * A testing loser selector, class LoserSelectorFromGen,
   #   is created with _system_ and _testing_comparer_.
+  # * A paradigm ERC learner, class OTLearn::ParadigmErcLearning,
+  #   is created with the testing loser selector.
   # * An ERC learner, class OTLearn::ErcLearning,
   #   is created with the testing loser selector.
   # * A grammar tester, class OTLearn::GrammarTest, is created with
@@ -43,10 +52,11 @@ module OTLearn
     # The linguistic system.
     attr_accessor :system
 
-    # The comparer for learning.
+    # The comparer for learning. Currently included for interface
+    # consistency only.
     attr_accessor :learning_comparer
 
-    # The comparer for testing.
+    # The comparer for testing, as well as for MMR and FSF.
     attr_accessor :testing_comparer
 
     # Provides methods for creation of common components.
@@ -64,10 +74,8 @@ module OTLearn
     # have not been provided.
     def build
       check_factory_settings
-      learn_selector = create_loser_selector(learning_comparer)
       test_selector = create_loser_selector(testing_comparer)
-      fsf_learner, mmr_learner = create_learning_components(learn_selector,
-                                                            test_selector)
+      fsf_learner, mmr_learner = create_learning_components(test_selector)
       # Assign the induction learning components
       in_learner = InductionLearning.new
       in_learner.fsf_learner = fsf_learner
@@ -78,11 +86,11 @@ module OTLearn
 
     # Creates the Fewest Set Features learner and the Max Mismatch Ranking
     # learner.
-    def create_learning_components(learn_selector, test_selector)
+    def create_learning_components(selector)
       fsf_learner = FewestSetFeatures.new
-      fsf_learner.para_erc_learner = create_para_erc_learner(learn_selector)
+      fsf_learner.para_erc_learner = create_para_erc_learner(selector)
       mmr_learner = MaxMismatchRanking.new
-      mmr_learner.erc_learner = create_erc_learner(test_selector)
+      mmr_learner.erc_learner = create_erc_learner(selector)
       [fsf_learner, mmr_learner]
     end
     private :create_learning_components

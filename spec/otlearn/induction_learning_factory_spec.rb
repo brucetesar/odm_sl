@@ -26,11 +26,11 @@ RSpec.describe 'OTLearn::InductionLearningFactory' do
       comparer = loser_selector.comparer
       expect(comparer).to eq testing_comparer
     end
-    it 'creates an FSF learner with the learning comparer' do
+    it 'creates an FSF learner with the testing comparer' do
       para_erc_learner = @in_learn.fsf_learner.para_erc_learner
       learn_loser_selector = para_erc_learner.erc_learner.loser_selector
-      learn_comparer = learn_loser_selector.comparer
-      expect(learn_comparer).to eq learning_comparer
+      comparer = learn_loser_selector.comparer
+      expect(comparer).to eq testing_comparer
     end
     it 'creates a learner with the testing comparer' do
       tester = @in_learn.grammar_tester
