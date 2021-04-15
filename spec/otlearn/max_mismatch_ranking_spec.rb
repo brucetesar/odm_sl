@@ -3,6 +3,7 @@
 # Author: Morgan Moyer / Bruce Tesar
 
 require 'otlearn/max_mismatch_ranking'
+require 'stringio'
 
 RSpec.describe OTLearn::MaxMismatchRanking do
   let(:failed_winner) { double('failed_winner') }
@@ -11,6 +12,8 @@ RSpec.describe OTLearn::MaxMismatchRanking do
   let(:grammar) { double('grammar') }
   let(:erc_learner) { double('erc_learner') }
   let(:mrcd_result) { double('mrcd_result') }
+  # Use StringIO as a test mock for $stdout.
+  let(:msg_output) { StringIO.new }
   before(:example) do
     allow(failed_winner).to receive(:output)
     allow(grammar).to receive(:parse_output).and_return(mismatch)
@@ -23,7 +26,7 @@ RSpec.describe OTLearn::MaxMismatchRanking do
     before(:example) do
       allow(mrcd_result).to receive(:any_change?).and_return(true)
       allow(mrcd_result).to receive(:added_pairs).and_return([new_pair])
-      @max_mismatch_ranking = OTLearn::MaxMismatchRanking.new
+      @max_mismatch_ranking = OTLearn::MaxMismatchRanking.new(msg_output: msg_output)
       @max_mismatch_ranking.erc_learner = erc_learner
       @mmr_step = @max_mismatch_ranking.run(failed_winner_list, grammar)
     end
@@ -39,13 +42,16 @@ RSpec.describe OTLearn::MaxMismatchRanking do
     it 'determines the failed winner' do
       expect(@mmr_step.failed_winner).to eq(mismatch)
     end
+    it 'does not write a console message' do
+      expect(msg_output.string).to eq ''
+    end
   end
 
   context 'with a consistent failed winner yielding no new ranking info' do
     before(:example) do
       allow(mrcd_result).to receive(:any_change?).and_return(false)
       allow(mrcd_result).to receive(:added_pairs).and_return([])
-      @max_mismatch_ranking = OTLearn::MaxMismatchRanking.new
+      @max_mismatch_ranking = OTLearn::MaxMismatchRanking.new(msg_output: msg_output)
       @max_mismatch_ranking.erc_learner = erc_learner
       @mmr_step = @max_mismatch_ranking.run(failed_winner_list, grammar)
     end
@@ -60,6 +66,10 @@ RSpec.describe OTLearn::MaxMismatchRanking do
     end
     it 'determines the failed winner' do
       expect(@mmr_step.failed_winner).to eq(mismatch)
+    end
+    it 'writes a console message' do
+      expect(msg_output.string).to eq\
+        "MMR: A failed consistent winner did not provide new ranking information.\n"
     end
   end
 end

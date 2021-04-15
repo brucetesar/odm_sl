@@ -36,7 +36,11 @@ module OTLearn
     # Initializes a new object for the max mismatch ranking algorithm.
     # :call-seq:
     #   MaxMismatchRanking.new -> mmr_learner
-    def initialize
+    #--
+    # msg_output is a dependency injection used for testing. It is the
+    # IO channel to which console messages are written (normally $stdout).
+    def initialize(msg_output: $stdout)
+      @msg_output = msg_output
       @erc_learner = ErcLearning.new
     end
 
@@ -60,7 +64,7 @@ module OTLearn
       unless changed
         msg1 = 'MMR: A failed consistent winner'
         msg2 = 'did not provide new ranking information.'
-        puts "#{msg1} #{msg2}"
+        @msg_output.puts "#{msg1} #{msg2}"
       end
       newly_added_wl_pairs = mrcd_result.added_pairs
       MmrSubstep.new(newly_added_wl_pairs, failed_winner, changed)
