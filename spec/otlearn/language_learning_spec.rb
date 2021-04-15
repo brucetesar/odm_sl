@@ -19,6 +19,8 @@ RSpec.describe OTLearn::LanguageLearning do
   let(:cp_step) { double('cp_step') }
   let(:in_learner) { double('in_learner') }
   let(:in_step) { double('in_step') }
+  # Use StringIO as a test mock for $stderr.
+  let(:warn_output) { StringIO.new }
   before(:example) do
     allow(ph_learner).to receive(:run)
     allow(sf_learner).to receive(:run)
@@ -31,7 +33,8 @@ RSpec.describe OTLearn::LanguageLearning do
     before(:example) do
       allow(ph_learner).to receive(:run).and_return(ph_step)
       allow(ph_step).to receive(:all_correct?).and_return(true)
-      @language_learning = OTLearn::LanguageLearning.new
+      @language_learning =
+        OTLearn::LanguageLearning.new(warn_output: warn_output)
       @language_learning.ph_learner = ph_learner
       @language_learning.sf_learner = sf_learner
       @language_learning.cp_learner = cp_learner
@@ -53,6 +56,9 @@ RSpec.describe OTLearn::LanguageLearning do
     it 'does not call induction learning' do
       expect(in_learner).not_to have_received(:run)
     end
+    it 'does not write a warning message' do
+      expect(warn_output.string).to eq ''
+    end
   end
 
   context 'given single form learnable data' do
@@ -61,7 +67,8 @@ RSpec.describe OTLearn::LanguageLearning do
       allow(ph_step).to receive(:all_correct?).and_return(false)
       allow(sf_learner).to receive(:run).and_return(sf_step1)
       allow(sf_step1).to receive(:all_correct?).and_return(true)
-      @language_learning = OTLearn::LanguageLearning.new
+      @language_learning =
+        OTLearn::LanguageLearning.new(warn_output: warn_output)
       @language_learning.ph_learner = ph_learner
       @language_learning.sf_learner = sf_learner
       @language_learning.cp_learner = cp_learner
@@ -84,6 +91,9 @@ RSpec.describe OTLearn::LanguageLearning do
     it 'does not call induction learning' do
       expect(in_learner).not_to have_received(:run)
     end
+    it 'does not write a warning message' do
+      expect(warn_output.string).to eq ''
+    end
   end
 
   context 'given single contrast pair learnable data' do
@@ -97,7 +107,8 @@ RSpec.describe OTLearn::LanguageLearning do
       allow(cp_learner).to receive(:run).and_return(cp_step)
       allow(cp_step).to receive(:all_correct?).and_return(false)
       allow(cp_step).to receive(:changed?).and_return(true)
-      @language_learning = OTLearn::LanguageLearning.new
+      @language_learning =
+        OTLearn::LanguageLearning.new(warn_output: warn_output)
       @language_learning.ph_learner = ph_learner
       @language_learning.sf_learner = sf_learner
       @language_learning.cp_learner = cp_learner
@@ -120,6 +131,9 @@ RSpec.describe OTLearn::LanguageLearning do
     it 'does not call induction learning' do
       expect(in_learner).not_to have_received(:run)
     end
+    it 'does not write a warning message' do
+      expect(warn_output.string).to eq ''
+    end
   end
 
   context 'given single induction step learnable data' do
@@ -135,7 +149,8 @@ RSpec.describe OTLearn::LanguageLearning do
       allow(in_learner).to receive(:run).and_return(in_step)
       allow(in_step).to receive(:all_correct?).and_return(false)
       allow(in_step).to receive(:changed?).and_return(true)
-      @language_learning = OTLearn::LanguageLearning.new
+      @language_learning =
+        OTLearn::LanguageLearning.new(warn_output: warn_output)
       @language_learning.ph_learner = ph_learner
       @language_learning.sf_learner = sf_learner
       @language_learning.cp_learner = cp_learner
@@ -161,11 +176,12 @@ RSpec.describe OTLearn::LanguageLearning do
       expect(in_learner).to\
         have_received(:run).exactly(1).times
     end
+    it 'does not write a warning message' do
+      expect(warn_output.string).to eq ''
+    end
   end
 
   context 'when a RuntimeError is raised' do
-    # Use StringIO as a test mock for $stderr.
-    let(:warn_output) { StringIO.new }
     before(:example) do
       allow(grammar).to receive(:label).and_return('L#err')
       allow(ph_learner).to receive(:run).and_return(ph_step)
