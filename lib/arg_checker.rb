@@ -8,7 +8,12 @@ class ArgChecker
   # Returns a new object of class ArgChecker.
   # :call-seq:
   #   ArgChecker.new -> checker
-  def initialize; end
+  #--
+  # err_output is a dependency injection used for testing. It is
+  # the IO channel to which error msgs are written (normally $stderr).
+  def initialize(err_output: $stderr)
+    @err_output = err_output
+  end
 
   # Checks if _arg_ is given (not nil). If it is, return true.
   # If _arg_ is nil, print an error message including the name string
@@ -18,7 +23,7 @@ class ArgChecker
   def arg_given?(arg, option_string)
     return true unless arg.nil?
 
-    puts "ERROR: missing command line option #{option_string}."
+    @err_output.puts "ERROR: missing command line option #{option_string}."
     false
   end
 
@@ -33,8 +38,8 @@ class ArgChecker
     return true if values.member?(arg)
     return false unless arg_given?(arg, option_string)
 
-    puts "ERROR: invalid #{option_string} value #{arg}."
-    puts "Value must be one of #{values.join(', ')}"
+    @err_output.puts "ERROR: invalid #{option_string} value #{arg}."
+    @err_output.puts "Value must be one of #{values.join(', ')}"
     false
   end
 end
