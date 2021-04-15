@@ -43,10 +43,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
       # The possible unset features and their behavior
       allow(unset_feat1).to receive(:value=).with(out_feat_value1)
       allow(unset_feat1).to receive(:value).and_return(out_feat_value1)
-      allow(unset_feat1).to receive(:value=).with(nil)
+      allow(unset_feat1).to receive(:unset)
       allow(unset_feat2).to receive(:value=).with(out_feat_value2)
       allow(unset_feat2).to receive(:value).and_return(out_feat_value2)
-      allow(unset_feat2).to receive(:value=).with(nil)
+      allow(unset_feat2).to receive(:unset)
       # mock the parse of failed_winner's output used to test a feature
       allow(failed_winner).to receive(:output).and_return(fw_output)
       allow(grammar).to receive(:parse_output).with(fw_output)\
@@ -280,10 +280,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
       # The possible unset features and their behavior
       allow(unset_feat1).to receive(:value=).with(out_feat_value1)
       allow(unset_feat1).to receive(:value).and_return(out_feat_value1)
-      allow(unset_feat1).to receive(:value=).with(nil)
+      allow(unset_feat1).to receive(:unset)
       allow(unset_feat2).to receive(:value=).with(out_feat_value2)
       allow(unset_feat2).to receive(:value).and_return(out_feat_value2)
-      allow(unset_feat2).to receive(:value=).with(nil)
+      allow(unset_feat2).to receive(:unset)
       # a test double of FeatureValuePair for dependency injection
       allow(fv_pair_class).to \
         receive(:new).with(unset_feat1, out_feat_value1).and_return(fv_pair1)

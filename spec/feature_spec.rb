@@ -57,6 +57,20 @@ RSpec.describe Feature do
     it 'is not val2' do
       expect(@host.val2?).to be false
     end
+    it 'is not unset' do
+      expect(@host.unset?).to be false
+    end
+    context 'and is then unset' do
+      before(:example) do
+        @host.unset
+      end
+      it 'is unset' do
+        expect(@host.unset?).to be true
+      end
+      it 'is not val1' do
+        expect(@host.val1?).to be false
+      end
+    end
   end
 
   context 'and another feature of same type and value' do

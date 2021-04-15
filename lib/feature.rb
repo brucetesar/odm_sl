@@ -55,6 +55,12 @@ module Feature
     value == UNSET
   end
 
+  # Changes the value of the feature to unset. Returns a reference to self.
+  def unset
+    self.value = UNSET
+    self
+  end
+
   # Returns true if _val_ is a valid value for the feature;
   # returns false otherwise.
   def valid_value?(val)

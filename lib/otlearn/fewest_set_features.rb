@@ -161,7 +161,7 @@ module OTLearn
     end
     private :select_most_restrictive_uf
 
-    # Tests the unset feature +ufeat+ of +tested_winner+ (a testing copy of
+    # Tests the unset feature _ufeat_ of _tested_winner_ (a testing copy of
     # failed_winner) by assigning, in the lexicon, the unset feature to the
     # value matching its surface realization in tested_winner, and then
     # running a mismatch consistency check on tested_winner jointly with
@@ -189,8 +189,7 @@ module OTLearn
         val_pair = @fv_pair_class.new(ufeat, ufeat.value)
       end
       # Unset the tested feature in any event.
-      # TODO: need a proper "unset" method for features
-      ufeat.value = nil
+      ufeat.unset
       # return the val_pair if it worked, or nil if it didn't
       val_pair
     end
