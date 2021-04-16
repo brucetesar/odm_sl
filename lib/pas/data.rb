@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # Author: Morgan Moyer
-#
+
 # This adds, to the module PAS, routines for generating data of various types
 # within the PAS (stress-length) linguistic system.
 
@@ -22,11 +24,12 @@ module PAS
   # the next generated gets number _id_number_ + 2, etc.).
   # If a code block is given, each generated lexical entry is passed to it.
   def PAS.generate_morphemes(uf_length, type, id_number)
-    if type==Morpheme::ROOT then label_pref = "r"
-    elsif type==Morpheme::PREFIX then label_pref = "p"
-    elsif type==Morpheme::SUFFIX then label_pref = "s"
-    else raise "Unrecognized morpheme type."
-    end
+    label_pref = case type
+                 when Morpheme::ROOT then "r"
+                 when Morpheme::PREFIX then "p"
+                 when Morpheme::SUFFIX then "s"
+                 else raise "Unrecognized morpheme type."
+                 end
     lexical_entry_list = []
     PAS.generate_underlying_forms(uf_length) do |uf|
       id_number += 1
@@ -94,8 +97,8 @@ module PAS
     return competitions
   end
 
-  # Generates a list of competitions and a grammar with a lexicon of
-  # corresponding morphemes. This can be used, for instance, to generate
+  # Generates a list of competitions, one for each possible input of
+  # a prescribed paradigm. This can be used, for instance, to generate
   # winners via OTLearn.generate_language_from_competitions().
   #
   # This method generates the paradigm 1r1s, with all of the possible
@@ -122,8 +125,8 @@ module PAS
     return comp_list
   end
   
-  # Generates a list of competitions and a grammar with a lexicon of
-  # corresponding morphemes. This can be used, for instance, to generate
+  # Generates a list of competitions, one for each possible input of
+  # a prescribed paradigm. This can be used, for instance, to generate
   # winners via OTLearn.generate_language_from_competitions().
   #
   # This method generates the paradigm 2r1s, with all of the possible
@@ -145,44 +148,32 @@ module PAS
     end
     # Generate the competition for each morphword
     comp_list = competitions_from_morphwords(words, gram)
-    return comp_list, gram
+    return comp_list
   end
 
-  # Generates a list of competitions and a grammar with a lexicon of
-  # corresponding morphemes. This can be used, for instance, to generate
+  # Generates a list of competitions, one for each possible input of
+  # a prescribed paradigm. This can be used, for instance, to generate
   # winners via OTLearn.generate_language_from_competitions().
   #
   # This method generates the paradigm 1p2r, with all of the possible
   # 1-syllable prefixes and all of the possible 2-syllable roots, and
   # words formed from all possible prefix+root combinations.
   def PAS.generate_competitions_1p_2r
-      # Generate the morphemes
-      roots = PAS.generate_morphemes(2, Morpheme::ROOT, 0)
-      prefixes = PAS.generate_morphemes(1, Morpheme::PREFIX, 0)
-      # Create a new grammar, and add all of the morphemes to the lexicon.
-      gram = Grammar.new(system: PAS::System.instance)
-      roots.each{|root_le| gram.lexicon.add(root_le)}
-      prefixes.each{|pre_le| gram.lexicon.add(pre_le)}
-      # Morphology: create all combinations of one root and one prefix
-      word_parts = roots.product(prefixes)
-      words = word_parts.map do |parts|
-        # Add the morphemes of the combination to a new morphological word.
-        parts.inject(MorphWord.new){|w,le| w.add(le.morpheme); w}
-      end
-      # Generate the competition for each morphword
-      comp_list = competitions_from_morphwords(words, gram)
-      return comp_list, gram
+    # Generate the morphemes
+    roots = PAS.generate_morphemes(2, Morpheme::ROOT, 0)
+    prefixes = PAS.generate_morphemes(1, Morpheme::PREFIX, 0)
+    # Create a new grammar, and add all of the morphemes to the lexicon.
+    gram = Grammar.new(system: PAS::System.instance)
+    roots.each{|root_le| gram.lexicon.add(root_le)}
+    prefixes.each{|pre_le| gram.lexicon.add(pre_le)}
+    # Morphology: create all combinations of one root and one prefix
+    word_parts = roots.product(prefixes)
+    words = word_parts.map do |parts|
+      # Add the morphemes of the combination to a new morphological word.
+      parts.inject(MorphWord.new){|w,le| w.add(le.morpheme); w}
+    end
+    # Generate the competition for each morphword
+    comp_list = competitions_from_morphwords(words, gram)
+    return comp_list
   end
-
-#--
-# Hierarchies
-#++
-
-  # The hierarchy for Language A
-  def PAS.hier_a
-    hier = Hierarchy.new
-    hier << [SYSTEM.wsp] << [SYSTEM.idstress] << [SYSTEM.culm] << [SYSTEM.ml] <<
-      [SYSTEM.mr] << [SYSTEM.idlength] << [SYSTEM.nolong]
-    return hier
-  end
-end # module PAS
+end

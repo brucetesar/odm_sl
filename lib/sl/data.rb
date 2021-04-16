@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
-#
+
 # This adds, to the module SL, routines for generating data of various types
 # within the SL (stress-length) linguistic system.
 
@@ -22,11 +24,12 @@ module SL
   # the next generated gets number _id_number_ + 2, etc.).
   # If a code block is given, each generated lexical entry is passed to it.
   def SL.generate_morphemes(uf_length, type, id_number)
-    if type==Morpheme::ROOT then label_pref = "r"
-    elsif type==Morpheme::PREFIX then label_pref = "p"
-    elsif type==Morpheme::SUFFIX then label_pref = "s"
-    else raise "Unrecognized morpheme type."
-    end
+    label_pref = case type
+                 when Morpheme::ROOT then "r"
+                 when Morpheme::PREFIX then "p"
+                 when Morpheme::SUFFIX then "s"
+                 else raise "Unrecognized morpheme type."
+                 end
     lexical_entry_list = []
     SL.generate_underlying_forms(uf_length) do |uf|
       id_number += 1
@@ -156,21 +159,21 @@ module SL
   # 1-syllable prefixes and all of the possible 2-syllable roots, and
   # words formed from all possible prefix+root combinations.
   def SL.generate_competitions_1p_2r
-      # Generate the morphemes
-      roots = SL.generate_morphemes(2, Morpheme::ROOT, 0)
-      prefixes = SL.generate_morphemes(1, Morpheme::PREFIX, 0)
-      # Create a new grammar, and add all of the morphemes to the lexicon.
-      gram = Grammar.new(system: SL::System.instance)
-      roots.each{|root_le| gram.lexicon.add(root_le)}
-      prefixes.each{|pre_le| gram.lexicon.add(pre_le)}
-      # Morphology: create all combinations of one root and one prefix
-      word_parts = roots.product(prefixes)
-      words = word_parts.map do |parts|
-        # Add the morphemes of the combination to a new morphological word.
-        parts.inject(MorphWord.new){|w,le| w.add(le.morpheme); w}
-      end
-      # Generate the competition for each morphword
-      comp_list = competitions_from_morphwords(words, gram)
-      return comp_list
+    # Generate the morphemes
+    roots = SL.generate_morphemes(2, Morpheme::ROOT, 0)
+    prefixes = SL.generate_morphemes(1, Morpheme::PREFIX, 0)
+    # Create a new grammar, and add all of the morphemes to the lexicon.
+    gram = Grammar.new(system: SL::System.instance)
+    roots.each{|root_le| gram.lexicon.add(root_le)}
+    prefixes.each{|pre_le| gram.lexicon.add(pre_le)}
+    # Morphology: create all combinations of one root and one prefix
+    word_parts = roots.product(prefixes)
+    words = word_parts.map do |parts|
+      # Add the morphemes of the combination to a new morphological word.
+      parts.inject(MorphWord.new){|w,le| w.add(le.morpheme); w}
+    end
+    # Generate the competition for each morphword
+    comp_list = competitions_from_morphwords(words, gram)
+    return comp_list
   end
 end
