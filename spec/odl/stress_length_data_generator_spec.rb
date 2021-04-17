@@ -37,9 +37,9 @@ RSpec.describe 'ODL::StressLengthDataGenerator' do
     let(:mw3) { double('morphword3') }
     let(:mw4) { double('morphword4') }
     before(:example) do
-      allow(lexentry_generator).to receive(:generate_morphemes)\
+      allow(lexentry_generator).to receive(:lexical_entries)\
         .with(1, Morpheme::ROOT, 0).and_return([r1_le, r2_le])
-      allow(lexentry_generator).to receive(:generate_morphemes)\
+      allow(lexentry_generator).to receive(:lexical_entries)\
         .with(1, Morpheme::SUFFIX, 0).and_return([s1_le, s2_le])
       allow(r1_le).to receive(:morpheme).and_return(r1)
       allow(r2_le).to receive(:morpheme).and_return(r2)
@@ -56,7 +56,7 @@ RSpec.describe 'ODL::StressLengthDataGenerator' do
       allow(mw4).to receive(:add).with(s2)
       @words = [mw1, mw2, mw3, mw4]
       allow(competition_generator).to \
-        receive(:competitions_from_morphwords)\
+        receive(:competitions)\
         .with(@words, lexicon).and_return(expected_comp_list)
       @comp_list = @generator.generate_competitions_1r1s
     end

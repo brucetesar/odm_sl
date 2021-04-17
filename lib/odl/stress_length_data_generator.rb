@@ -10,11 +10,25 @@ module ODL
   # An object of this class is able to generate a set of competitions,
   # one for each morphword that meets specifications. The presumed
   # morphological categories come from the class Morpheme, and are:
+  # * Morpheme::PREFIX
   # * Morpheme::ROOT
   # * Morpheme::SUFFIX
-  # * Morpheme::PREFIX
   class StressLengthDataGenerator
+    # Internal alias for Morpheme::ROOT.
+    ROOT = Morpheme::ROOT
+
+    # Internal alias for Morpheme::SUFFIX.
+    SUFFIX = Morpheme::SUFFIX
+
+    # Internal alias for Morpheme::PREFIX.
+    PREFIX = Morpheme::PREFIX
+
     # Returns a new Stress-Length data generator object.
+    # === Parameters
+    # * lexentry_generator - generates lexical entries for possible
+    #   underlying forms of morphemes.
+    # * comp_generator - generates a set of competitions for a given
+    #   set of morphwords, given lexical entries for the morphemes.
     # :call-seq:
     #   new(lexentry_generator, comp_generator) -> data_generator
     #--
@@ -34,19 +48,19 @@ module ODL
     # suffixes are created. Then all possible root-suffix pairs are
     # constructed, and a morphword is constructed for each such pair.
     # Finally, a separate competition is constructed for each morphword,
-    # a a list of the competitions is returned.
+    # and a list of the competitions is returned.
     def generate_competitions_1r1s
       # generate the morphemes
-      roots = @lexentry_generator.generate_morphemes(1, Morpheme::ROOT, 0)
-      suffixes =
-        @lexentry_generator.generate_morphemes(1, Morpheme::SUFFIX, 0)
+      roots = @lexentry_generator.lexical_entries(1, ROOT, 0)
+      suffixes = @lexentry_generator.lexical_entries(1, SUFFIX, 0)
       # create a temporary lexicon, adding all lexical entries.
       lexicon = @lexicon_class.new
       roots.each { |root_le| lexicon.add(root_le) }
       suffixes.each { |suf_le| lexicon.add(suf_le) }
       # Construct morphwords for each root+suffix combination
       words = combine_morphemes(roots, suffixes)
-      @comp_generator.competitions_from_morphwords(words, lexicon)
+      # Generate a competition for each morphword; return a list of them.
+      @comp_generator.competitions(words, lexicon)
     end
 
     # Constructs all root+suffix combinations of _roots_ and _suffixes_,
