@@ -6,9 +6,9 @@ require 'rspec'
 require 'odl/underlying_form_generator'
 
 RSpec.describe 'ODL::UnderlyingFormGenerator' do
-  let(:element_generator){ double('element generator') }
-  let(:e1){ double('element 1') }
-  let(:e2){ double('element 2') }
+  let(:element_generator) { double('element generator') }
+  let(:e1) { double('element 1') }
+  let(:e2) { double('element 2') }
   before(:example) do
     allow(element_generator).to receive(:elements).and_yield(e1).and_yield(e2)
     @generator = ODL::UnderlyingFormGenerator.new(element_generator)
@@ -28,7 +28,7 @@ RSpec.describe 'ODL::UnderlyingFormGenerator' do
 
   context 'generating UFs of negative length' do
     it 'raises a RuntimeError' do
-      expect{@generator.underlying_forms(-1)}.to raise_error(RuntimeError)
+      expect { @generator.underlying_forms(-1) }.to raise_error(RuntimeError)
     end
   end
 

@@ -7,11 +7,11 @@ require 'odl/stress_length_data_generator'
 require 'morpheme'
 
 RSpec.describe 'ODL::StressLengthDataGenerator' do
-  let(:lexentry_generator){ double('lexentry_generator') }
-  let(:competition_generator){ double('competition_generator') }
-  let(:lexicon_class){ double('lexicon_class') }
-  let(:lexicon){ double('lexicon') }
-  let(:morphword_class){ double('morphword_class') }
+  let(:lexentry_generator) { double('lexentry_generator') }
+  let(:competition_generator) { double('competition_generator') }
+  let(:lexicon_class) { double('lexicon_class') }
+  let(:lexicon) { double('lexicon') }
+  let(:morphword_class) { double('morphword_class') }
   before(:example) do
     allow(lexicon_class).to receive(:new).and_return(lexicon)
     allow(lexicon).to receive(:add)
@@ -23,24 +23,24 @@ RSpec.describe 'ODL::StressLengthDataGenerator' do
   end
 
   context 'when 1r1s competitions are generated' do
-    let(:r1){ double('root1') }
-    let(:r2){ double('root2') }
-    let(:s1){ double('suffix1') }
-    let(:s2){ double('suffix2') }
-    let(:r1_le){ double('r1 lexical entry') }
-    let(:r2_le){ double('r2 lexical entry') }
-    let(:s1_le){ double('s1 lexical entry') }
-    let(:s2_le){ double('s2 lexical entry') }
-    let(:expected_comp_list){ double('expected_comp_list') }
-    let(:mw1){ double('morphword1') }
-    let(:mw2){ double('morphword2') }
-    let(:mw3){ double('morphword3') }
-    let(:mw4){ double('morphword4') }
+    let(:r1) { double('root1') }
+    let(:r2) { double('root2') }
+    let(:s1) { double('suffix1') }
+    let(:s2) { double('suffix2') }
+    let(:r1_le) { double('r1 lexical entry') }
+    let(:r2_le) { double('r2 lexical entry') }
+    let(:s1_le) { double('s1 lexical entry') }
+    let(:s2_le) { double('s2 lexical entry') }
+    let(:expected_comp_list) { double('expected_comp_list') }
+    let(:mw1) { double('morphword1') }
+    let(:mw2) { double('morphword2') }
+    let(:mw3) { double('morphword3') }
+    let(:mw4) { double('morphword4') }
     before(:example) do
       allow(lexentry_generator).to receive(:generate_morphemes)\
-      .with(1, Morpheme::ROOT, 0).and_return([r1_le, r2_le])
+        .with(1, Morpheme::ROOT, 0).and_return([r1_le, r2_le])
       allow(lexentry_generator).to receive(:generate_morphemes)\
-      .with(1, Morpheme::SUFFIX, 0).and_return([s1_le, s2_le])
+        .with(1, Morpheme::SUFFIX, 0).and_return([s1_le, s2_le])
       allow(r1_le).to receive(:morpheme).and_return(r1)
       allow(r2_le).to receive(:morpheme).and_return(r2)
       allow(s1_le).to receive(:morpheme).and_return(s1)

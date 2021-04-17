@@ -36,7 +36,7 @@ module ODL
     # :call-seq:
     #   underlying_forms(length) -> array
     def underlying_forms(length)
-      raise 'UF length cannot be negative!' if length < 0
+      raise 'UF length cannot be negative!' if length.negative?
 
       # Start with a single empty underlying form
       uf_list = [Underlying.new]

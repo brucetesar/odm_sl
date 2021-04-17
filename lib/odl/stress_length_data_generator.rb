@@ -42,17 +42,28 @@ module ODL
         @lexentry_generator.generate_morphemes(1, Morpheme::SUFFIX, 0)
       # create a temporary lexicon, adding all lexical entries.
       lexicon = @lexicon_class.new
-      roots.each{ |root_le| lexicon.add(root_le) }
-      suffixes.each{ |suf_le| lexicon.add(suf_le) }
+      roots.each { |root_le| lexicon.add(root_le) }
+      suffixes.each { |suf_le| lexicon.add(suf_le) }
+      # Construct morphwords for each root+suffix combination
+      words = combine_morphemes(roots, suffixes)
+      @comp_generator.competitions_from_morphwords(words, lexicon)
+    end
+
+    # Constructs all root+suffix combinations of _roots_ and _suffixes_,
+    # representing each combination as a morphword. Returns an array
+    # of morphwords.
+    def combine_morphemes(roots, suffixes)
       # Morphology: create all combinations of one root and one suffix
       word_parts = roots.product(suffixes)
       # Next line: how to include free roots as (monomorphemic) words
       # word_parts += roots.product()
-      words = word_parts.map do |parts|
+      word_parts.map do |parts|
         # Add the morphemes of the combination to a new morphological word
-        parts.inject(@morphword_class.new){ |w, le| w.add(le.morpheme); w}
+        parts.each_with_object(@morphword_class.new) do |le, mw|
+          mw.add(le.morpheme)
+        end
       end
-      @comp_generator.competitions_from_morphwords(words, lexicon)
     end
+    private :combine_morphemes
   end
 end
