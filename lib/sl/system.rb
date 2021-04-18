@@ -10,6 +10,11 @@ require 'ui_correspondence'
 require 'word'
 require 'underlying'
 require 'lexical_entry'
+require 'odl/element_generator'
+require 'odl/underlying_form_generator'
+require 'odl/lexical_entry_generator'
+require 'odl/competition_generator'
+require 'odl/stress_length_data_generator'
 
 # Module SL contains the linguistic system elements defining the
 # Stress-Length (SL) linguistic system. SL builds words from syllables,
@@ -51,6 +56,7 @@ module SL
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
+      @data_generator = initialize_data_generation
     end
 
     # Returns the list of constraints (each constraint is a Constraint object).
@@ -201,6 +207,19 @@ module SL
       end
       word.eval # compute the number of violations of each constraint
       word
+    end
+
+    def initialize_data_generation
+      element_generator = ODL::ElementGenerator.new(Syllable)
+      uf_generator = ODL::UnderlyingFormGenerator.new(element_generator)
+      lexentry_generator = ODL::LexicalEntryGenerator.new(uf_generator)
+      comp_generator = ODL::CompetitionGenerator.new(self)
+      ODL::StressLengthDataGenerator.new(lexentry_generator, comp_generator)
+    end
+    private :initialize_data_generation
+
+    def generate_competitions_1r1s
+      @data_generator.generate_competitions_1r1s
     end
 
     private

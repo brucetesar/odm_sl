@@ -8,7 +8,7 @@
 # The resolver adds <project>/lib to the $LOAD_PATH.
 require_relative '../../lib/odl/resolver'
 
-require 'sl/data'
+require 'sl/system'
 require 'factorial_typology'
 require 'otlearn/data_manip'
 
@@ -16,7 +16,8 @@ require 'otlearn/data_manip'
 # a list of sets of language data, one for each language in
 # the typology of the SL system, with each root and each suffix
 # consisting of a single syllable (1r1s).
-competition_list = SL.generate_competitions_1r1s
+system = SL::System.instance
+competition_list = system.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
 lang_list = ft_result.factorial_typology
 

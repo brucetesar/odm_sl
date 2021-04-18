@@ -10,7 +10,6 @@ require_relative '../lib/odl/resolver'
 require 'optparse'
 require 'arg_checker'
 require 'sl/system'
-require 'sl/data'
 require 'factorial_typology'
 require 'otlearn/data_manip'
 require 'otlearn/language_learning_factory'
@@ -75,7 +74,7 @@ tcomp_type = "test_#{tcomp_string}".to_sym
 data_file = 'outputs_typology_1r1s.mar'
 unless File.exist?(data_file)
   puts 'Regenerating the typology data file.'
-  competition_list = SL.generate_competitions_1r1s
+  competition_list = ling_system.generate_competitions_1r1s
   ft_result = FactorialTypology.new(competition_list)
   lang_list = ft_result.factorial_typology
   File.open(data_file, 'wb') do |f|

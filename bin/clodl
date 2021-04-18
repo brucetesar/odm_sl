@@ -9,7 +9,6 @@ require_relative '../lib/odl/resolver'
 
 require 'optparse'
 require 'sl/system'
-require 'sl/data'
 require 'factorial_typology'
 require 'grammar'
 require 'otlearn/data_manip'
@@ -96,7 +95,7 @@ check_arg_value(comp_test_string, comp_type_values, '--ctest')
 comp_test_type = "test_#{comp_learn_string}".to_sym
 
 # Generate the language typology.
-competition_list = SL.generate_competitions_1r1s
+competition_list = ling_system.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
 lang_list = ft_result.factorial_typology
 
