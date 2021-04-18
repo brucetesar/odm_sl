@@ -17,12 +17,15 @@ require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_image_maker'
 require 'otlearn/language_learning_runner'
 
+# set the linguistic system
+ling_system = SL::System.instance
+
 # define variables for option values
 list_options = false
 para_bias_string = nil
 lcomp_string = nil
 tcomp_string = nil
-out_dir = '.'  # default is current working directory
+out_dir = '.' # default is current working directory
 
 # define the allowed command line options
 opts = OptionParser.new
@@ -88,13 +91,13 @@ factory = OTLearn::LanguageLearningFactory.new
 factory.send(para_bias)
 factory.send(lcomp_type)
 factory.send(tcomp_type)
-factory.system = SL::System.instance
+factory.system = ling_system
 learner = factory.build
 
 # Run learning on all of the languages
 puts 'Learning the SL typology.'
 image_maker = OTLearn::LanguageLearningImageMaker.new
-runner = OTLearn::LanguageLearningRunner.new(factory.system, learner,
+runner = OTLearn::LanguageLearningRunner.new(ling_system, learner,
                                              image_maker)
 runner.prep_output_dir(out_dir, '*.csv')
 runner.run_languages(data_file) do |label, outputs|

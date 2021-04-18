@@ -17,6 +17,9 @@ require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_image_maker'
 require 'csv_output'
 
+# set the linguistic system
+ling_system = SL::System.instance
+
 # define variables for option values
 label = nil
 report_filename = nil
@@ -110,11 +113,11 @@ factory = OTLearn::LanguageLearningFactory.new
 factory.send(para_bias)
 factory.send(comp_learn_type)
 factory.send(comp_test_type)
-factory.system = SL::System.instance
+factory.system = ling_system
 lang_sim = factory.build
 
 # Run learning on the language.
-grammar = Grammar.new(system: factory.system)
+grammar = Grammar.new(system: ling_system)
 grammar.label = label
 result = lang_sim.learn(outputs, grammar)
 
