@@ -48,6 +48,12 @@ class FeatureInstance
     @feature.value = new_value
   end
 
+  # Changes this feature to unset. Returns a reference to self.
+  def unset
+    @feature.unset
+    self
+  end
+
   # Returns the morpheme associated with the element containing
   # this feature.
   def morpheme

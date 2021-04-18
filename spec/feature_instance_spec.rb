@@ -12,6 +12,7 @@ RSpec.describe FeatureInstance do
       type = 'some_type'
       allow(@feature).to receive(:type).and_return(type)
       allow(@feature).to receive(:value).and_return('the_value')
+      allow(@feature).to receive(:unset).and_return(@feature)
       allow(@element).to receive(:get_feature).with(type).and_return(@feature)
       allow(@element).to receive(:morpheme).and_return('the_morph')
       @feature_instance = FeatureInstance.new(@element, @feature)
@@ -31,6 +32,14 @@ RSpec.describe FeatureInstance do
     it 'allows the feature value to be set to a different value' do
       expect(@feature).to receive(:value=).with('new_value')
       @feature_instance.value = 'new_value'
+    end
+    it 'allows the feature to be unset' do
+      @feature_instance.unset
+      expect(@feature).to have_received(:unset)
+    end
+    it 'returns a reference to self when unset' do
+      rvalue = @feature_instance.unset
+      expect(rvalue).to eq @feature_instance
     end
   end
 
