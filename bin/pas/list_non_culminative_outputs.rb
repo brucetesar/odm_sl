@@ -10,8 +10,7 @@
 require_relative '../../lib/odl/resolver'
 
 # Requires for classes needed in loading data from marshal file.
-require 'output'
-require 'pas/data'
+require 'pas/system'
 
 # Read languages from a Marshal-format file, successively yielding
 # the label and outputs of each language.
