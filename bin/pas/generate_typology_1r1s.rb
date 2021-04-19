@@ -39,15 +39,15 @@ File.open(out_file, 'wb') do |f|
 end
 
 # Write a human-readable form of each language of the typology to a textfile.
-txt_dir = File.join(ODL::TEMP_DIR, 'pas_languages')
-Dir.mkdir(txt_dir) unless Dir.exist?(txt_dir)
-chooser = OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
-rcd_runner = RcdRunner.new(chooser)
-lang_list.each do |lang|
-  lang_file = File.join(txt_dir, "#{lang.label}.txt")
-  File.open(lang_file, 'w') do |file|
-    file.puts lang.label
-    file.puts rcd_runner.run_rcd(lang).hierarchy.to_s
-    lang.each { |pair| file.puts "#{pair.winner.output.morphword} #{pair}" }
-  end
-end
+# txt_dir = File.join(ODL::TEMP_DIR, 'pas_languages')
+# Dir.mkdir(txt_dir) unless Dir.exist?(txt_dir)
+# chooser = OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
+# rcd_runner = RcdRunner.new(chooser)
+# lang_list.each do |lang|
+#   lang_file = File.join(txt_dir, "#{lang.label}.txt")
+#   File.open(lang_file, 'w') do |file|
+#     file.puts lang.label
+#     file.puts rcd_runner.run_rcd(lang).hierarchy.to_s
+#     lang.each { |pair| file.puts "#{pair.winner.output.morphword} #{pair}" }
+#   end
+# end
