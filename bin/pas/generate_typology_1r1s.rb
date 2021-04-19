@@ -8,18 +8,16 @@
 # The resolver adds <project>/lib to the $LOAD_PATH.
 require_relative '../../lib/odl/resolver'
 
-require 'pas/data'
+require 'pas/system'
 require 'factorial_typology'
 require 'otlearn/data_manip'
-require 'otlearn/ranking_bias_some_low'
-require 'otlearn/faith_low'
-require 'rcd_runner'
 
 # Generate the language typology data:
 # a list of sets of language data, one for each language in
 # the typology of the PAS system, with each root and each suffix
 # consisting of a single syllable (1r1s).
-competition_list = PAS.generate_competitions_1r1s
+system = PAS::System.instance
+competition_list = system.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
 lang_list = ft_result.factorial_typology
 
@@ -30,8 +28,8 @@ Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
 
 # Write the data for each language of the typology to a data file.
 # Uses Marshal to write objects to file.
-out_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
-File.open(out_file, 'wb') do |f|
+data_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
+File.open(data_file, 'wb') do |f|
   lang_list.each do |lang|
     outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
     Marshal.dump(["Lg#{lang.label}", outputs], f)
