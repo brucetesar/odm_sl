@@ -10,6 +10,11 @@ require 'ui_correspondence'
 require 'word'
 require 'underlying'
 require 'lexical_entry'
+require 'odl/element_generator'
+require 'odl/underlying_form_generator'
+require 'odl/lexical_entry_generator'
+require 'odl/competition_generator'
+require 'odl/stress_length_data_generator'
 
 # Module PAS contains the linguistic system elements defining the
 # Pitch Accent Stress (PAS) linguistic system. PAS builds words from syllables,
@@ -76,6 +81,7 @@ module PAS
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
+      @data_generator = initialize_data_generation
     end
 
     # Accepts parameters of a morph_word and a lexicon. It builds an
@@ -167,34 +173,54 @@ module PAS
       # If any morphemes aren't currently in the lexicon, create new entries, with
       # the same number of syllables as in the output, and all features unset.
       mw.each do |m|
-        unless lexicon.any? { |entry| entry.morpheme == m }
-          under = Underlying.new
-          # create a new UF syllable for each syllable of m in the output
-          syls_of_m = output.find_all { |syl| syl.morpheme == m }
-          syls_of_m.each { |x| under << Syllable.new.set_morpheme(m) }
-          lexicon << Lexical_Entry.new(m, under)
-        end
+        next if lexicon.any? { |entry| entry.morpheme == m }
+
+        under = Underlying.new
+        # create a new UF syllable for each syllable of m in the output
+        syls_of_m = output.find_all { |syl| syl.morpheme == m }
+        syls_of_m.each { |_x| under << Syllable.new.set_morpheme(m) }
+        lexicon << Lexical_Entry.new(m, under)
       end
       # Construct the input form
       input = input_from_morphword(mw, lexicon)
       word = Word.new(self, input, output)
-      # create 1-to-1 IO correspondence
-      if input.size != output.size
-        raise "Input size #{input.size} not equal to output size #{output.size}."
-      end
+      # Sanity check: 1-to-1 corresp. requires same sizes.
+      msg_s = "Input size #{input.size} != output size #{output.size}."
+      raise "system.parse_output: #{msg_s}" if input.size != output.size
 
+      # create 1-to-1 IO correspondence
       # Iterate over successive input and output syllables, adding each
       # pair to the word's correspondence relation.
       input.each_with_index do |in_syl, idx|
         out_syl = output[idx]
         word.add_to_io_corr(in_syl, out_syl)
-        if in_syl.morpheme != out_syl.morpheme
-          raise "Input syllable morph #{in_syl.morpheme.label} != " +
-                "output syllable morph #{out_syl.morpheme.label}"
-        end
+        next unless in_syl.morpheme != out_syl.morpheme
+
+        msg1 = "Input syllable morph #{in_syl.morpheme.label} != "
+        msg2 = "output syllable morph #{out_syl.morpheme.label}"
+        raise "#{msg1}#{msg2}"
       end
       word.eval # compute the number of violations of each constraint
       word
+    end
+
+    # Constructs and connects together the generators for
+    # basic representational elements. Returns a data generator,
+    # which is used to generate sets of competitions.
+    def initialize_data_generation
+      element_generator = ODL::ElementGenerator.new(Syllable)
+      uf_generator = ODL::UnderlyingFormGenerator.new(element_generator)
+      lexentry_generator = ODL::LexicalEntryGenerator.new(uf_generator)
+      comp_generator = ODL::CompetitionGenerator.new(self)
+      ODL::StressLengthDataGenerator.new(lexentry_generator, comp_generator)
+    end
+    private :initialize_data_generation
+
+    # Returns a list of competitions for all inputs consisting
+    # of one root and one suffix, where all of the roots have one
+    # syllable, and all of the suffixes have 1 syllable.
+    def generate_competitions_1r1s
+      @data_generator.generate_competitions_1r1s
     end
 
     private
@@ -217,8 +243,9 @@ module PAS
         # only apply when there's a main stress in the cand
         main_stress_found = cand.output.main_stress?
         if main_stress_found
-          for syl in cand.output do
+          cand.output.each do |syl|
             break if syl.main_stress?
+
             viol_count += 1
           end
         end
@@ -227,7 +254,7 @@ module PAS
       @mr = Constraint.new('MR', 4, MARK) do |cand|
         viol_count = 0
         stress_found = false
-        for syl in cand.output do
+        cand.output.each do |syl|
           viol_count += 1 if stress_found
           stress_found = true if syl.main_stress?
         end
@@ -238,7 +265,7 @@ module PAS
         cand.input.each do |in_syl|
           unless in_syl.stress_unset?
             out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if (in_syl.main_stress? != out_syl.main_stress?)
+            viol_count += 1 if in_syl.main_stress? != out_syl.main_stress?
           end
         end
         viol_count
@@ -248,20 +275,19 @@ module PAS
         cand.input.each do |in_syl|
           unless in_syl.length_unset?
             out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if (in_syl.long? != out_syl.long?)
+            viol_count += 1 if in_syl.long? != out_syl.long?
           end
         end
         viol_count
       end
-      # this only give a single violation to stress-less outputs
+      # Gives a single violation to stress-less outputs.
       @culm = Constraint.new('Culm', 7, MARK) do |cand|
         not_violated = cand.output.main_stress?
         if not_violated
-          viol_count = 0
+          0
         else
-          viol_count = 1
+          1
         end
-        viol_count
       end
     end
 
