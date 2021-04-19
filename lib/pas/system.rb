@@ -322,7 +322,4 @@ module PAS
       new_w
     end
   end
-
-  # The system object for the linguistic system PAS (pitch-accent/stress).
-  SYSTEM = System.instance
 end
