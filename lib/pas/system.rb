@@ -46,6 +46,30 @@ module PAS
     # Indicates that a constraint is a faithfulness constraint.
     FAITH = Constraint::FAITH
 
+    # The list of constraints. The list is frozen, as are the constraints.
+    attr_reader :constraints
+
+    # Returns the markedness constraint NoLong.
+    attr_reader :nolong
+
+    # Returns the markedness constraint WSP.
+    attr_reader :wsp
+
+    # Returns the markedness constraint ML.
+    attr_reader :ml
+
+    # Returns the markedness constraint MR.
+    attr_reader :mr
+
+    # Returns the faithfulness constraint IDStress.
+    attr_reader :idstress
+
+    # Returns the faithfulness constraint IDLength.
+    attr_reader :idlength
+
+    # Returns the markedness constraint CULM
+    attr_reader :culm
+
     # Creates and freezes the constraints and the constraint list.
     def initialize
       initialize_constraints
@@ -54,44 +78,30 @@ module PAS
       @constraints.freeze # freeze the constraint list
     end
 
-    # Returns the list of constraints (each constraint is a Constraint object).
-    # Note that the returned list is frozen, as are the constraints that
-    # it contains.
-    def constraints() return @constraints end
-
-    # Returns the markedness constraint NoLong.
-    def nolong() return @nolong end
-    # Returns the markedness constraint WSP.
-    def wsp() return @wsp end
-    # Returns the markedness constraint ML.
-    def ml() return @ml end
-    # Returns the markedness constraint MR.
-    def mr() return @mr end
-    # Returns the faithfulness constraint IDStress.
-    def idstress() return @idstress end
-    # Returns the faithfulness constraint IDLength.
-    def idlength() return @idlength end
-    # Returns the markedness constraint CULM
-    def culm() return @culm end
-
-    # Accepts parameters of a morph_word and a lexicon. It builds an input form
-    # by concatenating the syllables of the underlying forms of each of the
-    # morphemes in the morph_word, in order. It also constructs the
-    # correspondence relation between the underlying forms of the lexicon and
-    # the input, with an entry for each corresponding pair of
-    # underlying/input syllables.
-    def input_from_morphword(mw, lexicon)
+    # Accepts parameters of a morph_word and a lexicon. It builds an
+    # input form by concatenating the syllables of the underlying forms
+    # of each of the morphemes in the morph_word, in order. It also
+    # constructs the correspondence relation between the underlying forms
+    # of the lexicon and the input, with an entry for each corresponding
+    # pair of underlying/input syllables.
+    def input_from_morphword(mwd, lexicon)
       input = Input.new
-      input.morphword = mw
-      mw.each do |m| # for each morpheme in the morph_word, in order
-        lex_entry = lexicon.find { |entry| entry.morpheme == m } # get the lexical entry
+      input.morphword = mwd
+      mwd.each do |m| # for each morpheme in the morph_word, in order
+        lex_entry = lexicon.find { |entry| entry.morpheme == m }
         raise "Morpheme #{m.label} has no lexical entry." if lex_entry.nil?
+
         uf = lex_entry.uf
-        raise "The lexical entry for morpheme #{m.label} has no underlying form." if uf.nil?
-        uf.each do |syl| # for each syllable of the underlying form
+        msg1 = "The lexical entry for morpheme #{m.label}"
+        msg2 = 'has no underlying form.'
+        raise "#{msg1} #{msg2}" if uf.nil?
+
+        uf.each do |syl|
           in_syl = syl.dup
-          input.push(in_syl) # add a duplicate of the underlying syllable to input.
-          input.ui_corr.add_corr(syl, in_syl) # create a correspondence between underlying and input syllables.
+          # add a duplicate of the underlying syllable to input.
+          input.push(in_syl)
+          # create a correspondence between underlying and input syllables.
+          input.ui_corr.add_corr(syl, in_syl)
         end
       end
       input

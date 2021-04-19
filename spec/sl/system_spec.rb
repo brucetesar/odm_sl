@@ -2,6 +2,7 @@
 
 # Author: Bruce Tesar
 
+require 'rspec'
 require 'sl/system'
 require 'lexicon'
 require 'lexical_entry'
@@ -253,21 +254,25 @@ RSpec.describe SL::System do
   # Specs for #input_from_morphword()
   # ***************************************
   context 'System with a lexicon including r1 /s./ and s4 /S:/' do
+    let(:r1) { double('r1') }
+    let(:s4) { double('s4') }
     before(:each) do
+      allow(r1).to receive(:label).and_return('r1')
+      allow(s4).to receive(:label).and_return('s4')
       @lex_entry_r1 = instance_double(Lexical_Entry, 'lex_entry_r1')
       allow(@lex_entry_r1).to receive(:nil?).and_return(false)
-      allow(@lex_entry_r1).to receive(:morpheme).and_return('r1')
+      allow(@lex_entry_r1).to receive(:morpheme).and_return(r1)
       allow(@lex_entry_r1).to receive(:uf).and_return(['s.'])
       @lex_entry_s4 = instance_double(Lexical_Entry, 'lex_entry_s4')
       allow(@lex_entry_s4).to receive(:nil?).and_return(false)
-      allow(@lex_entry_s4).to receive(:morpheme).and_return('s4')
+      allow(@lex_entry_s4).to receive(:morpheme).and_return(s4)
       allow(@lex_entry_s4).to receive(:uf).and_return(['S:'])
       @lexicon = [@lex_entry_r1, @lex_entry_s4]
     end
     context "with morphword ['r1']" do
       before(:each) do
         @mw = instance_double(MorphWord, "morphword ['r1']")
-        allow(@mw).to receive(:each).and_yield('r1')
+        allow(@mw).to receive(:each).and_yield(r1)
       end
       it '#input_from_morphword returns input with morphword r1' do
         input = @system.input_from_morphword(@mw, @lexicon)
@@ -287,7 +292,7 @@ RSpec.describe SL::System do
     context "with morphword ['r1', 's4']" do
       before(:each) do
         @mw = double
-        allow(@mw).to receive(:each).and_yield('r1').and_yield('s4')
+        allow(@mw).to receive(:each).and_yield(r1).and_yield(s4)
       end
       it '#input_from_morphword returns input with morphword r1s4' do
         input = @system.input_from_morphword(@mw, @lexicon)
@@ -461,16 +466,20 @@ RSpec.describe SL::System do
   end
 
   context 'with lexicon including r1 /s./ and s1 /S:/' do
+    let(:r1) { double('r1') }
+    let(:s1) { double('s1') }
     before(:each) do
-      @in_sylr1 = SL::Syllable.new.set_unstressed.set_short.set_morpheme('r1')
+      allow(r1).to receive(:label).and_return('r1')
+      allow(s1).to receive(:label).and_return('s1')
+      @in_sylr1 = SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
       @lex_entry_r1 = double('lex_entry_r1')
       allow(@lex_entry_r1).to receive(:nil?).and_return(false)
-      allow(@lex_entry_r1).to receive(:morpheme).and_return('r1')
+      allow(@lex_entry_r1).to receive(:morpheme).and_return(r1)
       allow(@lex_entry_r1).to receive(:uf).and_return([@in_sylr1])
-      @in_syls1 = SL::Syllable.new.set_main_stress.set_long.set_morpheme('s1')
+      @in_syls1 = SL::Syllable.new.set_main_stress.set_long.set_morpheme(s1)
       @lex_entry_s1 = double('lex_entry_s1')
       allow(@lex_entry_s1).to receive(:nil?).and_return(false)
-      allow(@lex_entry_s1).to receive(:morpheme).and_return('s1')
+      allow(@lex_entry_s1).to receive(:morpheme).and_return(s1)
       allow(@lex_entry_s1).to receive(:uf).and_return([@in_syls1])
       @lex = [@lex_entry_r1, @lex_entry_s1]
       # distinct objects from the ones in the lexicon
@@ -479,11 +488,11 @@ RSpec.describe SL::System do
     context 'and output s.S. it parses to a candidate' do
       before(:each) do
         @out_syl1 =
-          SL::Syllable.new.set_unstressed.set_short.set_morpheme('r1')
+          SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
         @out_syl2 =
-          SL::Syllable.new.set_main_stress.set_short.set_morpheme('s1')
+          SL::Syllable.new.set_main_stress.set_short.set_morpheme(s1)
         @morphword = instance_double('Morphword')
-        allow(@morphword).to receive(:each).and_yield('r1').and_yield('s1')
+        allow(@morphword).to receive(:each).and_yield(r1).and_yield(s1)
         @output = Output.new << @out_syl1 << @out_syl2
         @output.morphword = @morphword
         @word = @system.parse_output(@output, @lex)
@@ -493,11 +502,15 @@ RSpec.describe SL::System do
   end
 
   context 'with a lexicon containing only r1 /s./' do
+    let(:r1) { double('r1') }
+    let(:s1) { double('s1') }
     before(:each) do
-      @in_sylr1 = SL::Syllable.new.set_unstressed.set_short.set_morpheme('r1')
+      allow(r1).to receive(:label).and_return('r1')
+      allow(s1).to receive(:label).and_return('s1')
+      @in_sylr1 = SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
       @lex_entry_r1 = instance_double(Lexical_Entry, 'lex_entry_r1')
       allow(@lex_entry_r1).to receive(:nil?).and_return(false)
-      allow(@lex_entry_r1).to receive(:morpheme).and_return('r1')
+      allow(@lex_entry_r1).to receive(:morpheme).and_return(r1)
       allow(@lex_entry_r1).to receive(:uf).and_return([@in_sylr1])
 
       @lex = instance_double(Lexicon, 'lexicon')
@@ -506,10 +519,10 @@ RSpec.describe SL::System do
       # only r1 is in the lexicon
       allow(@lex).to receive(:find).and_return(@lex_entry_r1, nil)
 
-      @in_syls1 = SL::Syllable.new.set_morpheme('s1')
+      @in_syls1 = SL::Syllable.new.set_morpheme(s1)
       @lex_entry_s1 = instance_double(Lexical_Entry, 'lex_entry_s1')
       allow(@lex_entry_s1).to receive(:nil?).and_return(false)
-      allow(@lex_entry_s1).to receive(:morpheme).and_return('s1')
+      allow(@lex_entry_s1).to receive(:morpheme).and_return(s1)
       allow(@lex_entry_s1).to receive(:uf).and_return([@in_syls1])
       # should only be called *after* the lexical entry would have been added
       allow(@lex).to receive(:find).and_return(@lex_entry_r1, @lex_entry_s1)
@@ -520,11 +533,11 @@ RSpec.describe SL::System do
     context 'and output s.S.' do
       before(:each) do
         @out_syl1 =
-          SL::Syllable.new.set_unstressed.set_short.set_morpheme('r1')
+          SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
         @out_syl2 =
-          SL::Syllable.new.set_main_stress.set_short.set_morpheme('s1')
+          SL::Syllable.new.set_main_stress.set_short.set_morpheme(s1)
         @morphword = instance_double('Morphword')
-        allow(@morphword).to receive(:each).and_yield('r1').and_yield('s1')
+        allow(@morphword).to receive(:each).and_yield(r1).and_yield(s1)
         @output = Output.new << @out_syl1 << @out_syl2
         @output.morphword = @morphword
       end
