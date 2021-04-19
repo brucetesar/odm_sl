@@ -9,12 +9,14 @@ RSpec.describe WinLosePair do
     @constraint_list = ['C1', 'C2']
     @winner = double('Winner')
     allow(@winner).to receive(:input).and_return('input')
+    allow(@winner).to receive(:output).and_return('win-output')
     allow(@winner).to receive(:label).and_return('win-label')
     allow(@winner).to receive(:constraint_list).and_return(@constraint_list)
     allow(@winner).to receive(:get_viols).with('C1').and_return(0)
     allow(@winner).to receive(:get_viols).with('C2').and_return(3)
     @loser = double('Loser')
     allow(@loser).to receive(:input).and_return('input')
+    allow(@loser).to receive(:output).and_return('lose-output')
     allow(@loser).to receive(:label).and_return('lose-label')
     allow(@loser).to receive(:get_viols).with('C1').and_return(1)
     allow(@loser).to receive(:get_viols).with('C2').and_return(2)
@@ -47,6 +49,23 @@ RSpec.describe WinLosePair do
   end
   it 'does not respond to the preference-setting methods of Erc' do
     expect(@win_lose_pair).not_to respond_to(:set_w, :set_l, :set_e)
+  end
+  context 'to_s' do
+    before(:example) do
+      @str_rep = @win_lose_pair.to_s
+    end
+    it 'to_s includes the input' do
+      expect(/input/ =~ @str_rep).not_to be nil
+    end
+    it 'to_s includes the winner output' do
+      expect(/win-output/ =~ @str_rep).not_to be nil
+    end
+    it 'to_s includes the loser output' do
+      expect(/lose-output/ =~ @str_rep).not_to be nil
+    end
+    it 'to_s includes the constraint preferences' do
+      expect(/C1:W C2:L/ =~ @str_rep).not_to be nil
+    end
   end
 
   context 'with mis-matching inputs' do
