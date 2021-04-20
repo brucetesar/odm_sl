@@ -3,7 +3,7 @@
 # Author: Bruce Tesar
 
 require 'cell'
-require 'cellrange'
+require 'cell_range'
 
 # A 2D rectangular grid of cells, addressed by row and column using
 # count indexing (starting from 1).

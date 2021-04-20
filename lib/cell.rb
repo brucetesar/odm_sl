@@ -1,7 +1,7 @@
 # Author: Bruce Tesar
 # 
 
-require_relative 'cellrange'
+require_relative 'cell_range'
 
 # An address of a cell in a two-dimensional sheet. IMPORTANT: this is *not*
 # a complete functioning cell, only a coordinate-based address of a cell,
