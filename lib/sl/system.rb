@@ -171,7 +171,7 @@ module SL
         # create a new UF syllable for each syllable of m in the output
         syls_of_m = output.find_all { |syl| syl.morpheme == m }
         syls_of_m.each { |_x| under << Syllable.new.set_morpheme(m) }
-        lexicon << Lexical_Entry.new(m, under)
+        lexicon << LexicalEntry.new(m, under)
       end
       # Construct the input form
       input = input_from_morphword(mw, lexicon)

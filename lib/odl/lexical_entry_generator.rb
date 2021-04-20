@@ -43,7 +43,7 @@ module ODL
         id_number += 1
         morph = Morpheme.new("#{label}#{id_number}", type)
         uf.each { |el| el.set_morpheme(morph) }
-        le_list << Lexical_Entry.new(morph, uf)
+        le_list << LexicalEntry.new(morph, uf)
       end
       le_list
     end

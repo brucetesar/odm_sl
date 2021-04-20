@@ -382,11 +382,11 @@ RSpec.describe PAS::System do
     before(:each) do
       allow(r1).to receive(:label).and_return('r1')
       allow(s4).to receive(:label).and_return('s4')
-      @lex_entry_r1 = instance_double(Lexical_Entry, 'lex_entry_r1')
+      @lex_entry_r1 = instance_double(LexicalEntry, 'lex_entry_r1')
       allow(@lex_entry_r1).to receive(:nil?).and_return(false)
       allow(@lex_entry_r1).to receive(:morpheme).and_return(r1)
       allow(@lex_entry_r1).to receive(:uf).and_return(['s.'])
-      @lex_entry_s4 = instance_double(Lexical_Entry, 'lex_entry_s4')
+      @lex_entry_s4 = instance_double(LexicalEntry, 'lex_entry_s4')
       allow(@lex_entry_s4).to receive(:nil?).and_return(false)
       allow(@lex_entry_s4).to receive(:morpheme).and_return(s4)
       allow(@lex_entry_s4).to receive(:uf).and_return(['S:'])
@@ -649,7 +649,7 @@ RSpec.describe PAS::System do
       allow(s1).to receive(:label).and_return('s1')
       # the input *after* the new lexical entry for s1 is created
       @in_sylr1 = PAS::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
-      @lex_entry_r1 = instance_double(Lexical_Entry, 'lex_entry_r1')
+      @lex_entry_r1 = instance_double(LexicalEntry, 'lex_entry_r1')
       allow(@lex_entry_r1).to receive(:nil?).and_return(false)
       allow(@lex_entry_r1).to receive(:morpheme).and_return(r1)
       allow(@lex_entry_r1).to receive(:uf).and_return([@in_sylr1])
@@ -661,7 +661,7 @@ RSpec.describe PAS::System do
       allow(@lex).to receive(:find).and_return(@lex_entry_r1, nil)
 
       @in_syls1 = PAS::Syllable.new.set_morpheme(s1)
-      @lex_entry_s1 = instance_double(Lexical_Entry, 'lex_entry_s1')
+      @lex_entry_s1 = instance_double(LexicalEntry, 'lex_entry_s1')
       allow(@lex_entry_s1).to receive(:nil?).and_return(false)
       allow(@lex_entry_s1).to receive(:morpheme).and_return(s1)
       allow(@lex_entry_s1).to receive(:uf).and_return([@in_syls1])

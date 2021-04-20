@@ -6,7 +6,7 @@ require 'lexical_entry'
 RSpec.describe Lexicon do
   context "with an entry for morpheme M1" do
     before(:each) do
-      @m1 = instance_double(Lexical_Entry)
+      @m1 = instance_double(LexicalEntry)
       allow(@m1).to receive(:morpheme).and_return("M1")
       allow(@m1).to receive(:uf).and_return("uf_for_M1")
       @lexicon = Lexicon.new

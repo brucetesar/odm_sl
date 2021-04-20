@@ -1,23 +1,28 @@
-# Author: Bruce Tesar
-#
+# frozen_string_literal: true
 
-require_relative 'morpheme'
-require_relative 'underlying'
+# Author: Bruce Tesar
 
 # A lexical entry pairs a morpheme with an underlying form.
-class Lexical_Entry
+class LexicalEntry
+  # The morpheme of the lexical entry.
   attr_reader :morpheme
 
   # Returns a lexical entry with the given morpheme and underlying form.
-  def initialize(morph=Morpheme.new, uf=Underlying.new)
-    @morpheme = morph
-    @underlying_form = uf
+  # :call-seq:
+  #   new(morpheme, underlying_form) -> lexical_entry
+  def initialize(morpheme, underlying_form)
+    @morpheme = morpheme
+    @underlying_form = underlying_form
   end
-  
-  # The morpheme object is identical in the copy entry, but a duplicate
-  # is made of the underlying form for the copy entry.
+
+  # Returns a duplicate lexical entry. The morpheme object in the
+  # duplicate entry is identical to the original. The underlying form
+  # of the duplicate is itself a duplicate of the underlying form of
+  # the original.
+  # :call-seq:
+  #   dup() -> lexical_entry
   def dup
-    return Lexical_Entry.new(@morpheme, @underlying_form.dup)
+    LexicalEntry.new(@morpheme, @underlying_form.dup)
   end
 
   # Returns the label of the morpheme in this lexical entry.
@@ -37,7 +42,6 @@ class Lexical_Entry
 
   # Returns a string giving the morpheme label and the underlying form.
   def to_s
-    "#{@morpheme.label} #{@underlying_form.to_s}"
+    "#{@morpheme.label} #{@underlying_form}"
   end
-
-end # class Lexical_Entry
+end

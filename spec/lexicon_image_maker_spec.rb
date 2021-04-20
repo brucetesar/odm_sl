@@ -6,10 +6,10 @@ require 'lexicon_image_maker'
 
 RSpec.describe LexiconImageMaker do
   let(:lexicon) { instance_double('Lexicon') }
-  let(:pref1) { instance_double('Lexical_Entry', label: 'p1', uf: 'a') }
-  let(:root1) { instance_double('Lexical_Entry', label: 'r1', uf: 'x') }
-  let(:root2) { instance_double('Lexical_Entry', label: 'r2', uf: 'y') }
-  let(:suff1) { instance_double('Lexical_Entry', label: 's1', uf: 'y') }
+  let(:pref1) { instance_double('LexicalEntry', label: 'p1', uf: 'a') }
+  let(:root1) { instance_double('LexicalEntry', label: 'r1', uf: 'x') }
+  let(:root2) { instance_double('LexicalEntry', label: 'r2', uf: 'y') }
+  let(:suff1) { instance_double('LexicalEntry', label: 's1', uf: 'y') }
   let(:sheet_class) { double('sheet class') }
   let(:sheet) { double('sheet') }
   let(:subsheet) { double('subsheet') }
