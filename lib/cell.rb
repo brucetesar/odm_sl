@@ -1,41 +1,35 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
-# 
 
-require_relative 'cell_range'
-
-# An address of a cell in a two-dimensional sheet. IMPORTANT: this is *not*
-# a complete functioning cell, only a coordinate-based address of a cell,
-# containing row and column values.
+# An address of a cell in a two-dimensional sheet. IMPORTANT: this is
+# *not* a complete functioning cell, only a coordinate-based address
+# of a cell, containing row and column values.
 class Cell
-
   # The row value for the cell
   attr_accessor :row
 
   # The column value for the cell
   attr_accessor :col
 
-  # Returns a Cell with row +row+ and column +col+.
+  # Returns a Cell with row _row_ and column _col_.
   def initialize(row, col)
     @row = row
     @col = col
   end
 
-  # Returns a CellRange object representing the range consisting of
-  # the single cell represented by self.
-  def to_cellrange
-    return CellRange.new_from_cells(self,self)
-  end
-
-  # Returns true if +cell+ has the same row and column indices
+  # Returns true if _other_ has the same row and column indices
   # as self.
-  def eql?(cell)
-    return false unless row==cell.row
-    return false unless col==cell.col
-    return true
+  def eql?(other)
+    return false unless row == other.row
+    return false unless col == other.col
+
+    true
   end
 
-  # A synonym for .eql?().
-  def ==(cell)
-    eql?(cell)
+  # Returns true if _other_ has the same row and column indices
+  # as self.
+  def ==(other)
+    eql?(other)
   end
 end
