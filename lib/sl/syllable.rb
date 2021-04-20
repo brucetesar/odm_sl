@@ -1,41 +1,43 @@
-# encoding: UTF-8
-#
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
-#
- 
-require_relative 'stress'
-require_relative 'length'
+
+require 'sl/stress'
+require 'sl/length'
 
 module SL
-
-  # A syllable for the SL system has two features, stress and length. It also
-  # can have an affiliated morpheme.
+  # A syllable for the SL system has two features, stress and length. It
+  # also can have an affiliated morpheme.
   #
-  # Learning algorithms are expected to use the "generic" interface, consisting
-  # of the methods #each_feature() and #get_feature(). The method #each_feature()
-  # is an iterator that yields each feature of the syllable in turn,
-  # allowing other routines to work with syllables without knowing in advance
-  # how many or what types of features they have.
+  # Learning algorithms are expected to use the "generic" interface,
+  # consisting of the methods #each_feature() and #get_feature(). The
+  # method #each_feature() is an iterator that yields each feature of the
+  # syllable in turn, allowing other routines to work with syllables
+  # without knowing in advance how many or what types of features they
+  # have.
   class Syllable
+    # Returns the morpheme that this syllable is affiliated with.
+    attr_reader :morpheme
 
-    # Returns a syllable, initialized to the parameters if provided. Otherwise,
-    # returns a syllable with unset features, and an empty string for the
-    # morpheme.
+    # Returns a new syllable, with unset features, and an empty
+    # string for the morpheme.
+    # :call-seq:
+    #   new() -> syllable
     def initialize
       @stress = Stress.new
       @length = Length.new
-      @morpheme = "" # label of the morpheme this syllable is affiliated with.
+      @morpheme = ''
     end
 
     # A duplicate has copies of the features, so that they may be altered
     # independently of the original syllable's features.
     def dup
       dup_syl = self.class.new
-      dup_syl.set_morpheme(self.morpheme)
+      dup_syl.set_morpheme(morpheme)
       each_feature do |f|
-        dup_syl.set_feature(f.type,f.value)
+        dup_syl.set_feature(f.type, f.value)
       end
-      return dup_syl
+      dup_syl
     end
 
     # Protected accessors, only used for #==()
@@ -45,15 +47,16 @@ module SL
     # Returns true if this syllable matches _other_ in the values
     # the stress feature, the length feature, and morpheme identity.
     def ==(other)
-      return false unless @stress==other.stress
-      return false unless @length==other.length
-      return false unless @morpheme==other.morpheme
-      return true
+      return false unless @stress == other.stress
+      return false unless @length == other.length
+      return false unless @morpheme == other.morpheme
+
+      true
     end
 
     # The same as ==(other).
     def eql?(other)
-      self==other
+      self == other
     end
 
     # Returns true if the syllable's stress feature has the value
@@ -90,11 +93,6 @@ module SL
       @length.unset?
     end
 
-    # Returns the morpheme that this syllable is affiliated with.
-    def morpheme
-      @morpheme
-    end
-
     # Sets the syllable's length feature to the value long.
     def set_long
       @length.set_long
@@ -119,9 +117,9 @@ module SL
       self
     end
 
-    # Set the morpheme that this syllable is affiliated with to _m_.
-    def set_morpheme(m)
-      @morpheme = m
+    # Set the morpheme that this syllable is affiliated with to _morph_.
+    def set_morpheme(morph)
+      @morpheme = morph
       self
     end
 
@@ -139,54 +137,52 @@ module SL
     # * unset [?]
     #
     # Thus, an unstressed long syllable would be represented "s:", while
-    # a short syllable with an unset stress feature would be represented "?.".
+    # a short syllable with an unset stress feature would be represented
+    # "?.".
     def to_s
-      stress_s = case
-      when main_stress? then "S"
-      when unstressed? then "s"
-      when stress_unset? then "?"
-      end
-      length_s = case
-      when short? then "."
-      when long? then ":"
-      when length_unset? then "?"
-      end
-      return stress_s + length_s
+      stress_s = if main_stress? then 'S'
+                 elsif unstressed? then 's'
+                 elsif stress_unset? then '?'
+                 else 'stress_nodef'
+                 end
+      length_s = if short? then '.'
+                 elsif long? then ':'
+                 elsif length_unset? then '?'
+                 else 'length_nodef'
+                 end
+      "#{stress_s}#{length_s}"
     end
 
     # Constructs a string representation of the syllable suitable for use
-    # with GraphViz (for constructing lattice diagrams). Differs from #to_s()
-    # in three ways:
+    # with GraphViz (for constructing lattice diagrams). Differs from
+    # #to_s() in three ways:
     # * It uses a prefix consonant to indicate the morpheme type:
     #   "p" for root, "k" for suffix, "t" for prefix, in keeping with the
     #   paka world.
-    # * It uses an accented a [á] instead of S for a stressed vowel, and
+    # * It uses an accented a instead of S for a stressed vowel, and
     #   an unaccented a instead of s for an unstressed vowel.
     # * It uses no symbol to represent short vowel length instead of ".".
     def to_gv
-      base = "morpheme_type_not_defined"
-      if morpheme.root? then
-        base = "p"
-      elsif morpheme.suffix? then
-        base = "k"
-      elsif morpheme.prefix? then
-        base = "t"
-      end
-      stress_s = case
-      when main_stress? then "á"
-      when unstressed? then "a"
-      when stress_unset? then "?"
-      end
-      length_s = case
-      when short? then ""
-      when long? then ":"
-      when length_unset? then "?"
-      end
-      return base + stress_s + length_s
+      base = if morpheme.root? then 'p'
+             elsif morpheme.suffix? then 'k'
+             elsif morpheme.prefix? then 't'
+             else 'morpheme_type_not_defined'
+             end
+      stress_s = if main_stress? then 'á'
+                 elsif unstressed? then 'a'
+                 elsif stress_unset? then '?'
+                 else 'stress_type_not_defined'
+                 end
+      length_s = if short? then ''
+                 elsif long? then ':'
+                 elsif length_unset? then '?'
+                 else 'length_type_not_defined'
+                 end
+      "#{base}#{stress_s}#{length_s}"
     end
 
     # Iterator over the features of the syllable.
-    def each_feature() # :yields: feature
+    def each_feature # :yields: feature
       yield @length
       yield @stress
     end
@@ -194,23 +190,29 @@ module SL
     # Returns the syllable's _type_ feature. Raises an exception if the
     # syllable does not have a feature of type _type_.
     def get_feature(type)
-      each_feature{|f| return f if f.type==type}
-      raise "SL::Syllable#get_feature(): parameter #{type.to_s} is not a valid feature type."
+      each_feature { |f| return f if f.type == type }
+      # No feature of that type was found; raise a RuntimeError.
+      msg1 = 'Syllable#get_feature():'
+      msg2 = "parameter #{type} is not a valid feature type."
+      raise "#{msg1} #{msg2}"
     end
 
     # Sets the _feature_type_ feature of the syllable to _feature_value_.
     # Returns a reference to the syllable's feature.
-    # Raises an exception if _feature_type_ is not a valid type.
+    #
+    # Raises a RuntimeError if _feature_type_ is invalid.
+    #
+    # Raises a RuntimeError if _feature_value_ is invalid.
     def set_feature(feature_type, feature_value)
-      syl_feat = get_feature(feature_type) # raises exception if invalid type
+      syl_feat = get_feature(feature_type) # can raise invalid type error
       # raise an exception if invalid value
-      unless syl_feat.valid_value?(feature_value) or feature_value==Feature::UNSET
-        raise "SL::Syllable#set_feature invalid feature value parameter: #{feature_value}"
-      end
+      msg1 = 'SL::Syllable#set_feature invalid feature value parameter:'
+      msg = "#{msg1} #{feature_value}"
+      raise msg unless syl_feat.valid_value?(feature_value) || \
+                       (feature_value == Feature::UNSET)
+
       syl_feat.value = feature_value
-      return syl_feat
+      syl_feat
     end
-
-  end # class Syllable
-
-end # module SL
+  end
+end
