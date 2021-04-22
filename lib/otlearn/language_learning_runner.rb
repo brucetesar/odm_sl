@@ -23,9 +23,9 @@ module OTLearn
     # :call-seq:
     #   run(label, outputs) -> result
     def run(label, outputs)
-      grammar = Grammar.new(system: @system)
+      grammar = Grammar.new(@system)
       grammar.label = label
-      @learner.learn(outputs,grammar)
+      @learner.learn(outputs, grammar)
     end
 
     # Reads all of the languages in _data_file_. For each language,

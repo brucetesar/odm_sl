@@ -116,7 +116,7 @@ factory.system = ling_system
 lang_sim = factory.build
 
 # Run learning on the language.
-grammar = Grammar.new(system: ling_system)
+grammar = Grammar.new(ling_system)
 grammar.label = label
 result = lang_sim.learn(outputs, grammar)
 

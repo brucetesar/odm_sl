@@ -2,8 +2,8 @@
 
 # Author: Bruce Tesar
 
-require_relative 'erc_list'
-require_relative 'lexicon'
+require 'erc_list'
+require 'lexicon'
 
 # A grammar consists of a reference to a linguistic system,
 # a list of ERCs, and a lexicon.
@@ -21,17 +21,14 @@ class Grammar
   attr_reader :system
 
   # :call-seq:
-  #   Grammar.new(system: mysystem) -> Grammar
-  #   Grammar.new(system: mysystem, erc_list: mylist, lexicon: mylexicon) -> Grammar
+  #   Grammar.new(mysystem) -> grammar
+  #   Grammar.new(mysystem, erc_list: mylist, lexicon: mylexicon) -> grammar
   #
-  # The first form returns a grammar with an empty ERC list and an empty lexicon.
-  # The second form returns a grammar with ERC list +mylist+ and lexicon +mylexicon+.
-  #
-  # The system parameter is mandatory.
-  # Raises an exception if no system parameter is provided.
-  def initialize(system: nil, erc_list: nil, lexicon: Lexicon.new)
-    raise 'Grammar.new must be given a system parameter.' if system.nil?
-
+  # The first returns a grammar with an empty ERC list and an empty
+  # lexicon.
+  # The second returns a grammar with ERC list _mylist_ and lexicon
+  # _mylexicon_.
+  def initialize(system, erc_list: nil, lexicon: Lexicon.new)
     @system = system
     # If no ERC list was provided, create an empty one.
     @erc_list = erc_list
@@ -57,14 +54,13 @@ class Grammar
   # and the duplicate lexical entries contain duplicates of the underlying
   # forms but references to the very same morpheme objects.
   def dup
-    self.class.new(erc_list: erc_list.dup, lexicon: lexicon.dup,
-                   system: system)
+    self.class.new(system, erc_list: erc_list.dup, lexicon: lexicon.dup)
   end
 
   # Returns a copy of the grammar, with a copy of the ERC list, and
   # a reference to the very same lexicon object.
   def dup_same_lexicon
-    self.class.new(erc_list: erc_list.dup, lexicon: lexicon, system: system)
+    self.class.new(system, erc_list: erc_list.dup, lexicon: lexicon)
   end
 
   # Returns the underlying form for the given morpheme, as stored in

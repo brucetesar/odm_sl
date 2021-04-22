@@ -6,20 +6,13 @@ require 'rspec'
 require 'grammar'
 
 RSpec.describe Grammar do
-  context 'Grammar.new, when no system specified,' do
-    it 'raises an exception' do
-      expect { Grammar.new }.to \
-        raise_exception('Grammar.new must be given a system parameter.')
-    end
-  end
-
   context 'A new Grammar, with only the system specified,' do
     let(:sys) { double('system') }
     let(:morph) { double('morph') }
     let(:con_list) { [:con1] }
     before(:example) do
       allow(sys).to receive(:constraints).and_return(con_list)
-      @grammar = Grammar.new(system: sys)
+      @grammar = Grammar.new(sys)
     end
     it 'returns a reference to system' do
       expect(@grammar.system).to eq(sys)
@@ -47,7 +40,7 @@ RSpec.describe Grammar do
     before(:example) do
       allow(sys).to receive(:constraints).and_return([])
       allow(lex).to receive(:get_uf).with('the_morph').and_return('the_uf')
-      @grammar = Grammar.new(system: sys, lexicon: lex)
+      @grammar = Grammar.new(sys, lexicon: lex)
     end
     it 'returns the given lexicon' do
       expect(@grammar.lexicon).to eq(lex)
@@ -61,7 +54,7 @@ RSpec.describe Grammar do
     let(:sys) { double('system') }
     before(:example) do
       allow(sys).to receive(:constraints).and_return([])
-      @grammar = Grammar.new(system: sys)
+      @grammar = Grammar.new(sys)
     end
     context 'when duplicated with dup' do
       before(:example) do
@@ -98,7 +91,7 @@ RSpec.describe Grammar do
       allow(sys).to receive(:parse_output).with(output, lexicon)\
                                           .and_return(word)
       @grammar =
-        Grammar.new(system: sys, erc_list: erc_list, lexicon: lexicon)
+        Grammar.new(sys, erc_list: erc_list, lexicon: lexicon)
       @return_value = @grammar.parse_output(output)
     end
     it 'calls system.parse_output' do
