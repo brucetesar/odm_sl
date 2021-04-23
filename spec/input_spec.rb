@@ -262,4 +262,31 @@ RSpec.describe Input do
         yield_successive_args(finst_1_1, finst_1_2, finst_2_1, finst_2_2)
     end
   end
+
+  context 'with more than one morpheme' do
+    let(:s11) { double('s11') }
+    let(:s12) { double('s12') }
+    let(:s21) { double('s21') }
+    let(:m1) { double('morph1') }
+    let(:m2) { double('morph2') }
+    before(:each) do
+      allow(s11).to receive(:morpheme).and_return(m1)
+      allow(s12).to receive(:morpheme).and_return(m1)
+      allow(s21).to receive(:morpheme).and_return(m2)
+      allow(s11).to receive(:to_s).and_return('s11')
+      allow(s12).to receive(:to_s).and_return('s12')
+      allow(s21).to receive(:to_s).and_return('s21')
+      allow(s11).to receive(:to_gv).and_return('g11')
+      allow(s12).to receive(:to_gv).and_return('g12')
+      allow(s21).to receive(:to_gv).and_return('g21')
+      @input = Input.new
+      @input << s11 << s12 << s21
+    end
+    it 'to_s() returns a string with dashes between the morphemes' do
+      expect(@input.to_s).to eq 's11s12-s21'
+    end
+    it 'to_gv() returns a string without dashes between the morphemes' do
+      expect(@input.to_gv).to eq 'g11g12g21'
+    end
+  end
 end

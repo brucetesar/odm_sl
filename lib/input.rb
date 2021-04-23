@@ -10,6 +10,11 @@ require 'feature_instance'
 # elements and their correspondents in the lexicon. An input is typically
 # formed by concatenating the underlying forms of the morphemes of
 # a lexical word.
+#
+# Methods that aren't explicitly defined here, but are responded to
+# by class Array, are delegated to the internal array of input elements.
+# Thus, standard array methods, such as #push(), may be called on
+# Input objects.
 class Input
   # the morphword associated with the input
   attr_accessor :morphword
@@ -41,10 +46,19 @@ class Input
 
   # Delegate all method calls not explicitly defined here to the
   # element list.
-  def method_missing(name, *args, &block)
-    @element_list.send(name, *args, &block)
+  def method_missing(name, *args, &block) # :nodoc:
+    if @element_list.respond_to?(name)
+      @element_list.send(name, *args, &block)
+    else
+      super
+    end
   end
-  protected :method_missing
+
+  # Indicates that the object responds to those methods that are
+  # successfully delegated to the element list.
+  def respond_to_missing?(name, include_private = false) # :nodoc:
+    @element_list.respond_to?(name) || super
+  end
 
   # Returns a duplicate of the input. This is a deep copy, containing
   # a duplicate of the morphword and a duplicate of each input element.
@@ -116,23 +130,21 @@ class Input
   # morphemes.
   def to_s
     morph = first.morpheme
-    out_str = ''
+    parts = []
     each do |syl|
       unless syl.morpheme == morph # a new morpheme has been reached
-        out_str += '-'
+        parts << '-'
         morph = syl.morpheme
       end
-      out_str += syl.to_s
+      parts << syl.to_s
     end
-    out_str
+    parts.join('')
   end
 
   # A string output appropriate for GraphViz (no dashes between morphemes).
   def to_gv
-    out_str = ''
-    each do |syl|
-      out_str += syl.to_gv
-    end
-    out_str
+    parts = []
+    each { |syl| parts << syl.to_gv }
+    parts.join('')
   end
 end
