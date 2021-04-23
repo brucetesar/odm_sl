@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
 
 # An IO correspondence relates corresponding input-output elements.
@@ -13,61 +15,77 @@
 # Each pair is a size 2 array with the first element the input
 # correspondent and the second element the output correspondent.
 class IOCorrespondence
+  # The index (integer) in a correspondence pair for the input element.
+  IN = 0 # :nodoc:
 
-  # The index in a correspondence pair for the input element.
-  IN = 0
-  
-  # The index in a correspondence pair for the output element.
-  OUT = 1
-  
+  # The index (integer) in a correspondence pair for the output element.
+  OUT = 1 # :nodoc:
+
   # Returns an empty IOCorrespondence.
+  # :call-seq:
+  #   new() -> correspondence
   def initialize
     @pair_list = []
   end
-  
-  # Adds a correspondence pair indicating that +in_el+ and +out_el+
-  # are IO correspondents. Returns a reference to the IO correspondence itself.
-  def add_corr(in_el,out_el)
+
+  # Adds a correspondence pair indicating that _in_el_ and _out_el_
+  # are IO correspondents. Returns a reference to self.
+  # :call-seq:
+  #   add_corr(in_el, out_el) -> self
+  def add_corr(in_el, out_el)
     pair = []
     pair[IN] = in_el
     pair[OUT] = out_el
     @pair_list << pair
-    return self
+    self
   end
-  
+
   # Returns the number of correspondence pairs in the relation.
+  # :call-seq:
+  #   size() -> int
   def size
     @pair_list.size
   end
 
-  # Returns true if the output element +out_el+ has an input correspondent.
+  # Returns true if the output element _out_el_ has an input
+  # correspondent, false otherwise.
+  # :call-seq:
+  #   in_corr?(out_el) -> boolean
   def in_corr?(out_el)
-    @pair_list.any?{|pair| pair[OUT].equal?(out_el)}    
+    @pair_list.any? { |pair| pair[OUT].equal?(out_el) }
   end
-  
-  # Returns true if the input element +in_el+ has an output correspondent.
+
+  # Returns true if the input element _in_el_ has an output
+  # correspondent, false otherwise.
+  # :call-seq:
+  #   out_corr?(in_el) -> boolean
   def out_corr?(in_el)
-    @pair_list.any?{|pair| pair[IN].equal?(in_el)}
+    @pair_list.any? { |pair| pair[IN].equal?(in_el) }
   end
 
-  # Returns the input correspondent for output element +out_el+. If +out_el+.
-  # has no input correspondent, nil is returned. If +out_el+. has more than one
-  # input correspondent, the first one listed in the correspondence
-  # relation is returned.
+  # Returns the input correspondent for output element _out_el_.
+  # If _out_el_. has no input correspondent, nil is returned.
+  # If _out_el_. has more than one input correspondent, the first one
+  # listed in the correspondence relation is returned.
+  # :call-seq:
+  #   in_corr(out_el) -> in_el
   def in_corr(out_el)
-    first_pair = @pair_list.find{|pair| pair[OUT].equal?(out_el)}
+    first_pair = @pair_list.find { |pair| pair[OUT].equal?(out_el) }
     return nil if first_pair.nil?
-    return first_pair[IN]
-  end
-  
-  # Returns the output correspondent for input element +in_el+. If +in_el+ has
-  # no output correspondent, nil is returned. If +in_el+ has more than one
-  # output correspondent, the first one listed in the correspondence
-  # relation is returned.
-  def out_corr(in_el)
-    first_pair = @pair_list.find{|pair| pair[IN].equal?(in_el)}
-    return nil if first_pair.nil?
-    return first_pair[OUT]
+
+    first_pair[IN]
   end
 
-end # class IOCorrespondence
+  # Returns the output correspondent for input element _in_el_.
+  # If _in_el_ has no output correspondent, nil is returned.
+  # If _in_el_ has more than one output correspondent, the first one
+  # listed in the correspondence relation is returned.
+  # :call-seq:
+  #   out_corr(in_el) -> out_el
+  def out_corr(in_el)
+    first_pair = @pair_list.find { |pair| pair[IN].equal?(in_el) }
+    return nil if first_pair.nil?
+
+    first_pair[OUT]
+  end
+end
