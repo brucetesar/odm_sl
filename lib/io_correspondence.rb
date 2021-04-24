@@ -7,7 +7,7 @@
 # NOTE: an IO correspondence is specific to a particular instance of
 # a particular word. References to the actual
 # elements of the input and output are stored in the correspondence,
-# and retrieval is based on object identity, using .equal?(), NOT ==.
+# and retrieval is based on object identity, using #equal?(), NOT #==.
 # This is important: two phonologically identical elements could have
 # separate existence in the same input or output (and even belong to
 # the same morpheme).
@@ -64,9 +64,10 @@ class IOCorrespondence
   end
 
   # Returns the input correspondent for output element _out_el_.
-  # If _out_el_. has no input correspondent, nil is returned.
-  # If _out_el_. has more than one input correspondent, the first one
-  # listed in the correspondence relation is returned.
+  # * If _out_el_. has no input correspondent, nil is returned.
+  # * If _out_el_. has more than one input correspondent, the first one
+  #   listed in the correspondence relation is returned. This should
+  #   never happen.
   # :call-seq:
   #   in_corr(out_el) -> in_el
   def in_corr(out_el)
@@ -77,9 +78,10 @@ class IOCorrespondence
   end
 
   # Returns the output correspondent for input element _in_el_.
-  # If _in_el_ has no output correspondent, nil is returned.
-  # If _in_el_ has more than one output correspondent, the first one
-  # listed in the correspondence relation is returned.
+  # * If _in_el_ has no output correspondent, nil is returned.
+  # * If _in_el_ has more than one output correspondent, the first one
+  #   listed in the correspondence relation is returned. This should
+  #   never happen.
   # :call-seq:
   #   out_corr(in_el) -> out_el
   def out_corr(in_el)
