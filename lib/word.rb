@@ -10,6 +10,9 @@ require 'feature_corr_router'
 
 # A Word is a candidate (input, output, constraints), combined with
 # an IO correspondence relation and a reference to the linguistic system.
+#
+# Methods that aren't explicitly defined here, but are responded to
+# by class Candidate, are delegated to the internal candidate object.
 class Word
   # A word starts out with an empty input and output by default, but
   # input and output can be optionally passed as parameters.
@@ -32,16 +35,20 @@ class Word
     @io_corr = IOCorrespondence.new
   end
 
-  # Delegate all method calls not explicitly defined here to the candidate.
-  def method_missing(name, *args, &block)
-    @candidate.send(name, *args, &block)
+  # Delegate all method calls not explicitly defined here to the
+  # candidate.
+  def method_missing(name, *args, &block) # :nodoc:
+    if @candidate.respond_to?(name)
+      @candidate.send(name, *args, &block)
+    else
+      super
+    end
   end
-  protected :method_missing
 
-  # No methods are explicitly responded to from within Word#method_missing.
-  # This checks the superclass in case it does.
-  def respond_to_missing?(name, include_priv)
-    super
+  # Indicates that the object responds to those methods that are
+  # successfully delegated to the candidate.
+  def respond_to_missing?(name, include_private = false) # :nodoc:
+    @candidate.respond_to?(name) || super
   end
 
   # Adds a new IO correspondence pair, with _in_el_ corresponding to _out_el_.
@@ -197,7 +204,7 @@ class Word
   # possible values). Raises a RuntimeError if the feature is suprabinary.
   def feature_arity_check(feature)
     arity = 0
-    feature.each_value { |val| arity += 1 }
+    feature.each_value { |_val| arity += 1 }
     if arity > 2
       raise 'Word#mismatch_input_to_output!' \
             ' attempted to mismatch a suprabinary feature.'
@@ -271,8 +278,10 @@ class Word
   # Freezes the word, and additionally freezes the IO correspondence
   # relation.
   def freeze
+    super
     @candidate.freeze
     @io_corr.freeze
+    true # arbitrary return value
   end
 
   # Evaluates and stores the number of violations of each constraint by

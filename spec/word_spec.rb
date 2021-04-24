@@ -54,9 +54,9 @@ RSpec.describe Word do
       allow(router).to receive(:out_feat_corr_of_in).with(finst_2)\
                                                     .and_return(out_finst2)
       allow(router).to receive(:uf_feat_corr_of_in).with(finst_1)\
-                                                    .and_return(uf_finst1)
+                                                   .and_return(uf_finst1)
       allow(router).to receive(:uf_feat_corr_of_in).with(finst_2)\
-                                                    .and_return(uf_finst2)
+                                                   .and_return(uf_finst2)
       @word = Word.new(system, input, output,
                        candidate_class: candidate_class, corr_router: router)
       allow(@word).to receive(:eval)
