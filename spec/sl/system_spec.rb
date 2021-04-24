@@ -256,17 +256,25 @@ RSpec.describe SL::System do
   context 'System with a lexicon including r1 /s./ and s4 /S:/' do
     let(:r1) { double('r1') }
     let(:s4) { double('s4') }
+    let(:uf_r1_1) { double('uf_r1_1') } # first segment of the UF of r1
+    let(:uf_s4_1) { double('uf_s4_1') } # first segment of the UF of s4
+    let(:in_r1_1) { double('in_r1_1') } # first segment of the input of r1
+    let(:in_s4_1) { double('in_s4_1') } # first segment of the input of s4
+    let(:uf_r1) { [uf_r1_1] }
+    let(:uf_s4) { [uf_s4_1] }
     before(:each) do
       allow(r1).to receive(:label).and_return('r1')
       allow(s4).to receive(:label).and_return('s4')
+      allow(uf_r1_1).to receive(:dup).and_return(in_r1_1)
+      allow(uf_s4_1).to receive(:dup).and_return(in_s4_1)
       @lex_entry_r1 = instance_double(LexicalEntry, 'lex_entry_r1')
       allow(@lex_entry_r1).to receive(:nil?).and_return(false)
       allow(@lex_entry_r1).to receive(:morpheme).and_return(r1)
-      allow(@lex_entry_r1).to receive(:uf).and_return(['s.'])
+      allow(@lex_entry_r1).to receive(:uf).and_return(uf_r1)
       @lex_entry_s4 = instance_double(LexicalEntry, 'lex_entry_s4')
       allow(@lex_entry_s4).to receive(:nil?).and_return(false)
       allow(@lex_entry_s4).to receive(:morpheme).and_return(s4)
-      allow(@lex_entry_s4).to receive(:uf).and_return(['S:'])
+      allow(@lex_entry_s4).to receive(:uf).and_return(uf_s4)
       @lexicon = [@lex_entry_r1, @lex_entry_s4]
     end
     context "with morphword ['r1']" do
@@ -278,15 +286,19 @@ RSpec.describe SL::System do
         input = @system.input_from_morphword(@mw, @lexicon)
         expect(input.morphword).to eq(@mw)
       end
-      it '#input_from_morphword returns input [s.]' do
+      it '#input_from_morphword returns input with the UF of r1' do
         input = @system.input_from_morphword(@mw, @lexicon)
-        expect(input).to eq(['s.'])
+        expect(input).to eq([in_r1_1])
       end
-      it '#input_from_morphword returns input with 1 ui pair [s.,s.]' do
+      it '#input_from_morphword returns input with 1 ui pair' do
         input = @system.input_from_morphword(@mw, @lexicon)
         ui_corr = input.ui_corr
         expect(ui_corr.size).to eq(1)
-        expect(ui_corr[0]).to eq(['s.', 's.'])
+      end
+      it '#input_from_morphword returns input with ui pair for r1' do
+        input = @system.input_from_morphword(@mw, @lexicon)
+        ui_corr = input.ui_corr
+        expect(ui_corr.in_corr(uf_r1_1)).to eq in_r1_1
       end
     end
     context "with morphword ['r1', 's4']" do
@@ -298,16 +310,24 @@ RSpec.describe SL::System do
         input = @system.input_from_morphword(@mw, @lexicon)
         expect(input.morphword).to eq(@mw)
       end
-      it '#input_from_morphword returns input [s.,S:]' do
+      it '#input_from_morphword returns input with UFs of r1 and s4' do
         input = @system.input_from_morphword(@mw, @lexicon)
-        expect(input).to eq(['s.', 'S:'])
+        expect(input).to eq([in_r1_1, in_s4_1])
       end
-      it '#input_from_morphword returns input with 2 ui pairs, [s.,s.] and [S:,S:]' do
+      it '#input_from_morphword returns input with 2 ui pairs' do
         input = @system.input_from_morphword(@mw, @lexicon)
         ui_corr = input.ui_corr
         expect(ui_corr.size).to eq(2)
-        expect(ui_corr[0]).to eq(['s.', 's.'])
-        expect(ui_corr[1]).to eq(['S:', 'S:'])
+      end
+      it '#input_from_morphword returns input with ui pair for r1' do
+        input = @system.input_from_morphword(@mw, @lexicon)
+        ui_corr = input.ui_corr
+        expect(ui_corr.in_corr(uf_r1_1)).to eq in_r1_1
+      end
+      it '#input_from_morphword returns input with ui pair for s4' do
+        input = @system.input_from_morphword(@mw, @lexicon)
+        ui_corr = input.ui_corr
+        expect(ui_corr.in_corr(uf_s4_1)).to eq in_s4_1
       end
     end
     it 'raises an exception when the morpheme has no lexical entry' do

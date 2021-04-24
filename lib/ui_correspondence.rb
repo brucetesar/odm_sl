@@ -49,11 +49,6 @@ class UICorrespondence
     @pair_list.size
   end
 
-  # TODO: modernize the system_spec.rb files, so this method can be eliminated.
-  def [](idx)
-    @pair_list[idx]
-  end
-
   # Returns true if underlying element _uf_el_ has an input
   # correspondent. Returns false otherwise.
   # :call-seq:
