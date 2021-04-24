@@ -50,13 +50,13 @@ RSpec.describe Lexicon do
       expect(@lexicon.get_uf(m3)).to be_nil
     end
     it 'returns an empty list of roots' do
-      expect(@lexicon.get_roots).to be_empty
+      expect(@lexicon.roots).to be_empty
     end
     it 'returns an empty list of suffixes' do
-      expect(@lexicon.get_suffixes).to be_empty
+      expect(@lexicon.suffixes).to be_empty
     end
     it 'returns an empty list of prefixes' do
-      expect(@lexicon.get_prefixes).to be_empty
+      expect(@lexicon.prefixes).to be_empty
     end
     it 'returns an empty string representation' do
       expect(@lexicon.to_s).to eq ''
@@ -79,15 +79,15 @@ RSpec.describe Lexicon do
     it 'returns a root list with the m1 lexical entry' do
       # extracting the morpheme makes the example indifferent to whether
       # it is using m1_le or m1_le_dup
-      morphs = lexicon.get_roots.map(&:morpheme)
+      morphs = lexicon.roots.map(&:morpheme)
       expect(morphs).to contain_exactly(m1)
     end
     it 'returns a suffix list with the m2 lexical entry' do
-      morphs = lexicon.get_suffixes.map(&:morpheme)
+      morphs = lexicon.suffixes.map(&:morpheme)
       expect(morphs).to contain_exactly(m2)
     end
     it 'returns an empty list of prefixes' do
-      expect(lexicon.get_prefixes).to be_empty
+      expect(lexicon.prefixes).to be_empty
     end
     it 'returns a string rep. with m1 and m2' do
       rep = "m1_lexical_entry\nm2_lexical_entry\n"

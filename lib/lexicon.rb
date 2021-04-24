@@ -15,13 +15,17 @@ class Lexicon < Array
   # duplicated copies of the lexical entries of the lexicon. Altering a lexical
   # entry in the duplicate will not alter the corresponding lexical entry
   # in the original.
+  # :call-seq:
+  #   dup() -> lexicon
   def dup
     copy = Lexicon.new
     each { |e| copy.add(e.dup) }
     copy
   end
 
-  # Adds a lexical entry to the lexicon. Returns a reference to the lexicon.
+  # Adds a lexical entry to the lexicon. Returns a reference to self.
+  # :call-seq:
+  #   add(entry) -> self
   def add(entry)
     push entry
     self
@@ -29,6 +33,8 @@ class Lexicon < Array
 
   # Returns the underlying form for the given morpheme.
   # Returns nil if the morpheme has no entry.
+  # :call-seq:
+  #   get_uf(morph) -> uf or nil
   def get_uf(morph)
     lex_entry = find { |entry| entry.morpheme == morph } # get the lexical entry
     return nil if lex_entry.nil?
@@ -38,34 +44,37 @@ class Lexicon < Array
 
   # Returns an array of all the lexical entries containing morphemes
   # of type prefix.
-  def get_prefixes
+  # :call-seq:
+  #   prefixes() -> array
+  def prefixes
     find_all { |entry| entry.type == Morpheme::PREFIX }
   end
 
   # Returns an array of all the lexical entries containing morphemes
   # of type suffix.
-  def get_suffixes
+  # :call-seq:
+  #   suffixes() -> array
+  def suffixes
     find_all { |entry| entry.type == Morpheme::SUFFIX }
   end
 
   # Returns an array of all the lexical entries containing morphemes
   # of type root.
-  def get_roots
+  # :call-seq:
+  #   roots() -> array
+  def roots
     find_all { |entry| entry.type == Morpheme::ROOT }
   end
 
   # Returns a string representation of the lexicon, with the lexical
   # entries grouped by morpheme type.
+  # :call-seq:
+  #   to_s() -> string
   def to_s
-    prefixes = get_prefixes
-    roots = get_roots
-    suffixes = get_suffixes
-    out_str = prefixes.join('  ')
-    out_str += "\n" unless prefixes.empty?
-    out_str += roots.join('  ')
-    out_str += "\n" unless roots.empty?
-    out_str += suffixes.join('  ')
-    out_str += "\n" unless suffixes.empty?
+    out_str = ''.dup # dup because string literals are frozen.
+    out_str << prefixes.join('  ') << "\n" unless prefixes.empty?
+    out_str << roots.join('  ') << "\n" unless roots.empty?
+    out_str << suffixes.join('  ') << "\n" unless suffixes.empty?
     out_str
   end
 end

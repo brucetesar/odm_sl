@@ -29,9 +29,9 @@ class LexiconImageMaker
   def get_image(lexicon)
     @sheet = @sheet_class.new
     @last_row = 0
-    add_morphs(lexicon.get_prefixes) unless lexicon.get_prefixes.empty?
-    add_morphs(lexicon.get_roots) unless lexicon.get_roots.empty?
-    add_morphs(lexicon.get_suffixes) unless lexicon.get_suffixes.empty?
+    add_morphs(lexicon.prefixes) unless lexicon.prefixes.empty?
+    add_morphs(lexicon.roots) unless lexicon.roots.empty?
+    add_morphs(lexicon.suffixes) unless lexicon.suffixes.empty?
     @sheet
   end
 

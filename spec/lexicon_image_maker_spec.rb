@@ -22,9 +22,9 @@ RSpec.describe LexiconImageMaker do
   end
   context 'An empty lexicon' do
     before(:each) do
-      allow(lexicon).to receive(:get_prefixes).and_return([])
-      allow(lexicon).to receive(:get_roots).and_return([])
-      allow(lexicon).to receive(:get_suffixes).and_return([])
+      allow(lexicon).to receive(:prefixes).and_return([])
+      allow(lexicon).to receive(:roots).and_return([])
+      allow(lexicon).to receive(:suffixes).and_return([])
       @lexicon_image = @lexicon_image_maker.get_image(lexicon)
     end
     it 'gives an image with no subsheets' do
@@ -34,9 +34,9 @@ RSpec.describe LexiconImageMaker do
 
   context 'A lexicon with root r1 /x/' do
     before(:each) do
-      allow(lexicon).to receive(:get_prefixes).and_return([])
-      allow(lexicon).to receive(:get_roots).and_return([root1])
-      allow(lexicon).to receive(:get_suffixes).and_return([])
+      allow(lexicon).to receive(:prefixes).and_return([])
+      allow(lexicon).to receive(:roots).and_return([root1])
+      allow(lexicon).to receive(:suffixes).and_return([])
       @lexicon_image = @lexicon_image_maker.get_image(lexicon)
     end
     it 'gives an image with one subsheet' do
@@ -52,9 +52,9 @@ RSpec.describe LexiconImageMaker do
 
   context 'A lexicon with root 1 r1 /x/ and root r2 /y/' do
     before(:each) do
-      allow(lexicon).to receive(:get_prefixes).and_return([])
-      allow(lexicon).to receive(:get_roots).and_return([root1, root2])
-      allow(lexicon).to receive(:get_suffixes).and_return([])
+      allow(lexicon).to receive(:prefixes).and_return([])
+      allow(lexicon).to receive(:roots).and_return([root1, root2])
+      allow(lexicon).to receive(:suffixes).and_return([])
       @lexicon_image = @lexicon_image_maker.get_image(lexicon)
     end
     it 'gives an image with one subsheet' do
@@ -76,9 +76,9 @@ RSpec.describe LexiconImageMaker do
 
   context 'A lexicon with root 1 r1 /x/ and suffix s1 /y/' do
     before(:each) do
-      allow(lexicon).to receive(:get_prefixes).and_return([])
-      allow(lexicon).to receive(:get_roots).and_return([root1])
-      allow(lexicon).to receive(:get_suffixes).and_return([suff1])
+      allow(lexicon).to receive(:prefixes).and_return([])
+      allow(lexicon).to receive(:roots).and_return([root1])
+      allow(lexicon).to receive(:suffixes).and_return([suff1])
       @lexicon_image = @lexicon_image_maker.get_image(lexicon)
     end
     it 'gives an image with two subsheets' do
@@ -100,9 +100,9 @@ RSpec.describe LexiconImageMaker do
 
   context 'A lexicon with prefix p1 /a/, root r1 /x/ and suffix s1 /y/' do
     before(:each) do
-      allow(lexicon).to receive(:get_prefixes).and_return([pref1])
-      allow(lexicon).to receive(:get_roots).and_return([root1])
-      allow(lexicon).to receive(:get_suffixes).and_return([suff1])
+      allow(lexicon).to receive(:prefixes).and_return([pref1])
+      allow(lexicon).to receive(:roots).and_return([root1])
+      allow(lexicon).to receive(:suffixes).and_return([suff1])
       @lexicon_image = @lexicon_image_maker.get_image(lexicon)
     end
     it 'gives an image with three subsheets' do
