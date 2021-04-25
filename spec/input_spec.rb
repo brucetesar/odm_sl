@@ -310,6 +310,11 @@ RSpec.describe Input do
       @result = (@input.push 's1')
       expect(@result).to equal @input
     end
+    it 'when #each is called' do
+      @input << 's1'
+      @result = @input.each { |_x| 5 }
+      expect(@result).to equal @input
+    end
     it 'when #each_index is called' do
       @input << 's1'
       @result = @input.each_index { |_x| 5 }

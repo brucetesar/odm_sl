@@ -138,6 +138,15 @@ class Input
     self
   end
 
+  # Calls the block once for each element, yielding the element.
+  # Returns a reference to self.
+  # :call-seq:
+  #   each() { |obj| ... } -> input
+  def each(&block) # :yields: obj
+    @element_list.each(&block)
+    self
+  end
+
   # Calls the block once for each element, but yields the index of each
   # element to the block (rather than the element itself). Returns a
   # reference to self.
