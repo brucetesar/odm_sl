@@ -192,4 +192,38 @@ RSpec.describe Output do
       expect(@dup.main_stress?).to be true
     end
   end
+
+  # shallow_copy()
+
+  context 'given a shallow copy' do
+    before(:example) do
+      @output << syl1_stress << syl2_nostress
+      @output.morphword = mword
+      @copy = @output.shallow_copy
+    end
+    it 'has an equivalent morphword to the copy' do
+      expect(@output.morphword).to eq @copy.morphword
+    end
+    it 'has the same morphword object as the copy' do
+      expect(@output.morphword).to equal @copy.morphword
+    end
+    it 'is equivalent to the copy' do
+      expect(@output).to eq @copy
+    end
+    it 'is not the same object as the copy' do
+      expect(@output).not_to equal @copy
+    end
+    it 'has a first syllable equivalent to the copy first syllable' do
+      expect(@output.first).to eq @copy.first
+    end
+    it 'first syllable is the same object as the copy first syllable' do
+      expect(@output.first).to equal @copy.first
+    end
+    it 'has main stress' do
+      expect(@output.main_stress?).to be true
+    end
+    it 'the copy has main stress' do
+      expect(@copy.main_stress?).to be true
+    end
+  end
 end

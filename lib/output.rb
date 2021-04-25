@@ -4,6 +4,8 @@
 
 # An Output is a list of correspondence elements, with an associated
 # morphological word.
+#
+# Output subclasses from Array, and so inherits a variety of methods.
 class Output < Array
   # The morphword associated with the output.
   attr_accessor :morphword
@@ -20,10 +22,20 @@ class Output < Array
   # :call-seq:
   #   dup() -> output
   def dup
-    # Call Array#map to get an array of dups of the elements, and add
-    # them to a new Output.
-    copy = Output.new.concat(super.map(&:dup))
-    copy.morphword = @morphword.dup
+    copy = Output.new
+    copy.concat(map(&:dup))
+    copy.morphword = morphword.dup
+    copy
+  end
+
+  # Returns a shallow copy of the output, containing the very same
+  # correspondence element and morphological word objects.
+  # :call-seq:
+  #   shallow_copy() -> output
+  def shallow_copy
+    copy = Output.new
+    copy.concat(self)
+    copy.morphword = morphword
     copy
   end
 

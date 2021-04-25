@@ -255,19 +255,19 @@ class Word
     copy
   end
 
-  # Returns a copy of the word with the same input object, a cloned output
-  # containing the same syllable objects, and a new IO correspondence
-  # containing the same [input,output] pairs.
-  # No copy is made of the constraint violations; those
-  # will be as initialized by new(). Thus, constraint violations should be
-  # assessed via eval() after competitors are complete. The copied word
-  # is set to non-optimal by new().
-  # This is used in gen() to create copies for building/extending competitors;
-  # all competitors reference the very same input object, and can share
-  # output syllable objects.
+  # Returns a copy of the word with the same input object, a shallow copy
+  # of the output, and a new IO correspondence containing the same
+  # [input, output] pairs.
+  #
+  # No copy is made of the constraint violations; those will be as
+  # initialized by Word.new(). Thus, constraint violations should be
+  # assessed via Word#eval() after competitors are complete.
+  #
+  # dup_for_gen() is used in gen() to create copies for building /
+  # extending competitors; all competitors reference the very same input
+  # object, and can share output syllable objects.
   def dup_for_gen
-    # use clone() method for a shallow copy of output.
-    copy = Word.new(@system, input, output.clone)
+    copy = Word.new(@system, input, output.shallow_copy)
     input.each do |in_el|
       out_el = io_out_corr(in_el) # output correspondent (if it exists)
       copy.add_to_io_corr(in_el, out_el) unless out_el.nil?
