@@ -312,12 +312,12 @@ RSpec.describe Input do
     end
     it 'when #each is called' do
       @input << 's1'
-      @result = @input.each { |_x| 5 }
+      @result = @input.each { |_x| }
       expect(@result).to equal @input
     end
     it 'when #each_index is called' do
       @input << 's1'
-      @result = @input.each_index { |_x| 5 }
+      @result = @input.each_index { |_x| }
       expect(@result).to equal @input
     end
   end

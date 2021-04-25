@@ -5,7 +5,7 @@
 # An underlying form is the phonological representation associated with
 # a morpheme, in the form of a list of correpondence elements.
 #
-# Output subclasses from Array, and so inherits a variety of methods.
+# Underlying subclasses from Array, and so inherits a variety of methods.
 class Underlying < Array
   # Returns an empty Underlying object.
   # :call-seq:

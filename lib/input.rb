@@ -11,11 +11,8 @@ require 'feature_instance'
 # formed by concatenating the underlying forms of the morphemes of
 # a lexical word.
 #
-# Methods that aren't explicitly defined here, but are responded to
-# by class Array, are delegated to the internal array of input elements.
-# Thus, standard array methods, such as #push(), may be called on
-# Input objects.
-class Input
+# Input subclasses from Array, and so inherits a variety of methods.
+class Input < Array
   # the morphword associated with the input
   attr_accessor :morphword
 
@@ -41,23 +38,6 @@ class Input
     @morphword = morphword
     @ui_corr = ui_corr
     @feature_instance_class = feat_inst_class
-    @element_list = []
-  end
-
-  # Delegate all method calls not explicitly defined here to the
-  # element list.
-  def method_missing(name, *args, &block) # :nodoc:
-    if @element_list.respond_to?(name)
-      @element_list.send(name, *args, &block)
-    else
-      super
-    end
-  end
-
-  # Indicates that the object responds to those methods that are
-  # successfully delegated to the element list.
-  def respond_to_missing?(name, include_private = false) # :nodoc:
-    @element_list.respond_to?(name) || super
   end
 
   # Returns a duplicate of the input. This is a deep copy, containing
@@ -120,43 +100,6 @@ class Input
     true
   end
 
-  # Appends _element_ to the end of the list of elements in the input.
-  # Returns a reference to self.
-  # :call-seq:
-  #   input << element -> input
-  def <<(element)
-    @element_list << element
-    self
-  end
-
-  # Pushes (appends) _element_ to the end of the list of elements in
-  # the input. Returns a reference to self.
-  # :call-seq:
-  #   push(element) -> input
-  def push(element)
-    @element_list.push(element)
-    self
-  end
-
-  # Calls the block once for each element, yielding the element.
-  # Returns a reference to self.
-  # :call-seq:
-  #   each() { |obj| ... } -> input
-  def each(&block) # :yields: obj
-    @element_list.each(&block)
-    self
-  end
-
-  # Calls the block once for each element, but yields the index of each
-  # element to the block (rather than the element itself). Returns a
-  # reference to self.
-  # :call-seq:
-  #   each_index() { |index| ... } -> input
-  def each_index(&block) # :yields: index
-    @element_list.each_index(&block)
-    self
-  end
-
   # Iterates through all feature instances of the input, yielding each
   # to the block. It progresses through the elements in order (in the
   # input), and each feature for a given element is yielded before
@@ -189,8 +132,7 @@ class Input
     parts.join
   end
 
-  # A string output appropriate for GraphViz (no dashes between
-  # morphemes).
+  # A string appropriate for GraphViz (no dashes between morphemes).
   # :call-seq:
   #   to_gv() -> string
   def to_gv
