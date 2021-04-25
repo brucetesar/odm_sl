@@ -226,4 +226,19 @@ RSpec.describe Output do
       expect(@copy.main_stress?).to be true
     end
   end
+
+  # Methods like << often return self, so that calls can be stacked.
+  # Make sure that Output#<< follows that expected behavior.
+  context 'when Output#<< is called' do
+    before(:example) do
+      @output = Output.new
+      @result = (@output << 's1')
+    end
+    it 'returns an object of class Output' do
+      expect(@result.class).to eq Output
+    end
+    it 'returns the callee' do
+      expect(@result).to equal @output
+    end
+  end
 end

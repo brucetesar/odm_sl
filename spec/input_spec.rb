@@ -289,4 +289,19 @@ RSpec.describe Input do
       expect(@input.to_gv).to eq 'g11g12g21'
     end
   end
+
+  # Methods like << often return self, so that calls can be stacked.
+  # Make sure that Input#<< follows that expected behavior.
+  context 'when Input#<< is called' do
+    before(:example) do
+      @input = Input.new
+      @result = (@input << 's1')
+    end
+    it 'returns an object of class Input' do
+      expect(@result.class).to eq Input
+    end
+    it 'returns the callee' do
+      expect(@result).to equal @input
+    end
+  end
 end

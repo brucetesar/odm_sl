@@ -64,6 +64,8 @@ class Input
   # a duplicate of the morphword and a duplicate of each input element.
   # The copy's UI correspondence is between the duplicate input elements
   # and the very same underlying elements of the lexicon.
+  # :call-seq:
+  #   dup() -> input
   def dup
     # Create an empty input for the copy. The morphword is set to nil in
     # the constructor call to avoid generation of a new Morphword object,
@@ -94,6 +96,8 @@ class Input
   #
   # NOTE: does not check for equivalence of morphwords. To require that
   # as well, use Input#eql?().
+  # :call-seq:
+  #   input == other -> boolean
   def ==(other)
     return false unless size == other.size
 
@@ -106,6 +110,8 @@ class Input
   # equivalent (==) morphwords.
   # The morphword equivalence requirement distinguishes Input#eql?() from
   # Input#==().
+  # :call-seq:
+  #   eql?(other) -> boolean
   def eql?(other)
     return false unless self == other
 
@@ -114,20 +120,34 @@ class Input
     true
   end
 
+  # Appends _element_ to the end of the list of elements in the input.
+  # Returns a reference to self.
+  # :call-seq:
+  #   input << element -> input
+  def <<(element)
+    @element_list << element
+    self
+  end
+
   # Iterates through all feature instances of the input, yielding each
   # to the block. It progresses through the elements in order (in the
   # input), and each feature for a given element is yielded before
-  # moving on to the next element.
-  def each_feature
+  # moving on to the next element. Returns a reference to self.
+  # :call-seq:
+  #   each_feature() { |feature_instance| ... } -> input
+  def each_feature # :yields: feature_instance
     each do |element|
       element.each_feature do |feat|
         yield @feature_instance_class.new(element, feat)
       end
     end
+    self
   end
 
-  # Lists the elements of the input as a string, with dashes between
-  # morphemes.
+  # Returns a string listing the elements of the input as a string,
+  # with dashes between morphemes.
+  # :call-seq:
+  #   to_s() -> string
   def to_s
     morph = first.morpheme
     parts = []
@@ -138,13 +158,16 @@ class Input
       end
       parts << syl.to_s
     end
-    parts.join('')
+    parts.join
   end
 
-  # A string output appropriate for GraphViz (no dashes between morphemes).
+  # A string output appropriate for GraphViz (no dashes between
+  # morphemes).
+  # :call-seq:
+  #   to_gv() -> string
   def to_gv
     parts = []
     each { |syl| parts << syl.to_gv }
-    parts.join('')
+    parts.join
   end
 end
