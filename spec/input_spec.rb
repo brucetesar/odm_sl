@@ -32,6 +32,9 @@ RSpec.describe Input do
     it 'returns the provided UI correspondence' do
       expect(@input.ui_corr).to eq ui_corr
     end
+    it 'yields the index for the element' do
+      expect { |probe| @input.each_index(&probe) }.to yield_successive_args(0)
+    end
 
     context 'and a second element' do
       let(:element2) { double('element2') }
@@ -46,6 +49,9 @@ RSpec.describe Input do
       end
       it 'has element2 second' do
         expect(@input[1]).to eq element2
+      end
+      it 'yields the indices for the elements' do
+        expect { |probe| @input.each_index(&probe) }.to yield_successive_args(0, 1)
       end
     end
   end
@@ -291,16 +297,22 @@ RSpec.describe Input do
   end
 
   # Methods like << often return self, so that calls can be stacked.
-  # Make sure that Input#<< follows that expected behavior.
-  context 'when Input#<< is called' do
+  # Make sure that Input follows that expected behavior for these methods.
+  context 'the callee (self) is returned' do
     before(:example) do
       @input = Input.new
+    end
+    it 'when #<< is called' do
       @result = (@input << 's1')
+      expect(@result).to equal @input
     end
-    it 'returns an object of class Input' do
-      expect(@result.class).to eq Input
+    it 'when #push is called' do
+      @result = (@input.push 's1')
+      expect(@result).to equal @input
     end
-    it 'returns the callee' do
+    it 'when #each_index is called' do
+      @input << 's1'
+      @result = @input.each_index { |_x| 5 }
       expect(@result).to equal @input
     end
   end

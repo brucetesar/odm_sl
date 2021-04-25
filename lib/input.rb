@@ -129,6 +129,25 @@ class Input
     self
   end
 
+  # Pushes (appends) _element_ to the end of the list of elements in
+  # the input. Returns a reference to self.
+  # :call-seq:
+  #   push(element) -> input
+  def push(element)
+    @element_list.push(element)
+    self
+  end
+
+  # Calls the block once for each element, but yields the index of each
+  # element to the block (rather than the element itself). Returns a
+  # reference to self.
+  # :call-seq:
+  #   each_index() { |index| ... } -> input
+  def each_index(&block) # :yields: index
+    @element_list.each_index(&block)
+    self
+  end
+
   # Iterates through all feature instances of the input, yielding each
   # to the block. It progresses through the elements in order (in the
   # input), and each feature for a given element is yielded before
