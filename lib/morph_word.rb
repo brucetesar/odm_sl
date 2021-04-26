@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
-#
 
 # A MorphWord represents the morphological structure of a word.
 # It contains the morphemes of the word in order.
-# 
+#
+# Includes the mixin Enumerable.
+#
 # Although a MorphWord need not be constructed with a root, the first
 # morpheme added to the word must be a root, and a word can only have
 # one root. The order of the morphemes presumes that the word is put
@@ -11,8 +14,8 @@
 # precede the root, the second prefix added will appear immediately before
 # that, etc., with the beginning of the word consisting of the last prefix
 # added (unless no prefixes are added). Similarly, the first suffix added
-# appears immediately after the root, and so forth, with the end of the word
-# consisting of the last suffix added (unless no suffixes are added).
+# appears immediately after the root, and so forth, with the end of the
+# word consisting of the last suffix added (unless no suffixes are added).
 class MorphWord
   include Enumerable
 
@@ -20,67 +23,98 @@ class MorphWord
   # it is added as the root of the word. Otherwise, the word is initially
   # empty. A RuntimeError exception is raised if the constructor is given
   # a morpheme that is not a root.
-  def initialize(root=nil)
+  # :call-seq:
+  #   new() -> morph_word
+  #   new(morph) -> morph_word
+  def initialize(morph = nil)
     @word = []
-    if root.nil? then
-      @root_added = false
-    elsif root.root? then
-      @word.push(root)
-      @root_added = true
-    else
-      raise "MorphWord.initialize: The first morpheme added to a MorphWord must be a root."
-    end
+    @root_added = false
+    return if morph.nil?
+
+    msg = 'MorphWord.initialize: The first morpheme added must be a root.'
+    raise msg unless morph.root?
+
+    @word.push(morph)
+    @root_added = true
   end
 
   # Returns the number of morphemes in the word.
+  # :call-seq:
+  #   morph_count() -> int
   def morph_count
     @word.size
   end
-  
-  # Adds the morpheme _morph_ to the word. The morpheme must be an accepted
-  # morpheme type (root, prefix, suffix). An exception is raised if an attempt
-  # is made to add a root to word already containing a root, or a non-root to
-  # a word that does not already contain a root.
+
+  # Adds the morpheme _morph_ to the word. The morpheme must be an
+  # accepted morpheme type (root, prefix, suffix). Returns a
+  # reference to self.
+  #
+  # A RuntimeError is raised if an attempt is made to add a root to word
+  # already containing a root, or a non-root to a word that does not
+  # already contain a root.
+  # :call-seq:
+  #   add(morph) -> morph_word
   def add(morph)
-    if morph.root? then
-      raise "Cannot add a second root to a morphological word." if @root_added
+    check_root_conditions(morph)
+    if morph.root?
       @word.push(morph)
       @root_added = true
-    elsif !@root_added then
-      raise "Cannot add an affix to a morphological word without a root."
-    elsif morph.prefix? then
+    elsif morph.prefix?
       @word.unshift(morph)
-    elsif morph.suffix? then
+    elsif morph.suffix?
       @word.push(morph)
     else
-      raise "A morph_word only accepts valid morpheme types."
+      raise 'MorphWord.add: invalid morpheme type.'
     end
+    self
   end
 
-  # Applies the given code block to each morpheme in the word in order of
-  # precedence (left to right).
-  def each
-    @word.each{|m| yield(m)}
+  # Checks the root conditions: cannot add a second root, cannot
+  # affix to a rootless morphword. Called by #add().
+  def check_root_conditions(morph)
+    msg1 = 'MorphWord.add: Cannot add a second root.'
+    raise msg1 if morph.root? && @root_added
+
+    msg2 = 'MorphWord.add: Cannot add an affix to a word without a root.'
+    raise msg2 if !morph.root? && !@root_added
+
+    true
   end
-  
-  # dup() copies the @root_added value, and creates a duplicate @word array
-  # filled with the same morpheme objects (which should be unique).
+  private :check_root_conditions
+
+  # Applies the given code block to each morpheme in the word in order of
+  # precedence (left to right). Returns a reference to self.
+  def each(&block) # :yields: morpheme
+    @word.each(&block)
+    self
+  end
+
+  # Returns a duplicate of the morphword.
+  # :call-seq:
+  #   dup() -> morph_word
+  #--
+  # Uses protected methods #word= and #root_added=, to gain assignment
+  # access to those internal fields in the duplicate.
   def dup
     copy = MorphWord.new
     copy.word = @word.dup
     copy.root_added = @root_added
-    return copy
+    copy
   end
 
   # Returns true if the two morph_words consist of equivalent
   # morphemes in the identical sequence.
-  def ==(other_word)
+  # Equivalent to eql?(other).
+  # :call-seq:
+  #   morph_word == obj -> boolean
+  def ==(other)
     # Must have the same quantity of morphemes
-    return false unless self.morph_count == other_word.morph_count
+    return false unless morph_count == other.morph_count
+
     # Get external iterators over the morphemes of the words.
     # SyncEnumerator won't work here, because it requires []-style access.
-    self_iter = self.to_enum
-    other_iter = other_word.to_enum
+    self_iter = to_enum
+    other_iter = other.to_enum
     # Iterate over both morph_words simultaneously
     loop do
       self_morph = self_iter.next
@@ -88,12 +122,16 @@ class MorphWord
       # Order-matching morphemes must be the same
       return false unless self_morph == other_morph
     end
-    return true
+    true
   end
 
-  # A synonym for ==.
-  def eql?(other_word)
-    self==other_word
+  # Returns true if the two morph_words consist of equivalent
+  # morphemes in the identical sequence.
+  # Equivalent to eql?(other).
+  # :call-seq:
+  #   eql?(obj) -> boolean
+  def eql?(other)
+    self == other
   end
 
   # Sets the root_added flag to the parameter _boolean_.
@@ -101,16 +139,20 @@ class MorphWord
   def root_added=(boolean)
     @root_added = boolean
   end
+  protected :root_added=
 
-  # Sets the word array to the parameter _w_.
+  # Sets the word array to the parameter _word_.
   # Protected: used in #dup.
-  def word=(w)
-    @word = w
+  def word=(word)
+    @word = word
   end
-  protected :root_added=, :word=
+  protected :word=
 
+  # Returns a string representation of the morphemes in order, separated
+  # by '-'.
+  # :call-seq:
+  #   to_s() -> string
   def to_s
-    (@word.map{|m| m.label}).join('-')
+    @word.map(&:label).join('-')
   end
-
-end # class MorphWord
+end
