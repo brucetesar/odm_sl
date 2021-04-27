@@ -48,8 +48,6 @@ module OTLearn
       prior_result = @grammar_tester.run(output_list, grammar)
       # Create an external iterator which calls generate_contrast_pair()
       # to generate contrast pairs.
-      contrast_pair = nil
-      set_feature_list = []
       cp_gen = Enumerator.new do |result|
         @learning_module.generate_contrast_pair(result, winner_list,
                                                 grammar, prior_result)
@@ -59,6 +57,8 @@ module OTLearn
       # NOTE: loop silently rescues StopIteration, so if cp_gen runs out
       #       of contrast pairs, loop simply terminates, and execution
       #       continues below it.
+      contrast_pair = nil
+      set_feature_list = []
       loop do
         contrast_pair = cp_gen.next
         # Process the contrast pair, and return a list of any features
@@ -67,14 +67,14 @@ module OTLearn
         # If an underlying feature was set, exit the loop.
         # Otherwise, continue processing contrast pairs.
         break unless set_feature_list.empty?
+
+        contrast_pair = nil # didn't set any features
       end
       # For each newly set feature, see if any new ranking information
       # is now available.
       set_feature_list.each do |set_f|
         @para_erc_learner.run(set_f, grammar, output_list)
       end
-      # No successful contrast pair if no features were set.
-      contrast_pair = nil if set_feature_list.empty?
       changed = !set_feature_list.empty?
       test_result = @grammar_tester.run(output_list, grammar)
       ContrastPairStep.new(test_result, changed, contrast_pair)

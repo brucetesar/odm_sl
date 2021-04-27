@@ -28,8 +28,8 @@ RSpec.describe OTLearn::ContrastPairLearning do
       # The block defines the internal behavior of the test double.
       # The method needs to call #yield on the parameter +result+ passed in
       # by Enumerator.new().
-      allow(otlearn_module).to receive(:generate_contrast_pair) do
-        |result, win_list, grammar, p_result|
+      allow(otlearn_module).to receive(:generate_contrast_pair) \
+      do |result, _win_list, _grammar, _p_result|
         result.yield first_cp
       end
       # allow(otlearn_module).to\
@@ -75,8 +75,8 @@ RSpec.describe OTLearn::ContrastPairLearning do
       # The block defines the internal behavior of the test double.
       # The method needs to call #yield on the parameter +result+ passed in
       # by Enumerator.new().
-      allow(otlearn_module).to receive(:generate_contrast_pair) do
-        |result, win_list, grammar, p_result|
+      allow(otlearn_module).to receive(:generate_contrast_pair) \
+      do |result, _win_list, _grammar, _p_result|
         result.yield first_cp
       end
       # allow(otlearn_module).to\
@@ -118,12 +118,12 @@ RSpec.describe OTLearn::ContrastPairLearning do
       # The block defines the internal behavior of the test double.
       # The method needs to call #yield on the parameter +result+ passed in
       # by Enumerator.new().
-      allow(otlearn_module).to receive(:generate_contrast_pair) do
-        |result, win_list, grammar, p_result|
+      allow(otlearn_module).to receive(:generate_contrast_pair) \
+      do |result, _win_list, _grammar, _p_result|
         result.yield first_cp
       end
-      allow(otlearn_module).to receive(:generate_contrast_pair) do
-        |result, win_list, grammar, p_result|
+      allow(otlearn_module).to receive(:generate_contrast_pair) \
+      do |result, _win_list, _grammar, _p_result|
         result.yield second_cp
       end
       allow(otlearn_module).to\
