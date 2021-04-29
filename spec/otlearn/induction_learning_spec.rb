@@ -28,11 +28,11 @@ RSpec.describe OTLearn::InductionLearning do
       receive(:subtype).and_return(OTLearn::MAX_MISMATCH_RANKING)
   end
 
-  context 'with no failed winners' do
+  context 'with no failed winner outputs' do
     before(:each) do
       allow(grammar_tester).to\
         receive(:run).and_return(prior_result, test_result)
-      allow(prior_result).to receive(:failed_winners).and_return([])
+      allow(prior_result).to receive(:failed_outputs).and_return([])
     end
     it 'raises a RuntimeError' do
       expect do
@@ -44,12 +44,10 @@ RSpec.describe OTLearn::InductionLearning do
   end
 
   context 'with one inconsistent failed winner' do
-    let(:failed_winner_1) { double('failed_winner_1') }
     let(:failed_output_1) { double('output1') }
     before(:each) do
       allow(prior_result).to\
-        receive(:failed_winners).and_return([failed_winner_1])
-      allow(failed_winner_1).to receive(:output).and_return(failed_output_1)
+        receive(:failed_outputs).and_return([failed_output_1])
       allow(consistency_checker).to receive(:mismatch_consistent?)\
         .with([failed_output_1], grammar).and_return(false)
       allow(grammar_tester).to\
@@ -123,12 +121,10 @@ RSpec.describe OTLearn::InductionLearning do
   end
 
   context 'with one consistent failed winner' do
-    let(:failed_winner_1) { double('failed_winner_1') }
     let(:failed_output_1) { double('failed_output_1') }
     before(:each) do
       allow(prior_result).to\
-        receive(:failed_winners).and_return([failed_winner_1])
-      allow(failed_winner_1).to receive(:output).and_return(failed_output_1)
+        receive(:failed_outputs).and_return([failed_output_1])
       allow(consistency_checker).to receive(:mismatch_consistent?)\
         .with([failed_output_1], grammar).and_return(true)
       allow(grammar_tester).to\

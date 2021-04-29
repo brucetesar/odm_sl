@@ -66,16 +66,16 @@ module OTLearn
     # :call-seq:
     #   consistent_failed_winners(grammar, prior_result) -> array
     def consistent_failed_winners(grammar, prior_result)
-      failed_winners = prior_result.failed_winners.map(&:output)
+      failed_outputs = prior_result.failed_outputs
       # If there are no failed winners, raise an exception, because
       # induction learning shouldn't be called unless there are failed
       # winners to work on.
       msg1 = 'InductionLearning invoked with no failed winners.'
-      raise msg1 if failed_winners.empty?
+      raise msg1 if failed_outputs.empty?
 
       # Collect those winners that are mismatch consistent with the grammar,
       # and return an array of them.
-      failed_winners.select do |output|
+      failed_outputs.select do |output|
         consistency_checker.mismatch_consistent?([output], grammar)
       end
     end
