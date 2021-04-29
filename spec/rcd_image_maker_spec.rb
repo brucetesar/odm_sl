@@ -43,9 +43,10 @@ RSpec.describe RcdImageMaker do
     end
   end
 
-  context 'with ercs initially in reverse order' do
+  context 'with erc_sort flag set to true' do
     let(:erc1) { Test.quick_erc([ML, ME, MW]) }
     let(:erc2) { Test.quick_erc([MW, MW, ML]) }
+    let(:unsorted_ercs) { [erc1, erc2] }
     let(:unsorted_constraints) { erc1.constraint_list }
     let(:con1) { unsorted_constraints[0] }
     let(:con2) { unsorted_constraints[1] }
@@ -56,15 +57,31 @@ RSpec.describe RcdImageMaker do
     before(:each) do
       allow(rcd_result).to\
         receive(:hierarchy).and_return([[con2], [con3], [con1]])
-      allow(rcd_result).to receive(:erc_list).and_return([erc1, erc2])
-      @rcd_image = @rcd_image_maker.get_image(rcd_result)
+      allow(rcd_result).to receive(:erc_list).and_return(unsorted_ercs)
     end
-    it 'puts the CT image on the RCD image' do
-      expect(@rcd_image).to have_received(:put_range).exactly(1).times
+    context 'with erc_sort set to true' do
+      before(:example) do
+        @rcd_image = @rcd_image_maker.get_image(rcd_result, erc_sort: true)
+      end
+      it 'puts the CT image on the RCD image' do
+        expect(@rcd_image).to have_received(:put_range).exactly(1).times
+      end
+      it 'constructs a CT image with properly sorted ercs and constraints' do
+        expect(ct_image_maker).to\
+          have_received(:get_image).with(sorted_ercs, sorted_constraints)
+      end
     end
-    it 'constructs a CT image with properly sorted ercs and constraints' do
-      expect(ct_image_maker).to\
-        have_received(:get_image).with(sorted_ercs, sorted_constraints)
+    context 'with erc_sort false (not set)' do
+      before(:example) do
+        @rcd_image = @rcd_image_maker.get_image(rcd_result)
+      end
+      it 'puts the CT image on the RCD image' do
+        expect(@rcd_image).to have_received(:put_range).exactly(1).times
+      end
+      it 'constructs a CT image with properly sorted ercs and constraints' do
+        expect(ct_image_maker).to\
+          have_received(:get_image).with(unsorted_ercs, sorted_constraints)
+      end
     end
   end
 end
