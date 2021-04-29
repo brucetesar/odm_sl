@@ -29,5 +29,19 @@ module OTLearn
     def all_correct?
       @failed_winners.empty?
     end
+
+    # Returns an array of the outputs for each of the failed winners.
+    # :call-seq:
+    #   failed_outputs() -> array
+    def failed_outputs
+      failed_winners.map(&:output)
+    end
+
+    # Returns an array of the outputs for each of the successful winners.
+    # :call-seq:
+    #   success_outputs() -> array
+    def success_outputs
+      success_winners.map(&:output)
+    end
   end
 end

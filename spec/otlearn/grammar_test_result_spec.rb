@@ -6,12 +6,20 @@ require 'rspec'
 require 'otlearn/grammar_test_result'
 
 RSpec.describe 'OTLearn::GrammarTestResult' do
-  let(:failed_winners) { double('failed_winners') }
-  let(:success_winners) { double('success_winners') }
+  let(:failed_winners) { [] }
+  let(:success_winners) { [] }
   let(:grammar) { double('grammar') }
-  context 'with an empty failed winner list, success winners and a grammar' do
+  let(:win1) { double('winner1') }
+  let(:win2) { double('winner2') }
+  let(:out1) { double('output1') }
+  let(:out2) { double('output2') }
+  before(:example) do
+    allow(win1).to receive(:output).and_return(out1)
+    allow(win2).to receive(:output).and_return(out2)
+  end
+  context 'with an empty failed winner list' do
     before(:example) do
-      allow(failed_winners).to receive(:empty?).and_return(true)
+      success_winners << win1 << win2
       @result =
         OTLearn::GrammarTestResult.new(failed_winners, success_winners,
                                        grammar)
@@ -28,16 +36,29 @@ RSpec.describe 'OTLearn::GrammarTestResult' do
     it 'identifies that all winners are correct' do
       expect(@result.all_correct?).to be true
     end
+    it 'returns the failed outputs' do
+      expect(@result.failed_outputs).to be_empty
+    end
+    it 'returns the success outputs' do
+      expect(@result.success_outputs).to contain_exactly(out1, out2)
+    end
   end
   context 'with failed winners' do
     before(:example) do
-      allow(failed_winners).to receive(:empty?).and_return(false)
+      failed_winners << win1
+      success_winners << win2
       @result =
         OTLearn::GrammarTestResult.new(failed_winners, success_winners,
                                        grammar)
     end
     it 'identifies that not all winners are correct' do
       expect(@result.all_correct?).to be false
+    end
+    it 'returns the failed outputs' do
+      expect(@result.failed_outputs).to contain_exactly(out1)
+    end
+    it 'returns the success outputs' do
+      expect(@result.success_outputs).to contain_exactly(out2)
     end
   end
 end
