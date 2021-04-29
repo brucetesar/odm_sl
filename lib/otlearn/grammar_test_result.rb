@@ -34,14 +34,14 @@ module OTLearn
     # :call-seq:
     #   failed_outputs() -> array
     def failed_outputs
-      failed_winners.map(&:output)
+      @failed_outputs ||= failed_winners.map(&:output)
     end
 
     # Returns an array of the outputs for each of the successful winners.
     # :call-seq:
     #   success_outputs() -> array
     def success_outputs
-      success_winners.map(&:output)
+      @success_outputs ||= success_winners.map(&:output)
     end
   end
 end
