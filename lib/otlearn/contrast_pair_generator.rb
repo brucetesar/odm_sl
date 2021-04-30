@@ -3,23 +3,38 @@
 # Author: Bruce Tesar
 
 require 'otlearn/grammar_test'
-require 'word_search'
+require 'otlearn/contrast_word_finder'
 
 module OTLearn
-  # Generates a sequence of contrast pairs, derived from the list of
+  # Yields a sequence of contrast pairs, derived from the list of
   # outputs and the grammar provided to the constructor.
+  #
+  # These objects will normally be converted to enumerators, and used
+  # in that fashion:
+  #   cp_enum = ContrastPairGenerator.new(outputs, grammar).to_enum
+  #   loop { contrast_pair = cp_enum.next; <...> }
   class ContrastPairGenerator
+    # Returns a new contrast pair generator.
+    # === Parameters
+    # * outputs - the outputs of the language.
+    # * grammar - the grammar.
+    # :call-seq:
+    #   new(outputs, grammar) -> generator
+    #--
+    # Named parameters grammar_tester and contrast_finder are dependency
+    # injections used for testing.
     def initialize(outputs, grammar, grammar_tester: GrammarTest.new,
-                   word_searcher: WordSearch.new)
+                   contrast_finder: nil)
       @outputs = outputs
       @grammar = grammar
       @grammar_tester = grammar_tester
-      @word_searcher = word_searcher
-      @test_result = nil
-      @failed_winners = nil
+      @contrast_finder = contrast_finder
+      @contrast_finder ||= ContrastWordFinder.new(@grammar)
       pre_process_words
     end
 
+    # Runs a grammar test to find currently failing and succeeding winners.
+    # Returns true.
     def pre_process_words
       # run grammar test, get failed and successful outputs
       @test_result = @grammar_tester.run(@outputs, @grammar)
@@ -31,19 +46,23 @@ module OTLearn
         failed_outputs.map { |o| @grammar.parse_output(o) }
       @success_winners =
         success_outputs.map { |o| @grammar.parse_output(o) }
+      true
     end
     private :pre_process_words
 
-    def each
-      # iterate over failed winners
-      #   remove failed winner from working list of winners
-      #   iterate over morphemes of the failed winner
-      #     find unset features of failed winner outside of target morpheme
-      #     find working list winners that differ only in the target morpheme
-      #     iterate over candidate winners
-      #       if failed_winner and candidate_winner alternate on an unset feature
-      #         yield the pair as a contrast pair
-      yield [@failed_winners[0], @success_winners[0]]
+    # Successively yields valid contrast pairs, where the two words
+    # meet the conditions of a contrast pair as defined in the
+    # contrast finder (normally OTLearn::ContrastWordFinder).
+    # Returns nil.
+    def each # :yields: contrast_pair
+      failed_queue = @failed_winners.dup
+      until failed_queue.empty?
+        fwinner = failed_queue.shift
+        contrast_candidates = failed_queue + @success_winners
+        cwords = @contrast_finder.contrast_words(fwinner, contrast_candidates)
+        cwords.each { |word| yield [fwinner, word] }
+      end
+      nil
     end
   end
 end
