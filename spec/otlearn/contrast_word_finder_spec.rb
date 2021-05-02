@@ -8,7 +8,7 @@ require 'otlearn/contrast_word_finder'
 RSpec.describe 'OTLearn::ContrastWordFinder' do
   let(:grammar) { double('grammar') }
   let(:matcher) { double('contrast matcher') }
-  let(:word_search) { double('word_search') }
+  let(:alt_env_finder) { double('alt_env_finder') }
   let(:m1) { double('m1') }
   let(:m2) { double('m2') }
   let(:m3) { double('m3') }
@@ -16,7 +16,7 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
   before(:example) do
     @finder = OTLearn::ContrastWordFinder.new(grammar,
                                               contrast_matcher: matcher,
-                                              word_search: word_search)
+                                              alt_env_finder: alt_env_finder)
   end
 
   context 'given several words' do
@@ -43,28 +43,33 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
                                         .and_return(false)
       @others = [m1m4, m3m2, m3m4]
     end
-    context 'with alternating environment morphemes' do
-      let(:f11) { double('feature11') }
-      let(:f21) { double('feature21') }
-      let(:f31) { double('feature31') }
-      let(:f41) { double('feature41') }
+    context 'with unset alternating environment morphemes' do
       before(:example) do
-        allow(word_search).to receive(:find_unset_features)\
-          .with([m1], grammar).and_return([f11])
-        allow(word_search).to receive(:find_unset_features)\
-          .with([m2], grammar).and_return([f21])
-        allow(word_search).to receive(:find_unset_features)\
-          .with([m3], grammar).and_return([f31])
-        allow(word_search).to receive(:find_unset_features)\
-          .with([m4], grammar).and_return([f41])
-        allow(word_search).to receive(:conflicting_output_values?)\
-          .with(f11, [m1m2, m1m4]).and_return(true)
-        allow(word_search).to receive(:conflicting_output_values?)\
-          .with(f21, [m1m2, m3m2]).and_return(true)
+        # m2 has an unset feature that alternates for m1m2, m3m2
+        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2])\
+                                               .and_return([m3m2])
+        # m1 has an unset feature that alternates for m1m2, m1m4
+        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4])\
+                                               .and_return([m1m4])
         @contrast_words = @finder.contrast_words(m1m2, @others)
       end
       it 'returns the words differing in only one morpheme' do
         expect(@contrast_words).to contain_exactly(m1m4, m3m2)
+      end
+    end
+    context 'with one unset alternating environment morpheme' do
+      before(:example) do
+        # m2 has an unset feature that alternates for m1m2, m3m2
+        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2])\
+                                               .and_return([m3m2])
+        # m1 either has no unset feature, or the unset feature doesn't
+        # alternate for m1m2, m1m4
+        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4])\
+                                               .and_return([])
+        @contrast_words = @finder.contrast_words(m1m2, @others)
+      end
+      it 'returns only the word with the unset alt env morpheme' do
+        expect(@contrast_words).to contain_exactly(m3m2)
       end
     end
   end
