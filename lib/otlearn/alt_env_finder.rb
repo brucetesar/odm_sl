@@ -7,10 +7,10 @@ require 'word_search'
 module OTLearn
   # Finds words that alternate on an unset feature with respect to
   # a reference word. This is used in constructing contrast pairs.
-  #
   # == Illustration
-  # * r1 = /?,-/  s1 = /?,-/  s3 = /?,-/
-  # * ref_word: r1s1    others: [r1s3, r2s1, r2s3]
+  # * r1 = /?,-/ s1 = /?,-/ s3 = /?,-/
+  # * ref_word: r1s1
+  # * others: [r1s3, r2s1, r2s3]
   # * contrast morpheme: s1
   # * r1s1 output: [+,-,-,-]  r1s3 output: [-,-,+,-]
   # r1 is the environment morpheme, and its first feature is unset.
@@ -19,6 +19,8 @@ module OTLearn
   # r1s3 provides an alternating unset feature environment relative
   # to r1s1, and qualifies as a contrast word. In other words, r1s1
   # and r1s3 constitute a valid contrast pair.
+  #   finder = AltEnvFinder.new(grammar)
+  #   finder.find(r1s1, s1, [r1s3, r2s1, r2s3]) # => [r1s3]
   class AltEnvFinder
     # Returns a new alternating environment feature word finder object.
     # === Parameters
@@ -26,9 +28,12 @@ module OTLearn
     #   which features are unset.
     # :call-seq:
     #   new(grammar) -> finder
-    def initialize(grammar, word_search: WordSearch.new)
+    #--
+    # Named parameter word_search is a dependency injection used for
+    # testing.
+    def initialize(grammar, word_search: nil)
       @grammar = grammar
-      @word_search = word_search
+      @word_search = word_search || WordSearch.new
     end
 
     # Given reference word _ref_word_ and contrasting morpheme _morph_,
