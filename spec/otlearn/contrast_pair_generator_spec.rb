@@ -38,10 +38,11 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
       before(:example) do
         allow(contrastfinder).to receive(:contrast_words)\
           .with(r1s1, [r1s2, r2s1, r2s2]).and_return([r1s2])
-        @generator =
-          OTLearn::ContrastPairGenerator.new(outputs, grammar,
-                                             contrast_finder: contrastfinder)
+        @generator = OTLearn::ContrastPairGenerator\
+          .new(contrast_finder: contrastfinder)
         @generator.grammar_tester = gramtester
+        @generator.outputs = outputs
+        @generator.grammar = grammar
       end
       it 'yields r1s1-r1s2' do
         expect { |probe| @generator.each(&probe) }.to \
@@ -60,10 +61,11 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
       before(:example) do
         allow(contrastfinder).to receive(:contrast_words)\
           .with(r1s1, [r1s2, r2s1, r2s2]).and_return([r1s2, r2s1])
-        @generator =
-          OTLearn::ContrastPairGenerator.new(outputs, grammar,
-                                             contrast_finder: contrastfinder)
+        @generator = OTLearn::ContrastPairGenerator\
+          .new(contrast_finder: contrastfinder)
         @generator.grammar_tester = gramtester
+        @generator.outputs = outputs
+        @generator.grammar = grammar
       end
       it 'produces a enumerator yielding r1s1-r1s2 and r1s1-r2s1' do
         gen_enum = @generator.to_enum
@@ -90,10 +92,11 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
           .with(r1s2, [r2s2, r1s1, r2s1]).and_return([r2s2, r1s1])
         allow(contrastfinder).to receive(:contrast_words)\
           .with(r2s2, [r1s1, r2s1]).and_return([r2s1])
-        @generator =
-          OTLearn::ContrastPairGenerator.new(outputs, grammar,
-                                             contrast_finder: contrastfinder)
+        @generator = OTLearn::ContrastPairGenerator\
+          .new(contrast_finder: contrastfinder)
         @generator.grammar_tester = gramtester
+        @generator.outputs = outputs
+        @generator.grammar = grammar
       end
       it 'produces an enumerator yielding r1s2-r2s2, r1s2-r1s1, r2s2-r2s1' do
         gen_enum = @generator.to_enum
@@ -103,6 +106,34 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
         end
         expect(pairs).to eq [[r1s2, r2s2], [r1s2, r1s1], [r2s2, r2s1]]
       end
+    end
+  end
+
+  context 'when no outputs are provided' do
+    before(:example) do
+      @generator = OTLearn::ContrastPairGenerator\
+          .new(contrast_finder: contrastfinder)
+      @generator.grammar_tester = gramtester
+      @generator.grammar = grammar
+    end
+    it 'raises a RuntimeError' do
+      gen_enum = @generator.to_enum
+      msg = 'ContrastPairGenerator: no outputs provided.'
+      expect { gen_enum.next }.to raise_error(RuntimeError, msg)
+    end
+  end
+  context 'when no grammar is provided' do
+    let(:outputs) { [o11, o12, o21, o22] }
+    before(:example) do
+      @generator = OTLearn::ContrastPairGenerator\
+          .new(contrast_finder: contrastfinder)
+      @generator.grammar_tester = gramtester
+      @generator.outputs = outputs
+    end
+    it 'raises a RuntimeError' do
+      gen_enum = @generator.to_enum
+      msg = 'ContrastPairGenerator: no grammar provided.'
+      expect { gen_enum.next }.to raise_error(RuntimeError, msg)
     end
   end
 end
