@@ -15,6 +15,9 @@ module OTLearn
   #   cp_enum = cp_gen.to_enum
   #   loop { contrast_pair = cp_enum.next; <...> }
   class ContrastPairGenerator
+    # The grammar testing object. Default: GrammarTest.new.
+    attr_accessor :grammar_tester
+
     # Returns a new contrast pair generator.
     # === Parameters
     # * outputs - the outputs of the language.
@@ -22,13 +25,11 @@ module OTLearn
     # :call-seq:
     #   new(outputs, grammar) -> generator
     #--
-    # Named parameters grammar_tester and contrast_finder are dependency
-    # injections used for testing.
-    def initialize(outputs, grammar, grammar_tester: nil,
-                   contrast_finder: nil)
+    # Named parameter contrast_finder is a dependency injection used
+    # for testing.
+    def initialize(outputs, grammar, contrast_finder: nil)
       @outputs = outputs
       @grammar = grammar
-      @grammar_tester = grammar_tester
       @contrast_finder = contrast_finder
     end
 
