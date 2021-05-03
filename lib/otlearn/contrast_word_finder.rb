@@ -3,6 +3,8 @@
 # Author: Bruce Tesar
 
 require 'otlearn/alt_env_finder'
+require 'otlearn/contrast_word_matcher'
+require 'word_search'
 
 module OTLearn
   # A contrast word finder identifies words, from a given list, that
@@ -28,7 +30,7 @@ module OTLearn
     def initialize(grammar, contrast_matcher: nil, alt_env_finder: nil,
                    word_search: nil)
       @grammar = grammar
-      @cw_matcher = contrast_matcher
+      @contrast_matcher = contrast_matcher || ContrastWordMatcher.new
       @alt_env_finder = alt_env_finder || AltEnvFinder.new(@grammar)
       @word_search = word_search || WordSearch.new
     end
@@ -54,14 +56,24 @@ module OTLearn
       cword_list
     end
 
+    # Returns an array of pairs of [morpheme, word], one for each word in
+    # _others_ that is a contrast word for _ref_mw_. The paired morpheme
+    # is the morpheme of word that contrasts with the _morph_ of _ref_mw_.
     def find_morphword_matches(ref_mw, morph, others)
       others.each_with_object([]) do |o, memo|
-        match_morph = @cw_matcher.match(ref_mw, morph, o.morphword)
+        match_morph = @contrast_matcher.match(ref_mw, morph, o.morphword)
         memo << [match_morph, o] unless match_morph.nil?
       end
     end
     private :find_morphword_matches
 
+    # Returns an array of words that have a contrast morpheme corresponding
+    # to the target morpheme _morph_, such that either the _morph_ or
+    # the contrast morpheme has at least one unset feature.
+    #
+    # The point of contrast pairs is to set at least one feature in one
+    # of the contrasting morphemes, so if there are no features to set,
+    # there is no point in processing the pair.
     def check_for_unset_features(morph, mw_matches)
       # if the target morpheme has an unset feature, return all of the
       # mw match words.
