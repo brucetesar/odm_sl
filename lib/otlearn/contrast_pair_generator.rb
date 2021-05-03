@@ -11,7 +11,8 @@ module OTLearn
   #
   # These objects will normally be converted to enumerators, and used
   # in that fashion:
-  #   cp_enum = ContrastPairGenerator.new(outputs, grammar).to_enum
+  #   cp_gen = ContrastPairGenerator.new(outputs, grammar)
+  #   cp_enum = cp_gen.to_enum
   #   loop { contrast_pair = cp_enum.next; <...> }
   class ContrastPairGenerator
     # Returns a new contrast pair generator.
@@ -23,23 +24,48 @@ module OTLearn
     #--
     # Named parameters grammar_tester and contrast_finder are dependency
     # injections used for testing.
-    def initialize(outputs, grammar, grammar_tester: GrammarTest.new,
+    def initialize(outputs, grammar, grammar_tester: nil,
                    contrast_finder: nil)
       @outputs = outputs
       @grammar = grammar
       @grammar_tester = grammar_tester
       @contrast_finder = contrast_finder
-      @contrast_finder ||= ContrastWordFinder.new(@grammar)
-      pre_process_words
     end
+
+    # Successively yields valid contrast pairs, where the two words
+    # meet the conditions of a contrast pair as defined in the
+    # contrast finder (normally OTLearn::ContrastWordFinder).
+    # Returns nil.
+    def each # :yields: contrast_pair
+      check_defaults_pre_processing
+      failed_queue = @failed_winners.dup
+      until failed_queue.empty?
+        fwinner = failed_queue.shift
+        contrast_candidates = failed_queue + @success_winners
+        cwords =
+          @contrast_finder.contrast_words(fwinner, contrast_candidates)
+        cwords.each { |word| yield [fwinner, word] }
+      end
+      nil
+    end
+
+    # Assigns default values for the grammar tester and the contrast
+    # finder if they have not already been assigned.
+    # Runs word pre-processing if it has not already been run.
+    def check_defaults_pre_processing
+      @grammar_tester ||= GrammarTest.new
+      @contrast_finder ||= ContrastWordFinder.new(@grammar)
+      pre_process_words if @failed_winners.nil? || @success_winners.nil?
+    end
+    private :check_defaults_pre_processing
 
     # Runs a grammar test to find currently failing and succeeding winners.
     # Returns true.
     def pre_process_words
       # run grammar test, get failed and successful outputs
-      @test_result = @grammar_tester.run(@outputs, @grammar)
-      failed_outputs = @test_result.failed_outputs
-      success_outputs = @test_result.success_outputs
+      test_result = @grammar_tester.run(@outputs, @grammar)
+      failed_outputs = test_result.failed_outputs
+      success_outputs = test_result.success_outputs
       # convert outputs to full winner candidates, synchronized with
       # the grammar's lexicon.
       @failed_winners =
@@ -49,20 +75,5 @@ module OTLearn
       true
     end
     private :pre_process_words
-
-    # Successively yields valid contrast pairs, where the two words
-    # meet the conditions of a contrast pair as defined in the
-    # contrast finder (normally OTLearn::ContrastWordFinder).
-    # Returns nil.
-    def each # :yields: contrast_pair
-      failed_queue = @failed_winners.dup
-      until failed_queue.empty?
-        fwinner = failed_queue.shift
-        contrast_candidates = failed_queue + @success_winners
-        cwords = @contrast_finder.contrast_words(fwinner, contrast_candidates)
-        cwords.each { |word| yield [fwinner, word] }
-      end
-      nil
-    end
   end
 end
