@@ -15,10 +15,10 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
   let(:m3) { double('m3') }
   let(:m4) { double('m4') }
   before(:example) do
-    @finder = OTLearn::ContrastWordFinder.new(grammar,
-                                              contrast_matcher: matcher,
-                                              alt_env_finder: alt_env_finder,
-                                              word_search: word_search)
+    @finder =
+      OTLearn::ContrastWordFinder.new(contrast_matcher: matcher,
+                                      alt_env_finder: alt_env_finder,
+                                      word_search: word_search)
   end
 
   context 'given several words' do
@@ -57,9 +57,10 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         allow(word_search).to receive(:find_unset_features)\
           .with([m1], grammar).and_return([:found_feature])
         # m1 has an unset feature that alternates for m1m2, m1m4
-        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4], grammar)\
-                                               .and_return([m1m4])
-        @contrast_words = @finder.contrast_words(m1m2, @others)
+        allow(alt_env_finder).to \
+          receive(:find).with(m1m2, m2, [m1m4], grammar)\
+                        .and_return([m1m4])
+        @contrast_words = @finder.contrast_words(m1m2, @others, grammar)
       end
       it 'returns the words differing in only one morpheme' do
         expect(@contrast_words).to contain_exactly(m1m4, m3m2)
@@ -79,7 +80,7 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         # m1 has no unset feature that alternates for m1m2, m1m4
         allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4], grammar)\
                                                .and_return([])
-        @contrast_words = @finder.contrast_words(m1m2, @others)
+        @contrast_words = @finder.contrast_words(m1m2, @others, grammar)
       end
       it 'returns the word with the unset contrast morpheme' do
         expect(@contrast_words).to contain_exactly(m3m2)
@@ -102,7 +103,7 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         # m4 has an unset feature
         allow(word_search).to receive(:find_unset_features)\
           .with([m4], grammar).and_return([:found_feature])
-        @contrast_words = @finder.contrast_words(m1m2, @others)
+        @contrast_words = @finder.contrast_words(m1m2, @others, grammar)
       end
       it 'returns the word with the unset contrast morpheme' do
         expect(@contrast_words).to contain_exactly(m1m4)
@@ -128,7 +129,7 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         # m4 has an unset feature
         allow(word_search).to receive(:find_unset_features)\
           .with([m4], grammar).and_return([:found_feature])
-        @contrast_words = @finder.contrast_words(m1m2, @others)
+        @contrast_words = @finder.contrast_words(m1m2, @others, grammar)
       end
       # m3m2 blocked b/c neither m1 nor m3 has an unset feature.
       # m1m4 blocked b/c m1 has no unset, thus no unset alternating feature.

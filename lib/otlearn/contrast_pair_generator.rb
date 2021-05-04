@@ -52,7 +52,8 @@ module OTLearn
         fwinner = failed_queue.shift
         contrast_candidates = failed_queue + @success_winners
         cwords =
-          @contrast_finder.contrast_words(fwinner, contrast_candidates)
+          @contrast_finder.contrast_words(fwinner, contrast_candidates,
+                                          grammar)
         cwords.each { |word| yield [fwinner, word] }
       end
       nil
@@ -70,7 +71,7 @@ module OTLearn
       raise msg2 if @grammar.nil?
 
       @grammar_tester ||= GrammarTest.new
-      @contrast_finder ||= ContrastWordFinder.new(@grammar)
+      @contrast_finder ||= ContrastWordFinder.new
       pre_process_words if @failed_winners.nil? || @success_winners.nil?
     end
     private :check_defaults_pre_processing

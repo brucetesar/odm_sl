@@ -37,7 +37,7 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
     context 'and r1s2 is a contrast word' do
       before(:example) do
         allow(contrastfinder).to receive(:contrast_words)\
-          .with(r1s1, [r1s2, r2s1, r2s2]).and_return([r1s2])
+          .with(r1s1, [r1s2, r2s1, r2s2], grammar).and_return([r1s2])
         @generator = OTLearn::ContrastPairGenerator\
           .new(contrast_finder: contrastfinder)
         @generator.grammar_tester = gramtester
@@ -60,9 +60,10 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
     context 'and [r1s2, r2s1] are contrast words' do
       before(:example) do
         allow(contrastfinder).to receive(:contrast_words)\
-          .with(r1s1, [r1s2, r2s1, r2s2]).and_return([r1s2, r2s1])
+          .with(r1s1, [r1s2, r2s1, r2s2], grammar)\
+          .and_return([r1s2, r2s1])
         @generator = OTLearn::ContrastPairGenerator\
-          .new(contrast_finder: contrastfinder)
+                     .new(contrast_finder: contrastfinder)
         @generator.grammar_tester = gramtester
         @generator.outputs = outputs
         @generator.grammar = grammar
@@ -89,11 +90,12 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
     context 'r1s2, r2s2 have contrast words [r2s2, r1s1], [r2s1]' do
       before(:example) do
         allow(contrastfinder).to receive(:contrast_words)\
-          .with(r1s2, [r2s2, r1s1, r2s1]).and_return([r2s2, r1s1])
+          .with(r1s2, [r2s2, r1s1, r2s1], grammar)\
+          .and_return([r2s2, r1s1])
         allow(contrastfinder).to receive(:contrast_words)\
-          .with(r2s2, [r1s1, r2s1]).and_return([r2s1])
+          .with(r2s2, [r1s1, r2s1], grammar).and_return([r2s1])
         @generator = OTLearn::ContrastPairGenerator\
-          .new(contrast_finder: contrastfinder)
+                     .new(contrast_finder: contrastfinder)
         @generator.grammar_tester = gramtester
         @generator.outputs = outputs
         @generator.grammar = grammar
@@ -112,7 +114,7 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
   context 'when no outputs are provided' do
     before(:example) do
       @generator = OTLearn::ContrastPairGenerator\
-          .new(contrast_finder: contrastfinder)
+                   .new(contrast_finder: contrastfinder)
       @generator.grammar_tester = gramtester
       @generator.grammar = grammar
     end
@@ -126,7 +128,7 @@ RSpec.describe 'OTLearn::ContrastPairGenerator' do
     let(:outputs) { [o11, o12, o21, o22] }
     before(:example) do
       @generator = OTLearn::ContrastPairGenerator\
-          .new(contrast_finder: contrastfinder)
+                   .new(contrast_finder: contrastfinder)
       @generator.grammar_tester = gramtester
       @generator.outputs = outputs
     end

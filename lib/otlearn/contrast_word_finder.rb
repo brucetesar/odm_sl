@@ -19,27 +19,24 @@ module OTLearn
   #   words of the contrast pair.
   class ContrastWordFinder
     # Returns a new contrast word finder object.
-    # === Parameters
-    # * grammar - the grammar containing the lexicon that indicates
-    #   which features are unset.
     # :call-seq:
-    #   new(grammar) -> finder
+    #   new() -> finder
     #--
     # Named parameters contrast_matcher, alt_env_finder and word_search
     # are dependency injections used in testing.
-    def initialize(grammar, contrast_matcher: nil, alt_env_finder: nil,
+    def initialize(contrast_matcher: nil, alt_env_finder: nil,
                    word_search: nil)
-      @grammar = grammar
       @contrast_matcher = contrast_matcher || ContrastWordMatcher.new
       @alt_env_finder = alt_env_finder || AltEnvFinder.new
       @word_search = word_search || WordSearch.new
     end
 
     # Returns an array of words in _others_ that form valid contrast pairs
-    # with _ref_word_.
+    # with _ref_word_. The lexicon indicating which features are unset
+    # is provided by _grammar_.
     # :call-seq:
-    #   contrast_words(ref_word, others) -> array
-    def contrast_words(ref_word, others)
+    #   contrast_words(ref_word, others, grammar) -> array
+    def contrast_words(ref_word, others, grammar)
       ref_mw = ref_word.morphword
       cword_list = []
       ref_mw.each do |m|
@@ -48,10 +45,10 @@ module OTLearn
         mw_matches = find_morphword_matches(ref_mw, m, others)
         # Only keep words where one of the contrasting morphemes has an
         # unset feature.
-        match_words = check_for_unset_features(m, mw_matches)
+        match_words = check_for_unset_features(m, mw_matches, grammar)
         # find words alternating in an unset feature relative to ref_word
         alternating_words =
-          @alt_env_finder.find(ref_word, m, match_words, @grammar)
+          @alt_env_finder.find(ref_word, m, match_words, grammar)
         alternating_words.each { |w| cword_list << w }
       end
       cword_list
@@ -68,24 +65,24 @@ module OTLearn
     end
     private :find_morphword_matches
 
-    # Returns an array of words that have a contrast morpheme corresponding
-    # to the target morpheme _morph_, such that either the _morph_ or
-    # the contrast morpheme has at least one unset feature.
+    # Returns an array of words that have a contrast morpheme
+    # corresponding to the target morpheme _morph_, such that either the
+    # _morph_ or the contrast morpheme has at least one unset feature.
     #
     # The point of contrast pairs is to set at least one feature in one
     # of the contrasting morphemes, so if there are no features to set,
     # there is no point in processing the pair.
-    def check_for_unset_features(morph, mw_matches)
+    def check_for_unset_features(morph, mw_matches, grammar)
       # if the target morpheme has an unset feature, return all of the
       # mw match words.
       return mw_matches.map { |pair| pair[1] }\
-        unless @word_search.find_unset_features([morph], @grammar).empty?
+        unless @word_search.find_unset_features([morph], grammar).empty?
 
       # Target morph has no unset features, so check each contrast morph
       # for unset features, returning only those words with unset
       # contrast morpheme features.
       unset_matches = mw_matches.reject do |pair|
-        @word_search.find_unset_features([pair[0]], @grammar).empty?
+        @word_search.find_unset_features([pair[0]], grammar).empty?
       end
       unset_matches.map { |pair| pair[1] }
     end
