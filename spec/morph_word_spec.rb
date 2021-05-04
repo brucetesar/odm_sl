@@ -33,14 +33,14 @@ RSpec.describe 'MorphWord' do
       @mw = MorphWord.new
     end
     it 'contains zero morphemes' do
-      expect(@mw.morph_count).to eq 0
+      expect(@mw.size).to eq 0
     end
     context 'when a root is added' do
       before(:example) do
         @result = @mw.add(root)
       end
       it 'contains one morpheme' do
-        expect(@mw.morph_count).to eq 1
+        expect(@mw.size).to eq 1
       end
       it 'returns a reference to self' do
         expect(@result).to equal @mw
@@ -60,7 +60,7 @@ RSpec.describe 'MorphWord' do
       @mw = MorphWord.new(root)
     end
     it 'contains one morpheme' do
-      expect(@mw.morph_count).to eq 1
+      expect(@mw.size).to eq 1
     end
     it 'attempting to add a second root raises a RuntimeError' do
       msg = 'MorphWord.add: Cannot add a second root.'
@@ -71,7 +71,7 @@ RSpec.describe 'MorphWord' do
         @mw.add(suffix1)
       end
       it 'contains two morphemes' do
-        expect(@mw.morph_count).to eq 2
+        expect(@mw.size).to eq 2
       end
       it 'attempting to add an invalid morpheme raises a RuntimeError' do
         msg = 'MorphWord.add: invalid morpheme type.'

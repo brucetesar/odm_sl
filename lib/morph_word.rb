@@ -40,8 +40,8 @@ class MorphWord
 
   # Returns the number of morphemes in the word.
   # :call-seq:
-  #   morph_count() -> int
-  def morph_count
+  #   size() -> int
+  def size
     @word.size
   end
 
@@ -109,7 +109,7 @@ class MorphWord
   #   morph_word == obj -> boolean
   def ==(other)
     # Must have the same quantity of morphemes
-    return false unless morph_count == other.morph_count
+    return false unless size == other.size
 
     # Get external iterators over the morphemes of the words.
     # SyncEnumerator won't work here, because it requires []-style access.
