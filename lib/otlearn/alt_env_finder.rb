@@ -46,7 +46,7 @@ module OTLearn
     #   find(ref_word, morph, others) -> array
     def find(ref_word, morph, others)
       # The environment morphemes are all but the contrast morpheme.
-      env_morphs = ref_word.morphword - [morph]
+      env_morphs = ref_word.morphword.reject { |m| m == morph }
       # find unset features of failed winner in the environment morphemes.
       unset_features =
         @word_search.find_unset_features(env_morphs, @grammar)
