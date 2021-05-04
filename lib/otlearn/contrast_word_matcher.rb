@@ -34,7 +34,7 @@ module OTLearn
 
       contrast_morph = nil
       # iterate through the words morpheme by morpheme
-      ref_mw.each_index do |idx|
+      ref_mw.each_with_index do |_obj, idx|
         # boolean: are the corresponding morphemes not the same?
         morph_mismatch = ref_mw[idx] != other_mw[idx]
         # boolean: is the current ref word morpheme also the target?
