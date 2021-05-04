@@ -8,7 +8,7 @@ module OTLearn
   # Finds words that alternate on an unset feature with respect to
   # a reference word. This is used in constructing contrast pairs.
   # == Illustration
-  # * r1 = /?,-/ s1 = /?,-/ s3 = /?,-/
+  # * grammar: r1 = /?,-/ s1 = /?,-/ s3 = /?,-/
   # * ref_word: r1s1
   # * others: [r1s3, r2s1, r2s3]
   # * contrast morpheme: s1
@@ -19,20 +19,16 @@ module OTLearn
   # r1s3 provides an alternating unset feature environment relative
   # to r1s1, and qualifies as a contrast word. In other words, r1s1
   # and r1s3 constitute a valid contrast pair.
-  #   finder = AltEnvFinder.new(grammar)
-  #   finder.find(r1s1, s1, [r1s3, r2s1, r2s3]) # => [r1s3]
+  #   finder = AltEnvFinder.new
+  #   finder.find(r1s1, s1, [r1s3, r2s1, r2s3], grammar) # => [r1s3]
   class AltEnvFinder
     # Returns a new alternating environment feature word finder object.
-    # === Parameters
-    # * grammar - the grammar containing the lexicon that indicates
-    #   which features are unset.
     # :call-seq:
-    #   new(grammar) -> finder
+    #   new() -> finder
     #--
     # Named parameter word_search is a dependency injection used for
     # testing.
-    def initialize(grammar, word_search: nil)
-      @grammar = grammar
+    def initialize(word_search: nil)
       @word_search = word_search || WordSearch.new
     end
 
@@ -43,13 +39,13 @@ module OTLearn
     # the surface with _ref_word_ with respect to an unset feature of the
     # environment morphemes.
     # :call-seq:
-    #   find(ref_word, morph, others) -> array
-    def find(ref_word, morph, others)
+    #   find(ref_word, morph, others, grammar) -> array
+    def find(ref_word, morph, others, grammar)
       # The environment morphemes are all but the contrast morpheme.
       env_morphs = ref_word.morphword.reject { |m| m == morph }
       # find unset features of failed winner in the environment morphemes.
       unset_features =
-        @word_search.find_unset_features(env_morphs, @grammar)
+        @word_search.find_unset_features(env_morphs, grammar)
       return [] if unset_features.empty?
 
       alternating_environment_words(ref_word, unset_features, others)

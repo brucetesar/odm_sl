@@ -31,7 +31,7 @@ module OTLearn
                    word_search: nil)
       @grammar = grammar
       @contrast_matcher = contrast_matcher || ContrastWordMatcher.new
-      @alt_env_finder = alt_env_finder || AltEnvFinder.new(@grammar)
+      @alt_env_finder = alt_env_finder || AltEnvFinder.new
       @word_search = word_search || WordSearch.new
     end
 
@@ -50,7 +50,8 @@ module OTLearn
         # unset feature.
         match_words = check_for_unset_features(m, mw_matches)
         # find words alternating in an unset feature relative to ref_word
-        alternating_words = @alt_env_finder.find(ref_word, m, match_words)
+        alternating_words =
+          @alt_env_finder.find(ref_word, m, match_words, @grammar)
         alternating_words.each { |w| cword_list << w }
       end
       cword_list

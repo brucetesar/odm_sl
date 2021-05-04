@@ -21,7 +21,7 @@ RSpec.describe 'OTLearn::AltEnvFinder' do
     allow(m1m4).to receive(:morphword).and_return([m1, m4])
     allow(m3m2).to receive(:morphword).and_return([m3, m2])
     allow(m3m4).to receive(:morphword).and_return([m3, m4])
-    @finder = OTLearn::AltEnvFinder.new(grammar, word_search: word_search)
+    @finder = OTLearn::AltEnvFinder.new(word_search: word_search)
   end
 
   context 'with all features unset' do
@@ -44,7 +44,7 @@ RSpec.describe 'OTLearn::AltEnvFinder' do
         allow(word_search).to receive(:conflicting_output_values?)\
           .with(f21, [m1m2, m3m2]).and_return(true)
         others = [m3m2]
-        @words = @finder.find(m1m2, m1, others)
+        @words = @finder.find(m1m2, m1, others, grammar)
       end
       it 'finds m3m2 for m1m2' do
         expect(@words).to contain_exactly(m3m2)
@@ -55,7 +55,7 @@ RSpec.describe 'OTLearn::AltEnvFinder' do
         allow(word_search).to receive(:conflicting_output_values?)\
           .with(f11, [m1m2, m1m4]).and_return(true)
         others = [m1m4]
-        @words = @finder.find(m1m2, m2, others)
+        @words = @finder.find(m1m2, m2, others, grammar)
       end
       it 'finds m1m4 for m1m2' do
         expect(@words).to contain_exactly(m1m4)
@@ -66,7 +66,7 @@ RSpec.describe 'OTLearn::AltEnvFinder' do
         allow(word_search).to receive(:conflicting_output_values?)\
           .with(f11, [m1m2, m1m4]).and_return(false)
         others = [m1m4]
-        @words = @finder.find(m1m2, m2, others)
+        @words = @finder.find(m1m2, m2, others, grammar)
       end
       it 'finds no words for m1m2' do
         expect(@words).to be_empty
@@ -94,7 +94,7 @@ RSpec.describe 'OTLearn::AltEnvFinder' do
         allow(word_search).to receive(:conflicting_output_values?)\
           .with(f21, [m1m2, m3m2]).and_return(true)
         others = [m3m2]
-        @words = @finder.find(m1m2, m1, others)
+        @words = @finder.find(m1m2, m1, others, grammar)
       end
       it 'finds no words for m1m2' do
         expect(@words).to be_empty
@@ -105,7 +105,7 @@ RSpec.describe 'OTLearn::AltEnvFinder' do
         allow(word_search).to receive(:conflicting_output_values?)\
           .with(f11, [m1m2, m1m4]).and_return(true)
         others = [m1m4]
-        @words = @finder.find(m1m2, m2, others)
+        @words = @finder.find(m1m2, m2, others, grammar)
       end
       it 'finds m1m4 for m1m2' do
         expect(@words).to contain_exactly(m1m4)

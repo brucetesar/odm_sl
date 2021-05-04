@@ -51,13 +51,13 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         allow(word_search).to receive(:find_unset_features)\
           .with([m2], grammar).and_return([:found_feature])
         # m2 has an unset feature that alternates for m1m2, m3m2
-        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2], grammar)\
                                                .and_return([m3m2])
         # m1 has an unset feature
         allow(word_search).to receive(:find_unset_features)\
           .with([m1], grammar).and_return([:found_feature])
         # m1 has an unset feature that alternates for m1m2, m1m4
-        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4], grammar)\
                                                .and_return([m1m4])
         @contrast_words = @finder.contrast_words(m1m2, @others)
       end
@@ -71,13 +71,13 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         allow(word_search).to receive(:find_unset_features)\
           .with([m2], grammar).and_return([:found_feature])
         # m2 has an unset feature that alternates for m1m2, m3m2
-        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2], grammar)\
                                                .and_return([m3m2])
         # m1 has an unset feature
         allow(word_search).to receive(:find_unset_features)\
           .with([m1], grammar).and_return([:found_feature])
         # m1 has no unset feature that alternates for m1m2, m1m4
-        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4], grammar)\
                                                .and_return([])
         @contrast_words = @finder.contrast_words(m1m2, @others)
       end
@@ -91,13 +91,13 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         allow(word_search).to receive(:find_unset_features)\
           .with([m2], grammar).and_return([])
         # m2 has no unset feature that alternates for m1m2, m3m2
-        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [m3m2], grammar)\
                                                .and_return([])
         # m1 has an unset feature
         allow(word_search).to receive(:find_unset_features)\
           .with([m1], grammar).and_return([:found_feature])
         # m1 has an unset feature that alternates for m1m2, m1m4
-        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4], grammar)\
                                                .and_return([m1m4])
         # m4 has an unset feature
         allow(word_search).to receive(:find_unset_features)\
@@ -114,13 +114,13 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         allow(word_search).to receive(:find_unset_features)\
           .with([m2], grammar).and_return([:found_feature])
         # m2 has an unset feature, but m3m2 is ineligible
-        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m1, [], grammar)\
                                                .and_return([])
         # m1 has no unset feature
         allow(word_search).to receive(:find_unset_features)\
           .with([m1], grammar).and_return([])
         # m1 has no unset feature that alternates for m1m2, m1m4
-        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4])\
+        allow(alt_env_finder).to receive(:find).with(m1m2, m2, [m1m4], grammar)\
                                                .and_return([])
         # m3 has no unset feature
         allow(word_search).to receive(:find_unset_features)\
@@ -136,7 +136,7 @@ RSpec.describe 'OTLearn::ContrastWordFinder' do
         expect(@contrast_words).to be_empty
       end
       it 'checked for unset environment features for m1m4' do
-        expect(alt_env_finder).to have_received(:find).with(m1m2, m2, [m1m4])
+        expect(alt_env_finder).to have_received(:find).with(m1m2, m2, [m1m4], grammar)
       end
     end
   end
