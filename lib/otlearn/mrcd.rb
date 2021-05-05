@@ -2,7 +2,6 @@
 
 # Author: Bruce Tesar
 
-require 'win_lose_pair'
 require 'otlearn/mrcd_single'
 
 module OTLearn
@@ -45,15 +44,14 @@ module OTLearn
     #   Mrcd.new(word_list, erc_list, selector) -> mrcd
     #--
     # * single_mrcd_class - dependency injection parameter for testing.
-    def initialize(word_list, erc_list, selector,
-                   single_mrcd_class: OTLearn::MrcdSingle)
+    def initialize(word_list, erc_list, selector, single_mrcd_class: nil)
       # Make working copies of the word and ERC lists.
       @word_list = word_list.dup
       @prior_ercs = erc_list.dup.freeze
       @erc_list = erc_list.dup
       @added_pairs = []
       @selector = selector # loser selector
-      @single_mrcd_class = single_mrcd_class
+      @single_mrcd_class = single_mrcd_class || MrcdSingle
       run_mrcd
     end
 

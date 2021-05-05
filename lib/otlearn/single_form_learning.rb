@@ -8,9 +8,9 @@ require 'otlearn/paradigm_erc_learning'
 require 'otlearn/grammar_test'
 
 module OTLearn
-  # This processes all of the outputs in the grammatical output list, one at a
-  # time in order, with respect to a grammar. Any results of learning are
-  # realized as side effect changes to the grammar.
+  # This processes all of the outputs in the grammatical output list, one
+  # at a time in order, with respect to a grammar. Any results of learning
+  # are realized as side effect changes to the grammar.
   class SingleFormLearning
     # Paradigmatic ERC learner. Default value: ParadigmErcLearning.new
     attr_accessor :para_erc_learner
@@ -23,7 +23,7 @@ module OTLearn
 
     # Creates a new single form learner.
     # :call-seq:
-    #   SingleFormLearning.new -> learner
+    #   new -> learner
     def initialize
       # Set default values for external dependencies.
       @para_erc_learner = ParadigmErcLearning.new

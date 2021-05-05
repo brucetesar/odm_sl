@@ -42,14 +42,14 @@ module OTLearn
     attr_accessor :testing_comparer
 
     # Provides methods for creation of common components.
-    include OTLearn::FactoryLearnTestMixin
+    include FactoryLearnTestMixin
 
     # Returns a new SingleFormLearningFactory object.
     # :call-seq:
-    #   SingleFormLearningFactory.new -> factory
+    #   new -> factory
     def initialize; end
 
-    # Returns an OTLearn::SingleFormLearning object matching
+    # Returns a SingleFormLearning object matching
     # the factory-specified settings.
     #
     # Raises a RuntimeError if any of the required components

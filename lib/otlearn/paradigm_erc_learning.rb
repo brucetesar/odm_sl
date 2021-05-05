@@ -13,7 +13,8 @@ module OTLearn
     # The ERC learner. Default: ErcLearning.new
     attr_accessor :erc_learner
 
-    # The object that searches the given word list. Default: WordSearch.new
+    # The object that searches the given word list.
+    # Default: WordSearch.new
     attr_accessor :word_searcher
 
     # Returns a new paradigm ERC learner.

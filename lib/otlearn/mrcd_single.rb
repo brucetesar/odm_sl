@@ -23,26 +23,22 @@ module OTLearn
     attr_reader :winner
 
     # Returns a new MrcdSingle object.
-    #
     # ==== Parameters
-    #
     # * winner - the candidate the learner is attempting to make optimal.
     # * erc_list - the ERC list being tested. This list is first
     #   duplicated internally, and so is not modified; the internal
     #   duplicate may have additional winner-loser pairs added to it.
     # * selector - the loser selector (given a winner and an ERC list).
-    #
     # :call-seq:
-    #   MrcdSingle.new(winner, erc_list, selector) -> mrcdsingle
+    #   new(winner, erc_list, selector) -> mrcdsingle
     #--
-    # * wl_pair_class - dependency injection parameter for testing.
-    #   MrcdSingle.new(winner, erc_list, selector, wl_pair_class: my_pair_class) -> mrcdsingle
-    def initialize(winner, erc_list, selector, wl_pair_class: WinLosePair)
+    # wl_pair_class is a dependency injection for testing.
+    def initialize(winner, erc_list, selector, wl_pair_class: nil)
       @winner = winner
       @erc_list = erc_list.dup
       @added_pairs = []
       @selector = selector
-      @wl_pair_class = wl_pair_class
+      @wl_pair_class = wl_pair_class || WinLosePair
       run_mrcd_single
     end
 

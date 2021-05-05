@@ -13,7 +13,7 @@ module OTGeneric
 
     # Returns a new WinnersReader object.
     # :call-seq:
-    #   WinnersReader.new -> reader
+    #   new -> reader
     def initialize
       @competitions = []
     end
@@ -39,12 +39,13 @@ module OTGeneric
     def find_competition_for_input(input, competitions)
       match_comp = competitions.find { |comp| comp[0].input == input }
       if match_comp.nil?
-        msg = "Winner has input #{input}, but there is no such competition."
+        msg =
+          "Winner has input #{input}, but there is no such competition."
         raise msg
       end
       match_comp
     end
-    protected :find_competition_for_input
+    private :find_competition_for_input
 
     # Find the candidate corresponding to the _output_.
     # Return the candidate.
@@ -53,12 +54,13 @@ module OTGeneric
     def find_candidate_for_output(output, competition)
       winner = competition.find { |cand| cand.output == output }
       if winner.nil?
-        msg1 = "Winner has input #{competition[0].input} output #{output},"
-        msg2 = 'but there is no such candidate.'
-        raise "#{msg1} #{msg2}"
+        msg =
+          "Winner has input #{competition[0].input} output #{output}," \
+          ' but there is no such candidate.'
+        raise msg
       end
       winner
     end
-    protected :find_candidate_for_output
+    private :find_candidate_for_output
   end
 end

@@ -12,9 +12,8 @@ module OTGeneric
     attr_accessor :constraints
 
     # Returns a new CandidateReader object.
-    #
     # :call-seq:
-    #   CandidateReader.new -> reader
+    #   new -> reader
     def initialize
       # Initialize the list of constraints to an empty array.
       @constraints = []
@@ -41,33 +40,33 @@ module OTGeneric
       cand
     end
 
-    # Verify the number of violation cols matches the number of constraints.
-    # Raise a RuntimeError if they don't.
+    # Verify the number of violation cols matches the number of
+    # constraints. Raise a RuntimeError if they don't.
     def check_violation_col_count(row)
       row_viols = row.size - 2
       con_count = @constraints.size
       if row_viols != con_count
-        msg = "Candidate /#{row[0]}/[#{row[1]}]" +
-              " has #{row_viols} violation counts" +
+        msg = "Candidate /#{row[0]}/[#{row[1]}]" \
+              " has #{row_viols} violation counts" \
               ", headers have #{con_count} constraints."
         raise(msg)
       end
       true
     end
-    protected :check_violation_col_count
+    private :check_violation_col_count
 
     # Verify that the violation value is valid (a positive integer).
     # Raise a RuntimeError if it is not.
     def check_violation_value(viol_value, con, row)
       unless valid_violation_value?(viol_value)
-        msg1 = "Candidate /#{row[0]}/[#{row[1]}]"
-        msg2 = "has non-numeric violation value #{viol_value}"
-        msg3 = "for constraint #{con}."
-        raise "#{msg1} #{msg2} #{msg3}"
+        msg = "Candidate /#{row[0]}/[#{row[1]}]" \
+              " has non-numeric violation value #{viol_value}" \
+              " for constraint #{con}."
+        raise(msg)
       end
       true
     end
-    protected :check_violation_value
+    private :check_violation_value
 
     # Returns true if the string _viol_value_ contains only digits.
     # Returns false otherwise.
@@ -76,6 +75,6 @@ module OTGeneric
 
       true
     end
-    protected :valid_violation_value?
+    private :valid_violation_value?
   end
 end

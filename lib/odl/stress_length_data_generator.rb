@@ -35,12 +35,11 @@ module ODL
     # The named parameters _lexicon_class_ and _morphword_class_ are
     # dependency injections used for testing.
     def initialize(lexentry_generator, comp_generator,
-                   lexicon_class: Lexicon, morphword_class: MorphWord)
+                   lexicon_class: nil, morphword_class: nil)
       @lexentry_generator = lexentry_generator
       @comp_generator = comp_generator
-      # Dependency injection instance variables
-      @lexicon_class = lexicon_class
-      @morphword_class = morphword_class
+      @lexicon_class = lexicon_class || Lexicon
+      @morphword_class = morphword_class || MorphWord
     end
 
     # Returns a list of competitions. The lexical entries corresponding

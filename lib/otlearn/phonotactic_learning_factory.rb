@@ -42,11 +42,11 @@ module OTLearn
     attr_accessor :testing_comparer
 
     # Provides methods for creation of common components.
-    include OTLearn::FactoryLearnTestMixin
+    include FactoryLearnTestMixin
 
     # Returns a new PhonotacticLearningFactory object.
     # :call-seq:
-    #   PhonotacticLearningFactory.new -> factory
+    #   new -> factory
     def initialize; end
 
     # Returns an OTLearn::PhonotacticLearning object matching

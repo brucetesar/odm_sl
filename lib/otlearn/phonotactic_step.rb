@@ -14,14 +14,15 @@ module OTLearn
     attr_reader :test_result
 
     # Returns a new step object for phonotactic learning.
-    # * +test_result+ - the test result run at the end of the step.
-    # * +changed+ - a boolean indicating of the step changed the grammar.
+    # === Parameters
+    # * _test_result_ - the test result run at the end of the step.
+    # * _changed_ - a boolean indicating of the step changed the grammar.
     # :call-seq:
-    #   PhonotacticStep.new(test_result, changed) -> step
+    #   new(test_result, changed) -> step
     def initialize(test_result, changed)
       @test_result = test_result
       @changed = changed
-      @step_type = OTLearn::PHONOTACTIC
+      @step_type = PHONOTACTIC
     end
 
     # Returns true if the grammar was changed by the learning step;

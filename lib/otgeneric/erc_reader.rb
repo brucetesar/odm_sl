@@ -15,9 +15,7 @@ module OTGeneric
     # Returns a new ErcReader object.
     # :call-seq:
     #   ErcReader.new -> reader
-    def initialize
-      super
-    end
+    def initialize; end
 
     # Takes an array of column headers _headers_, and an array of arrays
     # _data_, and returns an equivalent ErcList of ERCs.
@@ -49,7 +47,7 @@ module OTGeneric
       end
       constraints
     end
-    protected :convert_headers_to_constraints
+    private :convert_headers_to_constraints
 
     # Converts each data row to an Erc object. Returns an ErcList of
     # the ERCs.
@@ -70,6 +68,6 @@ module OTGeneric
       end
       erc_list
     end
-    protected :convert_data_to_ercs
+    private :convert_data_to_ercs
   end
 end

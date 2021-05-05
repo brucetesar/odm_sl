@@ -24,27 +24,28 @@ module OTLearn
   # Reference: Prince & Tesar 2004, "Learning phonotactic distributions".
   class RankingBiasSomeLow
     # Returns a new ranking bias object.
-    # The parameter +low_constraint_type+ should respond to the method
-    # #member(constraint), returning true of the constraint is a member
-    # of the class of constraints to be low-ranked.
+    # === Parameters
+    # * _low_constraint_type_ - should respond to the method
+    #   #member(constraint), returning true of the constraint is a member
+    #   of the class of constraints to be low-ranked.
     # :call-seq:
-    #   RankingBiasSomeLow.new(low_type) -> bias
+    #   new(low_type) -> bias
     def initialize(low_constraint_type)
       @low_constraint_type = low_constraint_type
     end
 
-    # Returns true of +con+ is a constraint that should be low-ranked.
+    # Returns true of _con_ is a constraint that should be low-ranked.
     def low_constraint_type?(con)
       @low_constraint_type.member?(con)
     end
 
-    # Returns true if the +con+ is active with respect to +ercs+, meaning
+    # Returns true if the _con_ is active with respect to _ercs_, meaning
     # it prefers the winner in at least one of the ERCs.
     def active?(con, ercs)
       ercs.any? { |erc| erc.w?(con) }
     end
 
-    # Returns an array of constraints from among those in +rankable+
+    # Returns an array of constraints from among those in _rankable_
     # that are to be ranked next according to the ranking bias.
     def choose_cons_to_rank(rankable, rcd)
       # Get the current unranked constraints and unexplained ercs
@@ -80,8 +81,8 @@ module OTLearn
       end
       # find the pair with the highest num_freed
       best_pair = freed_high.max { |a, b| a[1] <=> b[1] }
-      # If none of the active constraints frees any high kind, return all of
-      # the low active constraints.
+      # If none of the active constraints frees any high kind, return all
+      # of the low active constraints.
       return low_active if (best_pair[1]).zero?
 
       [best_pair[0]] # return a list with the constraint of the best pair
@@ -89,7 +90,7 @@ module OTLearn
     protected :max_freed_high
 
     # Counts the number of high-kind constraints freed up by ranking
-    # +target_con+ next, and returns that number.
+    # _target_con_ next, and returns that number.
     def count_freed_high(target_con, unranked_p, unex_ercs_p)
       stratum = [target_con]
       unex_ercs = unex_ercs_p
@@ -97,7 +98,8 @@ module OTLearn
       unranked = unranked_p
       ranked = []
       total_freed_high = 0
-      # repeat RCD-type passes until no rankable high-kind constraints remain.
+      # repeat RCD-type passes until no rankable high-kind constraints
+      # remain.
       loop do
         ranked, unranked = Rcd.rank_next_stratum(stratum, ranked, unranked)
         ex_ercs, unex_ercs =

@@ -37,7 +37,7 @@ module ODL
     end
 
     # Generates the possible values of _feature_, and then creates
-    # a separate copy of each element of el_list for each value of
+    # a separate copy of each element of _el_list_ for each value of
     # _feature_, with the element's instance of _feature_ set to
     # its corresponding feature value.
     # Returns an array of the constructed elements.

@@ -14,10 +14,8 @@ module OTGeneric
     #   CompListReader.new -> reader
     #--
     # cand_reader is a dependency injection, used for testing.
-    #++
     def initialize(cand_reader: nil)
-      @cand_reader = cand_reader
-      @cand_reader ||= OTGeneric::CandidateReader.new
+      @cand_reader = cand_reader || CandidateReader.new
     end
 
     # Takes an array of column headers _headers_, and an array of arrays
@@ -49,7 +47,7 @@ module OTGeneric
       end
       constraints
     end
-    protected :convert_headers_to_constraints
+    private :convert_headers_to_constraints
 
     # Converts each row of _data_ to a Candidate object.
     # Returns an array of the candidates.
@@ -60,6 +58,6 @@ module OTGeneric
       end
       candidates
     end
-    protected :convert_data_to_candidates
+    private :convert_data_to_candidates
   end
 end

@@ -11,20 +11,19 @@ module OTLearn
   class SingleFormLearningImageMaker
     # Constructs a single form learning image from a single form learning
     # step.
-    #--
-    # +grammar_test_image_maker+ and +sheet_class+ are dependency injections
-    # used for testing.
-    #++
     # :call-seq:
-    #   SingleFormLearningImageMaker.new -> image_maker
-    def initialize(grammar_test_image_maker: GrammarTestImageMaker.new,
-                   sheet_class: Sheet)
-      @grammar_test_image_maker = grammar_test_image_maker
-      @sheet_class = sheet_class
+    #   new -> image_maker
+    #--
+    # grammar_test_image_maker and sheet_class are dependency injections
+    # used for testing.
+    def initialize(grammar_test_image_maker: nil, sheet_class: nil)
+      @grammar_test_image_maker = grammar_test_image_maker || \
+                                  GrammarTestImageMaker.new
+      @sheet_class = sheet_class || Sheet
     end
 
-    # Constructs the image from the single form learning step.
-    # Returns a sheet containing the image of the single form learning step.
+    # Constructs the image from the single form learning step. Returns
+    # a sheet containing the image of the single form learning step.
     # :call-seq:
     #   get_image(sf_step) -> sheet
     def get_image(sf_step)

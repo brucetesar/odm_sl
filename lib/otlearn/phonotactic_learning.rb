@@ -12,10 +12,10 @@ module OTLearn
   # changes to the grammar.
   class PhonotacticLearning
     # The learner for additional ERCs (ranking information).
-    # Default value is OTLearn::ErcLearning.new.
+    # Default value is ErcLearning.new.
     attr_accessor :erc_learner
 
-    # The grammar testing object. Default value is OTLearn::GrammarTest.new.
+    # The grammar testing object. Default value is GrammarTest.new.
     attr_accessor :grammar_tester
 
     # Creates a phonotactic learning object.
@@ -36,8 +36,9 @@ module OTLearn
       PhonotacticStep.new(test_result, mrcd_result.any_change?)
     end
 
-    # Parse the outputs into winners, with set input features matching their
-    # lexicon values, and unset features assigned values matching the output.
+    # Parse the outputs into winners, with set input features matching
+    # their lexicon values, and unset features assigned values matching
+    # the output.
     def construct_winners(output_list, grammar)
       output_list.map do |out|
         grammar.parse_output(out).match_input_to_output!

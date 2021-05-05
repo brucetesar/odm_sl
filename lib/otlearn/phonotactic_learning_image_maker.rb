@@ -11,16 +11,15 @@ module OTLearn
   class PhonotacticLearningImageMaker
     # Constructs a phonotactic learning image from a phonotactic learning
     # step.
-    #--
-    # +grammar_test_image_maker+ and +sheet_class+ are dependency injections
-    # used for testing.
-    #++
     # :call-seq:
-    #   PhonotacticLearningImageMaker.new -> image_maker
-    def initialize(grammar_test_image_maker: GrammarTestImageMaker.new,
-                   sheet_class: Sheet)
-      @grammar_test_image_maker = grammar_test_image_maker
-      @sheet_class = sheet_class
+    #   new -> image_maker
+    #--
+    # grammar_test_image_maker and sheet_class are dependency injections
+    # used for testing.
+    def initialize(grammar_test_image_maker: nil, sheet_class: nil)
+      @grammar_test_image_maker = grammar_test_image_maker || \
+                                  GrammarTestImageMaker.new
+      @sheet_class = sheet_class || Sheet
     end
 
     # Returns a sheet containing the image of the phonotactic learning step.
