@@ -21,9 +21,8 @@ RSpec.describe 'OTLearn::ContrastPairLearning' do
   before(:example) do
     allow(output_list).to receive(:map).and_return(winner_list)
     allow(para_erc_learner).to receive(:run)
-    allow(cp_gen_class).to receive(:new).and_return(cp_gen)
-    allow(cp_gen).to receive(:outputs=).with(output_list)
-    allow(cp_gen).to receive(:grammar=).with(grammar)
+    allow(cp_gen_class).to receive(:new).with(output_list, grammar)\
+                                        .and_return(cp_gen)
     allow(cp_gen).to receive(:grammar_tester=).with(grammar_tester)
     allow(cp_gen).to receive(:to_enum).and_return cp_enum
     allow(grammar_tester).to receive(:run).and_return(test_result)

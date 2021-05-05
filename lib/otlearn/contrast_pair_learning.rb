@@ -92,11 +92,9 @@ module OTLearn
 
     # Returns an Enumerator that iterates over valid contrast pairs,
     # defined from _output_list_ and _grammar_.
-    def construct_cp_enumerator(output_list, grammar)
-      cp_generator = @cp_gen_class.new
+    def construct_cp_enumerator(outputs, grammar)
+      cp_generator = @cp_gen_class.new(outputs, grammar)
       cp_generator.grammar_tester = grammar_tester
-      cp_generator.outputs = output_list
-      cp_generator.grammar = grammar
       cp_generator.to_enum
     end
     private :construct_cp_enumerator
