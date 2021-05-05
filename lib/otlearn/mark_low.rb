@@ -6,8 +6,9 @@ module OTLearn
   # Represents the class of markedness constraints. Designed to be used
   # with RankingBiasSomeLow for biased constraint demotion.
   class MarkLow
+    # Returns a new MarkLow object.
     # :call-seq:
-    #   MarkLow.new -> mark_low
+    #   new -> mark_low
     def initialize; end
 
     # Returns true if _constraint_ is a markedness constraint,

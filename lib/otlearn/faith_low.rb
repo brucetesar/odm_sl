@@ -6,8 +6,9 @@ module OTLearn
   # Represents the class of faithfulness constraints. Designed to be used
   # with RankingBiasSomeLow for biased constraint demotion.
   class FaithLow
+    # Returns a new FaithLow object.
     # :call-seq:
-    #   FaithLow.new -> faith_low
+    #   new -> faith_low
     def initialize; end
 
     # Returns true if _constraint_ is a faithfulness constraint,
