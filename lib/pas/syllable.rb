@@ -1,13 +1,11 @@
-# encoding: UTF-8
-#
-# Author: Bruce Tesar
-#
- 
-require_relative 'stress'
-require_relative 'length'
+# frozen_string_literal: true
+
+# Author: Morgan Moyer / Bruce Tesar
+
+require 'pas/stress'
+require 'pas/length'
 
 module PAS
-
   # A syllable for the PAS system has two features, stress and length. It also
   # can have an affiliated morpheme.
   #
@@ -17,25 +15,29 @@ module PAS
   # allowing other routines to work with syllables without knowing in advance
   # how many or what types of features they have.
   class Syllable
+    # Returns the morpheme that this syllable is affiliated with.
+    attr_reader :morpheme
 
     # Returns a syllable, initialized to the parameters if provided. Otherwise,
     # returns a syllable with unset features, and an empty string for the
     # morpheme.
+    # :call-seq:
+    #   new -> syllable
     def initialize
       @stress = Stress.new
       @length = Length.new
-      @morpheme = "" # label of the morpheme this syllable is affiliated with.
+      @morpheme = '' # label of the morpheme this syllable is affiliated with.
     end
 
     # A duplicate has copies of the features, so that they may be altered
     # independently of the original syllable's features.
     def dup
       dup_syl = self.class.new
-      dup_syl.set_morpheme(self.morpheme)
+      dup_syl.set_morpheme(morpheme)
       each_feature do |f|
-        dup_syl.set_feature(f.type,f.value)
+        dup_syl.set_feature(f.type, f.value)
       end
-      return dup_syl
+      dup_syl
     end
 
     # Protected accessors, only used for #==()
@@ -45,15 +47,16 @@ module PAS
     # Returns true if this syllable matches _other_ in the values
     # the stress feature, the length feature, and morpheme identity.
     def ==(other)
-      return false unless @stress==other.stress
-      return false unless @length==other.length
-      return false unless @morpheme==other.morpheme
-      return true
+      return false unless @stress == other.stress
+      return false unless @length == other.length
+      return false unless @morpheme == other.morpheme
+
+      true
     end
 
     # The same as ==(other).
     def eql?(other)
-      self==other
+      self == other
     end
 
     # Returns true if the syllable's stress feature has the value
@@ -88,11 +91,6 @@ module PAS
     # Returns true is the length feature is unset.
     def length_unset?
       @length.unset?
-    end
-
-    # Returns the morpheme that this syllable is affiliated with.
-    def morpheme
-      @morpheme
     end
 
     # Sets the syllable's length feature to the value long.
@@ -141,17 +139,17 @@ module PAS
     # Thus, an unstressed long syllable would be represented "s:", while
     # a short syllable with an unset stress feature would be represented "?.".
     def to_s
-      stress_s = case
-      when main_stress? then "S"
-      when unstressed? then "s"
-      when stress_unset? then "?"
-      end
-      length_s = case
-      when short? then "."
-      when long? then ":"
-      when length_unset? then "?"
-      end
-      return stress_s + length_s
+      stress_s = if main_stress? then 'S'
+                 elsif unstressed? then 's'
+                 elsif stress_unset? then '?'
+                 else 'stress_nodef'
+                 end
+      length_s = if short? then '.'
+                 elsif long? then ':'
+                 elsif length_unset? then '?'
+                 else 'length_nodef'
+                 end
+      "#{stress_s}#{length_s}"
     end
 
     # Constructs a string representation of the syllable suitable for use
@@ -164,29 +162,26 @@ module PAS
     #   an unaccented a instead of s for an unstressed vowel.
     # * It uses no symbol to represent short vowel length instead of ".".
     def to_gv
-      base = "morpheme_type_not_defined"
-      if morpheme.root? then
-        base = "p"
-      elsif morpheme.suffix? then
-        base = "k"
-      elsif morpheme.prefix? then
-        base = "t"
-      end
-      stress_s = case
-      when main_stress? then "á"
-      when unstressed? then "a"
-      when stress_unset? then "?"
-      end
-      length_s = case
-      when short? then ""
-      when long? then ":"
-      when length_unset? then "?"
-      end
-      return base + stress_s + length_s
+      base = if morpheme.root? then 'p'
+             elsif morpheme.suffix? then 'k'
+             elsif morpheme.prefix? then 't'
+             else 'morpheme_type_not_defined'
+             end
+      stress_s = if main_stress? then 'á'
+                 elsif unstressed? then 'a'
+                 elsif stress_unset? then '?'
+                 else 'stress_type_not_defined'
+                 end
+      length_s = if short? then ''
+                 elsif long? then ':'
+                 elsif length_unset? then '?'
+                 else 'length_type_not_defined'
+                 end
+      "#{base}#{stress_s}#{length_s}"
     end
 
     # Iterator over the features of the syllable.
-    def each_feature() # :yields: feature
+    def each_feature # :yields: feature
       yield @length
       yield @stress
     end
@@ -194,23 +189,25 @@ module PAS
     # Returns the syllable's _type_ feature. Raises an exception if the
     # syllable does not have a feature of type _type_.
     def get_feature(type)
-      each_feature{|f| return f if f.type==type}
-      raise "PAS::Syllable#get_feature(): parameter #{type.to_s} is not a valid feature type."
+      each_feature { |f| return f if f.type == type }
+      raise "PAS::Syllable#get_feature(): parameter #{type}" \
+            ' is not a valid feature type.'
     end
 
     # Sets the _feature_type_ feature of the syllable to _feature_value_.
     # Returns a reference to the syllable's feature.
-    # Raises an exception if _feature_type_ is not a valid type.
+    # Raises an exception if _feature_value_ is not a valid value.
     def set_feature(feature_type, feature_value)
-      syl_feat = get_feature(feature_type) # raises exception if invalid type
+      syl_feat = get_feature(feature_type)
       # raise an exception if invalid value
-      unless syl_feat.valid_value?(feature_value) or feature_value==Feature::UNSET
-        raise "PAS::Syllable#set_feature invalid feature value parameter: #{feature_value}"
+      unless syl_feat.valid_value?(feature_value) || \
+             feature_value == Feature::UNSET
+        msg = 'PAS::Syllable#set_feature invalid feature value' \
+              " parameter: #{feature_value}"
+        raise msg
       end
       syl_feat.value = feature_value
-      return syl_feat
+      syl_feat
     end
-
-  end # class Syllable
-
-end # module PAS
+  end
+end
