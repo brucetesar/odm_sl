@@ -5,42 +5,38 @@
 require 'otlearn/otlearn'
 require 'otlearn/contrast_pair_learning'
 
-RSpec.describe OTLearn::ContrastPairLearning do
+RSpec.describe 'OTLearn::ContrastPairLearning' do
   let(:winner_list) { double('winner_list') }
   let(:output_list) { double('output_list') }
   let(:grammar) { double('grammar') }
-  let(:prior_result) { double('prior_result') }
-  let(:otlearn_module) { double('OTLearn module') }
+  let(:cp_gen_class) { double('cp_generator_class') }
+  let(:cp_gen) { double('cp_generator') }
+  let(:cp_enum) { double('cp_enumerator') }
   let(:first_cp) { double('first_cp') }
   let(:second_cp) { double('second_cp') }
   let(:grammar_tester) { double('grammar_tester') }
   let(:test_result) { double('test_result') }
   let(:para_erc_learner) { double('para_erc_learner') }
   let(:feature_learner) { double('feature_learner') }
-  before(:each) do
-    allow(grammar).to receive(:system)
+  before(:example) do
     allow(output_list).to receive(:map).and_return(winner_list)
     allow(para_erc_learner).to receive(:run)
+    allow(cp_gen_class).to receive(:new).and_return(cp_gen)
+    allow(cp_gen).to receive(:outputs=).with(output_list)
+    allow(cp_gen).to receive(:grammar=).with(grammar)
+    allow(cp_gen).to receive(:grammar_tester=).with(grammar_tester)
+    allow(cp_gen).to receive(:to_enum).and_return cp_enum
+    allow(grammar_tester).to receive(:run).and_return(test_result)
+    allow(test_result).to receive(:all_correct?).and_return(false)
   end
 
   context 'with first pair informative' do
-    before(:each) do
-      # The block defines the internal behavior of the test double.
-      # The method needs to call #yield on the parameter +result+ passed in
-      # by Enumerator.new().
-      allow(otlearn_module).to receive(:generate_contrast_pair) \
-      do |result, _win_list, _grammar, _p_result|
-        result.yield first_cp
-      end
-      # allow(otlearn_module).to\
-      #   receive(:set_uf_values).with(first_cp, grammar).and_return(['feat1'])
+    before(:example) do
+      allow(cp_enum).to receive(:next).and_return(first_cp)
       allow(feature_learner).to\
         receive(:run).with(first_cp, grammar).and_return(['feat1'])
-      allow(grammar_tester).to\
-        receive(:run).and_return(prior_result, test_result)
-      allow(test_result).to receive(:all_correct?).and_return(false)
-      cp_learner = OTLearn::ContrastPairLearning\
-                   .new(learning_module: otlearn_module)
+      cp_learner =
+        OTLearn::ContrastPairLearning.new(cp_gen_class: cp_gen_class)
       cp_learner.para_erc_learner = para_erc_learner
       cp_learner.feature_learner = feature_learner
       cp_learner.grammar_tester = grammar_tester
@@ -56,8 +52,8 @@ RSpec.describe OTLearn::ContrastPairLearning do
     it 'changes the grammar' do
       expect(@cp_step).to be_changed
     end
-    it 'runs a grammar test before and after learning' do
-      expect(grammar_tester).to have_received(:run).exactly(2).times
+    it 'runs a grammar test after learning' do
+      expect(grammar_tester).to have_received(:run).exactly(1).times
     end
     it 'gives the grammar test result' do
       expect(@cp_step.test_result).to eq test_result
@@ -70,24 +66,14 @@ RSpec.describe OTLearn::ContrastPairLearning do
     end
   end
 
-  context 'with one uniformative pair' do
-    before(:each) do
-      # The block defines the internal behavior of the test double.
-      # The method needs to call #yield on the parameter +result+ passed in
-      # by Enumerator.new().
-      allow(otlearn_module).to receive(:generate_contrast_pair) \
-      do |result, _win_list, _grammar, _p_result|
-        result.yield first_cp
-      end
-      # allow(otlearn_module).to\
-      #   receive(:set_uf_values).with(first_cp, grammar).and_return([])
+  context 'with one uninformative pair' do
+    before(:example) do
+      allow(cp_enum).to \
+        receive(:next).and_return(first_cp).and_raise(StopIteration)
       allow(feature_learner).to\
         receive(:run).with(first_cp, grammar).and_return([])
-      allow(grammar_tester).to\
-        receive(:run).and_return(prior_result, test_result)
-      allow(test_result).to receive(:all_correct?).and_return(false)
-      cp_learner = OTLearn::ContrastPairLearning\
-                   .new(learning_module: otlearn_module)
+      cp_learner =
+        OTLearn::ContrastPairLearning.new(cp_gen_class: cp_gen_class)
       cp_learner.para_erc_learner = para_erc_learner
       cp_learner.feature_learner = feature_learner
       cp_learner.grammar_tester = grammar_tester
@@ -102,8 +88,8 @@ RSpec.describe OTLearn::ContrastPairLearning do
     it 'does not change the grammar' do
       expect(@cp_step).not_to be_changed
     end
-    it 'runs a grammar test before and after learning' do
-      expect(grammar_tester).to have_received(:run).exactly(2).times
+    it 'runs a grammar test after learning' do
+      expect(grammar_tester).to have_received(:run).exactly(1).times
     end
     it 'gives the grammar test result' do
       expect(@cp_step.test_result).to eq test_result
@@ -114,30 +100,12 @@ RSpec.describe OTLearn::ContrastPairLearning do
   end
 
   context 'with the second pair informative' do
-    before(:each) do
-      # The block defines the internal behavior of the test double.
-      # The method needs to call #yield on the parameter +result+ passed in
-      # by Enumerator.new().
-      allow(otlearn_module).to receive(:generate_contrast_pair) \
-      do |result, _win_list, _grammar, _p_result|
-        result.yield first_cp
-      end
-      allow(otlearn_module).to receive(:generate_contrast_pair) \
-      do |result, _win_list, _grammar, _p_result|
-        result.yield second_cp
-      end
-      allow(otlearn_module).to\
-        receive(:set_uf_values).with(first_cp, grammar).and_return([])
-      # allow(otlearn_module).to\
-      #   receive(:set_uf_values).with(second_cp, grammar)\
-      #                          .and_return(['feat1'])
+    before(:example) do
+      allow(cp_enum).to receive(:next).and_return(second_cp)
       allow(feature_learner).to\
         receive(:run).with(second_cp, grammar).and_return(['feat1'])
-      allow(grammar_tester).to\
-        receive(:run).and_return(prior_result, test_result)
-      allow(test_result).to receive(:all_correct?).and_return(false)
-      cp_learner = OTLearn::ContrastPairLearning\
-                   .new(learning_module: otlearn_module)
+      cp_learner =
+        OTLearn::ContrastPairLearning.new(cp_gen_class: cp_gen_class)
       cp_learner.para_erc_learner = para_erc_learner
       cp_learner.feature_learner = feature_learner
       cp_learner.grammar_tester = grammar_tester
@@ -153,8 +121,8 @@ RSpec.describe OTLearn::ContrastPairLearning do
     it 'changes the grammar' do
       expect(@cp_step).to be_changed
     end
-    it 'runs a grammar test before and after learning' do
-      expect(grammar_tester).to have_received(:run).exactly(2).times
+    it 'runs a grammar test after learning' do
+      expect(grammar_tester).to have_received(:run).exactly(1).times
     end
     it 'gives the grammar test result' do
       expect(@cp_step.test_result).to eq test_result
