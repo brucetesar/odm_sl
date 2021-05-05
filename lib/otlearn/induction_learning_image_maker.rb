@@ -13,20 +13,18 @@ module OTLearn
   # of an Induction learning step.
   class InductionLearningImageMaker
     # Returns a new image maker for Induction Learning.
-    #--
-    # +fsf_image_maker+, +mmr_image_maker+, +grammar_test_image_maker+
-    #  and +sheet_class+ are dependency injections used for testing.
-    #++
     # :call-seq:
     #   InductionLearningImageMaker.new -> image_maker
-    def initialize(fsf_image_maker: FsfImageMaker.new,
-                   mmr_image_maker: MmrImageMaker.new,
-                   grammar_test_image_maker: GrammarTestImageMaker.new,
-                   sheet_class: Sheet)
-      @fsf_image_maker = fsf_image_maker
-      @mmr_image_maker = mmr_image_maker
-      @grammar_test_image_maker = grammar_test_image_maker
-      @sheet_class = sheet_class
+    #--
+    # fsf_image_maker, mmr_image_maker, grammar_test_image_maker
+    #  and sheet_class are dependency injections used for testing.
+    def initialize(fsf_image_maker: nil, mmr_image_maker: nil,
+                   grammar_test_image_maker: nil, sheet_class: nil)
+      @fsf_image_maker = fsf_image_maker || FsfImageMaker.new
+      @mmr_image_maker = mmr_image_maker || MmrImageMaker.new
+      @grammar_test_image_maker = grammar_test_image_maker || \
+                                  GrammarTestImageMaker.new
+      @sheet_class = sheet_class || Sheet
     end
 
     # Returns a sheet containing the image of the induction learning step.

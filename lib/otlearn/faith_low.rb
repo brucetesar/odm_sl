@@ -10,7 +10,7 @@ module OTLearn
     #   FaithLow.new -> faith_low
     def initialize; end
 
-    # Returns true if +constraint+ is a faithfulness constraint,
+    # Returns true if _constraint_ is a faithfulness constraint,
     # false otherwise.
     def member?(constraint)
       constraint.faithfulness?

@@ -11,8 +11,8 @@ module OTLearn
     # The grammar produced by learning.
     attr_reader :grammar
 
-    # Returns a learning result, containing +step_list+, a list of
-    # the learning steps taken in the simulation, and +grammar+,
+    # Returns a learning result, containing _step_list_, a list of
+    # the learning steps taken in the simulation, and _grammar_,
     # the grammar that learning produced.
     def initialize(step_list, grammar)
       @step_list = step_list

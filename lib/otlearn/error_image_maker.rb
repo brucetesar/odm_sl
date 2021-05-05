@@ -10,8 +10,8 @@ module OTLearn
     # Returns a new error image maker.
     # :call-seq:
     #   ErrorImageMaker.new -> image_maker
-    def initialize(sheet_class: Sheet)
-      @sheet_class = sheet_class
+    def initialize(sheet_class: nil)
+      @sheet_class = sheet_class || Sheet
     end
 
     # Returns a sheet containing an image of an error step.

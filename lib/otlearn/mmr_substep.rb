@@ -21,7 +21,7 @@ module OTLearn
     # :call-seq:
     #   MmrSubstep.new(new_pairs, failed_winner, change_flag)
     def initialize(new_pairs, failed_winner, change_flag)
-      @subtype = OTLearn::MAX_MISMATCH_RANKING
+      @subtype = MAX_MISMATCH_RANKING
       @newly_added_wl_pairs = new_pairs
       @failed_winner = failed_winner
       @changed = change_flag

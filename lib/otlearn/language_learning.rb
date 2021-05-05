@@ -55,14 +55,9 @@ module OTLearn
     #--
     # warn_output is a dependency injection used for testing. It is
     # the IO channel to which warnings are written (normally $stderr).
-    def initialize(warn_output: $stderr)
-      # Initialize the learning step object variables.
-      @ph_learner = nil
-      @sf_learner = nil
-      @cp_learner = nil
-      @in_learner = nil
+    def initialize(warn_output: nil)
       # The default output channel for warnings is $stderr.
-      @warn_output = warn_output
+      @warn_output = warn_output || $stderr
     end
 
     # Runs the learning simulation, and returns a learning result object.
@@ -121,13 +116,13 @@ module OTLearn
 
     # Checks each of the learner components. For each component,
     # if a learner object has not been assigned externally,
-    # assign the default. Returns true.
+    # assign the default. Returns nil.
     def optional_defaults
       @ph_learner ||= PhonotacticLearning.new
       @sf_learner ||= SingleFormLearning.new
       @cp_learner ||= ContrastPairLearning.new
       @in_learner ||= InductionLearning.new
-      true # arbitrary return value
+      nil # arbitrary return value
     end
     private :optional_defaults
 

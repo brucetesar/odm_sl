@@ -24,7 +24,7 @@ module OTLearn
     # :call-seq:
     #   #FsfSubstep.new(newly_set_features, failed_winner) -> substep
     def initialize(newly_set_features, failed_winner)
-      @subtype = OTLearn::FEWEST_SET_FEATURES
+      @subtype = FEWEST_SET_FEATURES
       @newly_set_features = newly_set_features
       @failed_winner = failed_winner
     end

@@ -20,13 +20,13 @@ module OTLearn
     #   ErcLearning.new -> learner
     #--
     # mrcd_class is a dependency injection used for testing.
-    def initialize(mrcd_class: Mrcd)
+    def initialize(mrcd_class: nil)
       @loser_selector = nil
-      @mrcd_class = mrcd_class
+      @mrcd_class = mrcd_class || Mrcd
     end
 
-    # Runs ERC learning, returning an Mrcd object based on +word_list+
-    # and +grammar+.
+    # Runs ERC learning, returning an Mrcd object based on _word_list_
+    # and _grammar_.
     # :call-seq:
     #   run(word_list, grammar) -> mrcd
     def run(word_list, grammar)

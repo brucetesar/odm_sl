@@ -8,12 +8,12 @@ require 'feature_value_pair'
 # the values of feature instances in various ways.
 class FeatureValueCombiner
   # Returns a new feature value combiner.
-  # :call_seq:
+  # :call-seq:
   #   FeatureValueCombiner.new -> combiner
   #--
   # fvp_class is a dependency injection used for testing.
-  def initialize(fvp_class: FeatureValuePair)
-    @fvp_class = fvp_class
+  def initialize(fvp_class: nil)
+    @fvp_class = fvp_class || FeatureValuePair
   end
 
   # Takes a list of feature instances, and returns an array of entries,

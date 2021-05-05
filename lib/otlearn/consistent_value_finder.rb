@@ -20,8 +20,8 @@ module OTLearn
     #   OTLearn::ConsistentValueFinder.new -> finder
     #--
     # input_assigner is a dependency injection used for testing.
-    def initialize(input_assigner: InputFeatureAssigner.new)
-      @assigner = input_assigner
+    def initialize(input_assigner: nil)
+      @assigner = input_assigner || InputFeatureAssigner.new
       @conflict_evaluator = ConflictFeatureEvaluator.new
     end
 

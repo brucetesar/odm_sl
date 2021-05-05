@@ -3,7 +3,7 @@
 # Author: Morgan Moyer
 
 module OTLearn
-  # This class of exceptions holds the +feature_value_list+
+  # This class of exceptions holds the _feature_value_list_
   # for languages which fail learning.
   class LearnEx < RuntimeError
     # List of consistent features that Fewest Set Features

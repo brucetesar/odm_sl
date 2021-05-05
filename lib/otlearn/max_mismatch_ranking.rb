@@ -7,11 +7,11 @@ require 'otlearn/mmr_substep'
 
 module OTLearn
   # MaxMismatchRanking takes a list of outputs of winners that are failing
-  # Initial Word Evaluation (where the candidate created using the maximally
-  # dissimilar input paired with the output is error tested),
-  # but that are consistent with the grammar, in the sense that there exists
-  # a ranking consistent with the grammar's support under which the winner
-  # succeeds (is optimal).
+  # Initial Word Evaluation (where the candidate created using the
+  # maximally dissimilar input paired with the output is error tested),
+  # but that are consistent with the grammar, in the sense that there
+  # exists a ranking consistent with the grammar's support under which the
+  # winner succeeds (is optimal).
   # One of the outputs is chosen, and parsed into a word where the input is
   # mismatched with the output. The learner computes the additional ranking
   # information necessary to make the winner successful, and adds that
@@ -19,13 +19,14 @@ module OTLearn
   # is achieved as a side effect on the grammar passed to the constructor.
   # The returned object contains the other products of the procedure.
   #
-  # This class would typically be invoked when neither single form learning nor
-  # contrast pairs are able to make further progress, yet learning is
-  # not yet complete, suggesting that a paradigmatic subset relation is present.
-  # The learner is making the inductive leap that the failed output, because
-  # it is consistent, is likely an actual grammatical output, and it
-  # further maximizes the number of inputs mapping to the output by mapping
-  # the max mismatch input, thus enforcing greater restrictiveness.
+  # This class would typically be invoked when neither single form learning
+  # nor contrast pairs are able to make further progress, yet learning is
+  # not yet complete, suggesting that a paradigmatic subset relation is
+  # present. The learner is making the inductive leap that the failed
+  # output, because it is consistent, is likely an actual grammatical
+  # output, and it further maximizes the number of inputs mapping to the
+  # output by mapping the max mismatch input, thus enforcing greater
+  # restrictiveness.
   #
   # This implementation assumes that all of the unset features are binary;
   # see the documentation for Word#mismatch_input_to_output!.
@@ -39,8 +40,8 @@ module OTLearn
     #--
     # msg_output is a dependency injection used for testing. It is the
     # IO channel to which console messages are written (normally $stdout).
-    def initialize(msg_output: $stdout)
-      @msg_output = msg_output
+    def initialize(msg_output: nil)
+      @msg_output = msg_output || $stdout
       @erc_learner = ErcLearning.new
     end
 

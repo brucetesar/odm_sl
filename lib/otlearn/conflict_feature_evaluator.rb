@@ -22,11 +22,10 @@ module OTLearn
     #--
     # input_assigner and feature_combiner are dependency injections
     # used for testing.
-    def initialize(input_assigner: InputFeatureAssigner.new,
-                   feature_combiner: FeatureValueCombiner.new)
+    def initialize(input_assigner: nil, feature_combiner: nil)
       @consistency_checker = ConsistencyChecker.new
-      @assigner = input_assigner
-      @combiner = feature_combiner
+      @assigner = input_assigner || InputFeatureAssigner.new
+      @combiner = feature_combiner || FeatureValueCombiner.new
     end
 
     # Returns true if there is a combination of assigned values for the

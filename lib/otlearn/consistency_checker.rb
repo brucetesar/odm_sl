@@ -38,9 +38,9 @@ module OTLearn
     #   ConsistencyChecker.new -> checker
     #--
     # mrcd_class is a dependency injection used for testing.
-    def initialize(mrcd_class: Mrcd)
+    def initialize(mrcd_class: nil)
       @loser_selector = nil
-      @mrcd_class = mrcd_class
+      @mrcd_class = mrcd_class || Mrcd
     end
 
     # Computes the mismatch input candidate for each output, and tests

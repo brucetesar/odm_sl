@@ -14,8 +14,8 @@ module OTLearn
     #++
     # :call-seq:
     #   FsfImageMaker.new -> image_maker
-    def initialize(sheet_class: Sheet)
-      @sheet_class = sheet_class
+    def initialize(sheet_class: nil)
+      @sheet_class = sheet_class || Sheet
     end
 
     # Returns a sheet containing the image of the FSF learning step.

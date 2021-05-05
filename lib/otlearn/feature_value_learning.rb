@@ -14,16 +14,16 @@ module OTLearn
   # be optimal.
   class FeatureValueLearning
     # Finder of consistent values for a target feature instance.
-    # Default value: OTLearn::ConsistentValueFinder.new
+    # Default value: ConsistentValueFinder.new
     attr_accessor :value_finder
 
     # Returns a new FeatureValueLearning object.
     #--
     # The named parameter _word_search_ is a dependency injection used
     # for testing.
-    def initialize(word_search: WordSearch.new)
-      @word_search = word_search
-      @value_finder = OTLearn::ConsistentValueFinder.new
+    def initialize(word_search: nil)
+      @word_search = word_search || WordSearch.new
+      @value_finder = ConsistentValueFinder.new
     end
 
     # Attempt to set the underlying values of unset features in

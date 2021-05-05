@@ -30,7 +30,7 @@ module OTLearn
       @substep = substep
       @test_result = test_result
       @changed = changed
-      @step_type = OTLearn::INDUCTION
+      @step_type = INDUCTION
     end
 
     # Returns true if the grammar was changed by the learning step;

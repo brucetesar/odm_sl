@@ -10,7 +10,7 @@ module OTLearn
     #   MarkLow.new -> mark_low
     def initialize; end
 
-    # Returns true if +constraint+ is a markedness constraint,
+    # Returns true if _constraint_ is a markedness constraint,
     # false otherwise.
     def member?(constraint)
       constraint.markedness?

@@ -9,13 +9,12 @@ module OTLearn
   # of a Max Mismatch Ranking learning step.
   class MmrImageMaker
     # Returns a new image maker for Max Mismatch Ranking.
-    #--
-    # _sheet_class_ is a dependency injection used for testing.
-    #++
     # :call-seq:
     #   MmrImageMaker.new -> image_maker
-    def initialize(sheet_class: Sheet)
-      @sheet_class = sheet_class
+    #--
+    # _sheet_class_ is a dependency injection used for testing.
+    def initialize(sheet_class: nil)
+      @sheet_class = sheet_class || Sheet
     end
 
     # Returns a sheet containing the image of the MMR learning step.
