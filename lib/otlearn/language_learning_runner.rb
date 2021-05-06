@@ -4,6 +4,7 @@
 
 require 'grammar'
 require 'csv_output'
+require 'set'
 
 module OTLearn
   # This class provides methods useful for running a language learner.
@@ -15,6 +16,20 @@ module OTLearn
       @system = system
       @learner = learner
       @image_maker = image_maker
+    end
+
+    # Class method for converting a list of winner-loser pairs
+    # _wlp_list_ to an array of winner outputs, with each winner output
+    # represented only once.
+    # :call-seq:
+    #   wlp_to_learning_data(wlp_list) -> array
+    def self.wlp_to_learning_data(wlp_list)
+      winners = Set.new # Set automatically filters duplicate entries
+      wlp_list.each do |wlp|
+        winners.add(wlp.winner)
+      end
+      # Extract the outputs of the winners of the language.
+      winners.map(&:output)
     end
 
     # Runs the language _learner_ (provided to the runner's constructor)
