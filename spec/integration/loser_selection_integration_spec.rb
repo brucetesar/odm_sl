@@ -55,10 +55,10 @@ RSpec.describe 'loser selection', :integration do
     @consistency_selector =
       LoserSelectorFromCompetition.new(consistency_comparer)
 
-    @c1 = Constraint.new('c1', 1, MARK)
-    @c2 = Constraint.new('c2', 2, MARK)
-    @c3 = Constraint.new('c3', 3, MARK)
-    @c4 = Constraint.new('c4', 4, MARK)
+    @c1 = Constraint.new('c1', nil, MARK)
+    @c2 = Constraint.new('c2', nil, MARK)
+    @c3 = Constraint.new('c3', nil, MARK)
+    @c4 = Constraint.new('c4', nil, MARK)
     @constraint_list = [@c1, @c2, @c3, @c4]
 
     @winner = Candidate.new('input', 'winner', @constraint_list)

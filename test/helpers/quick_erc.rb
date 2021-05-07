@@ -33,7 +33,7 @@ module Test
         con_type = Constraint::MARK
         con_name = "M#{id.to_s}"
       end
-      con = Constraint.new(con_name, id, con_type)
+      con = Constraint.new(con_name, nil, con_type)
       constraints << con
       if md[2]=='W' then erc.set_w(con)
       elsif md[2]=='L' then erc.set_l(con)

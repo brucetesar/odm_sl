@@ -6,12 +6,12 @@ require 'rspec'
 require 'constraint'
 
 RSpec.describe Constraint do
-  context 'A new markedness Constraint named Constraint1 with ID Con1' do
+  context 'A new markedness Constraint named Constraint1' do
     let(:cand1) { double('cand1') }
     let(:cand2) { double('cand2') }
     before(:example) do
       @constraint =
-        Constraint.new('Constraint1', 'Con1', Constraint::MARK) do |cand|
+        Constraint.new('Constraint1', nil, Constraint::MARK) do |cand|
           viols = 2
           viols = 7 if cand == cand1
           viols
@@ -20,17 +20,14 @@ RSpec.describe Constraint do
     it 'returns its name' do
       expect(@constraint.name).to eq('Constraint1')
     end
-    it 'returns its ID' do
-      expect(@constraint.id).to eq('Con1')
-    end
     it 'is a markedness constraint' do
       expect(@constraint.markedness?).to be true
     end
     it 'is not a faithfulness constraint' do
       expect(@constraint.faithfulness?).to be false
     end
-    it 'returns a to_s string of Con1:Constraint1' do
-      expect(@constraint.to_s).to eq('Con1:Constraint1')
+    it 'returns a to_s string of Constraint1' do
+      expect(@constraint.to_s).to eq('Constraint1')
     end
     it 'assesses 7 violations to candidate cand1' do
       expect(@constraint.eval_candidate(cand1)).to eq(7)
@@ -40,17 +37,14 @@ RSpec.describe Constraint do
     end
   end
 
-  context 'A new faithfulness Constraint with name Cname and ID Cid' do
+  context 'A new faithfulness Constraint with name Cname' do
     before(:example) do
-      @constraint = Constraint.new('Cname', 'Cid', Constraint::FAITH) do
+      @constraint = Constraint.new('Cname', nil, Constraint::FAITH) do
         return 0
       end
     end
     it 'returns its name' do
       expect(@constraint.name).to eq('Cname')
-    end
-    it 'returns its ID' do
-      expect(@constraint.id).to eq('Cid')
     end
     it 'is not a markedness constraint' do
       expect(@constraint.markedness?).to be false
@@ -58,33 +52,16 @@ RSpec.describe Constraint do
     it 'is a faithfulness constraint' do
       expect(@constraint.faithfulness?).to be true
     end
-    it 'returns a to_s string of Cid:Cname' do
-      expect(@constraint.to_s).to eq('Cid:Cname')
-    end
-  end
-
-  context 'A new constraint with nil for ID' do
-    before(:example) do
-      @constraint = Constraint.new('FullName', nil, Constraint::FAITH) do
-        return 0
-      end
-    end
-    it 'returns its name' do
-      expect(@constraint.name).to eq 'FullName'
-    end
-    it 'returns nil for the ID' do
-      expect(@constraint.id).to be_nil
-    end
-    it 'returns a to_s string without any ID' do
-      expect(@constraint.to_s).to eq 'FullName'
+    it 'returns a to_s string of Cname' do
+      expect(@constraint.to_s).to eq('Cname')
     end
   end
 
   context '' do
     before(:example) do
-      @buddy1 = Constraint.new('buddy', 'b', Constraint::MARK)
-      @buddy2 = Constraint.new('buddy', 'b', Constraint::MARK)
-      @notbuddy = Constraint.new('notbuddy', 'n', Constraint::MARK)
+      @buddy1 = Constraint.new('buddy', nil, Constraint::MARK)
+      @buddy2 = Constraint.new('buddy', nil, Constraint::MARK)
+      @notbuddy = Constraint.new('notbuddy', nil, Constraint::MARK)
     end
     it 'is == to another constraint with the same name' do
       expect(@buddy1 == @buddy2).to be true
@@ -108,21 +85,21 @@ RSpec.describe Constraint do
 
   context 'A new constraint set properly to MARK' do
     it 'does not raise a RuntimeError' do
-      expect { Constraint.new('FCon', '1', Constraint::MARK) }.not_to\
+      expect { Constraint.new('FCon', nil, Constraint::MARK) }.not_to\
         raise_error
     end
   end
 
   context 'A new Constraint with type set to OTHER' do
     it 'raises a RuntimeError' do
-      expect { Constraint.new('FCon', '1', 'OTHER') }.to\
+      expect { Constraint.new('FCon', nil, 'OTHER') }.to\
         raise_error(RuntimeError)
     end
   end
 
   context 'A new constraint with no evaluation block' do
     before(:example) do
-      @constraint = Constraint.new('FCon', '1', Constraint::MARK)
+      @constraint = Constraint.new('FCon', nil, Constraint::MARK)
     end
     it 'raises an exception if used to evaluate a candidate' do
       expect { @constraint.eval_candidate('cand') }.to\
