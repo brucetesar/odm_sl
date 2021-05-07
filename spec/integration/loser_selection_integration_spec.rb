@@ -13,38 +13,33 @@ require 'candidate'
 require 'erc'
 require 'erc_list'
 
-# Abbreviatory constants for constraint types
-MARK = Constraint::MARK
-FAITH = Constraint::FAITH
+RSpec.describe 'loser selection', :integration do
+  # Abbreviatory constants for constraint types
+  MARK = Constraint::MARK
+  FAITH = Constraint::FAITH
 
-# Uses parallel arrays of constraints and violation counts, and
-# assign _candidate_ the corresponding violation count for each
-# constraint.
-def assign_violations(candidate, constraint_list, violation_list)
-  constraint_list.each_with_index do |con, idx|
-    candidate.set_viols(con, violation_list[idx])
-  end
-end
-
-# Returns a new Erc. Uses parallel arrays of constraints and
-# constraint evaluations (W, L, e), and assigns to the new ERC
-# the corresponding evaluation for each constraint.
-def construct_erc(constraint_list, evaluation_list)
-  erc = Erc.new(constraint_list)
-  constraint_list.each_with_index do |con, idx|
-    case evaluation_list[idx]
-    when :W
-      erc.set_w(con)
-    when :L
-      erc.set_l(con)
-    when :e
-      # no need to explicitly set the default 'e' value
+  # Uses parallel arrays of constraints and violation counts, and
+  # assign _candidate_ the corresponding violation count for each
+  # constraint.
+  def assign_violations(candidate, constraint_list, violation_list)
+    constraint_list.each_with_index do |con, idx|
+      candidate.set_viols(con, violation_list[idx])
     end
   end
-  erc
-end
 
-RSpec.describe 'loser selection', :integration do
+  # Returns a new Erc. Uses parallel arrays of constraints and
+  # constraint evaluations (W, L, e), and assigns to the new ERC
+  # the corresponding evaluation for each constraint.
+  def construct_erc(constraint_list, evaluation_list)
+    erc = Erc.new(constraint_list)
+    constraint_list.each_with_index do |con, idx|
+      erc.set_w(con) if evaluation_list[idx] == :W
+      erc.set_l(con) if evaluation_list[idx] == :L
+      # no need to explicitly set the default 'e' value
+    end
+    erc
+  end
+
   before(:example) do
     rcd_ranker = Ranker.new # default of RCD
     pool_comparer = ComparePool.new(rcd_ranker)
@@ -54,13 +49,11 @@ RSpec.describe 'loser selection', :integration do
     consistency_comparer = CompareConsistency.new
     @consistency_selector =
       LoserSelectorFromCompetition.new(consistency_comparer)
-
     @c1 = Constraint.new('c1', nil, MARK)
     @c2 = Constraint.new('c2', nil, MARK)
     @c3 = Constraint.new('c3', nil, MARK)
     @c4 = Constraint.new('c4', nil, MARK)
     @constraint_list = [@c1, @c2, @c3, @c4]
-
     @winner = Candidate.new('input', 'winner', @constraint_list)
     @cand1 = Candidate.new('input', 'cand1', @constraint_list)
     @cand2 = Candidate.new('input', 'cand2', @constraint_list)
@@ -68,9 +61,9 @@ RSpec.describe 'loser selection', :integration do
 
   context 'total ranking with cand1 optimal' do
     before(:example) do
-      erc1 = construct_erc(@constraint_list, [:W, :L, :e, :e])
-      erc2 = construct_erc(@constraint_list, [:e, :W, :L, :e])
-      erc3 = construct_erc(@constraint_list, [:e, :e, :W, :L])
+      erc1 = construct_erc(@constraint_list, %i[W L e e])
+      erc2 = construct_erc(@constraint_list, %i[e W L e])
+      erc3 = construct_erc(@constraint_list, %i[e e W L])
       @erc_list = ErcList.new(@constraint_list)\
                          .add_all([erc1, erc2, erc3])
       assign_violations(@winner, @constraint_list, [0, 2, 1, 0])
@@ -100,9 +93,9 @@ RSpec.describe 'loser selection', :integration do
   end
   context 'total ranking with winner optimal' do
     before(:example) do
-      erc1 = construct_erc(@constraint_list, [:W, :L, :e, :e])
-      erc2 = construct_erc(@constraint_list, [:e, :W, :L, :e])
-      erc3 = construct_erc(@constraint_list, [:e, :e, :W, :L])
+      erc1 = construct_erc(@constraint_list, %i[W L e e])
+      erc2 = construct_erc(@constraint_list, %i[e W L e])
+      erc3 = construct_erc(@constraint_list, %i[e e W L])
       @erc_list = ErcList.new(@constraint_list)\
                          .add_all([erc1, erc2, erc3])
       assign_violations(@winner, @constraint_list, [0, 2, 1, 0])
@@ -134,8 +127,8 @@ RSpec.describe 'loser selection', :integration do
     before(:example) do
       # Rcd will give {c1,c2} >> {c3} >> {c4}
       # c1 is only high-ranked by default
-      erc1 = construct_erc(@constraint_list, [:e, :W, :L, :e])
-      erc2 = construct_erc(@constraint_list, [:e, :e, :W, :L])
+      erc1 = construct_erc(@constraint_list, %i[e W L e])
+      erc2 = construct_erc(@constraint_list, %i[e e W L])
       @erc_list = ErcList.new(@constraint_list)\
                          .add_all([erc1, erc2])
       # winner has fewer violations of {c1,c2}, but more of {c2}
@@ -167,8 +160,8 @@ RSpec.describe 'loser selection', :integration do
     before(:example) do
       # Rcd will give {c1,c2} >> {c3} >> {c4}
       # c1 is only high-ranked by default
-      erc1 = construct_erc(@constraint_list, [:e, :W, :L, :e])
-      erc2 = construct_erc(@constraint_list, [:e, :e, :W, :L])
+      erc1 = construct_erc(@constraint_list, %i[e W L e])
+      erc2 = construct_erc(@constraint_list, %i[e e W L])
       @erc_list = ErcList.new(@constraint_list)\
                          .add_all([erc1, erc2])
       # winner has fewer violations of {c1,c2}, but more of {c2}
@@ -201,7 +194,7 @@ RSpec.describe 'loser selection', :integration do
     before(:example) do
       # Rcd will give {c1,c2,c3} >> {c4}
       # c1 is only high-ranked by default
-      erc1 = construct_erc(@constraint_list, [:e, :e, :W, :L])
+      erc1 = construct_erc(@constraint_list, %i[e e W L])
       @erc_list = ErcList.new(@constraint_list)\
                          .add_all([erc1])
       # winner has fewer violations of {c1,c2}, but more of {c2}
