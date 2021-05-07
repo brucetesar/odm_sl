@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
 
-require_relative '../../lib/erc'
-require_relative '../../lib/constraint'
+require 'erc'
+require 'constraint'
 
 module Test
   # Constants for evaluation by constraints
-  ML = "ML"  # prefers the loser
-  ME = "Me"  # no preference
-  MW = "MW"  # prefers the winner
-  FL = "FL"  # prefers the loser
-  FE = "Fe"  # no preference
-  FW = "FW"  # prefers the winner
+  ML = 'ML'  # prefers the loser
+  ME = 'Me'  # no preference
+  MW = 'MW'  # prefers the winner
+  FL = 'FL'  # prefers the loser
+  FE = 'Fe'  # no preference
+  FW = 'FW'  # prefers the winner
 
   # This is a method for testing. It allows an ERC of a certain form to
   # be constructed in a single, readable line.
@@ -18,29 +20,32 @@ module Test
   # Test.quick_erc([MW,FL]) returns an ERC with two constraints:
   # * M1, a markedness constraint preferring the winner
   # * F2, a faithfulness constraint preferring the loser
-  def Test.quick_erc(evals, label="")
-    constraints = Array.new
+  def self.quick_erc(evals, label = '')
+    constraints = []
     erc = Erc.new(constraints, label)
     id = 0
     evals.each do |e|
       id += 1
       md = /(M|F)(W|L|e)/.match(e.to_s)
-      raise "Failed to match eval #{e.to_s} in quick_erc" if md.nil?
-      if md[1]=='F' then
+      raise "Failed to match eval #{e} in quick_erc" if md.nil?
+
+      if md[1] == 'F'
         con_type = Constraint::FAITH
-        con_name = "F#{id.to_s}"
+        con_name = "F#{id}"
       else
         con_type = Constraint::MARK
-        con_name = "M#{id.to_s}"
+        con_name = "M#{id}"
       end
       con = Constraint.new(con_name, nil, con_type)
       constraints << con
-      if md[2]=='W' then erc.set_w(con)
-      elsif md[2]=='L' then erc.set_l(con)
-      else erc.set_e(con)
+      if md[2] == 'W'
+        erc.set_w(con)
+      elsif md[2] == 'L'
+        erc.set_l(con)
+      else
+        erc.set_e(con)
       end
     end
-    return erc
+    erc
   end
-
-end # module Test
+end
