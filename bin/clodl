@@ -11,7 +11,7 @@ require 'optparse'
 require 'sl/system'
 require 'factorial_typology'
 require 'grammar'
-require 'otlearn/data_manip'
+require 'otlearn/language_learning_runner'
 require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_image_maker'
 require 'csv_output'
@@ -105,7 +105,7 @@ if lang.nil?
   puts "Language #{label} was not found in the typology."
   exit(1)
 end
-outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
+outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new

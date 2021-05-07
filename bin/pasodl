@@ -11,7 +11,6 @@ require 'optparse'
 require 'arg_checker'
 require 'pas/system'
 require 'factorial_typology'
-require 'otlearn/data_manip'
 require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_image_maker'
 require 'otlearn/language_learning_runner'
@@ -79,7 +78,7 @@ unless File.exist?(data_file)
   lang_list = ft_result.factorial_typology
   File.open(data_file, 'wb') do |f|
     lang_list.each do |lang|
-      outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
+      outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
       Marshal.dump(["Lg#{lang.label}", outputs], f)
     end
   end

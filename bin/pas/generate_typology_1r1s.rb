@@ -10,7 +10,7 @@ require_relative '../../lib/odl/resolver'
 
 require 'pas/system'
 require 'factorial_typology'
-require 'otlearn/data_manip'
+require 'otlearn/language_learning_runner'
 
 # Generate the language typology data:
 # a list of sets of language data, one for each language in
@@ -31,7 +31,7 @@ Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
 data_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
 File.open(data_file, 'wb') do |f|
   lang_list.each do |lang|
-    outputs = OTLearn.convert_wl_pairs_to_learning_data(lang)
+    outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
     Marshal.dump(["Lg#{lang.label}", outputs], f)
   end
 end
