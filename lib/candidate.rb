@@ -14,19 +14,16 @@ class Candidate
   # The morphword (default value is an empty string)
   attr_accessor :morphword
 
-  # The candidate is initialized with violation counts assigned for any of
-  # the constraints. At the least, violation counts must be
+  # The candidate is initialized with violation counts assigned for any
+  # of the constraints. At the least, violation counts must be
   # subsequently assigned to each constraint via set_viols().
-  #
   # ==== Parameters
-  #
   # * input - the input structure
   # * output - the output structure
-  # * constraints - a list of the constraint objects for the system; must
-  #   be convertible to an Array via #to_a.
-  #
+  # * constraints - a list of the constraint objects for the system;
+  #   must be convertible to an Array via #to_a.
   # :call-seq:
-  #   Candidate.new(input, output, constraints) -> candidate
+  #   new(input, output, constraints) -> candidate
   def initialize(input, output, constraints)
     @input = input
     @output = output
@@ -53,7 +50,7 @@ class Candidate
     self
   end
 
-  # Returns true if +con+ is in the candidate's constraint list;
+  # Returns true if _con_ is in the candidate's constraint list;
   # returns false otherwise.
   def con?(con)
     @constraints.include?(con)
@@ -64,34 +61,33 @@ class Candidate
   # *WARNING*: altering the list returned from this method will alter
   # the state of this object.
   #--
-  # The idea is to have a single constraint list object shared by all other
-  # objects in the system (more efficient).
-  #++
+  # The idea is to have a single constraint list object shared by all
+  # other objects in the system (more efficient).
   def constraint_list
     @constraints
   end
 
-  # Sets the number of violations of constraint +con+ to the value
-  # +violation_count+. Returns the number of violations.
+  # Sets the number of violations of constraint _con_ to the value
+  # _violation_count_. Returns the number of violations.
   def set_viols(con, violation_count)
     @violations[con] = violation_count
   end
 
   # Returns the number of violations assessed to this candidate by
-  # constraint +con+.
+  # constraint _con_.
   def get_viols(con)
     @violations[con]
   end
 
   # Returns true if this candidate has an identical violation profile to
-  # +other+; returns false otherwise.
+  # _other_; returns false otherwise.
   def ident_viols?(other)
     @constraints.all? do |con|
       get_viols(con) == other.get_viols(con)
     end
   end
 
-  # Compares this candidate with +other+ for value equality using #==
+  # Compares this candidate with _other_ for value equality using #==
   # with respect to their inputs and their outputs. Also checks that
   # the violation counts are identical.
   def ==(other)
@@ -102,7 +98,7 @@ class Candidate
     true
   end
 
-  # Compares this candidate with +other+ for value equality using #eql?
+  # Compares this candidate with _other_ for value equality using #eql?
   # with respect to their inputs and their outputs. Also checks that
   # the violation counts are identical.
   def eql?(other)
@@ -118,16 +114,15 @@ class Candidate
   # * A list of constraints and the number of violations of each.
   #   If a constraint hasn't been assigned a violation count, display '?'.
   def to_s
-    viol_s = ' '
+    viol_s = ' '.dup # because string literals are frozen
     @constraints.each do |c|
       viols_c = if @violations.key?(c) # if c has a violation count
                   get_viols(c)
                 else
                   '?'
                 end
-      viol_s += " #{c}:#{viols_c}"
+      viol_s << " #{c}:#{viols_c}"
     end
-    output_s = @output.to_s
-    "#{@input} --> #{output_s} #{viol_s}"
+    "#{@input} --> #{@output} #{viol_s}"
   end
 end
