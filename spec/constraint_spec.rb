@@ -2,19 +2,20 @@
 
 # Author: Bruce Tesar
 
+require 'rspec'
 require 'constraint'
 
 RSpec.describe Constraint do
-  context 'A new markedness Constraint with name Constraint1 and ID Con1' do
+  context 'A new markedness Constraint named Constraint1 with ID Con1' do
     let(:cand1) { double('cand1') }
     let(:cand2) { double('cand2') }
     before(:example) do
-      @constraint = Constraint.new('Constraint1',
-                                   'Con1', Constraint::MARK) do |cand|
-        viols = 2
-        viols = 7 if cand == cand1
-        viols
-      end
+      @constraint =
+        Constraint.new('Constraint1', 'Con1', Constraint::MARK) do |cand|
+          viols = 2
+          viols = 7 if cand == cand1
+          viols
+        end
     end
     it 'returns its name' do
       expect(@constraint.name).to eq('Constraint1')
@@ -91,7 +92,7 @@ RSpec.describe Constraint do
     it 'is eql? to another constraint with the same name' do
       expect(@buddy1.eql?(@buddy2)).to be true
     end
-    it 'has the same hash value as another constraint with the same name' do
+    it 'has the same hash value as a same-named constraint' do
       expect(@buddy1.hash).to eq(@buddy2.hash)
     end
     it 'is not == to a constraint with a different name' do
@@ -100,7 +101,7 @@ RSpec.describe Constraint do
     it 'is not eql? to a constraint with a different name' do
       expect(@buddy1.eql?(@notbuddy)).to be false
     end
-    it 'does not have the same hash value as a different-named constraint' do
+    it 'does not have the same hash value as a diff-named constraint' do
       expect(@buddy1.hash).not_to eq(@notbuddy.hash)
     end
   end
@@ -124,7 +125,8 @@ RSpec.describe Constraint do
       @constraint = Constraint.new('FCon', '1', Constraint::MARK)
     end
     it 'raises an exception if used to evaluate a candidate' do
-      expect { @constraint.eval_candidate('cand') }.to raise_error(RuntimeError)
+      expect { @constraint.eval_candidate('cand') }.to\
+        raise_error(RuntimeError)
     end
   end
 end

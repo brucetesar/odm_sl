@@ -28,23 +28,25 @@ class Constraint
   # The symbol version of the constraint's name.
   attr_reader :symbol
 
+  # TODO: eliminate Constraint id (affects fixtures, ::new()).
   # The id (an abbreviated label) of the constraint.
   attr_reader :id
 
-  # _name_ is the name of the constraint, ideally a short string.
-  # _id_ is an abbreviated label used for constructing labels for
-  # complex objects.
-  # _type_ must be one of the type constants, or an exception will
-  # be raised.
-  # * Constraint::MARK     markedness constraint
-  # * Constraint::FAITH    faithfulness constraint
-  # The block parameter is the violation evaluation function; it should
-  # take, as a parameter, a candidate, and return the number of times
-  # that candidate violates this constraint.
+  # Returns a new constraint object.
+  # === Parameters
+  # * _name_ - the name of the constraint.
+  # * _id_ - an abbreviated label.
+  # * _type_ - type of constraint; must be one of the type constants.
+  #   * Constraint::FAITH    faithfulness constraint
+  #   * Constraint::MARK     markedness constraint
+  # * The block parameter is the violation evaluation function; it should
+  #   take, as a parameter, a candidate, and return the number of times
+  #   that candidate violates this constraint.
+  # Raises a RuntimeError if _type_ is not one of the type constants.
   # :call-seq:
   #   Constraint.new(name, id, type) {|constraint| ... } -> constraint
   def initialize(name, id, type, &eval)
-    @name = name
+    @name = name.freeze
     @symbol = name.to_sym
     # The name should never change, so calculate the hash value of the
     # name once and store it.
@@ -55,10 +57,10 @@ class Constraint
     @eval_function = eval
   end
 
-  # Makes sure the parametric type is a correct value, and stores a
-  # corresponding boolean value in the instance variable @markedness.
-  # Raises an exception if the specified _type_ is neither MARK nor
-  # FAITH.
+  # Makes sure that _type_ is one of the constraint type constants;
+  # raises a RuntimeError if it isn't.
+  # Pre-computes a boolean indicating if the constraint is a markedness
+  # constraint or not.
   def check_constraint_type(type)
     if type == MARK
       @markedness = true
@@ -68,6 +70,7 @@ class Constraint
       raise "Type must be either MARK or FAITH, cannot be #{type}"
     end
   end
+  private :check_constraint_type
 
   # Two constraints are equivalent if their names are equivalent.
   def ==(other)
@@ -92,20 +95,21 @@ class Constraint
     @markedness
   end
 
-  # Returns true if this is a faithfulness constraint, and false otherwise.
+  # Returns true if this is a faithfulness constraint, and false
+  # otherwise.
   def faithfulness?
     !@markedness
   end
 
   # Returns the number of times this constraint is violated by the
   # parameter candidate.
-  # Raises a RuntimeError if no evaluation function block was provided at
-  # the time the constraint was constructed.
+  # Raises a RuntimeError if no evaluation function block was provided
+  # at the time the constraint was constructed.
   def eval_candidate(cand)
     if @eval_function.nil?
-      msg1 = 'Constraint#eval_candidate: no evaluation function was provided'
-      msg2 = 'but #eval_candidate was called.'
-      raise "#{msg1} #{msg2}"
+      msg = 'Constraint#eval_candidate: no evaluation function' \
+            ' was provided but #eval_candidate was called.'
+      raise msg
     end
 
     @eval_function.call(cand) # call the stored code block.
