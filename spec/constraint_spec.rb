@@ -5,13 +5,13 @@
 require 'rspec'
 require 'constraint'
 
-RSpec.describe Constraint do
+RSpec.describe 'Constraint' do
   context 'A new markedness Constraint named Constraint1' do
     let(:cand1) { double('cand1') }
     let(:cand2) { double('cand2') }
     before(:example) do
       @constraint =
-        Constraint.new('Constraint1', nil, Constraint::MARK) do |cand|
+        Constraint.new('Constraint1', Constraint::MARK) do |cand|
           viols = 2
           viols = 7 if cand == cand1
           viols
@@ -39,7 +39,7 @@ RSpec.describe Constraint do
 
   context 'A new faithfulness Constraint with name Cname' do
     before(:example) do
-      @constraint = Constraint.new('Cname', nil, Constraint::FAITH) do
+      @constraint = Constraint.new('Cname', Constraint::FAITH) do
         return 0
       end
     end
@@ -57,11 +57,11 @@ RSpec.describe Constraint do
     end
   end
 
-  context '' do
+  context 'A constraint' do
     before(:example) do
-      @buddy1 = Constraint.new('buddy', nil, Constraint::MARK)
-      @buddy2 = Constraint.new('buddy', nil, Constraint::MARK)
-      @notbuddy = Constraint.new('notbuddy', nil, Constraint::MARK)
+      @buddy1 = Constraint.new('buddy', Constraint::MARK)
+      @buddy2 = Constraint.new('buddy', Constraint::MARK)
+      @notbuddy = Constraint.new('notbuddy', Constraint::MARK)
     end
     it 'is == to another constraint with the same name' do
       expect(@buddy1 == @buddy2).to be true
@@ -85,21 +85,21 @@ RSpec.describe Constraint do
 
   context 'A new constraint set properly to MARK' do
     it 'does not raise a RuntimeError' do
-      expect { Constraint.new('FCon', nil, Constraint::MARK) }.not_to\
+      expect { Constraint.new('FCon', Constraint::MARK) }.not_to\
         raise_error
     end
   end
 
   context 'A new Constraint with type set to OTHER' do
     it 'raises a RuntimeError' do
-      expect { Constraint.new('FCon', nil, 'OTHER') }.to\
+      expect { Constraint.new('FCon', 'OTHER') }.to\
         raise_error(RuntimeError)
     end
   end
 
   context 'A new constraint with no evaluation block' do
     before(:example) do
-      @constraint = Constraint.new('FCon', nil, Constraint::MARK)
+      @constraint = Constraint.new('FCon', Constraint::MARK)
     end
     it 'raises an exception if used to evaluate a candidate' do
       expect { @constraint.eval_candidate('cand') }.to\

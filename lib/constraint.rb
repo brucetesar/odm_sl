@@ -2,16 +2,14 @@
 
 # Author: Bruce Tesar
 
-# A basic OT constraint, consisting of a name, an id, a type, and an
+# A basic OT constraint, consisting of a name, a type, and an
 # evaluation procedure for assigning violations to candidates.
 # Only the name is compared when constraints are compared for equality.
-# The id is an abbreviated label used for constructing labels for
-# complex objects. If nil is provided as the ID parameter, then no ID
-# is used.
 #
 # Constraints are used as keys for hashes (e.g., in ercs), so they should
-# not be altered once constructed. It is a good idea to freeze the
-# constraint objects once they have been created.
+# not be altered once constructed. The name string is frozen upon
+# construction. It is a good idea to freeze the constraint objects
+# themselves once they have been created.
 # Ideally, any OT system or analysis should have just a single object for
 # each constraint, with all constraint-referring objects containing
 # references to those same constraints.
@@ -28,14 +26,9 @@ class Constraint
   # The symbol version of the constraint's name.
   attr_reader :symbol
 
-  # TODO: eliminate Constraint id (affects fixtures, ::new()).
-  # The id (an abbreviated label) of the constraint.
-  attr_reader :id
-
   # Returns a new constraint object.
   # === Parameters
   # * _name_ - the name of the constraint.
-  # * _id_ - an abbreviated label.
   # * _type_ - type of constraint; must be one of the type constants.
   #   * Constraint::FAITH    faithfulness constraint
   #   * Constraint::MARK     markedness constraint
@@ -44,14 +37,13 @@ class Constraint
   #   that candidate violates this constraint.
   # Raises a RuntimeError if _type_ is not one of the type constants.
   # :call-seq:
-  #   Constraint.new(name, id, type) {|constraint| ... } -> constraint
-  def initialize(name, id, type, &eval)
+  #   Constraint.new(name, type) {|constraint| ... } -> constraint
+  def initialize(name, type, &eval)
     @name = name.freeze
     @symbol = name.to_sym
     # The name should never change, so calculate the hash value of the
     # name once and store it.
     @hash_value = @name.hash
-    @id = id.to_s unless id.nil?
     check_constraint_type(type)
     # store the evaluation function (passed as a code block)
     @eval_function = eval
@@ -115,13 +107,8 @@ class Constraint
     @eval_function.call(cand) # call the stored code block.
   end
 
-  # Returns a string consisting of the constraint's id, followed
-  # by a colon, followed by the constraint's name.
+  # Returns a string of the constraint's name.
   def to_s
-    if @id.nil?
-      @name.to_s
-    else
-      "#{@id}:#{@name}"
-    end
+    @name.to_s
   end
 end

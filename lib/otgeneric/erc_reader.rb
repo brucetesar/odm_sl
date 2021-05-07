@@ -43,7 +43,7 @@ module OTGeneric
                    else
                      Constraint::MARK
                    end
-        constraints << Constraint.new(head, nil, con_type)
+        constraints << Constraint.new(head, con_type)
       end
       constraints
     end

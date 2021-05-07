@@ -228,17 +228,17 @@ module PAS
     # This defines the constraints, and stores each in the appropriate
     # class variable.
     def initialize_constraints
-      @nolong = Constraint.new('NoLong', nil, MARK) do |cand|
+      @nolong = Constraint.new('NoLong', MARK) do |cand|
         cand.output.inject(0) do |sum, syl|
           if syl.long? then sum + 1 else sum end
         end
       end
-      @wsp = Constraint.new('WSP', nil, MARK) do |cand|
+      @wsp = Constraint.new('WSP', MARK) do |cand|
         cand.output.inject(0) do |sum, syl|
           if syl.long? && syl.unstressed? then sum + 1 else sum end
         end
       end
-      @ml = Constraint.new('ML', nil, MARK) do |cand|
+      @ml = Constraint.new('ML', MARK) do |cand|
         viol_count = 0
         # only apply when there's a main stress in the cand
         main_stress_found = cand.output.main_stress?
@@ -251,7 +251,7 @@ module PAS
         end
         viol_count
       end
-      @mr = Constraint.new('MR', nil, MARK) do |cand|
+      @mr = Constraint.new('MR', MARK) do |cand|
         viol_count = 0
         stress_found = false
         cand.output.each do |syl|
@@ -260,7 +260,7 @@ module PAS
         end
         viol_count
       end
-      @idstress = Constraint.new('IDStress', nil, FAITH) do |cand|
+      @idstress = Constraint.new('IDStress', FAITH) do |cand|
         viol_count = 0
         cand.input.each do |in_syl|
           unless in_syl.stress_unset?
@@ -270,7 +270,7 @@ module PAS
         end
         viol_count
       end
-      @idlength = Constraint.new('IDLength', nil, FAITH) do |cand|
+      @idlength = Constraint.new('IDLength', FAITH) do |cand|
         viol_count = 0
         cand.input.each do |in_syl|
           unless in_syl.length_unset?
@@ -281,7 +281,7 @@ module PAS
         viol_count
       end
       # Gives a single violation to stress-less outputs.
-      @culm = Constraint.new('Culm', nil, MARK) do |cand|
+      @culm = Constraint.new('Culm', MARK) do |cand|
         not_violated = cand.output.main_stress?
         if not_violated
           0

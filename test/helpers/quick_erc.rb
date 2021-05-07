@@ -36,7 +36,7 @@ module Test
         con_type = Constraint::MARK
         con_name = "M#{id}"
       end
-      con = Constraint.new(con_name, nil, con_type)
+      con = Constraint.new(con_name, con_type)
       constraints << con
       if md[2] == 'W'
         erc.set_w(con)
