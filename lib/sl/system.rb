@@ -220,17 +220,17 @@ module SL
     # This defines the constraints, and stores each in the appropriate
     # class variable.
     def initialize_constraints
-      @nolong = Constraint.new('NoLong', 1, MARK) do |cand|
+      @nolong = Constraint.new('NoLong', nil, MARK) do |cand|
         cand.output.inject(0) do |sum, syl|
           if syl.long? then sum + 1 else sum end
         end
       end
-      @wsp = Constraint.new('WSP', 2, MARK) do |cand|
+      @wsp = Constraint.new('WSP', nil, MARK) do |cand|
         cand.output.inject(0) do |sum, syl|
           if syl.long? && syl.unstressed? then sum + 1 else sum end
         end
       end
-      @ml = Constraint.new('ML', 3, MARK) do |cand|
+      @ml = Constraint.new('ML', nil, MARK) do |cand|
         viol_count = 0
         cand.output.each do |syl|
           break if syl.main_stress?
@@ -239,7 +239,7 @@ module SL
         end
         viol_count
       end
-      @mr = Constraint.new('MR', 4, MARK) do |cand|
+      @mr = Constraint.new('MR', nil, MARK) do |cand|
         viol_count = 0
         stress_found = false
         cand.output.each do |syl|
@@ -248,7 +248,7 @@ module SL
         end
         viol_count
       end
-      @idstress = Constraint.new('IDStress', 5, FAITH) do |cand|
+      @idstress = Constraint.new('IDStress', nil, FAITH) do |cand|
         viol_count = 0
         cand.input.each do |in_syl|
           unless in_syl.stress_unset?
@@ -258,7 +258,7 @@ module SL
         end
         viol_count
       end
-      @idlength = Constraint.new('IDLength', 6, FAITH) do |cand|
+      @idlength = Constraint.new('IDLength', nil, FAITH) do |cand|
         viol_count = 0
         cand.input.each do |in_syl|
           unless in_syl.length_unset?
