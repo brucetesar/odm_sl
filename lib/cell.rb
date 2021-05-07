@@ -12,14 +12,16 @@ class Cell
   # The column value for the cell
   attr_accessor :col
 
-  # Returns a Cell with row _row_ and column _col_.
-  def initialize(row, col)
+  # Returns a Cell with _row_ and _column_.
+  # :call-seq:
+  #   new(row, column) -> cell
+  def initialize(row, column)
     @row = row
-    @col = col
+    @col = column
   end
 
   # Returns true if _other_ has the same row and column indices
-  # as self.
+  # as self. Returns false otherwise.
   def eql?(other)
     return false unless row == other.row
     return false unless col == other.col
@@ -28,7 +30,7 @@ class Cell
   end
 
   # Returns true if _other_ has the same row and column indices
-  # as self.
+  # as self. Returns false otherwise.
   def ==(other)
     eql?(other)
   end
