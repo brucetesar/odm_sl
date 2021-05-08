@@ -5,17 +5,21 @@
 require 'grammar'
 require 'csv_output'
 require 'set'
+require 'otlearn/language_learning_image_maker'
 
 module OTLearn
   # This class provides methods useful for running a language learner.
   class LanguageLearningRunner
     # Returns a new runner for language learning.
     # :call-seq:
-    #   new(system, learner, image_maker) -> runner
-    def initialize(system, learner, image_maker)
+    #   new(system, learner) -> runner
+    #--
+    # The named parameter image_maker is a dependency injection used
+    # for testing.
+    def initialize(system, learner, image_maker: nil)
       @system = system
       @learner = learner
-      @image_maker = image_maker
+      @image_maker = image_maker || LanguageLearningImageMaker.new
     end
 
     # Class method for converting a list of winner-loser pairs

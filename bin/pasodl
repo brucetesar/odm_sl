@@ -12,7 +12,6 @@ require 'arg_checker'
 require 'pas/system'
 require 'factorial_typology'
 require 'otlearn/language_learning_factory'
-require 'otlearn/language_learning_image_maker'
 require 'otlearn/language_learning_runner'
 
 # set the linguistic system
@@ -94,9 +93,7 @@ learner = factory.build
 
 # Run learning on all of the languages
 puts 'Learning the PAS typology.'
-image_maker = OTLearn::LanguageLearningImageMaker.new
-runner = OTLearn::LanguageLearningRunner.new(ling_system, learner,
-                                             image_maker)
+runner = OTLearn::LanguageLearningRunner.new(ling_system, learner)
 runner.prep_output_dir(out_dir, '*.csv')
 runner.run_languages(data_file) do |label, outputs|
   result = runner.run(label, outputs)

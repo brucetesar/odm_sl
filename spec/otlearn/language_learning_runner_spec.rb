@@ -14,9 +14,9 @@ RSpec.describe 'OTLearn::LanguageLearningRunner' do
   let(:result) { double('result') }
   before(:example) do
     allow(learner).to receive(:learn).and_return(result)
-    allow(system).to receive(:constraints).and_return(['con1', 'con2'])
+    allow(system).to receive(:constraints).and_return(%w[con1 con2])
     @runner = OTLearn::LanguageLearningRunner.new(system, learner,
-                                                  image_maker)
+                                                  image_maker: image_maker)
   end
 
   context 'when run is called' do

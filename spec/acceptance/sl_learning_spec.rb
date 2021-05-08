@@ -8,9 +8,8 @@
 require_relative '../../lib/odl/resolver'
 
 require 'otlearn/language_learning_factory'
-require 'sl/system'
-require 'otlearn/language_learning_image_maker'
 require 'otlearn/language_learning_runner'
+require 'sl/system'
 
 RSpec.describe 'Running ODL on SL', :acceptance do
   before(:context) do
@@ -25,10 +24,8 @@ RSpec.describe 'Running ODL on SL', :acceptance do
     factory.para_mark_low.learn_consistent.test_consistent
     factory.system = SL::System.instance
     learner = factory.build
-    image_maker = OTLearn::LanguageLearningImageMaker.new
     # Run learning on all of the languages
-    runner = OTLearn::LanguageLearningRunner.new(factory.system, learner,
-                                                 image_maker)
+    runner = OTLearn::LanguageLearningRunner.new(factory.system, learner)
     runner.prep_output_dir(@generated_dir, '*.csv')
     runner.run_languages(data_file) do |label, outputs|
       result = runner.run(label, outputs)
