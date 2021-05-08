@@ -46,7 +46,7 @@ RSpec.describe 'OTLearn::LanguageLearningRunner' do
     end
     context 'with out_dir but not out_file' do
       before(:example) do
-        @runner.write(result, 'mydir')
+        @runner.write(result, out_dir: 'mydir')
       end
       it 'creates an image of the simulation' do
         expect(image_maker).to have_received(:get_image).with(result)

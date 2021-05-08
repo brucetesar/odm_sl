@@ -29,7 +29,7 @@ RSpec.describe 'Running ODL on SL', :acceptance do
     runner.prep_output_dir(@generated_dir, '*.csv')
     runner.run_languages(data_file) do |label, outputs|
       result = runner.run(label, outputs)
-      runner.write(result, @generated_dir)
+      runner.write(result, out_dir: @generated_dir)
     end
   end
 

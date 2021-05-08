@@ -97,7 +97,7 @@ runner = OTLearn::LanguageLearningRunner.new(ling_system, learner)
 runner.prep_output_dir(out_dir, '*.csv')
 runner.run_languages(data_file) do |label, outputs|
   result = runner.run(label, outputs)
-  runner.write(result, out_dir)
+  runner.write(result, out_dir: out_dir)
   puts "#{label} not learned." unless result.learning_successful?
 end
 puts 'SL learning is finished.'

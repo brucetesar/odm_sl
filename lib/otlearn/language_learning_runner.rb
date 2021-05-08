@@ -61,7 +61,7 @@ module OTLearn
 
     # Formats a learning _result_ as a CSV image, and writes
     # it to a .csv file in directory _out_dir_.
-    def write(result, out_dir)
+    def write(result, out_dir: '.')
       label = result.grammar.label
       sim_image = @image_maker.get_image(result)
       out_file = File.join(out_dir, "#{label}.csv")
