@@ -116,9 +116,12 @@ factory.system = ling_system
 lang_sim = factory.build
 
 # Run learning on the language.
-grammar = Grammar.new(ling_system)
-grammar.label = label
-result = lang_sim.learn(outputs, grammar)
+runner = OTLearn::LanguageLearningRunner.new(ling_system, lang_sim)
+result = runner.run(label, outputs)
+# Write the results to the output file.
+sim_image = OTLearn::LanguageLearningImageMaker.new.get_image(result)
+csv_output = CsvOutput.new(sim_image)
+csv_output.write_to_file(report_filename)
 
 # Display if learning was successful to STDOUT.
 if result.learning_successful?
@@ -126,8 +129,3 @@ if result.learning_successful?
 else
   puts "#{label} not learned."
 end
-
-# Write the results to the output file.
-sim_image = OTLearn::LanguageLearningImageMaker.new.get_image(result)
-csv_output = CsvOutput.new(sim_image)
-csv_output.write_to_file(report_filename)
