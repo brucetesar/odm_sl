@@ -8,3 +8,9 @@
 # this dependency is not automatically managed by gem itself (I don't know
 # why).
 require 'aruba/cucumber'
+
+# Set the timeout for an Aruba step. The default is 15 seconds, which is
+# too low for typology-cranking programs like slodl.
+Aruba.configure do |config|
+  config.exit_timeout = 20 # 20 seconds
+end
