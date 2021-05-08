@@ -14,12 +14,13 @@ module OTLearn
     # :call-seq:
     #   new(system, learner) -> runner
     #--
-    # The named parameter image_maker is a dependency injection used
-    # for testing.
-    def initialize(system, learner, image_maker: nil)
+    # The named parameters image_maker and csvout_class are dependency
+    # injections used for testing.
+    def initialize(system, learner, image_maker: nil, csvout_class: nil)
       @system = system
       @learner = learner
       @image_maker = image_maker || LanguageLearningImageMaker.new
+      @csvout_class = csvout_class || CsvOutput
     end
 
     # Class method for converting a list of winner-loser pairs
@@ -64,7 +65,7 @@ module OTLearn
       label = result.grammar.label
       sim_image = @image_maker.get_image(result)
       out_file = File.join(out_dir, "#{label}.csv")
-      csv = CsvOutput.new(sim_image)
+      csv = @csvout_class.new(sim_image)
       csv.write_to_file(out_file)
     end
 
