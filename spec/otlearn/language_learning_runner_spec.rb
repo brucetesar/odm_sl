@@ -32,6 +32,34 @@ RSpec.describe 'OTLearn::LanguageLearningRunner' do
       expect(@actual_result).to eq result
     end
   end
+  context 'when write is called' do
+    let(:result) { double('learning result') }
+    let(:grammar) { double('grammar') }
+    let(:sim_image) { double('sim_image') }
+    let(:csvout) { double('csvout') }
+    before(:example) do
+      allow(result).to receive(:grammar).and_return(grammar)
+      allow(grammar).to receive(:label).and_return(label)
+      allow(image_maker).to receive(:get_image).and_return(sim_image)
+      allow(csvout_class).to receive(:new).with(sim_image).and_return(csvout)
+      allow(csvout).to receive(:write_to_file)
+    end
+    context 'with out_dir but not out_file' do
+      before(:example) do
+        @runner.write(result, 'mydir')
+      end
+      it 'creates an image of the simulation' do
+        expect(image_maker).to have_received(:get_image).with(result)
+      end
+      it 'creates a csvoutput object with the simulation image' do
+        expect(csvout_class).to have_received(:new).with(sim_image)
+      end
+      it 'writes the image to out_dir with the label-based filename' do
+        expect(csvout).to have_received(:write_to_file)\
+          .with('mydir/language_label.csv')
+      end
+    end
+  end
 
   context 'creating learning data' do
     let(:wlp10) { double('wlp10') }
