@@ -44,9 +44,9 @@ RSpec.describe 'OTLearn::LanguageLearningRunner' do
       allow(csvout_class).to receive(:new).with(sim_image).and_return(csvout)
       allow(csvout).to receive(:write_to_file)
     end
-    context 'with out_dir but not out_file' do
+    context 'with out_dir but not filename' do
       before(:example) do
-        @runner.write(result, out_dir: 'mydir')
+        @rv = @runner.write(result, out_dir: 'mydir')
       end
       it 'creates an image of the simulation' do
         expect(image_maker).to have_received(:get_image).with(result)
@@ -57,6 +57,39 @@ RSpec.describe 'OTLearn::LanguageLearningRunner' do
       it 'writes the image to out_dir with the label-based filename' do
         expect(csvout).to have_received(:write_to_file)\
           .with('mydir/language_label.csv')
+      end
+      it 'returns nil' do
+        expect(@rv).to be_nil
+      end
+    end
+    context 'with filename but not out_dir' do
+      before(:example) do
+        @runner.write(result, filename: 'myfile')
+      end
+      it 'creates an image of the simulation' do
+        expect(image_maker).to have_received(:get_image).with(result)
+      end
+      it 'creates a csvoutput object with the simulation image' do
+        expect(csvout_class).to have_received(:new).with(sim_image)
+      end
+      it 'writes the image to out_dir with the label-based filename' do
+        expect(csvout).to have_received(:write_to_file)\
+          .with('./myfile.csv')
+      end
+    end
+    context 'with no out_dir or filename' do
+      before(:example) do
+        @runner.write(result)
+      end
+      it 'creates an image of the simulation' do
+        expect(image_maker).to have_received(:get_image).with(result)
+      end
+      it 'creates a csvoutput object with the simulation image' do
+        expect(csvout_class).to have_received(:new).with(sim_image)
+      end
+      it 'writes the image to current dir with the label-based filename' do
+        expect(csvout).to have_received(:write_to_file)\
+          .with('./language_label.csv')
       end
     end
   end

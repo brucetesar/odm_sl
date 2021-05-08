@@ -60,13 +60,27 @@ module OTLearn
     end
 
     # Formats a learning _result_ as a CSV image, and writes
-    # it to a .csv file in directory _out_dir_.
-    def write(result, out_dir: '.')
-      label = result.grammar.label
+    # it to a .csv file.
+    # * The named parameter _out_dir_ specifies a subdirectory to which
+    #   the output file should be written. The default value is '.', the
+    #   current working directory.
+    # * The named parameter _filename_ is the name of the output file
+    #   (the file extension will be .csv). The default value is the
+    #   label of the grammar specified within _result_.
+    # :call-seq:
+    #   write(result) -> nil
+    #   write(result, out_dir: mydir, filename: myfile) -> nil
+    def write(result, out_dir: '.', filename: nil)
+      label = if filename.nil?
+                result.grammar.label
+              else
+                filename
+              end
       sim_image = @image_maker.get_image(result)
       out_file = File.join(out_dir, "#{label}.csv")
       csv = @csvout_class.new(sim_image)
       csv.write_to_file(out_file)
+      nil
     end
 
     # Prepares a directory _dir_ for receiving output files.
