@@ -20,7 +20,6 @@ require 'csv_output'
 ling_system = SL::System.instance
 
 # define variables for option values
-label = nil
 report_filename = nil
 list_options = false
 para_bias_string = nil
@@ -29,8 +28,7 @@ comp_test_string = nil
 
 # define the allowed command line options
 opts = OptionParser.new
-opts.on('-l', '--language LABEL', 'language label')\
-  { |val| label = val.strip }
+opts.banner = 'Usage: clodl LANGLABEL [options]'
 opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
   { |val| report_filename = val }
 opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias')\
@@ -42,9 +40,8 @@ opts.on('-ct', '--ctest TYPE', 'Testing compare type')\
 opts.on('-h', '--help', 'list the command line options')\
   { list_options = true }
 
-# parse the actual command line, and report any unused arguments
+# parse the actual command line
 rest = opts.parse(ARGV)
-puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 
 # If the "list options" option is specified, print out the options
 # to STDOUT and exit (ignore any other options).
@@ -52,6 +49,16 @@ if list_options
   puts opts.to_s
   exit(0)
 end
+
+# Get the language label argument
+label = rest.shift
+if label.nil?
+  puts 'ERROR: missing argument for language label.'
+  puts 'To see all options, run: clodl -h'
+  exit(1) # return failure error code
+end
+# Report any unused arguments
+puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 
 # Checks if the provided argument is missing (nil). If it is,
 # print an error message including the missing option,
@@ -74,7 +81,6 @@ def check_arg_value(arg, values, option_string)
   exit(1) # return failure error code
 end
 
-check_required_arg(label, '--language')
 check_required_arg(report_filename, '--report')
 
 bias_values = %w[all_high faith_low mark_low]
