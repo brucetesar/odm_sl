@@ -115,13 +115,10 @@ factory.send(comp_test_type)
 factory.system = ling_system
 lang_sim = factory.build
 
-# Run learning on the language.
+# Run learning on the language, and write the results to a file.
 runner = OTLearn::LanguageLearningRunner.new(ling_system, lang_sim)
 result = runner.run(label, outputs)
-# Write the results to the output file.
-sim_image = OTLearn::LanguageLearningImageMaker.new.get_image(result)
-csv_output = CsvOutput.new(sim_image)
-csv_output.write_to_file(report_filename)
+runner.write(result, filename: report_filename)
 
 # Display if learning was successful to STDOUT.
 if result.learning_successful?
