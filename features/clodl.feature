@@ -28,21 +28,21 @@ Feature: clodl
       """
 
   Scenario: Run with an invalid language label
-    When I run `clodl Invalid -r report -p all_high --clearn ctie --ctest pool`
+    When I run `clodl Invalid -r report -p all_high --lcomp ctie --tcomp pool`
     Then it should fail with:
       """
       Language Invalid was not found in the typology.
       """
 
   Scenario: No paradigmatic ranking bias given
-    When I run `clodl L20 -r report.csv --clearn ctie --ctest pool`
+    When I run `clodl L20 -r report.csv --lcomp ctie --tcomp pool`
     Then it should fail with:
       """
       ERROR: missing command line option --para_bias.
       """
 
   Scenario: Invalid paradigmatic ranking bias given
-    When I run `clodl L20 -r report -p invalid_bias --clearn ctie --ctest pool`
+    When I run `clodl L20 -r report -p invalid_bias --lcomp ctie --tcomp pool`
     Then it should fail with:
       """
       ERROR: invalid --para_bias value invalid_bias.
@@ -50,37 +50,37 @@ Feature: clodl
       """
 
   Scenario: No learning compare type given
-    When I run `clodl L20 -r report -p mark_low --ctest pool`
+    When I run `clodl L20 -r report -p mark_low --tcomp pool`
     Then it should fail with:
       """
-      ERROR: missing command line option --clearn.
+      ERROR: missing command line option --lcomp.
       """
 
   Scenario: Invalid learning compare type given
-    When I run `clodl L20 -r report -p mark_low --clearn invalid_type --ctest pool`
+    When I run `clodl L20 -r report -p mark_low --lcomp invalid_type --tcomp pool`
     Then it should fail with:
       """
-      ERROR: invalid --clearn value invalid_type.
+      ERROR: invalid --lcomp value invalid_type.
       Value must be one of pool, ctie, consistent
       """
 
   Scenario: No testing compare type given
-    When I run `clodl L20 -r report -p mark_low --clearn ctie`
+    When I run `clodl L20 -r report -p mark_low --lcomp ctie`
     Then it should fail with:
       """
-      ERROR: missing command line option --ctest.
+      ERROR: missing command line option --tcomp.
       """
 
   Scenario: Invalid testing compare type given
-    When I run `clodl L20 -r report -p mark_low --clearn ctie --ctest invalid_type`
+    When I run `clodl L20 -r report -p mark_low --lcomp ctie --tcomp invalid_type`
     Then it should fail with:
       """
-      ERROR: invalid --ctest value invalid_type.
+      ERROR: invalid --tcomp value invalid_type.
       Value must be one of pool, ctie, consistent
       """
 
   Scenario: Run on LgL20
-    When I run `clodl L20 -r report -p mark_low --clearn consistent --ctest consistent`
+    When I run `clodl L20 -r report -p mark_low --lcomp consistent --tcomp consistent`
     Then it should pass with:
       """
       L20 learned.

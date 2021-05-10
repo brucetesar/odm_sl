@@ -23,8 +23,8 @@ ling_system = SL::System.instance
 report_filename = nil
 list_options = false
 para_bias_string = nil
-comp_learn_string = nil
-comp_test_string = nil
+lcomp_string = nil
+tcomp_string = nil
 
 # define the allowed command line options
 opts = OptionParser.new
@@ -33,10 +33,10 @@ opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
   { |val| report_filename = val }
 opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias')\
   { |val| para_bias_string = val }
-opts.on('-cl', '--clearn TYPE', 'Learning compare type')\
-  { |val| comp_learn_string = val }
-opts.on('-ct', '--ctest TYPE', 'Testing compare type')\
-  { |val| comp_test_string = val }
+opts.on('-l', '--lcomp TYPE', 'Learning compare type')\
+  { |val| lcomp_string = val }
+opts.on('-t', '--tcomp TYPE', 'Testing compare type')\
+  { |val| tcomp_string = val }
 opts.on('-h', '--help', 'list the command line options')\
   { list_options = true }
 
@@ -90,15 +90,15 @@ check_arg_value(para_bias_string, bias_values, '--para_bias')
 para_bias = "para_#{para_bias_string}".to_sym
 
 comp_type_values = %w[pool ctie consistent]
-check_required_arg(comp_learn_string, '--clearn')
-check_arg_value(comp_learn_string, comp_type_values, '--clearn')
+check_required_arg(lcomp_string, '--lcomp')
+check_arg_value(lcomp_string, comp_type_values, '--lcomp')
 # Prepend learn_ to the comp type, forming the name of the factory method.
-comp_learn_type = "learn_#{comp_learn_string}".to_sym
+comp_learn_type = "learn_#{lcomp_string}".to_sym
 
-check_required_arg(comp_test_string, '--ctest')
-check_arg_value(comp_test_string, comp_type_values, '--ctest')
+check_required_arg(tcomp_string, '--tcomp')
+check_arg_value(tcomp_string, comp_type_values, '--tcomp')
 # Prepend test_ to the comp type, forming the name of the factory method.
-comp_test_type = "test_#{comp_learn_string}".to_sym
+comp_test_type = "test_#{lcomp_string}".to_sym
 
 # Generate the language typology.
 competition_list = ling_system.generate_competitions_1r1s
