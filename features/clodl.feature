@@ -16,15 +16,13 @@ Feature: clodl
     Then it should fail with:
       """
       ERROR: missing argument for language label.
-      To see all options, run: clodl -h
       """
 
   Scenario: No report filename given
-    When I run `clodl L20`
+    When I run `clodl L20 -p all_high --lcomp ctie --tcomp pool`
     Then it should fail with:
       """
       ERROR: missing command line option --report.
-      To see all options, run: clodl -h
       """
 
   Scenario: Run with an invalid language label
