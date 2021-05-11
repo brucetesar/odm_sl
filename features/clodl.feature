@@ -19,24 +19,30 @@ Feature: clodl
       """
 
   Scenario: No report filename given
-    When I run `clodl L20 -p all_high --lcomp ctie --tcomp pool`
-    Then it should fail with:
+    When I run `clodl L20 -p all_high -l ctie -t pool`
+    Then it should pass with:
       """
-      ERROR: missing command line option --report.
+      L20 learned.
+      """
+    And a file named "L20.csv" should exist
+    And the file "L20.csv" should contain:
+      """
+       , , , , , , , , , , , \nL20,,,,,,,,,,,
+      Learned: true,,,,,,,,,,,
       """
 
   Scenario: Run with an invalid language label
-    When I run `clodl Invalid -r report -p all_high --lcomp ctie --tcomp pool`
+    When I run `clodl Invalid -r report -p all_high -l ctie -t pool`
     Then it should fail with:
       """
       Language Invalid was not found in the typology.
       """
 
   Scenario: No paradigmatic ranking bias given
-    When I run `clodl L20 -r report.csv --lcomp ctie --tcomp pool`
-    Then it should fail with:
+    When I run `clodl L20 -r report.csv -l ctie -t pool`
+    Then it should pass with:
       """
-      ERROR: missing command line option --para_bias.
+      L20 learned.
       """
 
   Scenario: Invalid paradigmatic ranking bias given
@@ -49,9 +55,9 @@ Feature: clodl
 
   Scenario: No learning compare type given
     When I run `clodl L20 -r report -p mark_low --tcomp pool`
-    Then it should fail with:
+    Then it should pass with:
       """
-      ERROR: missing command line option --lcomp.
+      L20 learned.
       """
 
   Scenario: Invalid learning compare type given
@@ -64,9 +70,9 @@ Feature: clodl
 
   Scenario: No testing compare type given
     When I run `clodl L20 -r report -p mark_low --lcomp ctie`
-    Then it should fail with:
+    Then it should pass with:
       """
-      ERROR: missing command line option --tcomp.
+      L20 learned.
       """
 
   Scenario: Invalid testing compare type given

@@ -19,25 +19,25 @@ require 'otlearn/language_learning_image_maker'
 ling_system = SL::System.instance
 
 # define variables for option values
-report_filename = nil
+report_filename = nil # default determined by LanguageLearningRunner#write
 list_options = false
-para_bias_string = nil
-lcomp_string = nil
-tcomp_string = nil
+para_bias_string = 'mark_low'
+lcomp_string = 'consistent'
+tcomp_string = 'ctie'
 
 # define the allowed command line options
 opts = OptionParser.new
 opts.banner = 'Usage: clodl LANGLABEL [options]'
-opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias')\
-  { |val| para_bias_string = val }
-opts.on('-l', '--lcomp TYPE', 'Learning compare type')\
-  { |val| lcomp_string = val }
-opts.on('-t', '--tcomp TYPE', 'Testing compare type')\
-  { |val| tcomp_string = val }
-opts.on('-r', '--report FILENAME', 'Detailed CSV report filename')\
-  { |val| report_filename = val }
-opts.on('-h', '--help', 'list the command line options')\
-  { list_options = true }
+opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias',
+        'Default: mark_low') { |val| para_bias_string = val }
+opts.on('-l', '--lcomp TYPE', 'Learning compare type',
+        'Default: consistent') { |val| lcomp_string = val }
+opts.on('-t', '--tcomp TYPE', 'Testing compare type',
+        'Default: ctie') { |val| tcomp_string = val }
+opts.on('-r', '--report FILENAME', 'Detailed CSV report filename',
+        'Default: LANGLABEL') { |val| report_filename = val }
+opts.on('-h', '--help', 'list the command line options',
+        'and default values') { list_options = true }
 
 # parse the actual command line
 rest = opts.parse(ARGV)
@@ -61,9 +61,8 @@ puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 bias_values = %w[all_high faith_low mark_low]
 comp_type_values = %w[pool ctie consistent]
 
-# Check the values of the mandatory command line arguments
+# Check the values of selected command line options
 arg_checker = ArgChecker.new
-exit(1) unless arg_checker.arg_given?(report_filename, '--report')
 exit(1) unless arg_checker.arg_valid?(para_bias_string, bias_values,
                                       '--para_bias')
 exit(1) unless arg_checker.arg_valid?(lcomp_string, comp_type_values,
