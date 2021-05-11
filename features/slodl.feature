@@ -36,6 +36,7 @@ Feature: slodl
       """
 
   Scenario: Run on the SL typology with no specified options
+    Given that file "outputs_typology_1r1s.mar" does not exist
     When I run `slodl`
     Then it should pass with exactly:
       """
@@ -51,6 +52,7 @@ Feature: slodl
       """
 
   Scenario: Run on the SL typology with an output directory
+    Given that file "outputs_typology_1r1s.mar" does not exist
     When I run `slodl -p mark_low -l consistent -t consistent -o mcc`
     Then it should pass with exactly:
       """

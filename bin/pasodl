@@ -19,27 +19,27 @@ ling_system = PAS::System.instance
 
 # define variables for option values
 list_options = false
-para_bias_string = nil
-lcomp_string = nil
-tcomp_string = nil
+para_bias_string = 'mark_low'
+lcomp_string = 'consistent'
+tcomp_string = 'ctie'
 out_dir = '.' # default is current working directory
 
 # define the allowed command line options
 opts = OptionParser.new
-opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias')\
-  { |val| para_bias_string = val }
-opts.on('-l', '--lcomp TYPE', 'Learning compare type')\
-  { |val| lcomp_string = val }
-opts.on('-t', '--tcomp TYPE', 'Testing compare type')\
-  { |val| tcomp_string = val }
-opts.on('-o', '--out_dir DIR', 'output directory name')\
-  { |val| out_dir = val }
+opts.banner = 'Usage: slodl [options]'
+opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias',
+        'Default: mark_low') { |val| para_bias_string = val }
+opts.on('-l', '--lcomp TYPE', 'Learning compare type',
+        'Default: consistent') { |val| lcomp_string = val }
+opts.on('-t', '--tcomp TYPE', 'Testing compare type',
+        'Default: ctie') { |val| tcomp_string = val }
+opts.on('-o', '--out_dir DIR', 'output directory name',
+        'Default: current working directory') { |val| out_dir = val }
 opts.on('-h', '--help', 'list the command line options')\
   { list_options = true }
 
-# parse the actual command line, and report any unused arguments
+# parse the actual command line
 rest = opts.parse(ARGV)
-puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 
 # If the "list options" option is specified, print out the options
 # to STDOUT and exit (ignore any other options).
@@ -47,6 +47,9 @@ if list_options
   puts opts.to_s
   exit(0)
 end
+
+# Report any unused arguments
+puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 
 # Define the possible values for certain argument types
 bias_values = %w[all_high faith_low mark_low]
@@ -69,7 +72,7 @@ tcomp_type = "test_#{tcomp_string}".to_sym
 
 # Read the languages from the data file. If the data file doesn't
 # exist in the current working directory, create a new one.
-data_file = 'outputs_typology_1r1s.mar'
+data_file = 'pas_outputs_typology_1r1s.mar'
 unless File.exist?(data_file)
   puts 'Regenerating the typology data file.'
   competition_list = ling_system.generate_competitions_1r1s
