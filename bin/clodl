@@ -58,6 +58,7 @@ end
 # Report any unused arguments
 puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
 
+# Define the possible values for certain argument types
 bias_values = %w[all_high faith_low mark_low]
 comp_type_values = %w[pool ctie consistent]
 

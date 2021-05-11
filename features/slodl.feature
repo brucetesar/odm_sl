@@ -11,26 +11,12 @@ Feature: slodl
       Usage: slodl [options]
       """
 
-  Scenario: No paradigmatic ranking bias given
-    When I run `slodl -l ctie -t pool`
-    Then it should fail with:
-      """
-      ERROR: missing command line option --para_bias.
-      """
-
   Scenario: Invalid paradigmatic ranking bias given
     When I run `slodl -p invalid_bias -l ctie -t pool`
     Then it should fail with:
       """
       ERROR: invalid --para_bias value invalid_bias.
       Value must be one of all_high, faith_low, mark_low
-      """
-
-  Scenario: No learning compare type given
-    When I run `slodl -p mark_low -t pool`
-    Then it should fail with:
-      """
-      ERROR: missing command line option --lcomp.
       """
 
   Scenario: Invalid learning compare type given
@@ -41,13 +27,6 @@ Feature: slodl
       Value must be one of pool, ctie, consistent
       """
 
-  Scenario: No testing compare type given
-    When I run `slodl -p mark_low -l ctie`
-    Then it should fail with:
-      """
-      ERROR: missing command line option --tcomp.
-      """
-
   Scenario: Invalid testing compare type given
     When I run `slodl -p mark_low -l ctie -t invalid_type`
     Then it should fail with:
@@ -56,8 +35,8 @@ Feature: slodl
       Value must be one of pool, ctie, consistent
       """
 
-  Scenario: Run on the SL typology with no specified output directory
-    When I run `slodl -p mark_low -l consistent -t consistent`
+  Scenario: Run on the SL typology with no specified options
+    When I run `slodl`
     Then it should pass with exactly:
       """
       Regenerating the typology data file.
