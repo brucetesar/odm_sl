@@ -32,7 +32,7 @@ data_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
 File.open(data_file, 'wb') do |f|
   lang_list.each do |lang|
     outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
-    Marshal.dump(["Lg#{lang.label}", outputs], f)
+    Marshal.dump([lang.label.to_s, outputs], f)
   end
 end
 
