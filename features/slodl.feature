@@ -36,37 +36,32 @@ Feature: slodl
       """
 
   Scenario: Run on the SL typology with no specified options
-    Given that file "outputs_typology_1r1s.mar" does not exist
     When I run `slodl`
     Then it should pass with exactly:
       """
-      Regenerating the typology data file.
+      Calculating the typology.
       Learning the SL typology.
       SL learning is finished.
       """
-    And a file named "outputs_typology_1r1s.mar" should exist
-    And a file named "LgL20.csv" should exist
-    And the file "LgL20.csv" should contain:
+    And a file named "L20.csv" should exist
+    And the file "L20.csv" should contain:
       """
       Learned: true
       """
 
   Scenario: Run on the SL typology with an output directory
-    Given that file "outputs_typology_1r1s.mar" does not exist
     When I run `slodl -p mark_low -l consistent -t consistent -o mcc`
     Then it should pass with exactly:
       """
-      Regenerating the typology data file.
+      Calculating the typology.
       Learning the SL typology.
       SL learning is finished.
       """
-    And a file named "outputs_typology_1r1s.mar" should exist
     And a directory named "mcc" should exist
-    And a file named "mcc/LgL20.csv" should exist
     And the following files should exist:
-      | mcc/LgL1.csv  | mcc/LgL2.csv  | mcc/LgL3.csv  | mcc/LgL4.csv  |
-      | mcc/LgL5.csv  | mcc/LgL6.csv  | mcc/LgL7.csv  | mcc/LgL8.csv  |
-      | mcc/LgL9.csv  | mcc/LgL10.csv | mcc/LgL11.csv | mcc/LgL12.csv |
-      | mcc/LgL13.csv | mcc/LgL14.csv | mcc/LgL15.csv | mcc/LgL16.csv |
-      | mcc/LgL17.csv | mcc/LgL18.csv | mcc/LgL19.csv | mcc/LgL20.csv |
-      | mcc/LgL21.csv | mcc/LgL22.csv | mcc/LgL23.csv | mcc/LgL24.csv |
+      | mcc/L1.csv  | mcc/L2.csv  | mcc/L3.csv  | mcc/L4.csv  |
+      | mcc/L5.csv  | mcc/L6.csv  | mcc/L7.csv  | mcc/L8.csv  |
+      | mcc/L9.csv  | mcc/L10.csv | mcc/L11.csv | mcc/L12.csv |
+      | mcc/L13.csv | mcc/L14.csv | mcc/L15.csv | mcc/L16.csv |
+      | mcc/L17.csv | mcc/L18.csv | mcc/L19.csv | mcc/L20.csv |
+      | mcc/L21.csv | mcc/L22.csv | mcc/L23.csv | mcc/L24.csv |

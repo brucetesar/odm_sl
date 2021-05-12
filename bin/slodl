@@ -70,21 +70,11 @@ para_bias = "para_#{para_bias_string}".to_sym
 lcomp_type = "learn_#{lcomp_string}".to_sym
 tcomp_type = "test_#{tcomp_string}".to_sym
 
-# Read the languages from the data file. If the data file doesn't
-# exist in the current working directory, create a new one.
-data_file = 'outputs_typology_1r1s.mar'
-unless File.exist?(data_file)
-  puts 'Regenerating the typology data file.'
-  competition_list = ling_system.generate_competitions_1r1s
-  ft_result = FactorialTypology.new(competition_list)
-  lang_list = ft_result.factorial_typology
-  File.open(data_file, 'wb') do |f|
-    lang_list.each do |lang|
-      outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
-      Marshal.dump(["Lg#{lang.label}", outputs], f)
-    end
-  end
-end
+# Calculate the languages of the typology.
+puts 'Calculating the typology.'
+competition_list = ling_system.generate_competitions_1r1s
+ft_result = FactorialTypology.new(competition_list)
+lang_list = ft_result.factorial_typology
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
@@ -98,9 +88,10 @@ learner = factory.build
 puts 'Learning the SL typology.'
 runner = OTLearn::LanguageLearningRunner.new(ling_system, learner)
 runner.prep_output_dir(out_dir, '*.csv')
-runner.run_languages(data_file) do |label, outputs|
-  result = runner.run(label, outputs)
+lang_list.each do |lang|
+  outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
+  result = runner.run(lang.label, outputs)
   runner.write(result, out_dir: out_dir)
-  puts "#{label} not learned." unless result.learning_successful?
+  puts "#{lang.label} not learned." unless result.learning_successful?
 end
 puts 'SL learning is finished.'
