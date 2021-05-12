@@ -37,8 +37,8 @@ RSpec.describe 'Running ODL on SL', :acceptance do
     context "on language L#{num}" do
       before(:example) do
         # Read each file's contents into a string
-        @generated = IO.read "#{@generated_dir}/LgL#{num}.csv"
-        @expected = IO.read "#{@expected_dir}/LgL#{num}.csv"
+        @generated = IO.read "#{@generated_dir}/L#{num}.csv"
+        @expected = IO.read "#{@expected_dir}/L#{num}.csv"
       end
       it 'produces output that matches its test fixture' do
         expect(@generated).to eq @expected
