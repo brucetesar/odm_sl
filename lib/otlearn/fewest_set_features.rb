@@ -80,7 +80,7 @@ module OTLearn
       @prior_result.failed_winners.each do |failed_winner|
         @failed_winner = failed_winner
         # find a feature that can rescue the failed winner.
-        find_and_set_a_succeeding_feature
+        find_and_set_feature
         # Check for any new ranking information based on the newly set
         # features. NOTE: currently, only one feature can be newly set,
         # but it is stored in the list newly_set_features.
@@ -99,7 +99,7 @@ module OTLearn
     # error-testing).
     #
     # Returns the newly set FeatureValuePair, or nil if none were found.
-    def find_and_set_a_succeeding_feature
+    def find_and_set_feature
       # Look for a feature that can make failed_winner succeed.
       # If one is found, store the successful FeatureValuePair.
       fv_pair = select_most_restrictive_uf
@@ -111,7 +111,7 @@ module OTLearn
       end
       fv_pair
     end
-    private :find_and_set_a_succeeding_feature
+    private :find_and_set_feature
 
     # Finds the unset underlying form feature of failed_winner that,
     # when assigned a value matching its output correspondent,
@@ -138,16 +138,9 @@ module OTLearn
       unset_uf_features =
         @word_search.find_unset_features_in_words([failed_winner_dup],
                                                   @grammar)
-      # Assign, in turn, each unset feature to match its output
-      # correspondent. Then test the modified failed winner along with
-      # the success winners for collective consistency with the grammar.
-      consistent_feature_val_list = []
-      unset_uf_features.each do |ufeat|
-        ufeat_val_pair = test_unset_feature(failed_winner_dup, ufeat)
-        unless ufeat_val_pair.nil?
-          consistent_feature_val_list << ufeat_val_pair
-        end
-      end
+      # Find unset features of failed winner that are consistent when set.
+      consistent_feature_val_list =
+        consistent_feature_values(failed_winner_dup, unset_uf_features)
       # Return: nil if no successful values, val_pair if one successful
       # value. Raise a LearnEx exception if more than one successful
       # value is found.
@@ -155,7 +148,7 @@ module OTLearn
       when 0
         nil # nil if no successful value was found
       when 1
-        consistent_feature_val_list[0] # the single element of the list.
+        consistent_feature_val_list.first
       else
         raise LearnEx.new(consistent_feature_val_list),
               'More than one single matching feature passes error testing.'
@@ -177,8 +170,7 @@ module OTLearn
     def test_unset_feature(tested_winner, ufeat)
       # set (temporarily) the tested feature to the value of its output
       # correspondent.
-      out_feat_inst = tested_winner.out_feat_corr_of_uf(ufeat)
-      ufeat.value = out_feat_inst.value
+      ufeat.value = tested_winner.out_feat_corr_of_uf(ufeat).value
       # Add the tested winner to (a dup of) the list of success winners.
       word_list = @prior_result.success_winners.dup
       word_list << tested_winner
@@ -197,5 +189,23 @@ module OTLearn
       val_pair
     end
     private :test_unset_feature
+
+    # Assign, in turn, each unset feature to match its output
+    # correspondent. Then test the modified failed winner along with
+    # the success winners for collective consistency with the grammar.
+    # Returns an array of feature value pairs of the failed winner
+    # that are each independently consistent when set.
+    # :call-seq:
+    #   consistent_feature_values(failed_winner, unset_uf_features) -> array
+    def consistent_feature_values(failed_winner, unset_uf_features)
+      consistent_feature_val_list = []
+      unset_uf_features.each do |ufeat|
+        ufeat_val_pair = test_unset_feature(failed_winner, ufeat)
+        consistent_feature_val_list << ufeat_val_pair \
+          unless ufeat_val_pair.nil?
+      end
+      consistent_feature_val_list
+    end
+    private :consistent_feature_values
   end
 end
