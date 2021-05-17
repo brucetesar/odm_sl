@@ -1,0 +1,14 @@
+# By default, git should determine if a file is binary, and normalize it
+# when the file is not binary (text).
+* text=auto
+
+# These files are text and should be normalized to CRLF in the working
+# directory.
+*.rb text
+*.yml text
+*.md text
+*.bat text
+
+# These files are binary, and should not be normalized.
+*.mar binary
+*.pdf binary

@@ -2,11 +2,10 @@
 /data/
 /temp/
 /tmp/
-/nbproject/
-/spec/examples.txt
-/pas_hierarchies.csv
-/pas_learning_fails.csv
-/pas_non-culm_winners.csv
-/pas_typology.csv
-/dataOLD/
+/pkg/
 /.idea/
+/spec/reports/
+
+# rspec failure tracking
+.rspec_status
+/spec/examples.txt
