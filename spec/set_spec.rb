@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
 #
 # These specs verify that the standard library class Set is hashable in
@@ -16,45 +18,45 @@
 
 require 'set'
 
-RSpec.shared_examples "equivalent sets" do |set1, set2|
-  it "are equivalent" do
-    expect(@sh1==@sh2).to be true
+RSpec.shared_examples 'equivalent sets' do |set1, set2|
+  it 'are equivalent' do
+    expect(@sh1 == @sh2).to be true
   end
-  it "are not the same object" do
+  it 'are not the same object' do
     expect(@sh1.equal?(@sh2)).not_to be true
   end
-  it "are eql" do
+  it 'are eql' do
     expect(@sh1.eql?(@sh2)).to be true
-  end  
-  it "have the same hash value" do
-    expect(@sh1.hash).to equal(@sh2.hash)
-  end  
-end # shared_examples "equivalent sets"
-
-RSpec.shared_examples "non-equivalent sets" do |set1, set2|
-  it "are not equivalent" do
-    expect(@sh1==@sh2).not_to be true
   end
-  it "are not the same object" do
+  it 'have the same hash value' do
+    expect(@sh1.hash).to equal(@sh2.hash)
+  end
+end
+
+RSpec.shared_examples 'non-equivalent sets' do |set1, set2|
+  it 'are not equivalent' do
+    expect(@sh1 == @sh2).not_to be true
+  end
+  it 'are not the same object' do
     expect(@sh1.equal?(@sh2)).not_to be true
   end
-  it "are not eql" do
+  it 'are not eql' do
     expect(@sh1.eql?(@sh2)).not_to be true
-  end  
-  it "do not have the same hash value" do
+  end
+  it 'do not have the same hash value' do
     expect(@sh1.hash).not_to equal(@sh2.hash)
-  end  
-end # shared_examples "non-equivalent sets"
+  end
+end
 
 RSpec.describe Set do
-  context "distinct sets" do
+  context 'distinct sets' do
     before(:each) do
       @sh1 = Set.new
       @sh2 = Set.new
     end
-    
-    context "each with no members" do
-      include_examples "equivalent sets", @sh1, @sh2
+
+    context 'each with no members' do
+      include_examples 'equivalent sets', @sh1, @sh2
     end
 
     context "each with 'foobar'" do
@@ -62,7 +64,7 @@ RSpec.describe Set do
         @sh1.add 'foobar'
         @sh2.add 'foobar'
       end
-      include_examples "equivalent sets", @sh1, @sh2
+      include_examples 'equivalent sets', @sh1, @sh2
     end
 
     context "one with 'foo' and one with 'bar'" do
@@ -70,7 +72,7 @@ RSpec.describe Set do
         @sh1.add 'foo'
         @sh2.add 'bar'
       end
-      include_examples "non-equivalent sets", @sh1, @sh2
+      include_examples 'non-equivalent sets', @sh1, @sh2
     end
   end
-end # describe Set
+end
