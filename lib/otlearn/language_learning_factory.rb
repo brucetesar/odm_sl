@@ -53,6 +53,11 @@ module OTLearn
       @sf_factory = SingleFormLearningFactory.new
       @cp_factory = ContrastPairLearningFactory.new
       @in_factory = InductionLearningFactory.new
+      # The following components must be specified via method calls
+      # after construction.
+      @para_bias = nil
+      @learn_type = nil
+      @test_type = nil
     end
 
     # Sets the paradigmatic learning ranking bias to faith_low.
