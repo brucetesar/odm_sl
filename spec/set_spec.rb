@@ -7,6 +7,7 @@
 # treated as equivalent sets, and should be assigned the same hash value.
 # In early implementations of Ruby (including 1.8.6), Set did not meet
 # these requirements.
+#
 # The class Set contains an instance of class Hash. At the time, Hash itself
 # did not implement the methods hash() and eql?(), so they defaulted
 # to the versions defined in class Object. As a consequence, two hashes were
@@ -18,33 +19,33 @@
 
 require 'set'
 
-RSpec.shared_examples 'equivalent sets' do |set1, set2|
+RSpec.shared_examples 'equivalent sets' do
   it 'are equivalent' do
-    expect(@sh1 == @sh2).to be true
+    expect(set1 == set2).to be true
   end
   it 'are not the same object' do
-    expect(@sh1.equal?(@sh2)).not_to be true
+    expect(set1.equal?(set2)).not_to be true
   end
   it 'are eql' do
-    expect(@sh1.eql?(@sh2)).to be true
+    expect(set1.eql?(set2)).to be true
   end
   it 'have the same hash value' do
-    expect(@sh1.hash).to equal(@sh2.hash)
+    expect(set1.hash).to equal(set2.hash)
   end
 end
 
-RSpec.shared_examples 'non-equivalent sets' do |set1, set2|
+RSpec.shared_examples 'non-equivalent sets' do
   it 'are not equivalent' do
-    expect(@sh1 == @sh2).not_to be true
+    expect(set1 == set2).not_to be true
   end
   it 'are not the same object' do
-    expect(@sh1.equal?(@sh2)).not_to be true
+    expect(set1.equal?(set2)).not_to be true
   end
   it 'are not eql' do
-    expect(@sh1.eql?(@sh2)).not_to be true
+    expect(set1.eql?(set2)).not_to be true
   end
   it 'do not have the same hash value' do
-    expect(@sh1.hash).not_to equal(@sh2.hash)
+    expect(set1.hash).not_to equal(set2.hash)
   end
 end
 
@@ -56,23 +57,24 @@ RSpec.describe Set do
     end
 
     context 'each with no members' do
-      include_examples 'equivalent sets', @sh1, @sh2
+      it_behaves_like 'equivalent sets' do
+        let(:set1) { @sh1 }
+        let(:set2) { @sh2 }
+      end
     end
 
     context "each with 'foobar'" do
-      before(:each) do
-        @sh1.add 'foobar'
-        @sh2.add 'foobar'
+      it_behaves_like 'equivalent sets' do
+        let(:set1) { @sh1.add 'foobar' }
+        let(:set2) { @sh2.add 'foobar' }
       end
-      include_examples 'equivalent sets', @sh1, @sh2
     end
 
     context "one with 'foo' and one with 'bar'" do
-      before(:each) do
-        @sh1.add 'foo'
-        @sh2.add 'bar'
+      it_behaves_like 'non-equivalent sets' do
+        let(:set1) { @sh1.add 'foo' }
+        let(:set2) { @sh2.add 'bar' }
       end
-      include_examples 'non-equivalent sets', @sh1, @sh2
     end
   end
 end
