@@ -2,6 +2,8 @@
 
 # Author: Bruce Tesar
 
+require 'sync_enum'
+
 module OTLearn
   # Matches two words, a reference word and an other word,
   # morpheme-by-morpheme in linear order. If they different in the
@@ -34,12 +36,9 @@ module OTLearn
 
       contrast_morph = nil
       # iterate through the words morpheme by morpheme
-      # TODO: create your own SyncEnumerator, that uses enums.
-      ref_iter = ref_mw.to_enum
-      other_iter = other_mw.to_enum
+      pair_iter = SyncEnum.new(ref_mw.to_enum, other_mw.to_enum)
       loop do
-        ref_morph = ref_iter.next
-        other_morph = other_iter.next
+        ref_morph, other_morph = pair_iter.next
         # boolean: are the corresponding morphemes not the same?
         morph_mismatch = ref_morph != other_morph
         # boolean: is the current ref word morpheme also the target?
