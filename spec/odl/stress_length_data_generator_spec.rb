@@ -6,20 +6,20 @@ require 'rspec'
 require 'odl/stress_length_data_generator'
 require 'morpheme'
 
-RSpec.describe 'ODL::StressLengthDataGenerator' do
+RSpec.describe ODL::StressLengthDataGenerator do
   let(:lexentry_generator) { double('lexentry_generator') }
   let(:competition_generator) { double('competition_generator') }
   let(:lexicon_class) { double('lexicon_class') }
   let(:lexicon) { double('lexicon') }
   let(:morphword_class) { double('morphword_class') }
-  before(:example) do
+
+  before do
     allow(lexicon_class).to receive(:new).and_return(lexicon)
     allow(lexicon).to receive(:add)
-    @generator =
-      ODL::StressLengthDataGenerator.new(lexentry_generator,
-                                         competition_generator,
-                                         lexicon_class: lexicon_class,
-                                         morphword_class: morphword_class)
+    @generator = described_class.new(lexentry_generator,
+                                     competition_generator,
+                                     lexicon_class: lexicon_class,
+                                     morphword_class: morphword_class)
   end
 
   context 'when 1r1s competitions are generated' do
@@ -36,7 +36,8 @@ RSpec.describe 'ODL::StressLengthDataGenerator' do
     let(:mw2) { double('morphword2') }
     let(:mw3) { double('morphword3') }
     let(:mw4) { double('morphword4') }
-    before(:example) do
+
+    before do
       allow(lexentry_generator).to receive(:lexical_entries)\
         .with(1, Morpheme::ROOT, 0).and_return([r1_le, r2_le])
       allow(lexentry_generator).to receive(:lexical_entries)\
@@ -60,42 +61,55 @@ RSpec.describe 'ODL::StressLengthDataGenerator' do
         .with(@words, lexicon).and_return(expected_comp_list)
       @comp_list = @generator.generate_competitions_1r1s
     end
+
     it 'adds r1_le to the lexicon' do
       expect(lexicon).to have_received(:add).with(r1_le)
     end
+
     it 'adds r2_le to the lexicon' do
       expect(lexicon).to have_received(:add).with(r2_le)
     end
+
     it 'adds s1_le to the lexicon' do
       expect(lexicon).to have_received(:add).with(s1_le)
     end
+
     it 'adds s2_le to the lexicon' do
       expect(lexicon).to have_received(:add).with(s2_le)
     end
+
     it 'adds r1 to morphword1' do
       expect(mw1).to have_received(:add).with(r1)
     end
+
     it 'adds s1 to morphword1' do
       expect(mw1).to have_received(:add).with(s1)
     end
+
     it 'adds r1 to morphword2' do
       expect(mw2).to have_received(:add).with(r1)
     end
+
     it 'adds s2 to morphword2' do
       expect(mw2).to have_received(:add).with(s2)
     end
+
     it 'adds r2 to morphword3' do
       expect(mw3).to have_received(:add).with(r2)
     end
+
     it 'adds s1 to morphword3' do
       expect(mw3).to have_received(:add).with(s1)
     end
+
     it 'adds r2 to morphword4' do
       expect(mw4).to have_received(:add).with(r2)
     end
+
     it 'adds s2 to morphword4' do
       expect(mw4).to have_received(:add).with(s2)
     end
+
     it 'returns a list of the competitions' do
       expect(@comp_list).to eq expected_comp_list
     end
