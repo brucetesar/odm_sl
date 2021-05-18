@@ -35,11 +35,12 @@ RSpec.describe 'Running ODL on SL', :acceptance do
 
   (1..24).each do |num|
     context "on language L#{num}" do
-      before(:example) do
+      before do
         # Read each file's contents into a string
         @generated = IO.read "#{@generated_dir}/L#{num}.csv"
         @expected = IO.read "#{@expected_dir}/L#{num}.csv"
       end
+
       it 'produces output that matches its test fixture' do
         expect(@generated).to eq @expected
       end

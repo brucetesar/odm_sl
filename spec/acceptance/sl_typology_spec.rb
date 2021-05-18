@@ -7,6 +7,7 @@
 
 require_relative '../../lib/odl/resolver'
 
+# TODO: replace with call to OTLearn::LanguageLearningRunner.run_languages
 def read_languages_from_file(data_file)
   File.open(data_file, 'rb') do |fin|
     until fin.eof
@@ -32,7 +33,7 @@ RSpec.describe 'Generating the 1r1s typology for SL', :acceptance do
   end
 
   context '' do
-    before(:example) do
+    before do
       fname = 'outputs_typology_1r1s.mar'
       @fixture_file = File.join(@sl_fixture_dir, fname)
       @generated_file = File.join(@generated_dir, fname)
