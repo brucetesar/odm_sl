@@ -7,7 +7,7 @@
 #   <project>/spec
 #   <project>/lib  # at least in RubyMine
 
---format documentation
+--format progress
 --color
 
 # load the contents of spec/spec_helper.rb
