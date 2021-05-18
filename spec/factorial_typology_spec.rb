@@ -4,15 +4,7 @@
 #
 # The class ErcList is mocked by an internal class, rather than a test
 # double, so that it can accumulate some values as an array. The class
-# MockErcList is partially defined in the top RSpec scope. But part of
-# its behavior needs to be context-dependent, so the rest of the class
-# specification, for the method #consistent?, is given within the before
-# statement of each test context. It is important that it go within
-# the before statement, not just inside the context, so that the
-# class declaration is re-run before each test; otherwise, the
-# declarations are only run once, when the file is first read, and
-# the last one read will determine the definition of #consistent? used
-# for *all* of the tests in all environments.
+# MockErcList is defined outside of the RSpec scope.
 #
 # Several of the entities in the tests do not need any state or behavior,
 # they just need to be identifiable. Instead of using full test doubles,
@@ -25,6 +17,27 @@
 require 'rspec'
 require 'factorial_typology'
 
+# A mock class to stand in for ErcList.
+class MockErcList < Array
+  attr_accessor :label
+
+  def add_all(new_ones)
+    concat(new_ones)
+  end
+
+  def consistent?
+    return true if self == [:erc1]
+    return true if self == [:erc2]
+    return true if self == [:erc11]
+    return true if self == [:erc12]
+    return true if self == %i[erc11 erc21]
+    return true if self == %i[erc11 erc22]
+    return true if self == %i[erc12 erc21]
+
+    false
+  end
+end
+
 RSpec.describe 'FactorialTypology' do
   let(:hbound_filter) { double('HBound Filter') }
   let(:erc_list_class) { double('erc_list_class') }
@@ -33,12 +46,6 @@ RSpec.describe 'FactorialTypology' do
   let(:cand1) { double('candidate 1') }
   let(:cand2) { double('candidate 2') }
   let(:con_list) { double('constraint list') }
-  class MockErcList < Array
-    attr_accessor :label
-    def add_all(new_ones)
-      concat(new_ones)
-    end
-  end
   before(:each) do
     allow(cand1).to receive(:constraint_list).and_return(con_list)
     allow(cand2).to receive(:constraint_list).and_return(con_list)
@@ -47,15 +54,6 @@ RSpec.describe 'FactorialTypology' do
 
   context 'given 1 competition with two non-HB candidates' do
     before(:each) do
-      class MockErcList
-        # determine what erc lists are consistent in this context
-        def consistent?
-          return true if self == [:erc1]
-          return true if self == [:erc2]
-
-          false
-        end
-      end
       allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
@@ -87,16 +85,9 @@ RSpec.describe 'FactorialTypology' do
   end
 
   context 'given 1 competition with 1 non-HB and 1 HB candidate' do
+    let(:mock_erc_list) { MockErcList.new }
     before(:each) do
-      class MockErcList
-        # determine what erc lists are consistent in this context
-        def consistent?
-          return true if self == [:erc1]
-          return true if self == [:erc2]
-
-          false
-        end
-      end
+      allow(mock_erc_list).to receive(:consistent?).and_return(false)
       allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
@@ -131,20 +122,6 @@ RSpec.describe 'FactorialTypology' do
     let(:cand21) { double('candidate 21') }
     let(:cand22) { double('candidate 22') }
     before(:each) do
-      class MockErcList
-        # Determine what erc lists are consistent in this context.
-        # One of the four cross-competition combinations is not consistent:
-        # [:erc12, :erc22]
-        def consistent?
-          return true if self == [:erc11]
-          return true if self == [:erc12]
-          return true if self == [:erc11, :erc21]
-          return true if self == [:erc11, :erc22]
-          return true if self == [:erc12, :erc21]
-
-          false
-        end
-      end
       allow(cand11).to receive(:constraint_list).and_return(con_list)
       allow(cand12).to receive(:constraint_list).and_return(con_list)
       allow(cand21).to receive(:constraint_list).and_return(con_list)
@@ -184,21 +161,12 @@ RSpec.describe 'FactorialTypology' do
     end
     it 'provides the correct typology' do
       expect(@factyp.factorial_typology).to eq \
-        [[:erc11, :erc21], [:erc11, :erc22], [:erc12, :erc21]]
+        [%i[erc11 erc21], %i[erc11 erc22], %i[erc12 erc21]]
     end
   end
 
   context 'given 1 competition with two identical violation candidates' do
     before(:each) do
-      class MockErcList
-        # determine what erc lists are consistent in this context
-        def consistent?
-          return true if self == [:erc1]
-          return true if self == [:erc2]
-
-          false
-        end
-      end
       allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
