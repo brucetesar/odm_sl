@@ -5,6 +5,7 @@
 /pkg/
 /.idea/
 /spec/reports/
+/features/reports/
 
 # rspec failure tracking
 .rspec_status
