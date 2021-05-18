@@ -230,49 +230,49 @@ RSpec.describe OTLearn::FewestSetFeatures do
   end
 
   context 'given an unsuccessful failed winner and a successful one' do
-    let(:failed_winner_1) { double('failed_winner_1') }
-    let(:failed_winner_1_dup) { double('failed_winner_1_dup') }
-    let(:failed_winner_2) { double('failed_winner_2') }
-    let(:failed_winner_2_dup) { double('failed_winner_2_dup') }
-    let(:fw_output_1) { double('fw_output_1') }
-    let(:fw_output_2) { double('fw_output_2') }
+    let(:failed_winner1) { double('failed_winner1') }
+    let(:failed_winner1_dup) { double('failed_winner1_dup') }
+    let(:failed_winner2) { double('failed_winner2') }
+    let(:failed_winner2_dup) { double('failed_winner2_dup') }
+    let(:fw_output1) { double('fw_output1') }
+    let(:fw_output2) { double('fw_output2') }
     let(:out_feat_instance1) { double('out_feat_instance1') }
     let(:out_feat_value1) { double('out_feat_value1') }
     let(:out_feat_instance2) { double('out_feat_instance2') }
     let(:out_feat_value2) { double('out_feat_value2') }
-    let(:unset_feat1) { double('unset_feature_1') }
-    let(:unset_feat2) { double('unset_feature_2') }
+    let(:unset_feat1) { double('unset_feature1') }
+    let(:unset_feat2) { double('unset_feature2') }
     let(:fv_pair1) { double('feature-value pair1') }
     let(:fv_pair2) { double('feature-value pair2') }
     before(:example) do
       # set up prior_result
       allow(prior_result).to\
         receive(:failed_winners)\
-        .and_return([failed_winner_1, failed_winner_2])
+        .and_return([failed_winner1, failed_winner2])
       allow(prior_result).to receive(:success_winners).and_return([])
 
       # Failed winner 1
-      allow(failed_winner_1).to receive(:output).and_return(fw_output_1)
+      allow(failed_winner1).to receive(:output).and_return(fw_output1)
       allow(grammar).to receive(:parse_output)\
-        .with(fw_output_1).and_return(failed_winner_1_dup)
-      allow(failed_winner_1_dup).to receive(:output).and_return(fw_output_1)
+        .with(fw_output1).and_return(failed_winner1_dup)
+      allow(failed_winner1_dup).to receive(:output).and_return(fw_output1)
       allow(consistency_checker).to receive(:mismatch_consistent?)
       allow(word_search).to receive(:find_unset_features_in_words)\
-        .with([failed_winner_1_dup], grammar).and_return([unset_feat1])
-      allow(failed_winner_1_dup).to \
+        .with([failed_winner1_dup], grammar).and_return([unset_feat1])
+      allow(failed_winner1_dup).to \
         receive(:out_feat_corr_of_uf)\
         .with(unset_feat1).and_return(out_feat_instance1)
       allow(out_feat_instance1).to receive(:value).and_return(out_feat_value1)
 
       # Failed winner 2
-      allow(failed_winner_2).to receive(:output).and_return(fw_output_2)
-      allow(grammar).to receive(:parse_output).with(fw_output_2)\
-                                              .and_return(failed_winner_2_dup)
-      allow(failed_winner_2_dup).to receive(:output).and_return(fw_output_2)
+      allow(failed_winner2).to receive(:output).and_return(fw_output2)
+      allow(grammar).to receive(:parse_output).with(fw_output2)\
+                                              .and_return(failed_winner2_dup)
+      allow(failed_winner2_dup).to receive(:output).and_return(fw_output2)
       allow(consistency_checker).to receive(:mismatch_consistent?)
       allow(word_search).to receive(:find_unset_features_in_words)\
-        .with([failed_winner_2_dup], grammar).and_return([unset_feat2])
-      allow(failed_winner_2_dup).to \
+        .with([failed_winner2_dup], grammar).and_return([unset_feat2])
+      allow(failed_winner2_dup).to \
         receive(:out_feat_corr_of_uf).with(unset_feat2)\
                                      .and_return(out_feat_instance2)
       allow(out_feat_instance2).to receive(:value).and_return(out_feat_value2)
@@ -297,9 +297,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
     context 'with the first failed winner inconsistent' do
       before(:example) do
         allow(consistency_checker).to receive(:mismatch_consistent?)\
-          .with([fw_output_1], grammar).and_return(false)
+          .with([fw_output1], grammar).and_return(false)
         allow(consistency_checker).to receive(:mismatch_consistent?)\
-          .with([fw_output_2], grammar).and_return(true)
+          .with([fw_output2], grammar).and_return(true)
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
           OTLearn::FewestSetFeatures\
@@ -312,7 +312,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.changed?).to be true
       end
       it 'determines the failed winner' do
-        expect(@substep.failed_winner).to equal failed_winner_2
+        expect(@substep.failed_winner).to equal failed_winner2
       end
       it 'only sets one feature' do
         expect(@substep.newly_set_features.size).to eq 1
@@ -328,9 +328,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
     context 'with the first failed winner consistent' do
       before(:example) do
         allow(consistency_checker).to receive(:mismatch_consistent?)\
-          .with([fw_output_1], grammar).and_return(true)
+          .with([fw_output1], grammar).and_return(true)
         allow(consistency_checker).to receive(:mismatch_consistent?)\
-          .with([fw_output_2], grammar).and_return(true)
+          .with([fw_output2], grammar).and_return(true)
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
           OTLearn::FewestSetFeatures\
@@ -343,7 +343,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.changed?).to be true
       end
       it 'determines the failed winner' do
-        expect(@substep.failed_winner).to equal failed_winner_1
+        expect(@substep.failed_winner).to equal failed_winner1
       end
       it 'only sets one feature' do
         expect(@substep.newly_set_features.size).to eq 1
