@@ -16,3 +16,20 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 80
+
+# RSpec Cop Configuration
+
+Metrics/BlockLength:
+  IgnoredMethods:
+    - RSpec.describe
+    - before
+    - context
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
