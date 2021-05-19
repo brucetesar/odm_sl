@@ -13,41 +13,47 @@ require 'io_correspondence'
 require 'sl/syllable'
 
 RSpec.describe SL::System do
-  before(:each) do
-    @system = SL::System.instance
-  end
+  let(:system) { described_class.instance }
 
   # ********************************
   # Specs for the system constraints
   # ********************************
-  context 'System returns a constraint list' do
-    before(:each) do
-      @con_list = @system.constraints
+  context 'returns a constraint list' do
+    before do
+      @con_list = system.constraints
     end
+
     it 'with 6 constraints' do
       expect(@con_list.size).to eq(6)
     end
+
     it 'containing WSP' do
-      expect(@con_list).to include(@system.wsp)
+      expect(@con_list).to include(system.wsp)
     end
+
     it 'containing MainLeft' do
-      expect(@con_list).to include(@system.ml)
+      expect(@con_list).to include(system.ml)
     end
+
     it 'containing MainRight' do
-      expect(@con_list).to include(@system.mr)
+      expect(@con_list).to include(system.mr)
     end
+
     it 'containing NoLong' do
-      expect(@con_list).to include(@system.nolong)
+      expect(@con_list).to include(system.nolong)
     end
+
     it 'containing Ident[stress]' do
-      expect(@con_list).to include(@system.idstress)
+      expect(@con_list).to include(system.idstress)
     end
+
     it 'containing Ident[length]' do
-      expect(@con_list).to include(@system.idlength)
+      expect(@con_list).to include(system.idlength)
     end
   end
-  context 'System, given candidate' do
-    before(:each) do
+
+  context 'with a candidate' do
+    before do
       @cand = double('candidate')
       @input = []
       @output = []
@@ -56,8 +62,9 @@ RSpec.describe SL::System do
       allow(@cand).to receive(:output).and_return(@output)
       allow(@cand).to receive(:io_out_corr)
     end
-    context '/S:/[S:]' do
-      before(:each) do
+
+    context 'with /S:/[S:]' do
+      before do
         # input syllable
         @syli1 = instance_double(SL::Syllable, 'Syli1')
         @input << @syli1
@@ -77,27 +84,34 @@ RSpec.describe SL::System do
         allow(@cand).to receive(:io_out_corr).with(@syli1)\
                                              .and_return(@sylo1)
       end
+
       it 'assigns 1 violation of NoLong' do
-        expect(@system.nolong.eval_candidate(@cand)).to eq(1)
+        expect(system.nolong.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 0 violations of WSP' do
-        expect(@system.wsp.eval_candidate(@cand)).to eq(0)
+        expect(system.wsp.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 0 violations of ML' do
-        expect(@system.ml.eval_candidate(@cand)).to eq(0)
+        expect(system.ml.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 0 violations of MR' do
-        expect(@system.mr.eval_candidate(@cand)).to eq(0)
+        expect(system.mr.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 0 violations of IDStress' do
-        expect(@system.idstress.eval_candidate(@cand)).to eq(0)
+        expect(system.idstress.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 0 violations of IDLength' do
-        expect(@system.idlength.eval_candidate(@cand)).to eq(0)
+        expect(system.idlength.eval_candidate(@cand)).to eq(0)
       end
     end
-    context '/s:/[S]' do
-      before(:each) do
+
+    context 'with /s:/[S]' do
+      before do
         # input syllable
         @syli1 = instance_double(SL::Syllable, 'Syli1')
         @input << @syli1
@@ -117,27 +131,34 @@ RSpec.describe SL::System do
         allow(@cand).to receive(:io_out_corr).and_return(@sylo1)
         allow(@cand).to receive(:io_in_corr).and_return(@syli1)
       end
+
       it 'assigns 0 violations of NoLong' do
-        expect(@system.nolong.eval_candidate(@cand)).to eq(0)
+        expect(system.nolong.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 0 violations of WSP' do
-        expect(@system.wsp.eval_candidate(@cand)).to eq(0)
+        expect(system.wsp.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 0 violations of ML' do
-        expect(@system.ml.eval_candidate(@cand)).to eq(0)
+        expect(system.ml.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 0 violations of MR' do
-        expect(@system.mr.eval_candidate(@cand)).to eq(0)
+        expect(system.mr.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 1 violation of IDStress' do
-        expect(@system.idstress.eval_candidate(@cand)).to eq(1)
+        expect(system.idstress.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 1 violation of IDLength' do
-        expect(@system.idlength.eval_candidate(@cand)).to eq(1)
+        expect(system.idlength.eval_candidate(@cand)).to eq(1)
       end
     end
-    context '/ss:/[Ss:]' do
-      before(:each) do
+
+    context 'with /ss:/[Ss:]' do
+      before do
         # input syllable 1
         @syli1 = instance_double(SL::Syllable, 'Syli1')
         @input << @syli1
@@ -173,27 +194,34 @@ RSpec.describe SL::System do
         allow(@cand).to receive(:io_in_corr).with(@sylo1).and_return(@syli1)
         allow(@cand).to receive(:io_in_corr).with(@sylo2).and_return(@syli2)
       end
+
       it 'assigns 1 violation of NoLong' do
-        expect(@system.nolong.eval_candidate(@cand)).to eq(1)
+        expect(system.nolong.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 1 violation of WSP' do
-        expect(@system.wsp.eval_candidate(@cand)).to eq(1)
+        expect(system.wsp.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 0 violations of ML' do
-        expect(@system.ml.eval_candidate(@cand)).to eq(0)
+        expect(system.ml.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 1 violation of MR' do
-        expect(@system.mr.eval_candidate(@cand)).to eq(1)
+        expect(system.mr.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 1 violation of IDStress' do
-        expect(@system.idstress.eval_candidate(@cand)).to eq(1)
+        expect(system.idstress.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 0 violations of IDLength' do
-        expect(@system.idlength.eval_candidate(@cand)).to eq(0)
+        expect(system.idlength.eval_candidate(@cand)).to eq(0)
       end
     end
-    context '/s.s:/[s.S:]' do
-      before(:each) do
+
+    context 'with /s.s:/[s.S:]' do
+      before do
         # input syllable 1
         @syli1 = instance_double(SL::Syllable, 'Syli1')
         @input << @syli1
@@ -229,23 +257,29 @@ RSpec.describe SL::System do
         allow(@cand).to receive(:io_in_corr).with(@sylo1).and_return(@syli1)
         allow(@cand).to receive(:io_in_corr).with(@sylo2).and_return(@syli2)
       end
+
       it 'assigns 1 violation of NoLong' do
-        expect(@system.nolong.eval_candidate(@cand)).to eq(1)
+        expect(system.nolong.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 0 violation of WSP' do
-        expect(@system.wsp.eval_candidate(@cand)).to eq(0)
+        expect(system.wsp.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 1 violations of ML' do
-        expect(@system.ml.eval_candidate(@cand)).to eq(1)
+        expect(system.ml.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 0 violation of MR' do
-        expect(@system.mr.eval_candidate(@cand)).to eq(0)
+        expect(system.mr.eval_candidate(@cand)).to eq(0)
       end
+
       it 'assigns 1 violation of IDStress' do
-        expect(@system.idstress.eval_candidate(@cand)).to eq(1)
+        expect(system.idstress.eval_candidate(@cand)).to eq(1)
       end
+
       it 'assigns 0 violations of IDLength' do
-        expect(@system.idlength.eval_candidate(@cand)).to eq(0)
+        expect(system.idlength.eval_candidate(@cand)).to eq(0)
       end
     end
   end
@@ -253,7 +287,7 @@ RSpec.describe SL::System do
   # ***************************************
   # Specs for #input_from_morphword()
   # ***************************************
-  context 'System with a lexicon including r1 /s./ and s4 /S:/' do
+  context 'with a lexicon including r1 /s./ and s4 /S:/' do
     let(:r1) { double('r1') }
     let(:s4) { double('s4') }
     let(:uf_r1_1) { double('uf_r1_1') } # first segment of the UF of r1
@@ -262,7 +296,8 @@ RSpec.describe SL::System do
     let(:in_s4_1) { double('in_s4_1') } # first segment of the input of s4
     let(:uf_r1) { [uf_r1_1] }
     let(:uf_s4) { [uf_s4_1] }
-    before(:each) do
+
+    before do
       allow(r1).to receive(:label).and_return('r1')
       allow(s4).to receive(:label).and_return('s4')
       allow(uf_r1_1).to receive(:dup).and_return(in_r1_1)
@@ -277,64 +312,76 @@ RSpec.describe SL::System do
       allow(@lex_entry_s4).to receive(:uf).and_return(uf_s4)
       @lexicon = [@lex_entry_r1, @lex_entry_s4]
     end
+
     context "with morphword ['r1']" do
-      before(:each) do
+      before do
         @mw = instance_double(MorphWord, "morphword ['r1']")
         allow(@mw).to receive(:each).and_yield(r1)
       end
+
       it '#input_from_morphword returns input with morphword r1' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         expect(input.morphword).to eq(@mw)
       end
+
       it '#input_from_morphword returns input with the UF of r1' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         expect(input).to eq([in_r1_1])
       end
+
       it '#input_from_morphword returns input with 1 ui pair' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         ui_corr = input.ui_corr
         expect(ui_corr.size).to eq(1)
       end
+
       it '#input_from_morphword returns input with ui pair for r1' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         ui_corr = input.ui_corr
         expect(ui_corr.in_corr(uf_r1_1)).to eq in_r1_1
       end
     end
+
     context "with morphword ['r1', 's4']" do
-      before(:each) do
+      before do
         @mw = double
         allow(@mw).to receive(:each).and_yield(r1).and_yield(s4)
       end
+
       it '#input_from_morphword returns input with morphword r1s4' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         expect(input.morphword).to eq(@mw)
       end
+
       it '#input_from_morphword returns input with UFs of r1 and s4' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         expect(input).to eq([in_r1_1, in_s4_1])
       end
+
       it '#input_from_morphword returns input with 2 ui pairs' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         ui_corr = input.ui_corr
         expect(ui_corr.size).to eq(2)
       end
+
       it '#input_from_morphword returns input with ui pair for r1' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         ui_corr = input.ui_corr
         expect(ui_corr.in_corr(uf_r1_1)).to eq in_r1_1
       end
+
       it '#input_from_morphword returns input with ui pair for s4' do
-        input = @system.input_from_morphword(@mw, @lexicon)
+        input = system.input_from_morphword(@mw, @lexicon)
         ui_corr = input.ui_corr
         expect(ui_corr.in_corr(uf_s4_1)).to eq in_s4_1
       end
     end
+
     it 'raises an exception when the morpheme has no lexical entry' do
       mw = double
       bad_m = double(label: 'x1')
       allow(mw).to receive(:each).and_yield(bad_m)
-      expect { @system.input_from_morphword(mw, @lexicon) }.to\
+      expect { system.input_from_morphword(mw, @lexicon) }.to\
         raise_error(RuntimeError)
     end
   end
@@ -357,42 +404,51 @@ RSpec.describe SL::System do
     it 'has input == to the original input' do
       expect(@word.input).to eq(@input)
     end
+
     it 'has morphword r1' do
       expect(@word.morphword).to eq('r1')
     end
+
     it 'has input syl1 associated with r1' do
       expect(@word.input[0].morpheme).to eq('r1')
     end
+
     it 'input syl1 has IO correspondent output syl1' do
       expect(@word.io_out_corr(@word.input[0])).to eq(@word.output[0])
     end
+
     it 'output syl1 has IO correspondent input syl1' do
       expect(@word.io_in_corr(@word.output[0])).to eq(@word.input[0])
     end
   end
 
-  context 'Given input /s:/' do
-    before(:each) do
+  context 'with input /s:/' do
+    before do
       @syl = SL::Syllable.new.set_unstressed.set_long.set_morpheme('r1')
       @input = Input.new
       @input.morphword = 'r1'
       @input << @syl
-      @competition = @system.gen(@input)
+      @competition = system.gen(@input)
     end
+
     it 'gen generates a competition with 6 constraints' do
       expect(@competition[0].constraint_list.size).to eq(6)
     end
+
     it 'generates 2 candidates' do
       expect(@competition.size).to eq(2)
     end
+
     ['S.', 'S:'].each do |out_str|
       context "candidate with output #{out_str}" do
-        before(:each) do
+        before do
           @word = @competition.find { |w| w.output.to_s == out_str }
         end
+
         it "generates candidate with output #{out_str}" do
           expect(@word).not_to be nil
         end
+
         include_examples '1-syllable Word'
       end
     end
@@ -404,24 +460,31 @@ RSpec.describe SL::System do
     it 'has input == to the original input' do
       expect(@word.input).to eq(@input)
     end
+
     it 'has morphword r1s1' do
       expect(@word.morphword).to eq('r1s1')
     end
+
     it 'has input syl1 associated with r1' do
       expect(@word.input[0].morpheme).to eq('r1')
     end
+
     it 'has input syl2 associated with s1' do
       expect(@word.input[1].morpheme).to eq('s1')
     end
+
     it 'input syl1 has IO correspondent output syl1' do
       expect(@word.io_out_corr(@word.input[0])).to eq(@word.output[0])
     end
+
     it 'input syl2 has IO correspondent output syl2' do
       expect(@word.io_out_corr(@word.input[1])).to eq(@word.output[1])
     end
+
     it 'output syl1 has IO correspondent input syl1' do
       expect(@word.io_in_corr(@word.output[0])).to eq(@word.input[0])
     end
+
     it 'output syl2 has IO correspondent input syl2' do
       expect(@word.io_in_corr(@word.output[1])).to eq(@word.input[1])
     end
@@ -431,29 +494,35 @@ RSpec.describe SL::System do
     it 'gen generates a competition with 6 constraints' do
       expect(@competition[0].constraint_list.size).to eq(6)
     end
+
     it 'generates 8 candidates' do
       expect(@competition.size).to eq(8)
     end
-    ['S.s.', 'S.s:', 'S:s.', 'S:s:', 's.S.', 's.S:', 's:S.', 's:S:'].each do |out_str|
+
+    ['S.s.', 'S.s:', 'S:s.', 'S:s:', 's.S.', 's.S:', 's:S.', 's:S:'].each \
+    do |out_str|
       context "candidate with output #{out_str}" do
-        before(:each) { @word = @competition.find { |w| w.output.to_s == out_str } }
+        before { @word = @competition.find { |w| w.output.to_s == out_str } }
+
         it "generates candidate with output #{out_str}" do
           expect(@word).not_to be nil
         end
+
         include_examples '2-syllable Word'
       end
     end
   end
 
-  context 'Given input /s:S./' do
-    before(:each) do
+  context 'with input /s:S./' do
+    before do
       @syl1 = SL::Syllable.new.set_unstressed.set_long.set_morpheme('r1')
       @syl2 = SL::Syllable.new.set_main_stress.set_short.set_morpheme('s1')
       @input = Input.new
       @input.morphword = 'r1s1'
       @input << @syl1 << @syl2
-      @competition = @system.gen(@input)
+      @competition = system.gen(@input)
     end
+
     include_examples '2-syllable outputs'
   end
 
@@ -465,21 +534,27 @@ RSpec.describe SL::System do
     it 'with output == to the starting output' do
       expect(@word.output).to eq(@output)
     end
+
     it 'with input matching the lexical entries' do
       expect(@word.input).to eq(@input)
     end
+
     it "with morphword matching the output's morphword" do
       expect(@word.morphword).to eq(@morphword)
     end
+
     it 'input syl1 has IO correspondent output syl1' do
       expect(@word.io_out_corr(@word.input[0])).to eq(@word.output[0])
     end
+
     it 'input syl2 has IO correspondent output syl2' do
       expect(@word.io_out_corr(@word.input[1])).to eq(@word.output[1])
     end
+
     it 'output syl1 has IO correspondent input syl1' do
       expect(@word.io_in_corr(@word.output[0])).to eq(@word.input[0])
     end
+
     it 'output syl2 has IO correspondent input syl2' do
       expect(@word.io_in_corr(@word.output[1])).to eq(@word.input[1])
     end
@@ -488,7 +563,8 @@ RSpec.describe SL::System do
   context 'with lexicon including r1 /s./ and s1 /S:/' do
     let(:r1) { double('r1') }
     let(:s1) { double('s1') }
-    before(:each) do
+
+    before do
       allow(r1).to receive(:label).and_return('r1')
       allow(s1).to receive(:label).and_return('s1')
       @in_sylr1 = SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
@@ -505,8 +581,9 @@ RSpec.describe SL::System do
       # distinct objects from the ones in the lexicon
       @input = Input.new << @in_sylr1.dup << @in_syls1.dup
     end
-    context 'and output s.S. it parses to a candidate' do
-      before(:each) do
+
+    context 'with parsed output s.S.' do
+      before do
         @out_syl1 =
           SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
         @out_syl2 =
@@ -515,8 +592,9 @@ RSpec.describe SL::System do
         allow(@morphword).to receive(:each).and_yield(r1).and_yield(s1)
         @output = Output.new << @out_syl1 << @out_syl2
         @output.morphword = @morphword
-        @word = @system.parse_output(@output, @lex)
+        @word = system.parse_output(@output, @lex)
       end
+
       include_examples 'parsed output'
     end
   end
@@ -524,7 +602,8 @@ RSpec.describe SL::System do
   context 'with a lexicon containing only r1 /s./' do
     let(:r1) { double('r1') }
     let(:s1) { double('s1') }
-    before(:each) do
+
+    before do
       allow(r1).to receive(:label).and_return('r1')
       allow(s1).to receive(:label).and_return('s1')
       @in_sylr1 = SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
@@ -550,8 +629,9 @@ RSpec.describe SL::System do
       # Distinct objects from the ones in the lexicon.
       @input = Input.new << @in_sylr1.dup << @in_syls1.dup
     end
-    context 'and output s.S.' do
-      before(:each) do
+
+    context 'when output s.S. is parsed' do
+      before do
         @out_syl1 =
           SL::Syllable.new.set_unstressed.set_short.set_morpheme(r1)
         @out_syl2 =
@@ -560,52 +640,54 @@ RSpec.describe SL::System do
         allow(@morphword).to receive(:each).and_yield(r1).and_yield(s1)
         @output = Output.new << @out_syl1 << @out_syl2
         @output.morphword = @morphword
+        allow(@lex).to receive(:<<)
+        @word = system.parse_output(@output, @lex)
       end
+
       it 'creates a new lexical entry for s1' do
-        # There is no simple way to test the argument given to :<<, i.e.,
-        # the lexical entry. This might be a job for a test spy, or
-        # a partial test dummy, but I won't pursue it at this time.
-        expect(@lex).to receive(:<<).once
-        @word = @system.parse_output(@output, @lex)
+        expect(@lex).to have_received(:<<).once
       end
-      context 'when parsed,' do
-        before(:each) do
-          allow(@lex).to receive(:<<).once
-          @word = @system.parse_output(@output, @lex)
-        end
-        include_examples 'parsed output'
-        it "the word's 2nd input syllable is unset for stress" do
-          expect(@word.input[1].stress_unset?).to be true
-        end
-        it "the word's 2nd input syllable is unset for length" do
-          expect(@word.input[1].length_unset?).to be true
-        end
+
+      include_examples 'parsed output'
+
+      it "the word's 2nd input syllable is unset for stress" do
+        expect(@word.input[1].stress_unset?).to be true
+      end
+
+      it "the word's 2nd input syllable is unset for length" do
+        expect(@word.input[1].length_unset?).to be true
       end
     end
   end
 
-  context 'generate_competitions_1r1s' do
-    before(:example) do
-      @comp_list = @system.generate_competitions_1r1s
+  context 'when generating competitions_1r1s' do
+    before do
+      @comp_list = system.generate_competitions_1r1s
     end
+
     it 'generates 16 competitions' do
       expect(@comp_list.size).to eq 16
     end
+
     it 'generates competitions of 8 candidates each' do
       expect(@comp_list.all? { |c| c.size == 8 }).to be true
     end
+
     it 'includes a competition for r1s1' do
       comp = @comp_list.find { |c| c[0].morphword.to_s == 'r1-s1' }
       expect(comp).not_to be_nil
     end
+
     it 'r1s1 has input s.-s.' do
       comp = @comp_list.find { |c| c[0].morphword.to_s == 'r1-s1' }
       expect(comp[0].input.to_s).to eq 's.-s.'
     end
+
     it 'r2s1 has input s:-s.' do
       comp = @comp_list.find { |c| c[0].morphword.to_s == 'r2-s1' }
       expect(comp[0].input.to_s).to eq 's:-s.'
     end
+
     it 'r2s3 has input s:-S.' do
       comp = @comp_list.find { |c| c[0].morphword.to_s == 'r2-s3' }
       expect(comp[0].input.to_s).to eq 's:-S.'
