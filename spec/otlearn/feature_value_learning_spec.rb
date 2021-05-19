@@ -5,18 +5,19 @@
 require 'rspec'
 require 'otlearn/feature_value_learning'
 
-RSpec.describe 'OTLearn::FeatureValueLearning' do
+RSpec.describe OTLearn::FeatureValueLearning do
   let(:grammar) { double('grammar') }
   let(:word1) { double('word1') }
   let(:out1) { double('output1') }
   let(:w1) { double('w1') }
   let(:word_search) { double('word search') }
   let(:value_finder) { double('consistent value finder') }
-  before(:example) do
+
+  before do
     allow(word1).to receive(:dup).and_return(w1)
     allow(w1).to receive(:sync_with_lexicon!)
     allow(w1).to receive(:match_input_to_output!)
-    @learner = OTLearn::FeatureValueLearning.new(word_search: word_search)
+    @learner = described_class.new(word_search: word_search)
     @learner.value_finder = value_finder
   end
 
@@ -26,7 +27,8 @@ RSpec.describe 'OTLearn::FeatureValueLearning' do
     let(:morph2) { double('morpheme2') }
     let(:target_feature) { double('target_feature') }
     let(:target_value) { double('target_value') }
-    before(:example) do
+
+    before do
       words = [word1]
       allow(word_search).to receive(:morphemes_to_words).with([w1])\
                                                         .and_return(m_in_w)
@@ -42,25 +44,28 @@ RSpec.describe 'OTLearn::FeatureValueLearning' do
         .with(target_feature, [w1], [], grammar).and_return([target_value])
       @set_features = @learner.run(words, grammar)
     end
-    # it 'parses the output of the word' do
-    #   expect(grammar).to have_received(:parse_output).with(out1)
-    # end
+
     it 'duplicates the word' do
       expect(word1).to have_received(:dup)
     end
+
     it 'matches the input to the UF' do
       expect(w1).to have_received(:sync_with_lexicon!)
     end
+
     it 'matches unset input features to the output' do
       expect(w1).to have_received(:match_input_to_output!)
     end
+
     it 'checks the words for conflicting values of the target feature' do
       expect(word_search).to have_received(:conflicting_output_values?)\
         .with(target_feature, [w1])
     end
+
     it 'sets the feature' do
       expect(target_feature).to have_received(:value=).with(target_value)
     end
+
     it 'returns a list of newly set features' do
       expect(@set_features).to contain_exactly(target_feature)
     end

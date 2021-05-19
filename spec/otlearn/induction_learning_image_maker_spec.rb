@@ -23,7 +23,8 @@ RSpec.describe OTLearn::InductionLearningImageMaker do
   let(:test_image) { double('test_image') }
   let(:sheet_class) { double('sheet_class') }
   let(:sheet) { double('sheet') }
-  before(:each) do
+
+  before do
     allow(grammar_test_image_maker).to\
       receive(:get_image).with(test_result).and_return(test_image)
     allow(in_step).to receive(:test_result).and_return(test_result)
@@ -36,60 +37,71 @@ RSpec.describe OTLearn::InductionLearningImageMaker do
     allow(sheet).to receive(:add_empty_row)
     allow(sheet).to receive(:append)
     @in_image_maker =
-      OTLearn::InductionLearningImageMaker\
-      .new(grammar_test_image_maker: grammar_test_image_maker,
-           fsf_image_maker: fsf_image_maker,
-           mmr_image_maker: mmr_image_maker,
-           sheet_class: sheet_class)
+      described_class.new(grammar_test_image_maker: grammar_test_image_maker,
+                          fsf_image_maker: fsf_image_maker,
+                          mmr_image_maker: mmr_image_maker,
+                          sheet_class: sheet_class)
   end
 
-  context 'given a step with fewest set features' do
+  context 'with a step with fewest set features' do
     let(:step_subtype) { OTLearn::FEWEST_SET_FEATURES }
-    before(:each) do
+
+    before do
       allow(in_step).to\
         receive(:step_subtype).and_return(step_subtype)
       allow(in_step).to receive(:substep)
       @in_image = @in_image_maker.get_image(in_step)
     end
+
     it 'indicates the step type' do
       expect(@in_image).to\
         have_received(:[]=).with(1, 1, 'Induction Learning')
     end
+
     it 'creates an FSF image' do
       expect(fsf_image_maker).to have_received(:get_image)
     end
+
     it 'does not create an MMR image' do
       expect(mmr_image_maker).not_to have_received(:get_image)
     end
+
     it 'adds the FSF image' do
       expect(@in_image).to have_received(:append).with(fsf_image)
     end
+
     it 'adds the test image' do
       expect(@in_image).to have_received(:append).with(test_image)
     end
   end
 
-  context 'given a step with max mismatch ranking' do
+  context 'with a step with max mismatch ranking' do
     let(:step_subtype) { OTLearn::MAX_MISMATCH_RANKING }
-    before(:each) do
+
+    before do
       allow(in_step).to\
         receive(:step_subtype).and_return(step_subtype)
       allow(in_step).to receive(:substep)
       @in_image = @in_image_maker.get_image(in_step)
     end
+
     it 'indicates the step type' do
       expect(@in_image).to\
         have_received(:[]=).with(1, 1, 'Induction Learning')
     end
+
     it 'does not create an FSF image' do
       expect(fsf_image_maker).not_to have_received(:get_image)
     end
+
     it 'creates an MMR image' do
       expect(mmr_image_maker).to have_received(:get_image)
     end
+
     it 'adds the MMR image' do
       expect(@in_image).to have_received(:append).with(mmr_image)
     end
+
     it 'adds the test image' do
       expect(@in_image).to have_received(:append).with(test_image)
     end

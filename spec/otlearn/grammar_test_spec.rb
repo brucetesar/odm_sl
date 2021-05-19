@@ -14,7 +14,8 @@ RSpec.describe OTLearn::GrammarTest do
   let(:output_nopt) { double('output_nopt') }
   let(:winner_nopt) { double('winner_nopt') }
   let(:loser) { double('loser') }
-  before(:each) do
+
+  before do
     allow(grammar).to receive(:system).and_return(system)
     allow(grammar).to receive(:dup).and_return(grammar)
     allow(grammar).to receive(:freeze)
@@ -31,53 +32,65 @@ RSpec.describe OTLearn::GrammarTest do
       receive(:select_loser).with(winner_opt, 'ERCs').and_return(nil)
     allow(selector).to\
       receive(:select_loser).with(winner_nopt, 'ERCs').and_return(loser)
-    @grammar_test = OTLearn::GrammarTest.new
+    @grammar_test = described_class.new
     @grammar_test.loser_selector = selector
   end
 
-  context 'given one optimal winner' do
+  context 'with one optimal winner' do
     let(:output_list) { [output_opt] }
-    before(:each) do
+
+    before do
       @result = @grammar_test.run(output_list, grammar)
     end
+
     it 'returns a list with that winner for success winners' do
       expect(@result.success_winners).to eq [winner_opt]
     end
+
     it 'returns an empty list for failed winners' do
       expect(@result.failed_winners).to be_empty
     end
+
     it 'reports that all winners are successful' do
       expect(@result.all_correct?).to be true
     end
   end
 
-  context 'given one non-optimal winner' do
+  context 'with one non-optimal winner' do
     let(:output_list) { [output_nopt] }
-    before(:each) do
+
+    before do
       @result = @grammar_test.run(output_list, grammar)
     end
+
     it 'returns an empty list for success winners' do
       expect(@result.success_winners).to be_empty
     end
+
     it 'returns a list with that winner for failed winners' do
       expect(@result.failed_winners).to eq [winner_nopt]
     end
+
     it 'reports that not all winners are successful' do
       expect(@result.all_correct?).to be false
     end
   end
 
-  context 'given one optimal and one non-optimal winner' do
+  context 'with one optimal and one non-optimal winner' do
     let(:output_list) { [output_opt, output_nopt] }
-    before(:each) do
+
+    before do
       @result = @grammar_test.run(output_list, grammar)
     end
+
     it 'returns a list with the opt winner for success winners' do
       expect(@result.success_winners).to eq [winner_opt]
     end
+
     it 'returns a list with the non-opt winner for failed winners' do
       expect(@result.failed_winners).to eq [winner_nopt]
     end
+
     it 'reports that not all winners are successful' do
       expect(@result.all_correct?).to be false
     end

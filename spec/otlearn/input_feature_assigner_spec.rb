@@ -5,7 +5,7 @@
 require 'rspec'
 require 'otlearn/input_feature_assigner'
 
-RSpec.describe 'OTLearn::InputFeatureAssigner' do
+RSpec.describe OTLearn::InputFeatureAssigner do
   let(:f_uf_inst) { double('UF feature instance') }
   let(:uf_el) { double('UF element') }
   let(:uf_feat) { double('UF feature') }
@@ -17,7 +17,8 @@ RSpec.describe 'OTLearn::InputFeatureAssigner' do
   let(:in_feat1) { double('in feature 1') }
   let(:in_feat2) { double('in feature 2') }
   let(:f_type) { double('feature type') }
-  before(:example) do
+
+  before do
     allow(f_uf_inst).to receive(:element).and_return(uf_el)
     allow(f_uf_inst).to receive(:feature).and_return(uf_feat)
     allow(uf_feat).to receive(:type).and_return(f_type)
@@ -25,11 +26,11 @@ RSpec.describe 'OTLearn::InputFeatureAssigner' do
     allow(in_feat2).to receive(:value=)
     allow(word1).to receive(:eval)
     allow(word2).to receive(:eval)
-    @assigner = OTLearn::InputFeatureAssigner.new
+    @assigner = described_class.new
   end
 
-  context 'given two words with the feature' do
-    before(:example) do
+  context 'with two words with the feature' do
+    before do
       allow(word1).to receive(:ui_in_corr).with(uf_el).and_return(in_el1)
       allow(word2).to receive(:ui_in_corr).with(uf_el).and_return(in_el2)
       allow(in_el1).to receive(:get_feature).with(f_type)\
@@ -40,22 +41,26 @@ RSpec.describe 'OTLearn::InputFeatureAssigner' do
       @return_value =
         @assigner.assign_input_features(f_uf_inst, assigned_value, word_list)
     end
+
     it 'assigns the input value to the first word' do
       expect(in_feat1).to have_received(:value=).with(assigned_value)
     end
+
     it 're-evaluates the constraint violations for the first word' do
       expect(word1).to have_received(:eval)
     end
+
     it 'assigns the input value to the second word' do
       expect(in_feat2).to have_received(:value=).with(assigned_value)
     end
+
     it 're-evaluates the constraint violations for the second word' do
       expect(word2).to have_received(:eval)
     end
   end
 
-  context 'given a word without and a word with the feature' do
-    before(:example) do
+  context 'with a word without and a word with the feature' do
+    before do
       allow(word1).to receive(:ui_in_corr).with(uf_el).and_return(nil)
       allow(word2).to receive(:ui_in_corr).with(uf_el).and_return(in_el2)
       allow(in_el1).to receive(:get_feature).with(f_type)\
@@ -66,15 +71,19 @@ RSpec.describe 'OTLearn::InputFeatureAssigner' do
       @return_value =
         @assigner.assign_input_features(f_uf_inst, assigned_value, word_list)
     end
+
     it 'does not assign the input value to the first word' do
       expect(in_feat1).not_to have_received(:value=)
     end
+
     it 'does not re-evaluate the constraint violations for the first word' do
       expect(word1).not_to have_received(:eval)
     end
+
     it 'assigns the input value to the second word' do
       expect(in_feat2).to have_received(:value=).with(assigned_value)
     end
+
     it 're-evaluates the constraint violations for the second word' do
       expect(word2).to have_received(:eval)
     end
