@@ -33,3 +33,6 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/VerifiedDoubles:
   Enabled: false
+
+RSpec/FilePath:
+  SpecSuffixOnly: true
