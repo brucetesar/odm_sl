@@ -18,7 +18,8 @@ RSpec.describe OTLearn::PhonotacticLearningImageMaker do
   let(:test_image) { double('test_image') }
   let(:sheet_class) { double('sheet_class') }
   let(:sheet) { double('sheet') }
-  before(:each) do
+
+  before do
     allow(grammar_test_image_maker).to\
       receive(:get_image).with(test_result).and_return(test_image)
     allow(pl_step).to receive(:test_result).and_return(test_result)
@@ -26,19 +27,20 @@ RSpec.describe OTLearn::PhonotacticLearningImageMaker do
     allow(sheet).to receive(:[]=)
     allow(sheet).to receive(:append)
     @pl_image_maker =
-      OTLearn::PhonotacticLearningImageMaker\
-      .new(grammar_test_image_maker: grammar_test_image_maker,
-           sheet_class: sheet_class)
+      described_class.new(grammar_test_image_maker: grammar_test_image_maker,
+                          sheet_class: sheet_class)
   end
 
-  context 'given a phonotactic learning step' do
-    before(:each) do
+  context 'with a phonotactic learning step' do
+    before do
       @pl_image = @pl_image_maker.get_image(pl_step)
     end
+
     it 'indicates the step type' do
       expect(@pl_image).to\
         have_received(:[]=).with(1, 1, 'Phonotactic Learning')
     end
+
     it 'adds the test result image' do
       expect(@pl_image).to have_received(:append).with(test_image)
     end
