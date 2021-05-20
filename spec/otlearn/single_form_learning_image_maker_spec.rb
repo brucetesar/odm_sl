@@ -18,7 +18,8 @@ RSpec.describe OTLearn::SingleFormLearningImageMaker do
   let(:test_image) { double('test_image') }
   let(:sheet_class) { double('sheet_class') }
   let(:sheet) { double('sheet') }
-  before(:each) do
+
+  before do
     allow(grammar_test_image_maker).to\
       receive(:get_image).with(test_result).and_return(test_image)
     allow(sf_step).to receive(:test_result).and_return(test_result)
@@ -26,19 +27,20 @@ RSpec.describe OTLearn::SingleFormLearningImageMaker do
     allow(sheet).to receive(:[]=)
     allow(sheet).to receive(:append)
     @sf_image_maker =
-      OTLearn::SingleFormLearningImageMaker\
-      .new(grammar_test_image_maker: grammar_test_image_maker,
-           sheet_class: sheet_class)
+      described_class.new(grammar_test_image_maker: grammar_test_image_maker,
+                          sheet_class: sheet_class)
   end
 
-  context 'given a single form learning step' do
-    before(:each) do
+  context 'with a single form learning step' do
+    before do
       @sf_image = @sf_image_maker.get_image(sf_step)
     end
+
     it 'indicates the step type' do
       expect(@sf_image).to\
         have_received(:[]=).with(1, 1, 'Single Form Learning')
     end
+
     it 'adds the test result image' do
       expect(@sf_image).to have_received(:append).with(test_image)
     end
