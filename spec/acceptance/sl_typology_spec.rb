@@ -6,16 +6,7 @@
 # It tests the output created by bin/generate_typology_1r1s.rb.
 
 require_relative '../../lib/odl/resolver'
-
-# TODO: replace with call to OTLearn::LanguageLearningRunner.run_languages
-def read_languages_from_file(data_file)
-  File.open(data_file, 'rb') do |fin|
-    until fin.eof
-      label, outputs = Marshal.load(fin)
-      yield label, outputs
-    end
-  end
-end
+require 'otlearn/language_learning_runner'
 
 RSpec.describe 'Generating the 1r1s typology for SL', :acceptance do
   before(:context) do
@@ -32,23 +23,19 @@ RSpec.describe 'Generating the 1r1s typology for SL', :acceptance do
     load "#{executable_dir}/generate_typology_1r1s.rb"
   end
 
-  context '' do
-    before do
-      fname = 'outputs_typology_1r1s.mar'
-      @fixture_file = File.join(@sl_fixture_dir, fname)
-      @generated_file = File.join(@generated_dir, fname)
-      @fixture_value = []
-      read_languages_from_file(@fixture_file) do |label, outputs|
-        @fixture_value << [label, outputs]
-      end
-      @generated_value = []
-      read_languages_from_file(@generated_file) do |label, outputs|
-        @generated_value << [label, outputs]
-      end
-    end
+  before do
+    fname = 'outputs_typology_1r1s.mar'
+    @fixture_file = File.join(@sl_fixture_dir, fname)
+    @generated_file = File.join(@generated_dir, fname)
+    @fixture_value = []
+    OTLearn::LanguageLearningRunner.read_languages(@fixture_file) \
+        { |label, outputs| @fixture_value << [label, outputs] }
+    @generated_value = []
+    OTLearn::LanguageLearningRunner.read_languages(@generated_file) \
+        { |label, outputs| @generated_value << [label, outputs] }
+  end
 
-    it 'produces output that matches its test fixture' do
-      expect(@generated_value).to eq @fixture_value
-    end
+  it 'produces output that matches its test fixture' do
+    expect(@generated_value).to eq @fixture_value
   end
 end
