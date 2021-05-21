@@ -3,6 +3,7 @@
 # Author: Bruce Tesar
 
 require 'rspec'
+require 'odl/resolver'
 require 'otlearn/language_learning_runner'
 
 RSpec.describe OTLearn::LanguageLearningRunner do
@@ -132,6 +133,22 @@ RSpec.describe OTLearn::LanguageLearningRunner do
 
     it 'returns a list of the outputs with no duplicates' do
       expect(@data).to contain_exactly(output1, output2)
+    end
+  end
+
+  context 'when class method iterating learning over languages' do
+    it 'yields the label and outputs of each language' do
+      dfile = File.join(ODL::DATA_DIR, 'sl', 'test_languages.mar')
+      expect { |probe| described_class.run_languages(dfile, &probe) }.to \
+        yield_successive_args(%w[TL1 Toutputs1], %w[TL2 Toutputs2])
+    end
+  end
+
+  context 'when instance method iterating learning over languages' do
+    it 'yields the label and outputs of each language' do
+      dfile = File.join(ODL::DATA_DIR, 'sl', 'test_languages.mar')
+      expect { |probe| @runner.run_languages(dfile, &probe) }.to \
+        yield_successive_args(%w[TL1 Toutputs1], %w[TL2 Toutputs2])
     end
   end
 end

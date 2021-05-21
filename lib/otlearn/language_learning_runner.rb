@@ -50,13 +50,22 @@ module OTLearn
 
     # Reads all of the languages in _data_file_. For each language,
     # the label and outputs are fed to the program block.
-    def run_languages(data_file)
+    def self.run_languages(data_file)
       File.open(data_file, 'rb') do |fin|
         until fin.eof
           label, outputs = Marshal.load(fin)
           yield label, outputs
         end
       end
+    end
+
+    # Reads all of the languages in _data_file_. For each language,
+    # the label and outputs are fed to the program block.
+    #
+    # This instance method gives instance-based access to the class
+    # method LanguageLearningRunner.run_languages().
+    def run_languages(data_file, &block)
+      LanguageLearningRunner.run_languages(data_file, &block)
     end
 
     # Formats a learning _result_ as a CSV image, and writes
