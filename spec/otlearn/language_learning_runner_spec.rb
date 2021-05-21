@@ -136,18 +136,18 @@ RSpec.describe OTLearn::LanguageLearningRunner do
     end
   end
 
-  context 'when class method iterating learning over languages' do
+  context 'when reading languages via class method' do
     it 'yields the label and outputs of each language' do
       dfile = File.join(ODL::DATA_DIR, 'sl', 'test_languages.mar')
-      expect { |probe| described_class.run_languages(dfile, &probe) }.to \
+      expect { |probe| described_class.read_languages(dfile, &probe) }.to \
         yield_successive_args(%w[TL1 Toutputs1], %w[TL2 Toutputs2])
     end
   end
 
-  context 'when instance method iterating learning over languages' do
+  context 'when reading languages via instance method' do
     it 'yields the label and outputs of each language' do
       dfile = File.join(ODL::DATA_DIR, 'sl', 'test_languages.mar')
-      expect { |probe| @runner.run_languages(dfile, &probe) }.to \
+      expect { |probe| @runner.read_languages(dfile, &probe) }.to \
         yield_successive_args(%w[TL1 Toutputs1], %w[TL2 Toutputs2])
     end
   end

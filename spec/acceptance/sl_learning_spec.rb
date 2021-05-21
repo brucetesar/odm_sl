@@ -13,7 +13,7 @@ require 'sl/system'
 RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
   data_file = File.join(ODL::DATA_DIR, 'sl', 'outputs_typology_1r1s.mar')
 
-  before(:context) do
+  before do
     # Configure and build the learner
     factory = OTLearn::LanguageLearningFactory.new
     factory.para_mark_low.learn_consistent.test_consistent
@@ -23,7 +23,7 @@ RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
     @runner = described_class.new(factory.system, learner)
   end
 
-  OTLearn::LanguageLearningRunner.run_languages(data_file) do |label, outputs|
+  described_class.read_languages(data_file) do |label, outputs|
     it "sucessfully learns #{label}" do
       @result = @runner.run(label, outputs)
       expect(@result).to be_learning_successful
