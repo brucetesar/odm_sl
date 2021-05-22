@@ -7,6 +7,8 @@ require_relative 'quick_erc'
 
 RSpec.describe QuickErc do
   before do
+    # Stub the class constants, so that the prefix described_class::
+    # can be omitted in the rest of the specs.
     stub_const('ML', described_class::ML)
     stub_const('ME', described_class::ME)
     stub_const('MW', described_class::MW)
