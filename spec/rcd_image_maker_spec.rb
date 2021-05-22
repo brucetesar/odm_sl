@@ -23,7 +23,7 @@ RSpec.describe RcdImageMaker do
   end
 
   context 'given RCD result with one ERC [W]' do
-    let(:erc1) { QuickErc.quick_erc([MW]) }
+    let(:erc1) { QuickErc.new([MW]) }
     let(:unsorted_constraints) { erc1.constraint_list }
     let(:con1) { unsorted_constraints[0] }
     let(:sorted_ercs) { [erc1] }
@@ -43,8 +43,8 @@ RSpec.describe RcdImageMaker do
   end
 
   context 'with erc_sort flag set to true' do
-    let(:erc1) { QuickErc.quick_erc([ML, ME, MW]) }
-    let(:erc2) { QuickErc.quick_erc([MW, MW, ML]) }
+    let(:erc1) { QuickErc.new([ML, ME, MW]) }
+    let(:erc2) { QuickErc.new([MW, MW, ML]) }
     let(:unsorted_ercs) { [erc1, erc2] }
     let(:unsorted_constraints) { erc1.constraint_list }
     let(:con1) { unsorted_constraints[0] }
