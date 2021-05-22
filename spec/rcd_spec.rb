@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # Author: Bruce Tesar
-#
-# The specs for class Rcd make use of a test helper, Test.quick_erc.
+
+# The specs for class Rcd make use of a spec helper, QuickErc.quick_erc.
 # This helper, in turn, explicitly uses the following production classes:
 # * Erc
 # * Constraint
@@ -13,12 +13,12 @@ require 'erc_list'
 RSpec.describe Rcd do
   let(:erc_list) { instance_double(ErcList, 'ERC list') }
   before(:example) do
-    stub_const 'ML', Test::ML
-    stub_const 'ME', Test::ME
-    stub_const 'MW', Test::MW
-    stub_const 'FL', Test::FL
-    stub_const 'FE', Test::FE
-    stub_const 'FW', Test::FW
+    stub_const 'ML', QuickErc::ML
+    stub_const 'ME', QuickErc::ME
+    stub_const 'MW', QuickErc::MW
+    stub_const 'FL', QuickErc::FL
+    stub_const 'FE', QuickErc::FE
+    stub_const 'FW', QuickErc::FW
   end
 
   context 'with an empty ERC list and 2 constraints' do
@@ -63,7 +63,7 @@ RSpec.describe Rcd do
   end
 
   context 'with ERC list [[ML,MW]]' do
-    let(:erc1) { Test.quick_erc([ML, MW]) }
+    let(:erc1) { QuickErc.quick_erc([ML, MW]) }
     let(:constraint_list) { erc1.constraint_list }
     let(:con1) { constraint_list[0] }
     let(:con2) { constraint_list[1] }
@@ -100,8 +100,8 @@ RSpec.describe Rcd do
   end
 
   context 'with ERC list [[ML,FW,MW],[MW,FL,Me]]' do
-    let(:erc1) { Test.quick_erc([ML, FW, MW]) }
-    let(:erc2) { Test.quick_erc([MW, FL, ME]) }
+    let(:erc1) { QuickErc.quick_erc([ML, FW, MW]) }
+    let(:erc2) { QuickErc.quick_erc([MW, FL, ME]) }
     let(:constraint_list) { erc1.constraint_list }
     let(:con1) { constraint_list[0] }
     let(:con2) { constraint_list[1] }
@@ -138,9 +138,9 @@ RSpec.describe Rcd do
   end
 
   context 'with ERC list [[MW,FE,ML],[ME,FL,MW],[ME,FW,ML]]' do
-    let(:erc1) { Test.quick_erc([MW, FE, ML]) }
-    let(:erc2) { Test.quick_erc([ME, FL, MW]) }
-    let(:erc3) { Test.quick_erc([ME, FW, ML]) }
+    let(:erc1) { QuickErc.quick_erc([MW, FE, ML]) }
+    let(:erc2) { QuickErc.quick_erc([ME, FL, MW]) }
+    let(:erc3) { QuickErc.quick_erc([ME, FW, ML]) }
     let(:constraint_list) { erc1.constraint_list }
     let(:con1) { constraint_list[0] }
     let(:con2) { constraint_list[1] }

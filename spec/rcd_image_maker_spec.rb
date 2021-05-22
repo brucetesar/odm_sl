@@ -11,9 +11,9 @@ RSpec.describe RcdImageMaker do
   let(:sheet_class) { double('sheet class') }
   let(:sheet) { double('sheet') }
   before(:each) do
-    stub_const 'ML', Test::ML
-    stub_const 'ME', Test::ME
-    stub_const 'MW', Test::MW
+    stub_const 'ML', QuickErc::ML
+    stub_const 'ME', QuickErc::ME
+    stub_const 'MW', QuickErc::MW
     allow(sheet_class).to receive(:new).and_return(sheet)
     allow(sheet).to receive(:put_range)
     allow(ct_image_maker).to receive(:get_image).and_return(ct_image)
@@ -23,7 +23,7 @@ RSpec.describe RcdImageMaker do
   end
 
   context 'given RCD result with one ERC [W]' do
-    let(:erc1) { Test.quick_erc([MW]) }
+    let(:erc1) { QuickErc.quick_erc([MW]) }
     let(:unsorted_constraints) { erc1.constraint_list }
     let(:con1) { unsorted_constraints[0] }
     let(:sorted_ercs) { [erc1] }
@@ -43,8 +43,8 @@ RSpec.describe RcdImageMaker do
   end
 
   context 'with erc_sort flag set to true' do
-    let(:erc1) { Test.quick_erc([ML, ME, MW]) }
-    let(:erc2) { Test.quick_erc([MW, MW, ML]) }
+    let(:erc1) { QuickErc.quick_erc([ML, ME, MW]) }
+    let(:erc2) { QuickErc.quick_erc([MW, MW, ML]) }
     let(:unsorted_ercs) { [erc1, erc2] }
     let(:unsorted_constraints) { erc1.constraint_list }
     let(:con1) { unsorted_constraints[0] }

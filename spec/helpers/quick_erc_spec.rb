@@ -7,17 +7,17 @@ require_relative 'quick_erc'
 
 RSpec.describe 'Test.quick_erc()' do
   before do
-    stub_const('ML', Test::ML)
-    stub_const('ME', Test::ME)
-    stub_const('MW', Test::MW)
-    stub_const('FL', Test::FL)
-    stub_const('FE', Test::FE)
-    stub_const('FW', Test::FW)
+    stub_const('ML', QuickErc::ML)
+    stub_const('ME', QuickErc::ME)
+    stub_const('MW', QuickErc::MW)
+    stub_const('FL', QuickErc::FL)
+    stub_const('FE', QuickErc::FE)
+    stub_const('FW', QuickErc::FW)
   end
 
   context 'with input [ML,MW]' do
     before do
-      @erc1 = Test.quick_erc([ML, MW])
+      @erc1 = QuickErc.quick_erc([ML, MW])
       @con_list = @erc1.constraint_list
       @con_names = @con_list.map(&:name)
     end
@@ -64,7 +64,7 @@ RSpec.describe 'Test.quick_erc()' do
 
   context 'with input [ML,FW,MW]' do
     before do
-      @erc1 = Test.quick_erc([ML, FW, MW])
+      @erc1 = QuickErc.quick_erc([ML, FW, MW])
       @con_list = @erc1.constraint_list
       @con_names = @con_list.map(&:name)
     end

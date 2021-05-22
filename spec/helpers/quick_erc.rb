@@ -5,7 +5,7 @@
 require 'erc'
 require 'constraint'
 
-module Test
+module QuickErc
   # Constants for evaluation by constraints
   ML = 'ML'  # prefers the loser
   ME = 'Me'  # no preference
