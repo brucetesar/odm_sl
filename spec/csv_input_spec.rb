@@ -2,10 +2,10 @@
 
 # Author: Bruce Tesar
 
+require_relative '../lib/odl/resolver'
 require 'csv_input'
 
-project_dir = File.absolute_path(File.join(File.dirname(__FILE__), '..'))
-fixture_dir = File.join(project_dir, 'test', 'fixtures')
+fixture_dir = File.join(ODL::SPEC_DIR, 'fixtures')
 
 RSpec.describe 'CsvInput' do
   context 'when created with a valid CSV filename' do
