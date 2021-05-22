@@ -5,7 +5,6 @@
 require 'rspec'
 require 'constraint'
 require 'otlearn/ranking_bias_some_low'
-require_relative '../../test/helpers/quick_erc'
 
 RSpec.describe OTLearn::RankingBiasSomeLow do
   let(:rcd) { double('rcd') }

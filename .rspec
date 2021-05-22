@@ -12,3 +12,6 @@
 
 # load the contents of spec/spec_helper.rb
 --require spec_helper
+
+# load helpers
+--require 'helpers/quick_erc'

@@ -3,7 +3,7 @@
 # Author: Bruce Tesar
 
 require 'rspec'
-require_relative '../../test/helpers/quick_erc'
+require_relative '../helpers/quick_erc'
 
 # These specs are created in the module Test, so that they share the
 # constants associated with quick_erc without polluting the global

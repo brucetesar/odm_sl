@@ -3,7 +3,6 @@
 # Author: Bruce Tesar
 
 require 'rcd_image_maker'
-require_relative '../test/helpers/quick_erc'
 
 RSpec.describe RcdImageMaker do
   let(:rcd_result) { double('rcd_result') }

@@ -9,7 +9,6 @@
 
 require 'rcd'
 require 'erc_list'
-require_relative '../test/helpers/quick_erc'
 
 RSpec.describe Rcd do
   let(:erc_list) { instance_double(ErcList, 'ERC list') }
