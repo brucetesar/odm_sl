@@ -30,6 +30,9 @@ module ODL
   # Create the data directory if it doesn't already exist.
   Dir.mkdir(DATA_DIR) unless Dir.exist?(DATA_DIR)
 
+  # Constant for the spec directory.
+  SPEC_DIR = File.expand_path('spec', PROJECT_DIR)
+
   # Constant for the temp directory.
   TEMP_DIR = File.expand_path('temp', PROJECT_DIR)
   # Create the temp directory if it doesn't already exist.

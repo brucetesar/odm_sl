@@ -2,8 +2,13 @@
 
 # Author: Bruce Tesar
 
-# This is an acceptance test for the typology generation for SL.
+# Acceptance tests for typology generation, using the system SL.
+# The factorial typology for SL using word forms 1r1s, where all words
+# consist of a 1-syllable root and a 1-syllable suffix, is generated.
+# The outputs of each generated language are then compared to the
+# corresponding set of outputs in a fixture file.
 
+require_relative '../../lib/odl/resolver'
 require 'otlearn/language_learning_runner'
 require 'sl/system'
 require 'factorial_typology'
@@ -21,7 +26,7 @@ RSpec.describe 'FactorialTypology', :acceptance do
       [lang.label, outputs]
     end
     # Retrieve the fixture data
-    fixture_file = File.join('spec', 'fixtures', 'sl',
+    fixture_file = File.join(ODL::SPEC_DIR, 'fixtures', 'sl',
                              'outputs_typology_1r1s.mar')
     fixture_data = []
     OTLearn::LanguageLearningRunner.read_languages(fixture_file) \

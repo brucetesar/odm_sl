@@ -11,7 +11,8 @@ require 'otlearn/language_learning_runner'
 require 'sl/system'
 
 RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
-  data_file = File.join(ODL::DATA_DIR, 'sl', 'outputs_typology_1r1s.mar')
+  data_file = File.join(ODL::SPEC_DIR, 'fixtures', 'sl',
+                        'outputs_typology_1r1s.mar')
 
   before do
     # Configure and build the learner
