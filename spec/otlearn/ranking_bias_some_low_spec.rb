@@ -16,12 +16,6 @@ RSpec.describe OTLearn::RankingBiasSomeLow do
   let(:con5) { instance_double(Constraint, 'Constraint5') }
 
   before do
-    stub_const 'ML', Test::ML
-    stub_const 'ME', Test::ME
-    stub_const 'MW', Test::MW
-    stub_const 'FL', Test::FL
-    stub_const 'FE', Test::FE
-    stub_const 'FW', Test::FW
     @bias = described_class.new(low_kind)
   end
 
