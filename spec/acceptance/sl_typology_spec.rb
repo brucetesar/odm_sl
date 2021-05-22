@@ -14,12 +14,12 @@ require 'sl/system'
 require 'factorial_typology'
 require 'sync_enum'
 
-RSpec.describe 'FactorialTypology', :acceptance do
+RSpec.describe FactorialTypology, :acceptance do
   context 'when generating the typology for SL 1r1s' do
     # Generate the typology data
     system = SL::System.instance
     competition_list = system.generate_competitions_1r1s
-    ft_result = FactorialTypology.new(competition_list)
+    ft_result = described_class.new(competition_list)
     lang_list = ft_result.factorial_typology
     generated_data = lang_list.map do |lang|
       outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
