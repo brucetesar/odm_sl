@@ -23,7 +23,7 @@ RSpec.describe 'FactorialTypology', :acceptance do
     end
     # Retrieve the fixture data
     project_dir = ODL::PROJECT_DIR
-    sl_fixture_dir = File.join(project_dir, 'test', 'fixtures', 'sl')
+    sl_fixture_dir = File.join(project_dir, 'spec', 'fixtures', 'sl')
     fname = 'outputs_typology_1r1s.mar'
     fixture_file = File.join(sl_fixture_dir, fname)
     fixture_data = []
