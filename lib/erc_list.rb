@@ -173,4 +173,13 @@ class ErcList
     @consistency_test = @rcd_runner.run_rcd(self) if @consistency_test.nil?
     @consistency_test.consistent?
   end
+
+  # Returns a string with the ErcList label and a string representation of
+  # each ERC in the list.
+  def to_s
+    str = String.new # so that it can be dynamically appended to.
+    str << "#{label}\n"
+    @list.each { |e| str << e.to_s << "\n" }
+    str
+  end
 end
