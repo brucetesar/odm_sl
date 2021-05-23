@@ -13,6 +13,7 @@ require 'otlearn/language_learning_runner'
 require 'sl/system'
 require 'factorial_typology'
 require 'sync_enum'
+require 'psych'
 
 RSpec.describe FactorialTypology, :acceptance do
   context 'when generating the typology for SL 1r1s' do
@@ -27,10 +28,8 @@ RSpec.describe FactorialTypology, :acceptance do
     end
     # Retrieve the fixture data
     fixture_file = File.join(ODL::SPEC_DIR, 'fixtures', 'sl',
-                             'outputs_typology_1r1s.mar')
-    fixture_data = []
-    OTLearn::LanguageLearningRunner.read_languages(fixture_file) \
-      { |label, outputs| fixture_data << [label, outputs] }
+                             'outputs_typology_1r1s.yml')
+    fixture_data = Psych.load_file(fixture_file)
 
     it 'generates the correct number of languages for SL 1r1s' do
       expect(generated_data.size).to eq fixture_data.size
