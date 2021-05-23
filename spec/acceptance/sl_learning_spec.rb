@@ -9,6 +9,7 @@ require_relative '../../lib/odl/resolver'
 require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_runner'
 require 'sl/system'
+require 'psych'
 
 RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
   context 'when run on the outputs of the SL languages' do
@@ -26,11 +27,13 @@ RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
       @runner = described_class.new(factory.system, learner)
     end
 
-    # For each language in SL, read the fixture outputs, and verify that
-    # learning is successful.
+    # For each language in SL, read the fixture outputs, run learning on
+    # the outputs, and verify that learning is successful.
     data_file = File.join(ODL::SPEC_DIR, 'fixtures', 'sl',
-                          'outputs_typology_1r1s.mar')
-    described_class.read_languages(data_file) do |label, outputs|
+                          'outputs_typology_1r1s.yml')
+    fixture_data = Psych.load_file(data_file)
+    fixture_data.each do |fix_lang|
+      label, outputs = fix_lang
       it "sucessfully learns #{label}" do
         result = @runner.run(label, outputs)
         expect(result).to be_learning_successful
