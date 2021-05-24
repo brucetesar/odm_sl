@@ -22,8 +22,8 @@ require 'odl/stress_length_data_generator'
 # Each output must have exactly one stress-bearing syllable.
 module SL
   # Contains the core elements of the SL (stress-length) linguistic system.
-  # It defines the constraints of the system, provides the #gen(_input_) method
-  # generating the candidates for _input_, provides a method for
+  # It defines the constraints of the system, provides the #gen(_input_)
+  # method generating the candidates for _input_, provides a method for
   # constructing the phonological input corresponding to a morphological
   # word with respect to a given grammar, and provides a method for parsing
   # a phonological output for a morphological word into a full structural
@@ -124,7 +124,7 @@ module SL
       # for each input segment, add it to the output in all possible ways,
       # creating new partial candidates
       input.each do |isyl|
-        # copy the partial candidate lists to old_*, and reset the lists to empty.
+        # copy the partial candidate lists to old_*, reset the lists to empty.
         old_no_stress_yet = no_stress_yet
         old_main_stress_assigned = main_stress_assigned
         no_stress_yet = []
@@ -132,16 +132,22 @@ module SL
         # iterate over old_no_stress_yet, for each member create a new candidate
         # for each of the ways of adding the next syllable.
         old_no_stress_yet.each do |w|
-          no_stress_yet << extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned << extend_word_output(w, isyl) { |s| s.set_main_stress.set_short }
-          no_stress_yet << extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
-          main_stress_assigned << extend_word_output(w, isyl) { |s| s.set_main_stress.set_long }
+          no_stress_yet <<
+            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
+          main_stress_assigned <<
+            extend_word_output(w, isyl) { |s| s.set_main_stress.set_short }
+          no_stress_yet <<
+            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
+          main_stress_assigned <<
+            extend_word_output(w, isyl) { |s| s.set_main_stress.set_long }
         end
         # iterate over old_main_stress_assigned, for each member create
         # a new candidate for each of the ways of adding the next syllable.
         old_main_stress_assigned.each do |w|
-          main_stress_assigned << extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned << extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
+          main_stress_assigned <<
+            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
+          main_stress_assigned <<
+            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
         end
       end
 
@@ -162,8 +168,9 @@ module SL
     # match the number of syllables for that morpheme in the output.
     def parse_output(output, lexicon)
       mw = output.morphword
-      # If any morphemes aren't currently in the lexicon, create new entries, with
-      # the same number of syllables as in the output, and all features unset.
+      # If any morphemes aren't currently in the lexicon, create new
+      # entries, with the same number of syllables as in the output, and
+      # all features unset.
       mw.each do |m|
         next if lexicon.any? { |entry| entry.morpheme == m }
 
