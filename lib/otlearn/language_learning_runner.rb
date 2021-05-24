@@ -37,23 +37,6 @@ module OTLearn
       winners.map(&:output)
     end
 
-    # Reads all of the languages in _data_file_. For each language,
-    # the label and outputs are fed to the program block.
-    # _data_file_ is a string containing the full path/filename of
-    # the Marshal file to be read from.
-    # Returns nil.
-    # :call-seq:
-    #   read_languages(data_file) { |label, outputs| ... } -> nil
-    def self.read_languages(data_file)
-      File.open(data_file, 'rb') do |fin|
-        until fin.eof
-          label, outputs = Marshal.load(fin)
-          yield label, outputs
-        end
-      end
-      nil
-    end
-
     # Runs the language _learner_ (provided to the runner's constructor)
     # on _label_ and _outputs_.
     # Returns the learning result produced by _learner_.
@@ -63,20 +46,6 @@ module OTLearn
       grammar = Grammar.new(@system)
       grammar.label = label
       @learner.learn(outputs, grammar)
-    end
-
-    # Reads all of the languages in _data_file_. For each language,
-    # the label and outputs are fed to the program block.
-    # _data_file_ is a string containing the full path/filename of
-    # the Marshal file to be read from.
-    # Returns nil.
-    #
-    # This instance method gives instance-based access to the class
-    # method LanguageLearningRunner.read_languages().
-    # :call-seq:
-    #   read_languages(data_file) { |label, outputs| ... } -> nil
-    def read_languages(data_file, &block)
-      LanguageLearningRunner.read_languages(data_file, &block)
     end
 
     # Formats a learning _result_ as a CSV image, and writes

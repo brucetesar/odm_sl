@@ -9,31 +9,23 @@
 # The resolver adds <project>/lib to the $LOAD_PATH.
 require_relative '../../lib/odl/resolver'
 
-# Requires for classes needed in loading data from marshal file.
+# Requires for classes needed in loading data.
 require 'pas/system'
-
-# Read languages from a Marshal-format file, successively yielding
-# the label and outputs of each language.
-def read_languages_from_file(data_file)
-  File.open(data_file, 'rb') do |fin|
-    until fin.eof
-      label, outputs = Marshal.load(fin)
-      yield label, outputs
-    end
-  end
-end
+require 'psych'
 
 # Set up filenames and paths
 data_dir = File.expand_path('pas', ODL::DATA_DIR)
-data_file = File.join(data_dir, 'outputs_typology_1r1s.mar')
+data_file = File.join(data_dir, 'outputs_typology_1r1s.yml')
 
 out_dir = File.expand_path('pas', ODL::TEMP_DIR)
 Dir.mkdir out_dir unless Dir.exist? out_dir
 out_file = File.join(out_dir, 'non_culminative_outputs.txt')
 
 # List the non-culminative outputs
+output_data = Psych.load_file(data_file)
 File.open(out_file, 'w') do |fout|
-  read_languages_from_file(data_file) do |label, outputs|
+  output_data.each do |data|
+    label, outputs = data
     outputs.each do |o|
       fout.puts "#{label} #{o.morphword} #{o}" unless o.main_stress?
     end

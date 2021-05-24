@@ -135,20 +135,4 @@ RSpec.describe OTLearn::LanguageLearningRunner do
       expect(@data).to contain_exactly(output1, output2)
     end
   end
-
-  context 'when reading languages via class method' do
-    it 'yields the label and outputs of each language' do
-      dfile = File.join(ODL::DATA_DIR, 'sl', 'test_languages.mar')
-      expect { |probe| described_class.read_languages(dfile, &probe) }.to \
-        yield_successive_args(%w[TL1 Toutputs1], %w[TL2 Toutputs2])
-    end
-  end
-
-  context 'when reading languages via instance method' do
-    it 'yields the label and outputs of each language' do
-      dfile = File.join(ODL::DATA_DIR, 'sl', 'test_languages.mar')
-      expect { |probe| @runner.read_languages(dfile, &probe) }.to \
-        yield_successive_args(%w[TL1 Toutputs1], %w[TL2 Toutputs2])
-    end
-  end
 end
