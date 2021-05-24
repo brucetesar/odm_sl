@@ -80,6 +80,10 @@ RSpec.describe FactorialTypology do
     it 'provides the correct typology' do
       expect(@factyp.factorial_typology).to eq [[:erc1], [:erc2]]
     end
+
+    it 'provides the winners of the languages' do
+      expect(@factyp.winner_lists).to eq [[cand1], [cand2]]
+    end
   end
 
   context 'with 1 competition with 1 non-HB and 1 HB candidate' do
@@ -115,6 +119,10 @@ RSpec.describe FactorialTypology do
 
     it 'provides a typology with a single language' do
       expect(@factyp.factorial_typology).to eq [[:erc2]]
+    end
+
+    it 'provides the winners of the languages' do
+      expect(@factyp.winner_lists).to eq [[cand2]]
     end
   end
 
@@ -168,6 +176,11 @@ RSpec.describe FactorialTypology do
     it 'provides the correct typology' do
       expect(@factyp.factorial_typology).to eq \
         [%i[erc11 erc21], %i[erc11 erc22], %i[erc12 erc21]]
+    end
+
+    it 'provides the winners of the languages' do
+      expect(@factyp.winner_lists).to eq [[cand11, cand21], [cand11, cand22],
+                                          [cand12, cand21]]
     end
   end
 

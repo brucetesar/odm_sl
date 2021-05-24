@@ -16,9 +16,6 @@ require 'ident_violation_analyzer'
 # one for each combination of a winner and a contending competitor.
 # The languages are assigned numbered labels, in the order in
 # which they are generated.
-#
-# To get a list of the optimal candidates for a particular language,
-# call OTLearn::wlp_winners(+language+).
 class FactorialTypology
   # The list of competitions with all the candidates
   attr_reader :original_comp_list
@@ -31,14 +28,18 @@ class FactorialTypology
   # one for each combination of a winner and a contending competitor.
   attr_reader :factorial_typology
 
+  # A list of the languages, each language represented as a list of the
+  # winners for that language.
+  attr_reader :winner_lists
+
   # Returns an object summarizing the factorial typology of the parameter
-  # +competition_list+. The parameter +competition_list+ must respond to
+  # _competition_list_. The parameter _competition_list_ must respond to
   # the method #each.
   #
   # :call-seq:
-  #   FactorialTypology.new(competition_list) -> FactorialTypology
+  #   new(competition_list) -> typology
   #--
-  # erc_list_class and hbound_filter are dependency injections, mostly
+  # erc_list_class and hbound_filter are dependency injections, used
   # for testing.
   def initialize(competition_list, erc_list_class: ErcList,
                  hbound_filter: HarmonicBoundFilter.new,
@@ -51,6 +52,25 @@ class FactorialTypology
     filter_harmonically_bounded
     ident_viol_candidates_check
     @factorial_typology = compute_typology
+  end
+
+  # Internal class representing a language as a list of winners
+  # along with a list of ERCs containing one ERC for each winner /
+  # competitor pair.
+  class LangRank
+    attr_accessor :winners, :ercs
+
+    def initialize(erc_list)
+      @winners = []
+      @ercs = erc_list
+    end
+
+    def dup
+      dup = super
+      dup.winners = winners.dup
+      dup.ercs = ercs.dup
+      dup
+    end
   end
 
   # Private method, called by #initialize, to filter out collectively
@@ -81,7 +101,7 @@ class FactorialTypology
     # Construct initial language list with a single empty language,
     # using the constraints of the first candidate of the first competition.
     con_list = contender_comp_list.first.first.constraint_list
-    lang_list = [@erc_list_class.new(con_list)]
+    lang_list = [LangRank.new(@erc_list_class.new(con_list))]
     # Iterate over the competitions
     contender_comp_list.each do |competition|
       lang_list_new = []
@@ -92,16 +112,19 @@ class FactorialTypology
           lang_new = lang.dup
           new_pairs = @erc_list_class.new_from_competition(winner,
                                                            competition)
-          lang_new.add_all(new_pairs)
+          lang_new.winners << winner
+          lang_new.ercs.add_all(new_pairs)
           # If the new language is consistent, add it to the new
           # language list.
-          lang_list_new << lang_new if lang_new.consistent?
+          lang_list_new << lang_new if lang_new.ercs.consistent?
         end
       end
       lang_list = lang_list_new
     end
-    label_languages(lang_list)
-    lang_list
+    @winner_lists = lang_list.map(&:winners)
+    erc_list = lang_list.map(&:ercs)
+    label_languages(erc_list)
+    erc_list
   end
   private :compute_typology
 

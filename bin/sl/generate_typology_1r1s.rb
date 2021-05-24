@@ -11,6 +11,7 @@ require_relative '../../lib/odl/resolver'
 require 'sl/system'
 require 'factorial_typology'
 require 'otlearn/language_learning_runner'
+require 'set'
 require 'psych'
 
 # Generate the language typology data:
@@ -26,8 +27,21 @@ lang_list = ft_result.factorial_typology
 data_dir = File.expand_path('sl', ODL::DATA_DIR)
 # If the directory doesn't already exist, create it.
 Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
+lang_dir = File.expand_path('lang', data_dir)
+Dir.mkdir(lang_dir) unless Dir.exist?(lang_dir)
 
-# Write the data for each language of the typology to a data file.
+# Write human-readable files for the languages of the typology.
+lang_list.each do |lang|
+  winners = Set.new
+  lang.each { |pair| winners.add(pair.winner) }
+  win_list = winners.to_a
+  rpt_file = File.join(lang_dir, "#{lang.label}.txt")
+  File.open(rpt_file, 'w') do |f|
+    win_list.each { |w| f.puts w.to_s }
+  end
+end
+
+# Write the learning data for each language of the typology to a data file.
 # Uses Psych to write an object to file in YAML format.
 outputs_list = lang_list.map do |lang|
   [lang.label, OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)]
