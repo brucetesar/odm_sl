@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Author: Bruce Tesar
-#
+
 # The class ErcList is mocked by an internal class, rather than a test
 # double, so that it can accumulate some values as an array. The class
 # MockErcList is defined outside of the RSpec scope.
@@ -26,19 +26,13 @@ class MockErcList < Array
   end
 
   def consistent?
-    return true if self == [:erc1]
-    return true if self == [:erc2]
-    return true if self == [:erc11]
-    return true if self == [:erc12]
-    return true if self == %i[erc11 erc21]
-    return true if self == %i[erc11 erc22]
-    return true if self == %i[erc12 erc21]
-
-    false
+    consistent_cases = [[:erc1], [:erc2], [:erc11], [:erc12],
+                        %i[erc11 erc21], %i[erc11 erc22], %i[erc12 erc21]]
+    consistent_cases.member?(self)
   end
 end
 
-RSpec.describe 'FactorialTypology' do
+RSpec.describe FactorialTypology do
   let(:hbound_filter) { double('HBound Filter') }
   let(:erc_list_class) { double('erc_list_class') }
   let(:analyzer_class) { double('analyzer_class') }
@@ -46,14 +40,15 @@ RSpec.describe 'FactorialTypology' do
   let(:cand1) { double('candidate 1') }
   let(:cand2) { double('candidate 2') }
   let(:con_list) { double('constraint list') }
-  before(:each) do
+
+  before do
     allow(cand1).to receive(:constraint_list).and_return(con_list)
     allow(cand2).to receive(:constraint_list).and_return(con_list)
     allow(analyzer_class).to receive(:new).and_return(viol_analyzer)
   end
 
-  context 'given 1 competition with two non-HB candidates' do
-    before(:each) do
+  context 'with 1 competition with two non-HB candidates' do
+    before do
       allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
@@ -68,25 +63,29 @@ RSpec.describe 'FactorialTypology' do
         .with(cand1, contenders1).and_return([:erc1])
       allow(erc_list_class).to receive(:new_from_competition) \
         .with(cand2, contenders1).and_return([:erc2])
-      @factyp = FactorialTypology.new(@comp_list,
-                                      erc_list_class: erc_list_class,
-                                      hbound_filter: hbound_filter,
-                                      viol_analyzer_class: analyzer_class)
+      @factyp = described_class.new(@comp_list,
+                                    erc_list_class: erc_list_class,
+                                    hbound_filter: hbound_filter,
+                                    viol_analyzer_class: analyzer_class)
     end
+
     it 'provides the original competition list' do
       expect(@factyp.original_comp_list).to eq @comp_list
     end
+
     it 'provides the contenders list' do
       expect(@factyp.contender_comp_list).to eq @contenders_list
     end
+
     it 'provides the correct typology' do
       expect(@factyp.factorial_typology).to eq [[:erc1], [:erc2]]
     end
   end
 
-  context 'given 1 competition with 1 non-HB and 1 HB candidate' do
+  context 'with 1 competition with 1 non-HB and 1 HB candidate' do
     let(:mock_erc_list) { MockErcList.new }
-    before(:each) do
+
+    before do
       allow(mock_erc_list).to receive(:consistent?).and_return(false)
       allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
@@ -100,28 +99,32 @@ RSpec.describe 'FactorialTypology' do
         .with(comp1).and_return(contenders1)
       allow(erc_list_class).to receive(:new_from_competition) \
         .with(cand2, contenders1).and_return([:erc2])
-      @factyp = FactorialTypology.new(@comp_list,
-                                      erc_list_class: erc_list_class,
-                                      hbound_filter: hbound_filter,
-                                      viol_analyzer_class: analyzer_class)
+      @factyp = described_class.new(@comp_list,
+                                    erc_list_class: erc_list_class,
+                                    hbound_filter: hbound_filter,
+                                    viol_analyzer_class: analyzer_class)
     end
+
     it 'provides the original competition list' do
       expect(@factyp.original_comp_list).to eq @comp_list
     end
+
     it 'provides just one contender' do
       expect(@factyp.contender_comp_list).to eq @contenders_list
     end
+
     it 'provides a typology with a single language' do
       expect(@factyp.factorial_typology).to eq [[:erc2]]
     end
   end
 
-  context 'given 2 competitions with one inconsistent combination' do
+  context 'with 2 competitions with one inconsistent combination' do
     let(:cand11) { double('candidate 11') }
     let(:cand12) { double('candidate 12') }
     let(:cand21) { double('candidate 21') }
     let(:cand22) { double('candidate 22') }
-    before(:each) do
+
+    before do
       allow(cand11).to receive(:constraint_list).and_return(con_list)
       allow(cand12).to receive(:constraint_list).and_return(con_list)
       allow(cand21).to receive(:constraint_list).and_return(con_list)
@@ -148,25 +151,28 @@ RSpec.describe 'FactorialTypology' do
         .with(cand21, contenders2).and_return([:erc21])
       allow(erc_list_class).to receive(:new_from_competition) \
         .with(cand22, contenders2).and_return([:erc22])
-      @factyp = FactorialTypology.new(@comp_list,
-                                      erc_list_class: erc_list_class,
-                                      hbound_filter: hbound_filter,
-                                      viol_analyzer_class: analyzer_class)
+      @factyp = described_class.new(@comp_list,
+                                    erc_list_class: erc_list_class,
+                                    hbound_filter: hbound_filter,
+                                    viol_analyzer_class: analyzer_class)
     end
+
     it 'provides the original competition list' do
       expect(@factyp.original_comp_list).to eq @comp_list
     end
+
     it 'provides the contenders list' do
       expect(@factyp.contender_comp_list).to eq @contenders_list
     end
+
     it 'provides the correct typology' do
       expect(@factyp.factorial_typology).to eq \
         [%i[erc11 erc21], %i[erc11 erc22], %i[erc12 erc21]]
     end
   end
 
-  context 'given 1 competition with two identical violation candidates' do
-    before(:each) do
+  context 'with 1 competition with two identical violation candidates' do
+    before do
       allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand1, cand2]
@@ -182,12 +188,12 @@ RSpec.describe 'FactorialTypology' do
       allow(erc_list_class).to receive(:new_from_competition) \
         .with(cand2, contenders1).and_return([:erc2])
     end
+
     it 'raises an exception' do
       expect do
-        FactorialTypology.new(@comp_list,
-                              erc_list_class: erc_list_class,
-                              hbound_filter: hbound_filter,
-                              viol_analyzer_class: analyzer_class)
+        described_class.new(@comp_list, erc_list_class: erc_list_class,
+                                        hbound_filter: hbound_filter,
+                                        viol_analyzer_class: analyzer_class)
       end.to raise_error(RuntimeError)
     end
   end
