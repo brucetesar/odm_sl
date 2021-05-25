@@ -11,23 +11,20 @@ require_relative '../../lib/odl/resolver'
 
 # Requires for classes needed in loading data.
 require 'pas/system'
+require 'labeled_object'
 require 'psych'
 
 # Set up filenames and paths
 data_dir = File.expand_path('pas', ODL::DATA_DIR)
 data_file = File.join(data_dir, 'outputs_typology_1r1s.yml')
-
-out_dir = File.expand_path('pas', ODL::TEMP_DIR)
-Dir.mkdir out_dir unless Dir.exist? out_dir
-out_file = File.join(out_dir, 'non_culminative_outputs.txt')
+rpt_file = File.join(data_dir, 'non_culminative_outputs.txt')
 
 # List the non-culminative outputs
 output_data = Psych.load_file(data_file)
-File.open(out_file, 'w') do |fout|
-  output_data.each do |data|
-    label, outputs = data
-    outputs.each do |o|
-      fout.puts "#{label} #{o.morphword} #{o}" unless o.main_stress?
+File.open(rpt_file, 'w') do |fout|
+  output_data.each do |lang|
+    lang.each do |o|
+      fout.puts "#{lang.label} #{o.morphword} #{o}" unless o.main_stress?
     end
   end
 end
