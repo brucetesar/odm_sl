@@ -13,7 +13,7 @@ class LabeledObject
   # External access to the base object; used for testing.
   attr_reader :base_obj # :nodoc:
 
-  # Returns a new labeled object. The label is initialized to the emtpy
+  # Returns a new labeled object. The label is initialized to the empty
   # string.
   # :call-seq:
   #   new(base_obj) -> labeled_obj
