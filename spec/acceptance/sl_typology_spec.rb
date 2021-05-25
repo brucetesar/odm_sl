@@ -14,6 +14,7 @@ require 'sl/system'
 require 'factorial_typology'
 require 'sync_enum'
 require 'psych'
+require 'labeled_object'
 
 RSpec.describe FactorialTypology, :acceptance do
   context 'when generating the typology for SL 1r1s' do
@@ -21,11 +22,7 @@ RSpec.describe FactorialTypology, :acceptance do
     system = SL::System.instance
     competition_list = system.generate_competitions_1r1s
     ft_result = described_class.new(competition_list)
-    lang_list = ft_result.factorial_typology
-    generated_data = lang_list.map do |lang|
-      outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
-      [lang.label, outputs]
-    end
+    generated_data = ft_result.learning_data
     # Retrieve the fixture data
     fixture_file = File.join(ODL::SPEC_DIR, 'fixtures', 'sl',
                              'outputs_typology_1r1s.yml')
@@ -38,12 +35,16 @@ RSpec.describe FactorialTypology, :acceptance do
     iter = SyncEnum.new(generated_data.to_enum, fixture_data.to_enum)
     loop do
       gen_lang, fix_lang = iter.next
-      it "generates a language with the label #{fix_lang[0]}" do
-        expect(gen_lang[0]).to eq fix_lang[0]
+      it "generates a language with the label #{fix_lang.label}" do
+        expect(gen_lang.label).to eq fix_lang.label
       end
 
-      it "generates the outputs for language #{fix_lang[0]}" do
-        expect(gen_lang[1]).to eq fix_lang[1]
+      # Attempting to directly compare gen_lang and fix_lang with eq
+      # crashes RSpec. Something to do with the role played by the
+      # LabeledObject decorator class. Converting them to arrays seems
+      # to solve the problem.
+      it "generates the outputs for language #{fix_lang.label}" do
+        expect(gen_lang.to_a).to eq fix_lang.to_a
       end
     end
   end

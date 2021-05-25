@@ -1,2265 +1,2313 @@
 ---
-- - L1
-  - - &9 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &1 !ruby/object:Morpheme
-          label: r1
-          type: :root
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &2 !ruby/object:Morpheme
-          label: s1
-          type: :suffix
-      ivars:
-        :@morphword: &70 !ruby/object:MorphWord
-          word:
-          - *1
-          - *2
-          root_added: true
-    - &10 !ruby/array:Output
-      internal:
-      - &25 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *1
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &3 !ruby/object:Morpheme
-          label: s2
-          type: :suffix
-      ivars:
-        :@morphword: &26 !ruby/object:MorphWord
-          word:
-          - *1
-          - *3
-          root_added: true
-    - &11 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *1
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &4 !ruby/object:Morpheme
-          label: s3
-          type: :suffix
-      ivars:
-        :@morphword: &80 !ruby/object:MorphWord
-          word:
-          - *1
-          - *4
-          root_added: true
-    - &12 !ruby/array:Output
-      internal:
-      - &27 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *1
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &5 !ruby/object:Morpheme
-          label: s4
-          type: :suffix
-      ivars:
-        :@morphword: &28 !ruby/object:MorphWord
-          word:
-          - *1
-          - *5
-          root_added: true
-    - &13 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &6 !ruby/object:Morpheme
-          label: r2
-          type: :root
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: &49 !ruby/object:MorphWord
-          word:
-          - *6
-          - *2
-          root_added: true
-    - &14 !ruby/array:Output
-      internal:
-      - &29 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: &30 !ruby/object:MorphWord
-          word:
-          - *6
-          - *3
-          root_added: true
-    - &15 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: &50 !ruby/object:MorphWord
-          word:
-          - *6
-          - *4
-          root_added: true
-    - &16 !ruby/array:Output
-      internal:
-      - &31 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: &32 !ruby/object:MorphWord
-          word:
-          - *6
-          - *5
-          root_added: true
-    - &33 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &7 !ruby/object:Morpheme
-          label: r3
-          type: :root
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: &17 !ruby/object:MorphWord
-          word:
-          - *7
-          - *2
-          root_added: true
-    - !ruby/array:Output
-      internal:
-      - &34 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *7
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: &18 !ruby/object:MorphWord
-          word:
-          - *7
-          - *3
-          root_added: true
-    - &19 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *7
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: &71 !ruby/object:MorphWord
-          word:
-          - *7
-          - *4
-          root_added: true
-    - &20 !ruby/array:Output
-      internal:
-      - &35 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *7
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: &36 !ruby/object:MorphWord
-          word:
-          - *7
-          - *5
-          root_added: true
-    - &37 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: &8 !ruby/object:Morpheme
-          label: r4
-          type: :root
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: &21 !ruby/object:MorphWord
-          word:
-          - *8
-          - *2
-          root_added: true
-    - !ruby/array:Output
-      internal:
-      - &38 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: &22 !ruby/object:MorphWord
-          word:
-          - *8
-          - *3
-          root_added: true
-    - &23 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: &52 !ruby/object:MorphWord
-          word:
-          - *8
-          - *4
-          root_added: true
-    - &24 !ruby/array:Output
-      internal:
-      - &39 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: &40 !ruby/object:MorphWord
-          word:
-          - *8
-          - *5
-          root_added: true
-- - L2
-  - - *9
-    - *10
-    - *11
-    - *12
-    - *13
-    - *14
-    - *15
-    - *16
-    - &45 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *7
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *17
-    - &46 !ruby/array:Output
-      internal:
-      - &57 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *7
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *18
-    - *19
-    - *20
-    - &83 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *21
-    - &84 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *22
-    - *23
-    - *24
-- - L3
-  - - *9
-    - &41 !ruby/array:Output
-      internal:
-      - *25
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *26
-    - *11
-    - &42 !ruby/array:Output
-      internal:
-      - *27
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *28
-    - *13
-    - &43 !ruby/array:Output
-      internal:
-      - *29
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *30
-    - *15
-    - &44 !ruby/array:Output
-      internal:
-      - *31
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *32
-    - *33
-    - &51 !ruby/array:Output
-      internal:
-      - *34
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *18
-    - *19
-    - &47 !ruby/array:Output
-      internal:
-      - *35
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *36
-    - *37
-    - &64 !ruby/array:Output
-      internal:
-      - *38
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *22
-    - *23
-    - &48 !ruby/array:Output
-      internal:
-      - *39
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *40
-- - L4
-  - - *9
-    - *41
-    - *11
-    - *42
-    - *13
-    - *43
-    - *15
-    - *44
-    - *45
-    - *46
-    - *19
-    - *47
-    - &58 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *21
-    - &62 !ruby/array:Output
-      internal:
-      - &59 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *22
-    - *23
-    - *48
-- - L5
-  - - *9
-    - *41
-    - *11
-    - *42
-    - &53 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *49
-    - &54 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *30
-    - &55 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *50
-    - &56 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *32
-    - *33
-    - *51
-    - *19
-    - *47
-    - !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *21
-    - &69 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *22
-    - &60 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *52
-    - &61 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *40
-- - L6
-  - - *9
-    - *41
-    - *11
-    - *42
-    - *53
-    - *54
-    - *55
-    - *56
-    - *45
-    - &67 !ruby/array:Output
-      internal:
-      - *57
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *18
-    - *19
-    - *47
-    - *58
-    - &68 !ruby/array:Output
-      internal:
-      - *59
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *22
-    - *60
-    - *61
-- - L7
-  - - *9
-    - *41
-    - *11
-    - *42
-    - &63 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *49
-    - *43
-    - *15
-    - *44
-    - *45
-    - *46
-    - *19
-    - *47
-    - *58
-    - *62
-    - &65 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *52
-    - *48
-- - L8
-  - - *9
-    - *41
-    - *11
-    - *42
-    - *63
-    - *43
-    - &66 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *50
-    - *44
-    - *33
-    - *51
-    - *19
-    - *47
-    - *58
-    - *64
-    - *65
-    - *48
-- - L9
-  - - *9
-    - *41
-    - *11
-    - *42
-    - *63
-    - *43
-    - *66
-    - *44
-    - *45
-    - *51
-    - *19
-    - *47
-    - *58
-    - *62
-    - *65
-    - *48
-- - L10
-  - - *9
-    - *41
-    - *11
-    - *42
-    - *63
-    - *54
-    - *55
-    - *56
-    - *45
-    - *67
-    - *19
-    - *47
-    - *58
-    - *68
-    - *65
-    - *61
-- - L11
-  - - *9
-    - *41
-    - *11
-    - *42
-    - *63
-    - *54
-    - *66
-    - *56
-    - *33
-    - *51
-    - *19
-    - *47
-    - *58
-    - *69
-    - *65
-    - *61
-- - L12
-  - - *9
-    - *41
-    - *11
-    - *42
-    - *63
-    - *54
-    - *66
-    - *56
-    - *45
-    - *51
-    - *19
-    - *47
-    - *58
-    - *68
-    - *65
-    - *61
-- - L13
-  - - &72 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *1
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *70
-    - *41
-    - *11
-    - *42
-    - *63
-    - &73 !ruby/array:Output
-      internal:
-      - &76 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *30
-    - *15
-    - *44
-    - *45
-    - *46
-    - &74 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *7
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *71
-    - *47
-    - *58
-    - *62
-    - *65
-    - &75 !ruby/array:Output
-      internal:
-      - &77 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *40
-- - L14
-  - - *72
-    - *41
-    - *11
-    - *42
-    - *63
-    - *73
-    - *66
-    - *44
-    - *45
-    - *51
-    - *74
-    - *47
-    - *58
-    - *62
-    - *65
-    - *75
-- - L15
-  - - *72
-    - *41
-    - *11
-    - *42
-    - *63
-    - &78 !ruby/array:Output
-      internal:
-      - *76
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *30
-    - *55
-    - *56
-    - *45
-    - *67
-    - *74
-    - *47
-    - *58
-    - *68
-    - *65
-    - &79 !ruby/array:Output
-      internal:
-      - *77
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *40
-- - L16
-  - - *72
-    - *41
-    - *11
-    - *42
-    - *63
-    - *78
-    - *66
-    - *56
-    - *45
-    - *51
-    - *74
-    - *47
-    - *58
-    - *68
-    - *65
-    - *79
-- - L17
-  - - *72
-    - *41
-    - &81 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *1
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *80
-    - *42
-    - *63
-    - *73
-    - *66
-    - &92 !ruby/array:Output
-      internal:
-      - &82 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *32
-    - *45
-    - *51
-    - *74
-    - *47
-    - *58
-    - *62
-    - *65
-    - *75
-- - L18
-  - - *72
-    - *41
-    - *81
-    - *42
-    - *63
-    - *78
-    - *66
-    - &97 !ruby/array:Output
-      internal:
-      - *82
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *32
-    - *45
-    - *51
-    - *74
-    - *47
-    - *58
-    - *68
-    - *65
-    - *79
-- - L19
-  - - *72
-    - &85 !ruby/array:Output
-      internal:
-      - &93 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *1
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *26
-    - *11
-    - *12
-    - &87 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *2
-      ivars:
-        :@morphword: *49
-    - &88 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *30
-    - *15
-    - *16
-    - *45
-    - *46
-    - *74
-    - &86 !ruby/array:Output
-      internal:
-      - &94 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *7
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *36
-    - *83
-    - *84
-    - &89 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *52
-    - &90 !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *8
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *40
-- - L20
-  - - *72
-    - *85
-    - *11
-    - *42
-    - *63
-    - *73
-    - *15
-    - *44
-    - *45
-    - *46
-    - *74
-    - *86
-    - *58
-    - *62
-    - *65
-    - *75
-- - L21
-  - - *72
-    - *85
-    - *81
-    - &91 !ruby/array:Output
-      internal:
-      - &96 !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *1
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *28
-    - *87
-    - *88
-    - !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *4
-      ivars:
-        :@morphword: *50
-    - !ruby/array:Output
-      internal:
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :main_stress
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *6
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :short
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *32
-    - *45
-    - *46
-    - *74
-    - *86
-    - *83
-    - *84
-    - *89
-    - *90
-- - L22
-  - - *72
-    - *85
-    - *81
-    - *91
-    - *63
-    - *73
-    - *66
-    - *92
-    - *45
-    - *46
-    - *74
-    - *86
-    - *58
-    - *62
-    - *65
-    - *75
-- - L23
-  - - *72
-    - &95 !ruby/array:Output
-      internal:
-      - *93
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *3
-      ivars:
-        :@morphword: *26
-    - *11
-    - *42
-    - *63
-    - *78
-    - *55
-    - *56
-    - *45
-    - *67
-    - *74
-    - &98 !ruby/array:Output
-      internal:
-      - *94
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *36
-    - *58
-    - *68
-    - *65
-    - *79
-- - L24
-  - - *72
-    - *95
-    - *81
-    - !ruby/array:Output
-      internal:
-      - *96
-      - !ruby/object:SL::Syllable
-        stress: !ruby/object:SL::Stress
-          type: :stress
-          value: :unstressed
-          value_list:
-          - :unstressed
-          - :main_stress
-        length: !ruby/object:SL::Length
-          type: :length
-          value: :long
-          value_list:
-          - :short
-          - :long
-        morpheme: *5
-      ivars:
-        :@morphword: *28
-    - *63
-    - *78
-    - *66
-    - *97
-    - *45
-    - *67
-    - *74
-    - *98
-    - *58
-    - *68
-    - *65
-    - *79
+- !ruby/object:LabeledObject
+  base_obj:
+  - &9 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &1 !ruby/object:Morpheme
+        label: r1
+        type: :root
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &2 !ruby/object:Morpheme
+        label: s1
+        type: :suffix
+    ivars:
+      :@morphword: &70 !ruby/object:MorphWord
+        word:
+        - *1
+        - *2
+        root_added: true
+  - &10 !ruby/array:Output
+    internal:
+    - &25 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *1
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &3 !ruby/object:Morpheme
+        label: s2
+        type: :suffix
+    ivars:
+      :@morphword: &26 !ruby/object:MorphWord
+        word:
+        - *1
+        - *3
+        root_added: true
+  - &11 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *1
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &4 !ruby/object:Morpheme
+        label: s3
+        type: :suffix
+    ivars:
+      :@morphword: &80 !ruby/object:MorphWord
+        word:
+        - *1
+        - *4
+        root_added: true
+  - &12 !ruby/array:Output
+    internal:
+    - &27 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *1
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &5 !ruby/object:Morpheme
+        label: s4
+        type: :suffix
+    ivars:
+      :@morphword: &28 !ruby/object:MorphWord
+        word:
+        - *1
+        - *5
+        root_added: true
+  - &13 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &6 !ruby/object:Morpheme
+        label: r2
+        type: :root
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: &49 !ruby/object:MorphWord
+        word:
+        - *6
+        - *2
+        root_added: true
+  - &14 !ruby/array:Output
+    internal:
+    - &29 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: &30 !ruby/object:MorphWord
+        word:
+        - *6
+        - *3
+        root_added: true
+  - &15 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: &50 !ruby/object:MorphWord
+        word:
+        - *6
+        - *4
+        root_added: true
+  - &16 !ruby/array:Output
+    internal:
+    - &31 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: &32 !ruby/object:MorphWord
+        word:
+        - *6
+        - *5
+        root_added: true
+  - &33 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &7 !ruby/object:Morpheme
+        label: r3
+        type: :root
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: &17 !ruby/object:MorphWord
+        word:
+        - *7
+        - *2
+        root_added: true
+  - !ruby/array:Output
+    internal:
+    - &34 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *7
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: &18 !ruby/object:MorphWord
+        word:
+        - *7
+        - *3
+        root_added: true
+  - &19 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *7
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: &71 !ruby/object:MorphWord
+        word:
+        - *7
+        - *4
+        root_added: true
+  - &20 !ruby/array:Output
+    internal:
+    - &35 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *7
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: &36 !ruby/object:MorphWord
+        word:
+        - *7
+        - *5
+        root_added: true
+  - &37 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: &8 !ruby/object:Morpheme
+        label: r4
+        type: :root
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: &21 !ruby/object:MorphWord
+        word:
+        - *8
+        - *2
+        root_added: true
+  - !ruby/array:Output
+    internal:
+    - &38 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: &22 !ruby/object:MorphWord
+        word:
+        - *8
+        - *3
+        root_added: true
+  - &23 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: &52 !ruby/object:MorphWord
+        word:
+        - *8
+        - *4
+        root_added: true
+  - &24 !ruby/array:Output
+    internal:
+    - &39 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: &40 !ruby/object:MorphWord
+        word:
+        - *8
+        - *5
+        root_added: true
+  label: L1
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *10
+  - *11
+  - *12
+  - *13
+  - *14
+  - *15
+  - *16
+  - &45 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *7
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *17
+  - &46 !ruby/array:Output
+    internal:
+    - &57 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *7
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *18
+  - *19
+  - *20
+  - &83 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *21
+  - &84 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *22
+  - *23
+  - *24
+  label: L2
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - &41 !ruby/array:Output
+    internal:
+    - *25
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *26
+  - *11
+  - &42 !ruby/array:Output
+    internal:
+    - *27
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *28
+  - *13
+  - &43 !ruby/array:Output
+    internal:
+    - *29
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *30
+  - *15
+  - &44 !ruby/array:Output
+    internal:
+    - *31
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *32
+  - *33
+  - &51 !ruby/array:Output
+    internal:
+    - *34
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *18
+  - *19
+  - &47 !ruby/array:Output
+    internal:
+    - *35
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *36
+  - *37
+  - &64 !ruby/array:Output
+    internal:
+    - *38
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *22
+  - *23
+  - &48 !ruby/array:Output
+    internal:
+    - *39
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *40
+  label: L3
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - *13
+  - *43
+  - *15
+  - *44
+  - *45
+  - *46
+  - *19
+  - *47
+  - &58 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *21
+  - &62 !ruby/array:Output
+    internal:
+    - &59 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *22
+  - *23
+  - *48
+  label: L4
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - &53 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *49
+  - &54 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *30
+  - &55 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *50
+  - &56 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *32
+  - *33
+  - *51
+  - *19
+  - *47
+  - !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *21
+  - &69 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *22
+  - &60 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *52
+  - &61 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *40
+  label: L5
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - *53
+  - *54
+  - *55
+  - *56
+  - *45
+  - &67 !ruby/array:Output
+    internal:
+    - *57
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *18
+  - *19
+  - *47
+  - *58
+  - &68 !ruby/array:Output
+    internal:
+    - *59
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *22
+  - *60
+  - *61
+  label: L6
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - &63 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *49
+  - *43
+  - *15
+  - *44
+  - *45
+  - *46
+  - *19
+  - *47
+  - *58
+  - *62
+  - &65 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *52
+  - *48
+  label: L7
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - *63
+  - *43
+  - &66 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *50
+  - *44
+  - *33
+  - *51
+  - *19
+  - *47
+  - *58
+  - *64
+  - *65
+  - *48
+  label: L8
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - *63
+  - *43
+  - *66
+  - *44
+  - *45
+  - *51
+  - *19
+  - *47
+  - *58
+  - *62
+  - *65
+  - *48
+  label: L9
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - *63
+  - *54
+  - *55
+  - *56
+  - *45
+  - *67
+  - *19
+  - *47
+  - *58
+  - *68
+  - *65
+  - *61
+  label: L10
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - *63
+  - *54
+  - *66
+  - *56
+  - *33
+  - *51
+  - *19
+  - *47
+  - *58
+  - *69
+  - *65
+  - *61
+  label: L11
+- !ruby/object:LabeledObject
+  base_obj:
+  - *9
+  - *41
+  - *11
+  - *42
+  - *63
+  - *54
+  - *66
+  - *56
+  - *45
+  - *51
+  - *19
+  - *47
+  - *58
+  - *68
+  - *65
+  - *61
+  label: L12
+- !ruby/object:LabeledObject
+  base_obj:
+  - &72 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *1
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *70
+  - *41
+  - *11
+  - *42
+  - *63
+  - &73 !ruby/array:Output
+    internal:
+    - &76 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *30
+  - *15
+  - *44
+  - *45
+  - *46
+  - &74 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *7
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *71
+  - *47
+  - *58
+  - *62
+  - *65
+  - &75 !ruby/array:Output
+    internal:
+    - &77 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *40
+  label: L13
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *41
+  - *11
+  - *42
+  - *63
+  - *73
+  - *66
+  - *44
+  - *45
+  - *51
+  - *74
+  - *47
+  - *58
+  - *62
+  - *65
+  - *75
+  label: L14
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *41
+  - *11
+  - *42
+  - *63
+  - &78 !ruby/array:Output
+    internal:
+    - *76
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *30
+  - *55
+  - *56
+  - *45
+  - *67
+  - *74
+  - *47
+  - *58
+  - *68
+  - *65
+  - &79 !ruby/array:Output
+    internal:
+    - *77
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *40
+  label: L15
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *41
+  - *11
+  - *42
+  - *63
+  - *78
+  - *66
+  - *56
+  - *45
+  - *51
+  - *74
+  - *47
+  - *58
+  - *68
+  - *65
+  - *79
+  label: L16
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *41
+  - &81 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *1
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *80
+  - *42
+  - *63
+  - *73
+  - *66
+  - &92 !ruby/array:Output
+    internal:
+    - &82 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *32
+  - *45
+  - *51
+  - *74
+  - *47
+  - *58
+  - *62
+  - *65
+  - *75
+  label: L17
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *41
+  - *81
+  - *42
+  - *63
+  - *78
+  - *66
+  - &97 !ruby/array:Output
+    internal:
+    - *82
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *32
+  - *45
+  - *51
+  - *74
+  - *47
+  - *58
+  - *68
+  - *65
+  - *79
+  label: L18
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - &85 !ruby/array:Output
+    internal:
+    - &93 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *1
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *26
+  - *11
+  - *12
+  - &87 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *2
+    ivars:
+      :@morphword: *49
+  - &88 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *30
+  - *15
+  - *16
+  - *45
+  - *46
+  - *74
+  - &86 !ruby/array:Output
+    internal:
+    - &94 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *7
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *36
+  - *83
+  - *84
+  - &89 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *52
+  - &90 !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *8
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *40
+  label: L19
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *85
+  - *11
+  - *42
+  - *63
+  - *73
+  - *15
+  - *44
+  - *45
+  - *46
+  - *74
+  - *86
+  - *58
+  - *62
+  - *65
+  - *75
+  label: L20
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *85
+  - *81
+  - &91 !ruby/array:Output
+    internal:
+    - &96 !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *1
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *28
+  - *87
+  - *88
+  - !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *4
+    ivars:
+      :@morphword: *50
+  - !ruby/array:Output
+    internal:
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :main_stress
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *6
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :short
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *32
+  - *45
+  - *46
+  - *74
+  - *86
+  - *83
+  - *84
+  - *89
+  - *90
+  label: L21
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *85
+  - *81
+  - *91
+  - *63
+  - *73
+  - *66
+  - *92
+  - *45
+  - *46
+  - *74
+  - *86
+  - *58
+  - *62
+  - *65
+  - *75
+  label: L22
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - &95 !ruby/array:Output
+    internal:
+    - *93
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *3
+    ivars:
+      :@morphword: *26
+  - *11
+  - *42
+  - *63
+  - *78
+  - *55
+  - *56
+  - *45
+  - *67
+  - *74
+  - &98 !ruby/array:Output
+    internal:
+    - *94
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *36
+  - *58
+  - *68
+  - *65
+  - *79
+  label: L23
+- !ruby/object:LabeledObject
+  base_obj:
+  - *72
+  - *95
+  - *81
+  - !ruby/array:Output
+    internal:
+    - *96
+    - !ruby/object:SL::Syllable
+      stress: !ruby/object:SL::Stress
+        type: :stress
+        value: :unstressed
+        value_list:
+        - :unstressed
+        - :main_stress
+      length: !ruby/object:SL::Length
+        type: :length
+        value: :long
+        value_list:
+        - :short
+        - :long
+      morpheme: *5
+    ivars:
+      :@morphword: *28
+  - *63
+  - *78
+  - *66
+  - *97
+  - *45
+  - *67
+  - *74
+  - *98
+  - *58
+  - *68
+  - *65
+  - *79
+  label: L24

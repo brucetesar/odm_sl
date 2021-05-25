@@ -10,6 +10,7 @@ require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_runner'
 require 'sl/system'
 require 'psych'
+require 'labeled_object'
 
 RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
   context 'when run on the outputs of the SL languages' do
@@ -33,9 +34,8 @@ RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
                           'outputs_typology_1r1s.yml')
     fixture_data = Psych.load_file(data_file)
     fixture_data.each do |fix_lang|
-      label, outputs = fix_lang
-      it "sucessfully learns #{label}" do
-        result = @runner.run(label, outputs)
+      it "sucessfully learns #{fix_lang.label}" do
+        result = @runner.run(fix_lang.label, fix_lang)
         expect(result).to be_learning_successful
       end
     end

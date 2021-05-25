@@ -21,7 +21,6 @@ require 'psych'
 system = SL::System.instance
 competition_list = system.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
-lang_list = ft_result.factorial_typology
 
 # Set the SL data directory.
 data_dir = File.expand_path('sl', ODL::DATA_DIR)
@@ -41,10 +40,7 @@ end
 
 # Write the learning data for each language of the typology to a data file.
 # Uses Psych to write an object to file in YAML format.
-outputs_list = lang_list.map do |lang|
-  [lang.label, OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)]
-end
 yml_file = File.join(data_dir, 'outputs_typology_1r1s.yml')
 File.open(yml_file, 'w') do |f|
-  Psych.dump(outputs_list, f)
+  Psych.dump(ft_result.learning_data, f)
 end
