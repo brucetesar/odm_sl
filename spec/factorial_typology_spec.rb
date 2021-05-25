@@ -82,7 +82,16 @@ RSpec.describe FactorialTypology do
     end
 
     it 'provides the winners of the languages' do
-      expect(@factyp.winner_lists).to eq [[cand1], [cand2]]
+      base_lists = @factyp.winner_lists.map(&:base_obj)
+      expect(base_lists).to eq [[cand1], [cand2]]
+    end
+
+    it 'labels the first language' do
+      expect(@factyp.winner_lists[0].label).to eq 'L1'
+    end
+
+    it 'labels the second language' do
+      expect(@factyp.winner_lists[1].label).to eq 'L2'
     end
   end
 
@@ -122,7 +131,8 @@ RSpec.describe FactorialTypology do
     end
 
     it 'provides the winners of the languages' do
-      expect(@factyp.winner_lists).to eq [[cand2]]
+      base_lists = @factyp.winner_lists.map(&:base_obj)
+      expect(base_lists).to eq [[cand2]]
     end
   end
 
@@ -179,8 +189,9 @@ RSpec.describe FactorialTypology do
     end
 
     it 'provides the winners of the languages' do
-      expect(@factyp.winner_lists).to eq [[cand11, cand21], [cand11, cand22],
-                                          [cand12, cand21]]
+      base_lists = @factyp.winner_lists.map(&:base_obj)
+      expect(base_lists).to eq [[cand11, cand21], [cand11, cand22],
+                                [cand12, cand21]]
     end
   end
 

@@ -5,6 +5,7 @@
 require 'erc_list'
 require 'harmonic_bound_filter'
 require 'ident_violation_analyzer'
+require 'labeled_object'
 
 # FactorialTypology objects summarize typologies of competition lists
 # in two ways:
@@ -121,7 +122,10 @@ class FactorialTypology
       end
       lang_list = lang_list_new
     end
-    @winner_lists = lang_list.map(&:winners)
+    @winner_lists = lang_list.map do |lang|
+      LabeledObject.new(lang.winners)
+    end
+    label_languages(@winner_lists)
     erc_list = lang_list.map(&:ercs)
     label_languages(erc_list)
     erc_list
