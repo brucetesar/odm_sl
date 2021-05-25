@@ -39,11 +39,15 @@ RSpec.describe FactorialTypology do
   let(:viol_analyzer) { double('viol_analyzer') }
   let(:cand1) { double('candidate 1') }
   let(:cand2) { double('candidate 2') }
+  let(:out1) { double('output 1') }
+  let(:out2) { double('output 2') }
   let(:con_list) { double('constraint list') }
 
   before do
     allow(cand1).to receive(:constraint_list).and_return(con_list)
     allow(cand2).to receive(:constraint_list).and_return(con_list)
+    allow(cand1).to receive(:output).and_return(out1)
+    allow(cand2).to receive(:output).and_return(out2)
     allow(analyzer_class).to receive(:new).and_return(viol_analyzer)
   end
 
@@ -81,6 +85,11 @@ RSpec.describe FactorialTypology do
       expect(@factyp.factorial_typology).to eq [[:erc1], [:erc2]]
     end
 
+    it 'labels the erc lists' do
+      labels = @factyp.factorial_typology.map(&:label)
+      expect(labels).to eq %w[L1 L2]
+    end
+
     it 'provides the winners of the languages' do
       base_lists = @factyp.winner_lists.map(&:base_obj)
       expect(base_lists).to eq [[cand1], [cand2]]
@@ -88,6 +97,16 @@ RSpec.describe FactorialTypology do
 
     it 'labels the winner lists' do
       labels = @factyp.winner_lists.map(&:label)
+      expect(labels).to eq %w[L1 L2]
+    end
+
+    it 'provides the learning data of the languages' do
+      base_lists = @factyp.learning_data.map(&:base_obj)
+      expect(base_lists).to eq [[out1], [out2]]
+    end
+
+    it 'labels the learning data' do
+      labels = @factyp.learning_data.map(&:label)
       expect(labels).to eq %w[L1 L2]
     end
   end
@@ -136,6 +155,16 @@ RSpec.describe FactorialTypology do
       labels = @factyp.winner_lists.map(&:label)
       expect(labels).to eq %w[L1]
     end
+
+    it 'provides the learning data of the languages' do
+      base_lists = @factyp.learning_data.map(&:base_obj)
+      expect(base_lists).to eq [[out2]]
+    end
+
+    it 'labels the learning data' do
+      labels = @factyp.learning_data.map(&:label)
+      expect(labels).to eq %w[L1]
+    end
   end
 
   context 'with 2 competitions with one inconsistent combination' do
@@ -143,12 +172,20 @@ RSpec.describe FactorialTypology do
     let(:cand12) { double('candidate 12') }
     let(:cand21) { double('candidate 21') }
     let(:cand22) { double('candidate 22') }
+    let(:out11) { double('output 11') }
+    let(:out12) { double('output 12') }
+    let(:out21) { double('output 21') }
+    let(:out22) { double('output 22') }
 
     before do
       allow(cand11).to receive(:constraint_list).and_return(con_list)
       allow(cand12).to receive(:constraint_list).and_return(con_list)
       allow(cand21).to receive(:constraint_list).and_return(con_list)
       allow(cand22).to receive(:constraint_list).and_return(con_list)
+      allow(cand11).to receive(:output).and_return(out11)
+      allow(cand12).to receive(:output).and_return(out12)
+      allow(cand21).to receive(:output).and_return(out21)
+      allow(cand22).to receive(:output).and_return(out22)
       allow(erc_list_class).to receive(:new).with(con_list)\
                                             .and_return(MockErcList.new)
       comp1 = [cand11, cand12]
@@ -198,6 +235,17 @@ RSpec.describe FactorialTypology do
 
     it 'labels the winner lists' do
       labels = @factyp.winner_lists.map(&:label)
+      expect(labels).to eq %w[L1 L2 L3]
+    end
+
+    it 'provides the learning data of the languages' do
+      base_lists = @factyp.learning_data.map(&:base_obj)
+      expect(base_lists).to eq [[out11, out21], [out11, out22],
+                                [out12, out21]]
+    end
+
+    it 'labels the learning data' do
+      labels = @factyp.learning_data.map(&:label)
       expect(labels).to eq %w[L1 L2 L3]
     end
   end

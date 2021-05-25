@@ -33,6 +33,10 @@ class FactorialTypology
   # winners for that language.
   attr_reader :winner_lists
 
+  # A list of the languages, each language represented as a list of the
+  # outputs of the winners for that language.
+  attr_reader :learning_data
+
   # Returns an object summarizing the factorial typology of the parameter
   # _competition_list_. The parameter _competition_list_ must respond to
   # the method #each.
@@ -126,6 +130,9 @@ class FactorialTypology
       LabeledObject.new(lang.winners)
     end
     label_languages(@winner_lists)
+    output_lists = @winner_lists.map { |win_list| win_list.map(&:output) }
+    @learning_data = output_lists.map { |outs| LabeledObject.new(outs) }
+    label_languages(@learning_data)
     erc_list = lang_list.map(&:ercs)
     label_languages(erc_list)
     erc_list
