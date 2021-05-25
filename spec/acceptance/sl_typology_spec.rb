@@ -9,7 +9,6 @@
 # corresponding set of outputs in a fixture file.
 
 require_relative '../../lib/odl/resolver'
-require 'otlearn/language_learning_runner'
 require 'sl/system'
 require 'factorial_typology'
 require 'sync_enum'

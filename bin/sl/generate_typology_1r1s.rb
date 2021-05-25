@@ -10,7 +10,6 @@ require_relative '../../lib/odl/resolver'
 
 require 'sl/system'
 require 'factorial_typology'
-require 'otlearn/language_learning_runner'
 require 'set'
 require 'psych'
 
