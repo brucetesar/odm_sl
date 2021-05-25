@@ -30,14 +30,12 @@ Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
 lang_dir = File.expand_path('lang', data_dir)
 Dir.mkdir(lang_dir) unless Dir.exist?(lang_dir)
 
-# Write human-readable files for the languages of the typology.
-lang_list.each do |lang|
-  winners = Set.new
-  lang.each { |pair| winners.add(pair.winner) }
-  win_list = winners.to_a
+# Write human-readable files listing the winners for each of the languages
+# of the typology.
+ft_result.winner_lists.each do |lang|
   rpt_file = File.join(lang_dir, "#{lang.label}.txt")
   File.open(rpt_file, 'w') do |f|
-    win_list.each { |w| f.puts w.to_s }
+    lang.each { |w| f.puts w.to_s }
   end
 end
 
