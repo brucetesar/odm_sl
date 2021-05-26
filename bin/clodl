@@ -13,7 +13,6 @@ require 'sl/system'
 require 'factorial_typology'
 require 'otlearn/language_learning_runner'
 require 'otlearn/language_learning_factory'
-require 'otlearn/language_learning_image_maker'
 
 # set the linguistic system
 ling_system = SL::System.instance
@@ -80,7 +79,7 @@ tcomp_type = "test_#{lcomp_string}".to_sym
 # Generate the language typology.
 competition_list = ling_system.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
-lang_list = ft_result.factorial_typology
+lang_list = ft_result.learning_data
 
 # Find the requested language.
 lang = lang_list.find { |l| l.label == label }
@@ -88,7 +87,6 @@ if lang.nil?
   puts "Language #{label} was not found in the typology."
   exit(1)
 end
-outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
@@ -100,7 +98,7 @@ lang_sim = factory.build
 
 # Run learning on the language, and write the results to a file.
 runner = OTLearn::LanguageLearningRunner.new(ling_system, lang_sim)
-result = runner.run(label, outputs)
+result = runner.run(label, lang)
 runner.write(result, filename: report_filename)
 
 # Display if learning was successful to STDOUT.

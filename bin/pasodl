@@ -74,7 +74,7 @@ tcomp_type = "test_#{tcomp_string}".to_sym
 puts 'Calculating the typology.'
 competition_list = ling_system.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
-lang_list = ft_result.factorial_typology
+lang_list = ft_result.learning_data
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
@@ -89,8 +89,7 @@ puts 'Learning the PAS typology.'
 runner = OTLearn::LanguageLearningRunner.new(ling_system, learner)
 runner.prep_output_dir(out_dir, '*.csv')
 lang_list.each do |lang|
-  outputs = OTLearn::LanguageLearningRunner.wlp_to_learning_data(lang)
-  result = runner.run(lang.label, outputs)
+  result = runner.run(lang.label, lang)
   runner.write(result, out_dir: out_dir)
   puts "#{lang.label} not learned." unless result.learning_successful?
 end
