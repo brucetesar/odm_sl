@@ -43,14 +43,6 @@ RSpec::Core::RakeTask.new(:spec_wip_tests) do |t|
   t.rspec_opts = '--tag wip'
 end
 
-desc 'diff the learning of all 24 SL languages (acceptance specs)'
-task :spec_diff_sl do
-  kdiff3 = 'C:/Programs/kdiff3/kdiff3.exe'
-  sl_fixture_dir = 'test/fixtures/sl_learning'
-  generated_dir = 'temp/sl_learning'
-  system "#{kdiff3} #{sl_fixture_dir} #{generated_dir}"
-end
-
 desc 'run RSpec specs with HTML output'
 RSpec::Core::RakeTask.new(:spec_html) do |t|
   t.rspec_opts = '-f html -o spec/reports/rspec_report.html'
