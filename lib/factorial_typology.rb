@@ -6,6 +6,7 @@ require 'erc_list'
 require 'harmonic_bound_filter'
 require 'ident_violation_analyzer'
 require 'labeled_object'
+require 'psych'
 
 # FactorialTypology objects summarize typologies of competition lists
 # in several ways:
@@ -184,4 +185,54 @@ class FactorialTypology
     lang_list
   end
   private :label_languages
+
+  # Write report files to _data_dir_, consisting of:
+  # * learning data file, outputs_typology_<_suffix_>.yml
+  # * lists of winners by language, lang_<_suffix_>/<lang.label>.txt
+  # The _suffix_ is usually used to represent the kinds of morpheme
+  # combinations present in _competition_list_, for example:
+  # * 1r1s - each word consists of a 1 syllable root with a 1 syllable
+  #   suffix.
+  # :call-seq:
+  #   write_to_files(data_dir, suffix) -> nil
+  def write_to_files(data_dir, suffix)
+    # Create the data directory if necessary.
+    Dir.mkdir(data_dir) unless Dir.exist?(data_dir)
+    # Set the lang directory; create it if necesary.
+    lang_dir = File.expand_path("lang_#{suffix}", data_dir)
+    Dir.mkdir(lang_dir) unless Dir.exist?(lang_dir)
+    # Write human-readable files listing the winners for each of the
+    # languages of the typology.
+    write_language_reports(lang_dir)
+    # Write the learning data for each language of the typology to a data
+    # file. Uses Psych to write an object to file in YAML format.
+    write_learning_data(data_dir, suffix)
+  end
+
+  # Write human-readable files listing the winners for each of the languages
+  # of the typology.
+  # :call-seq:
+  #   write_language_reports(lang_dir) -> nil
+  def write_language_reports(lang_dir)
+    winner_lists.each do |lang|
+      rpt_file = File.join(lang_dir, "#{lang.label}.txt")
+      File.open(rpt_file, 'w') do |f|
+        lang.each { |winner| f.puts winner.to_s }
+      end
+    end
+    nil
+  end
+
+  # Write the learning data for each language of the typology to the data
+  # file _data_dir_/outputs_typology_<_suffix_>.yml.
+  # Uses Psych to write to file in YAML format.
+  # :call-seq:
+  #   write_learning_data(data_dir, suffix) -> nil
+  def write_learning_data(data_dir, suffix)
+    yml_file = File.join(data_dir, "outputs_typology_#{suffix}.yml")
+    File.open(yml_file, 'w') do |f|
+      Psych.dump(learning_data, f)
+    end
+    nil
+  end
 end
