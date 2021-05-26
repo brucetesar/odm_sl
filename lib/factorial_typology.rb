@@ -8,15 +8,20 @@ require 'ident_violation_analyzer'
 require 'labeled_object'
 
 # FactorialTypology objects summarize typologies of competition lists
-# in two ways:
-# * Determining which candidates are contenders (possibly optimal).
-#   The contenders are obtained via the method #contender_comp_list.
-# * Determining the typology of possible languages.
-#   The language typology is obtained via method #factorial_typology.
-# Each language is represented as a list of winner-loser pairs,
-# one for each combination of a winner and a contending competitor.
-# The languages are assigned numbered labels, in the order in
-# which they are generated.
+# in several ways:
+# * A list, for each competition, of contender candidates (possibly
+#   optimal). See attribute #contender_comp_list.
+# * A list, for each language, of winner-loser pairs, with each winner
+#   paired separately with each of its competing contenders.
+#   See attribute #ranking_ercs_lists.
+# * A list, for each language, of the winning candidates.
+#   See attribute #winner_lists.
+# * A list, for each language, of the outputs of the winning candidates.
+#   See attribute #learning_data.
+# The languages are assigned numbered label strings, in the order in
+# which they are generated: L1, L2, and so forth. The elements of the
+# lists returned by #ranking_ercs_lists, #winner_lists, and #learning_data
+# all respond to the method _#label_ with the numbered language label string.
 class FactorialTypology
   # The list of competitions with all the candidates
   attr_reader :original_comp_list
@@ -27,7 +32,7 @@ class FactorialTypology
   # A list of the languages, each language represented as a list of
   # winner-loser pairs, one for each combination of a winner and
   # a contending competitor.
-  attr_reader :ranking_ercs_list
+  attr_reader :ranking_ercs_lists
 
   # A list of the languages, each language represented as a list of the
   # winners for that language.
@@ -56,7 +61,7 @@ class FactorialTypology
     @contender_comp_list = []
     filter_harmonically_bounded
     ident_viol_candidates_check
-    @ranking_ercs_list = compute_typology
+    @ranking_ercs_lists = compute_typology
   end
 
   # Internal class representing a language as a list of winners
