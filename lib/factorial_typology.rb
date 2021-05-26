@@ -24,10 +24,10 @@ class FactorialTypology
   # The list of competitions with only contenders (non-harmonically bound)
   attr_reader :contender_comp_list
 
-  # The factorial typology of the list of competitions.
-  # Each language is represented as a list of winner-loser pairs,
-  # one for each combination of a winner and a contending competitor.
-  attr_reader :factorial_typology
+  # A list of the languages, each language represented as a list of
+  # winner-loser pairs, one for each combination of a winner and
+  # a contending competitor.
+  attr_reader :ranking_ercs_list
 
   # A list of the languages, each language represented as a list of the
   # winners for that language.
@@ -44,8 +44,8 @@ class FactorialTypology
   # :call-seq:
   #   new(competition_list) -> typology
   #--
-  # erc_list_class and hbound_filter are dependency injections, used
-  # for testing.
+  # erc_list_class, hbound_filter, and viol_analyzer_class are dependency
+  # injections, used for testing.
   def initialize(competition_list, erc_list_class: ErcList,
                  hbound_filter: HarmonicBoundFilter.new,
                  viol_analyzer_class: IdentViolationAnalyzer)
@@ -56,20 +56,27 @@ class FactorialTypology
     @contender_comp_list = []
     filter_harmonically_bounded
     ident_viol_candidates_check
-    @factorial_typology = compute_typology
+    @ranking_ercs_list = compute_typology
   end
 
   # Internal class representing a language as a list of winners
   # along with a list of ERCs containing one ERC for each winner /
   # competitor pair.
   class LangRank
-    attr_accessor :winners, :ercs
+    # List of the winners of the language.
+    attr_accessor :winners
 
+    # List of the ranking ERCs supporting the typology.
+    attr_accessor :ercs
+
+    # Returns a new LangRank object.
     def initialize(erc_list)
       @winners = []
       @ercs = erc_list
     end
 
+    # Returns a duplicate of the LangRank object, which contains
+    # a duplicate of the winners list and a duplicate of the ERCs list.
     def dup
       dup = super
       dup.winners = winners.dup

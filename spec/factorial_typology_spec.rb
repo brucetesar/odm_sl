@@ -82,11 +82,11 @@ RSpec.describe FactorialTypology do
     end
 
     it 'provides the correct typology' do
-      expect(@factyp.factorial_typology).to eq [[:erc1], [:erc2]]
+      expect(@factyp.ranking_ercs_list).to eq [[:erc1], [:erc2]]
     end
 
     it 'labels the erc lists' do
-      labels = @factyp.factorial_typology.map(&:label)
+      labels = @factyp.ranking_ercs_list.map(&:label)
       expect(labels).to eq %w[L1 L2]
     end
 
@@ -143,7 +143,7 @@ RSpec.describe FactorialTypology do
     end
 
     it 'provides a typology with a single language' do
-      expect(@factyp.factorial_typology).to eq [[:erc2]]
+      expect(@factyp.ranking_ercs_list).to eq [[:erc2]]
     end
 
     it 'provides the winners of the languages' do
@@ -223,7 +223,7 @@ RSpec.describe FactorialTypology do
     end
 
     it 'provides the correct typology' do
-      expect(@factyp.factorial_typology).to eq \
+      expect(@factyp.ranking_ercs_list).to eq \
         [%i[erc11 erc21], %i[erc11 erc22], %i[erc12 erc21]]
     end
 
