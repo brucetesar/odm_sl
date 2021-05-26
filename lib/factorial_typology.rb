@@ -51,23 +51,27 @@ class FactorialTypology
   #--
   # erc_list_class, hbound_filter, and viol_analyzer_class are dependency
   # injections, used for testing.
-  def initialize(competition_list, erc_list_class: ErcList,
-                 hbound_filter: HarmonicBoundFilter.new,
-                 viol_analyzer_class: IdentViolationAnalyzer)
-    @erc_list_class = erc_list_class
-    @harmonic_bound_filter = hbound_filter
-    @viol_analyzer_class = viol_analyzer_class
+  def initialize(competition_list, erc_list_class: nil,
+                 hbound_filter: nil, viol_analyzer_class: nil)
     @original_comp_list = competition_list
+    # Apply default values to dependency injections
+    @erc_list_class = erc_list_class || ErcList
+    @harmonic_bound_filter = hbound_filter || HarmonicBoundFilter.new
+    @viol_analyzer_class = viol_analyzer_class || IdentViolationAnalyzer
+    # Obtain the constraint list from the first candidate of the first
+    # competition.
+    @con_list = @original_comp_list.first.first.constraint_list
+    # Filter out non-contender candidates, check for identical violations.
     @contender_comp_list = []
     filter_harmonically_bounded
     ident_viol_candidates_check
-    @ranking_ercs_lists = compute_typology
+    compute_typology
   end
 
   # Internal class representing a language as a list of winners
   # along with a list of ERCs containing one ERC for each winner /
   # competitor pair.
-  class LangRank
+  class LangRank # :nodoc:
     # List of the winners of the language.
     attr_accessor :winners
 
@@ -106,50 +110,64 @@ class FactorialTypology
   # profiles.
   def ident_viol_candidates_check
     msg = 'competing contenders with identical violation profiles'
-    @contender_comp_list.each do |comp|
+    contender_comp_list.each do |comp|
       analysis = @viol_analyzer_class.new(comp)
       raise "FactorialTypology: #{msg}" if analysis.ident_viol_candidates?
     end
   end
   private :ident_viol_candidates_check
 
-  # Computes the factorial typology, returning an array of Erc lists.
+  # Computes the factorial typology and creates the representations of it.
+  # Returns nil.
   def compute_typology
-    # Construct initial language list with a single empty language,
-    # using the constraints of the first candidate of the first competition.
-    con_list = contender_comp_list.first.first.constraint_list
-    lang_list = [LangRank.new(@erc_list_class.new(con_list))]
+    # Construct initial language list with a single empty language.
+    lang_list = [LangRank.new(@erc_list_class.new(@con_list))]
     # Iterate over the competitions
     contender_comp_list.each do |competition|
       lang_list_new = []
       lang_list.each do |lang|
-        # test each candidate as a possible winner with the existing
-        # language.
-        competition.each do |winner|
-          lang_new = lang.dup
-          new_pairs = @erc_list_class.new_from_competition(winner,
-                                                           competition)
-          lang_new.winners << winner
-          lang_new.ercs.add_all(new_pairs)
-          # If the new language is consistent, add it to the new
-          # language list.
-          lang_list_new << lang_new if lang_new.ercs.consistent?
-        end
+        # test each candidate of competition as a possible winner with
+        # the existing language.
+        combinations = combine_and_test_winners(competition, lang)
+        lang_list_new.concat(combinations)
       end
       lang_list = lang_list_new
     end
-    @winner_lists = lang_list.map do |lang|
-      LabeledObject.new(lang.winners)
+    create_representations(lang_list)
+  end
+  private :compute_typology
+
+  # Combine each member of _competition_ as a winner with _lang_.
+  # Return those combinations that are consistent.
+  def combine_and_test_winners(competition, lang)
+    consistent_comb = []
+    competition.each do |winner|
+      lang_new = lang.dup
+      new_pairs = @erc_list_class.new_from_competition(winner,
+                                                       competition)
+      lang_new.winners << winner
+      lang_new.ercs.add_all(new_pairs)
+      # If the new language is consistent, add it to the new
+      # language list.
+      consistent_comb << lang_new if lang_new.ercs.consistent?
     end
+    consistent_comb
+  end
+  private :combine_and_test_winners
+
+  # Create the ranking erc, winners, and learning data representations
+  # of the typology.
+  def create_representations(lang_list)
+    @ranking_ercs_lists = lang_list.map(&:ercs)
+    label_languages(@ranking_ercs_lists)
+    @winner_lists = lang_list.map { |lang| LabeledObject.new(lang.winners) }
     label_languages(@winner_lists)
     output_lists = @winner_lists.map { |win_list| win_list.map(&:output) }
     @learning_data = output_lists.map { |outs| LabeledObject.new(outs) }
     label_languages(@learning_data)
-    erc_list = lang_list.map(&:ercs)
-    label_languages(erc_list)
-    erc_list
+    nil
   end
-  private :compute_typology
+  private :create_representations
 
   # Assign numbered labels to the languages, by the order in which they
   # appear in the language list. Each label is stored as the label
