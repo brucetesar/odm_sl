@@ -2,23 +2,20 @@
 # frozen_string_literal: true
 
 # Author: Bruce Tesar
-# Command line program for running ODL on the languages of SL.
+# Command line program for running ODL.
 
 # The resolver adds <project>/lib to the $LOAD_PATH.
 require_relative '../lib/odl/resolver'
 
 require 'optparse'
 require 'arg_checker'
-require 'sl/system'
 require 'factorial_typology'
 require 'otlearn/language_learning_factory'
 require 'otlearn/language_learning_runner'
 
-# set the linguistic system
-ling_system = SL::System.instance
-
 # define variables for option values
 list_options = false
+label = nil
 para_bias_string = 'mark_low'
 lcomp_string = 'consistent'
 tcomp_string = 'ctie'
@@ -26,7 +23,9 @@ out_dir = '.' # default is current working directory
 
 # define the allowed command line options
 opts = OptionParser.new
-opts.banner = 'Usage: slodl [options]'
+opts.banner = 'Usage: odl SYSTEM [options]'
+opts.on('-L', '--Lang LABEL', 'language label',
+        'Default: entire typology') { |val| label = val }
 opts.on('-p', '--para_bias BIAS', 'paradigmatic ranking bias',
         'Default: mark_low') { |val| para_bias_string = val }
 opts.on('-l', '--lcomp TYPE', 'Learning compare type',
@@ -48,8 +47,31 @@ if list_options
   exit(0)
 end
 
+# Get the SYSTEM argument
+system_values_string = %w[sl pas].join(', ')
+system_val = rest.shift
+if system_val.nil?
+  puts 'ERROR: missing argument for linguistic system.'
+  puts "Value must be one of #{system_values_string}"
+  exit(1) # return failure error code
+end
 # Report any unused arguments
 puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
+
+# set the linguistic system
+case system_val
+when 'sl'
+  require 'sl/system'
+  system_module = SL
+when 'pas'
+  require 'pas/system'
+  system_module = PAS
+else
+  puts "ERROR: invalid linguistic system #{system_val}"
+  puts "Value must be one of #{system_values_string}"
+  exit(1) # return failure error code
+end
+ling_system = system_module::System.instance
 
 # Define the possible values for certain argument types
 bias_values = %w[all_high faith_low mark_low]
@@ -71,10 +93,19 @@ lcomp_type = "learn_#{lcomp_string}".to_sym
 tcomp_type = "test_#{tcomp_string}".to_sym
 
 # Calculate the languages of the typology.
-puts 'Calculating the typology.'
+puts "Calculating the #{system_module} typology."
 competition_list = ling_system.generate_competitions_1r1s
 ft_result = FactorialTypology.new(competition_list)
 lang_list = ft_result.learning_data
+
+# If a specific language was requested, find it.
+unless label.nil?
+  lang_list = lang_list.keep_if { |lang| lang.label == label }
+  if lang_list.empty?
+    puts "ERROR: language #{label} was not found in the typology."
+    exit(1)
+  end
+end
 
 # Configure the learner factory and build the learner
 factory = OTLearn::LanguageLearningFactory.new
@@ -84,8 +115,12 @@ factory.send(tcomp_type)
 factory.system = ling_system
 learner = factory.build
 
-# Run learning on all of the languages
-puts 'Learning the SL typology.'
+# Run learning
+if label.nil?
+  puts "Learning the #{system_module} typology."
+else
+  puts "Learning language #{label} of the #{system_module} typology."
+end
 runner = OTLearn::LanguageLearningRunner.new(ling_system, learner)
 runner.prep_output_dir(out_dir, '*.csv')
 lang_list.each do |lang|
@@ -93,4 +128,4 @@ lang_list.each do |lang|
   runner.write(result, out_dir: out_dir)
   puts "#{lang.label} not learned." unless result.learning_successful?
 end
-puts 'SL learning is finished.'
+puts "#{system_module} learning is finished."

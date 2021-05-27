@@ -10,7 +10,7 @@
 require 'aruba/cucumber'
 
 # Set the timeout for an Aruba step. The default is 15 seconds, which is
-# too low for typology-cranking programs like slodl.
+# too low for typology-cranking programs like odl.
 Aruba.configure do |config|
   config.exit_timeout = 20 # 20 seconds
 end
