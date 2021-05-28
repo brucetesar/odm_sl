@@ -5,13 +5,13 @@
 require_relative '../lib/odl/resolver'
 require 'csv_input'
 
-RSpec.describe 'CsvInput' do
+RSpec.describe CsvInput do
   fixture_dir = File.join(ODL::SPEC_DIR, 'fixtures')
 
   context 'when created with a valid CSV file' do
     before do
       infile = File.join(fixture_dir, 'erc_input1.csv')
-      @csv_input = CsvInput.new(infile)
+      @csv_input = described_class.new(infile)
     end
 
     it 'returns an array of column headers' do
@@ -26,7 +26,7 @@ RSpec.describe 'CsvInput' do
   context 'when created with a file containing numeric data' do
     before do
       infile = File.join(fixture_dir, 'cand_input1.csv')
-      @csv_input = CsvInput.new(infile)
+      @csv_input = described_class.new(infile)
     end
 
     it 'returns a data array of all strings' do
