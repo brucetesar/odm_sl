@@ -17,6 +17,9 @@ Style/StringLiteralsInInterpolation:
 Layout/LineLength:
   Max: 80
 
+Naming/VariableNumber:
+  Enabled: false
+
 # RSpec Cop Configuration
 
 Metrics/BlockLength:

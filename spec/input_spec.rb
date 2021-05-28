@@ -10,191 +10,231 @@ RSpec.describe Input do
   let(:morphword_dup) { double('morphword_dup') }
   let(:ui_corr) { double('ui_corr') }
   let(:feature_instance_class) { double('feature_instance_class') }
-  before(:example) do
+
+  before do
     allow(morphword).to receive(:dup).and_return(morphword_dup)
     allow(morphword).to receive(:==).with(morphword_dup).and_return(true)
   end
+
   context 'with one element' do
     let(:element1) { double('element1') }
-    before(:example) do
-      @input = Input.new(morphword: morphword, ui_corr: ui_corr)
+
+    before do
+      @input = described_class.new(morphword: morphword, ui_corr: ui_corr)
       @input << element1
     end
+
     it 'has size 1' do
       expect(@input.size).to eq 1
     end
+
     it 'returns the element' do
       expect(@input[0]).to eq element1
     end
+
     it 'returns the morphword' do
       expect(@input.morphword).to eq morphword
     end
+
     it 'returns the provided UI correspondence' do
       expect(@input.ui_corr).to eq ui_corr
     end
+
     it 'yields the index for the element' do
       expect { |probe| @input.each_index(&probe) }.to yield_successive_args(0)
     end
 
-    context 'and a second element' do
+    context 'with a second element' do
       let(:element2) { double('element2') }
-      before(:example) do
+
+      before do
         @input << element2
       end
+
       it 'has size 2' do
         expect(@input.size).to eq 2
       end
+
       it 'has element1 first' do
         expect(@input[0]).to eq element1
       end
+
       it 'has element2 second' do
         expect(@input[1]).to eq element2
       end
+
       it 'yields the indices for the elements' do
-        expect { |probe| @input.each_index(&probe) }.to yield_successive_args(0, 1)
+        expect { |probe| @input.each_index(&probe) }\
+          .to yield_successive_args(0, 1)
       end
     end
   end
 
-  context 'two inputs with the same morphword' do
+  context 'with two inputs with the same morphword' do
     let(:element_1_1) { double('element_1_1') }
     let(:element_1_2) { double('element_1_2') }
     let(:element_2_1) { double('element_2_1') }
     let(:element_2_2) { double('element_2_2') }
-    context 'each with two equivalent elements' do
-      before(:example) do
+
+    context 'with each with two equivalent elements' do
+      before do
         allow(element_1_1).to receive(:==).with(element_2_1)\
                                           .and_return(true)
         allow(element_1_2).to receive(:==).with(element_2_2)\
                                           .and_return(true)
-        @input1 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input1 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input1 << element_1_1 << element_1_2
-        @input2 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input2 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input2 << element_2_1 << element_2_2
       end
       # Regression spec making sure that methods taking blocks, like
       # #each_index, are properly delegated to the internal element list.
+
       it 'yields 2 indices' do
         expect { |probe| @input1.each_index(&probe) }.to \
           yield_control.exactly(2).times
       end
+
       it 'are ==' do
         expect(@input1 == @input2).to be true
       end
+
       it 'are eql' do
         expect(@input1.eql?(@input2)).to be true
       end
+
       it 'have equivalent first elements' do
         expect(@input1[0] == @input2[0]).to be true
       end
-      it 'each have size 2' do
+
+      it 'the first has size 2' do
         expect(@input1.size).to eq 2
+      end
+
+      it 'the second has size 2' do
         expect(@input2.size).to eq 2
       end
     end
-    context 'each with a distinct element' do
-      before(:example) do
+
+    context 'when each has a distinct element' do
+      before do
         allow(element_1_1).to receive(:==).and_return(false)
         allow(element_1_1).to receive(:==).with(element_2_1)\
                                           .and_return(true)
         allow(element_1_2).to receive(:==).and_return(false)
-        @input1 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input1 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input1 << element_1_1 << element_1_2
-        @input2 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input2 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input2 << element_2_1 << element_2_2
       end
+
       it 'have size 2' do
         expect(@input1.size).to eq 2
       end
+
       it 'have equivalent first elements' do
         expect(@input1[0] == @input2[0]).to be true
       end
+
       it 'have non-equivalent second elements' do
         expect(@input1[1] == @input2[1]).to be false
       end
+
       it 'yields 2 indices' do
         expect { |probe| @input1.each_index(&probe) }.to \
           yield_control.exactly(2).times
       end
+
       it 'are not ==' do
         expect(@input1 == @input2).to be false
       end
+
       it 'are not eql' do
         expect(@input1.eql?(@input2)).to be false
       end
     end
+
     context 'with the first having more elements than the second' do
-      before(:example) do
+      before do
         allow(element_1_1).to receive(:==).with(element_2_1)\
                                           .and_return(true)
-        @input1 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input1 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input1 << element_1_1 << element_1_2
-        @input2 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input2 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input2 << element_2_1
       end
+
       it 'are not ==' do
         expect(@input1 == @input2).to be false
       end
+
       it 'are not eql' do
         expect(@input1.eql?(@input2)).to be false
       end
     end
   end
 
-  context 'two inputs with different morphwords' do
+  context 'with two inputs with different morphwords' do
     let(:morphword2) { double('morphword 2') }
     let(:element_1_1) { double('element_1_1') }
     let(:element_1_2) { double('element_1_2') }
     let(:element_2_1) { double('element_2_1') }
     let(:element_2_2) { double('element_2_2') }
-    context 'each with two equivalent elements' do
-      before(:example) do
+
+    context 'when each has two equivalent elements' do
+      before do
         allow(morphword).to receive(:==).with(morphword2)\
                                         .and_return(false)
         allow(element_1_1).to receive(:==).with(element_2_1)\
                                           .and_return(true)
         allow(element_1_2).to receive(:==).with(element_2_2)\
                                           .and_return(true)
-        @input1 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input1 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input1 << element_1_1 << element_1_2
-        @input2 = Input.new(morphword: morphword2, ui_corr: ui_corr)
+        @input2 = described_class.new(morphword: morphword2, ui_corr: ui_corr)
         @input2 << element_2_1 << element_2_2
       end
+
       it 'are ==' do
         expect(@input1 == @input2).to be true
       end
+
       it 'are not eql (i.e, different morphwords)' do
         expect(@input1.eql?(@input2)).not_to be true
       end
     end
+
     context 'with non-equivalent elements' do
-      before(:example) do
+      before do
         allow(element_1_1).to receive(:==).with(element_2_1)\
                                           .and_return(false)
         allow(element_1_2).to receive(:==).with(element_2_2)\
                                           .and_return(true)
-        @input1 = Input.new(morphword: morphword, ui_corr: ui_corr)
+        @input1 = described_class.new(morphword: morphword, ui_corr: ui_corr)
         @input1 << element_1_1 << element_1_2
-        @input2 = Input.new(morphword: morphword2, ui_corr: ui_corr)
+        @input2 = described_class.new(morphword: morphword2, ui_corr: ui_corr)
         @input2 << element_2_1 << element_2_2
       end
+
       it 'are not ==' do
         expect(@input1 == @input2).not_to be true
       end
+
       it 'are not eql' do
         expect(@input1.eql?(@input2)).not_to be true
       end
     end
   end
 
-  context 'and a dup' do
+  context 'with a duplicate' do
     let(:element_1_1) { double('element_1_1') }
     let(:element_1_2) { double('element_1_2') }
     let(:element_dup_1) { double('element_dup_1') }
     let(:element_dup_2) { double('element_dup_2') }
     let(:uf1) { double('uf1') }
     let(:uf2) { double('uf2') }
-    before(:example) do
+
+    before do
       allow(element_1_1).to receive(:dup).and_return(element_dup_1)
       allow(element_1_2).to receive(:dup).and_return(element_dup_2)
       allow(element_1_1).to receive(:==).and_return(false)
@@ -207,29 +247,37 @@ RSpec.describe Input do
                                             .and_return(uf1)
       allow(ui_corr).to receive(:under_corr).with(element_1_2)\
                                             .and_return(uf2)
-      @input = Input.new(morphword: morphword, ui_corr: ui_corr)
+      @input = described_class.new(morphword: morphword, ui_corr: ui_corr)
       @input << element_1_1 << element_1_2
       @input_dup = @input.dup
     end
+
     it 'have the same number of elements' do
       expect(@input.size).to eq @input_dup.size
     end
+
     it 'have equivalent elements' do
       expect(@input == @input_dup).to be true
     end
+
     it 'are eql()' do
       expect(@input.eql?(@input_dup)).to be true
     end
-    it 'do not have identical elements' do
-      expect(@input[0].equal?(@input_dup[0])).to be false
-      expect(@input[1].equal?(@input_dup[1])).to be false
+
+    (0..1).each do |i|
+      it "element #{i} of each are not the same object" do
+        expect(@input[i]).not_to be_equal @input_dup[i]
+      end
     end
+
     it "the dup's first underlying element is the same" do
       expect(@input_dup.ui_corr.under_corr(@input_dup[0])).to equal uf1
     end
+
     it "the dup's second underlying element is the same" do
       expect(@input_dup.ui_corr.under_corr(@input_dup[1])).to equal uf2
     end
+
     it 'the dup has a dup of the morphword' do
       expect(@input_dup.morphword).to eq morphword_dup
     end
@@ -246,7 +294,8 @@ RSpec.describe Input do
     let(:finst_1_2) { double('finst_1_2') }
     let(:finst_2_1) { double('finst_2_1') }
     let(:finst_2_2) { double('finst_2_2') }
-    before(:example) do
+
+    before do
       allow(seg1).to receive(:each_feature).and_yield(feat_1_1)\
                                            .and_yield(feat_1_2)
       allow(seg2).to receive(:each_feature).and_yield(feat_2_1)\
@@ -259,10 +308,11 @@ RSpec.describe Input do
         receive(:new).with(seg2, feat_2_1).and_return(finst_2_1)
       allow(feature_instance_class).to \
         receive(:new).with(seg2, feat_2_2).and_return(finst_2_2)
-      @input = Input.new(morphword: morphword, ui_corr: ui_corr,
-                         feat_inst_class: feature_instance_class)
+      @input = described_class.new(morphword: morphword, ui_corr: ui_corr,
+                                   feat_inst_class: feature_instance_class)
       @input << seg1 << seg2
     end
+
     it 'yields four feature instances in succession' do
       expect { |probe| @input.each_feature(&probe) }.to \
         yield_successive_args(finst_1_1, finst_1_2, finst_2_1, finst_2_2)
@@ -275,7 +325,8 @@ RSpec.describe Input do
     let(:s21) { double('s21') }
     let(:m1) { double('morph1') }
     let(:m2) { double('morph2') }
-    before(:each) do
+
+    before do
       allow(s11).to receive(:morpheme).and_return(m1)
       allow(s12).to receive(:morpheme).and_return(m1)
       allow(s21).to receive(:morpheme).and_return(m2)
@@ -285,12 +336,14 @@ RSpec.describe Input do
       allow(s11).to receive(:to_gv).and_return('g11')
       allow(s12).to receive(:to_gv).and_return('g12')
       allow(s21).to receive(:to_gv).and_return('g21')
-      @input = Input.new
+      @input = described_class.new
       @input << s11 << s12 << s21
     end
+
     it 'to_s() returns a string with dashes between the morphemes' do
       expect(@input.to_s).to eq 's11s12-s21'
     end
+
     it 'to_gv() returns a string without dashes between the morphemes' do
       expect(@input.to_gv).to eq 'g11g12g21'
     end
@@ -298,26 +351,30 @@ RSpec.describe Input do
 
   # Methods like << often return self, so that calls can be stacked.
   # Make sure that Input follows that expected behavior for these methods.
-  context 'the callee (self) is returned' do
-    before(:example) do
-      @input = Input.new
+  context 'when the callee (self) is returned' do
+    before do
+      @input = described_class.new
     end
+
     it 'when #<< is called' do
       @result = (@input << 's1')
       expect(@result).to equal @input
     end
+
     it 'when #push is called' do
       @result = (@input.push 's1')
       expect(@result).to equal @input
     end
+
     it 'when #each is called' do
       @input << 's1'
-      @result = @input.each { |_x| }
+      @result = @input.each { |_x| nil }
       expect(@result).to equal @input
     end
+
     it 'when #each_index is called' do
       @input << 's1'
-      @result = @input.each_index { |_x| }
+      @result = @input.each_index { |_x| nil }
       expect(@result).to equal @input
     end
   end

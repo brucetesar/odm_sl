@@ -18,6 +18,7 @@ RSpec.describe Lexicon do
   let(:m2_uf) { double('m2_underlying_form') }
   let(:m3_uf) { double('m3_underlying_form') }
 
+  # rubocop:disable Metrics/AbcSize
   # Allows the parameter to behave like the lexical entry for morpheme m1.
   def acts_like_m1_le(lex_entry)
     allow(lex_entry).to receive(:morpheme).and_return(m1)
@@ -33,31 +34,39 @@ RSpec.describe Lexicon do
     allow(lex_entry).to receive(:type).and_return(Morpheme::SUFFIX)
     allow(lex_entry).to receive(:to_s).and_return('m2_lexical_entry')
   end
+  # rubocop:enable Metrics/AbcSize
 
-  before(:example) do
+  before do
     acts_like_m1_le(m1_le)
     acts_like_m2_le(m2_le)
-    @lexicon = Lexicon.new
+    @lexicon = described_class.new
   end
+
   context 'with no lexical entries' do
     it 'returns nil for the uf of m1' do
       expect(@lexicon.get_uf(m1)).to be_nil
     end
+
     it 'returns nil for the uf of m2' do
       expect(@lexicon.get_uf(m2)).to be_nil
     end
+
     it 'returns nil for the uf of m3' do
       expect(@lexicon.get_uf(m3)).to be_nil
     end
+
     it 'returns an empty list of roots' do
       expect(@lexicon.roots).to be_empty
     end
+
     it 'returns an empty list of suffixes' do
       expect(@lexicon.suffixes).to be_empty
     end
+
     it 'returns an empty list of prefixes' do
       expect(@lexicon.prefixes).to be_empty
     end
+
     it 'returns an empty string representation' do
       expect(@lexicon.to_s).to eq ''
     end
@@ -70,25 +79,31 @@ RSpec.describe Lexicon do
     it 'returns the uf for m1' do
       expect(lexicon.get_uf(m1)).to eq(m1_uf)
     end
+
     it 'returns the uf for m2' do
       expect(lexicon.get_uf(m2)).to eq(m2_uf)
     end
+
     it 'returns nil for the uf of m3' do
       expect(lexicon.get_uf(m3)).to be_nil
     end
+
     it 'returns a root list with the m1 lexical entry' do
       # extracting the morpheme makes the example indifferent to whether
       # it is using m1_le or m1_le_dup
       morphs = lexicon.roots.map(&:morpheme)
       expect(morphs).to contain_exactly(m1)
     end
+
     it 'returns a suffix list with the m2 lexical entry' do
       morphs = lexicon.suffixes.map(&:morpheme)
       expect(morphs).to contain_exactly(m2)
     end
+
     it 'returns an empty list of prefixes' do
       expect(lexicon.prefixes).to be_empty
     end
+
     it 'returns a string rep. with m1 and m2' do
       rep = "m1_lexical_entry\nm2_lexical_entry\n"
       expect(lexicon.to_s).to eq rep
@@ -96,18 +111,21 @@ RSpec.describe Lexicon do
   end
 
   context 'with entries for m1 and m2 but not m3' do
-    before(:each) do
+    before do
       @lexicon.add(m1_le)
       @lexicon.add(m2_le)
     end
+
     it_behaves_like 'm1+m2' do
       let(:lexicon) { @lexicon }
     end
-    context 'a dup' do
+
+    context 'with a duplicate' do
       let(:m1_le_dup) { double('m1_lexical_entry_dup') }
       let(:m2_le_dup) { double('m2_lexical_entry_dup') }
       let(:m3_le_dup) { double('m3_lexical_entry_dup') }
-      before(:example) do
+
+      before do
         allow(m1_le).to receive(:dup).and_return(m1_le_dup)
         allow(m2_le).to receive(:dup).and_return(m2_le_dup)
         allow(m3_le).to receive(:dup).and_return(m3_le_dup)
@@ -115,6 +133,7 @@ RSpec.describe Lexicon do
         acts_like_m2_le(m2_le_dup)
         @lex = @lexicon.dup
       end
+
       it_behaves_like 'm1+m2' do
         let(:lexicon) { @lex }
       end

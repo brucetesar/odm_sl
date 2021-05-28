@@ -5,30 +5,34 @@
 require 'rspec'
 require 'loser_selector_from_competition'
 
-RSpec.describe 'LoserSelectorFromCompetition' do
+RSpec.describe LoserSelectorFromCompetition do
   let(:winner) { double('winner') }
   let(:ranking_info) { double('ranking info') }
   let(:comparer) { double('comparer') }
-  before(:each) do
-    @selector = LoserSelectorFromCompetition.new(comparer)
+
+  before do
+    @selector = described_class.new(comparer)
   end
 
-  context 'given a competition with only the winner' do
-    before(:each) do
+  context 'with a competition with only the winner' do
+    before do
       competition = [winner]
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, winner, ranking_info) \
         .and_return(:IDENT_VIOLATIONS)
-      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition,
+                                                       ranking_info)
     end
+
     it 'returns nil' do
       expect(@loser).to be nil
     end
   end
 
-  context 'given a candidate more harmonic than the winner' do
+  context 'with a candidate more harmonic than the winner' do
     let(:moreh) { double('more harmonic') }
-    before(:each) do
+
+    before do
       competition = [winner, moreh]
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, winner, ranking_info) \
@@ -36,16 +40,19 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, moreh, ranking_info) \
         .and_return(:SECOND)
-      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition,
+                                                       ranking_info)
     end
+
     it 'returns the competitor' do
       expect(@loser).to eq moreh
     end
   end
 
-  context 'given a candidate less harmonic than the winner' do
+  context 'with a candidate less harmonic than the winner' do
     let(:lessh) { double('less harmonic') }
-    before(:each) do
+
+    before do
       competition = [lessh, winner]
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, winner, ranking_info) \
@@ -53,16 +60,19 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, lessh, ranking_info) \
         .and_return(:FIRST)
-      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition,
+                                                       ranking_info)
     end
+
     it 'returns nil' do
       expect(@loser).to be nil
     end
   end
 
-  context 'given a candidate distinct but with identical violations' do
+  context 'with a candidate distinct but with identical violations' do
     let(:ident_viols) { double('identical violations') }
-    before(:each) do
+
+    before do
       competition = [winner, ident_viols]
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, winner, ranking_info) \
@@ -70,18 +80,21 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, ident_viols, ranking_info) \
         .and_return(:IDENT_VIOLATIONS)
-      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition,
+                                                       ranking_info)
     end
+
     it 'returns nil' do
       expect(@loser).to be nil
     end
   end
 
-  context 'given two candidates more harmonic than the winner' do
+  context 'with two candidates more harmonic than the winner' do
     let(:lessh) { double('less harmonic') }
     let(:moreh1) { double('more harmonic1') }
     let(:moreh2) { double('more harmonic2') }
-    before(:each) do
+
+    before do
       competition = [lessh, moreh1, winner, moreh2]
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, winner, ranking_info) \
@@ -95,8 +108,10 @@ RSpec.describe 'LoserSelectorFromCompetition' do
       allow(comparer).to receive(:more_harmonic) \
         .with(winner, lessh, ranking_info) \
         .and_return(:FIRST)
-      @loser = @selector.select_loser_from_competition(winner, competition, ranking_info)
+      @loser = @selector.select_loser_from_competition(winner, competition,
+                                                       ranking_info)
     end
+
     it 'returns the competitor' do
       expect(@loser).to eq moreh1
     end
