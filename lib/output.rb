@@ -14,6 +14,7 @@ class Output < Array
   # :call-seq:
   #   new() -> output
   def initialize
+    super()
     @morphword = nil
   end
 

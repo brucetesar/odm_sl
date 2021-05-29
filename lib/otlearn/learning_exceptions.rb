@@ -12,6 +12,7 @@ module OTLearn
 
     # Returns a new LearnEx exception object.
     def initialize(consistent_feature_value_list)
+      super()
       @consistent_feature_value_list = consistent_feature_value_list
     end
   end

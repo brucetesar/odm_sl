@@ -56,7 +56,8 @@ module OTLearn
       return nil if ref_mw.size != other_mw.size
 
       # Cannot have the target morph appear multiple times
-      msg = 'ContrastWordMatcher#match: target word cannot appear multiple times'
+      msg = 'ContrastWordMatcher#match: '\
+            'target word cannot appear multiple times'
       raise msg if ref_mw.find_all { |m| m == morph }.size > 1
 
       true

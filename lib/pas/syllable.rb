@@ -10,10 +10,10 @@ module PAS
   # can have an affiliated morpheme.
   #
   # Learning algorithms are expected to use the "generic" interface, consisting
-  # of the methods #each_feature() and #get_feature(). The method #each_feature()
-  # is an iterator that yields each feature of the syllable in turn,
-  # allowing other routines to work with syllables without knowing in advance
-  # how many or what types of features they have.
+  # of the methods #each_feature() and #get_feature(). The method
+  # #each_feature() is an iterator that yields each feature of the syllable
+  # in turn, allowing other routines to work with syllables without knowing
+  # in advance how many or what types of features they have.
   class Syllable
     # Returns the morpheme that this syllable is affiliated with.
     attr_reader :morpheme

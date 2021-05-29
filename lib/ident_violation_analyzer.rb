@@ -12,7 +12,7 @@ class IdentViolationAnalyzer
   # The methods of Enumerable apply to the partition itself.
   include Enumerable
 
-  # Creates a partition of the candidates of +competition+ by constraint
+  # Creates a partition of the candidates of _competition_ by constraint
   # violation profile.
   #
   # :call-seq:
@@ -55,14 +55,14 @@ class IdentViolationAnalyzer
   end
   private :partition_by_viols
 
-  # Adds +cand+ to +partition+ based on +match+. If +match+ is not nil,
-  # add +cand+ to the part at index +match+, otherwise add as a new part.
+  # Adds _cand_ to _partition_ based on _match_. If _match_ is not nil,
+  # add _cand_ to the part at index _match_, otherwise add as a new part.
   def add_to_partition(cand, match, partition)
-    if !match.nil?
+    if match.nil?
+      partition << [cand]
+    else
       partition[match] << cand
       @ident_viol_candidates = true
-    else
-      partition << [cand]
     end
   end
   private :add_to_partition
