@@ -18,40 +18,40 @@ RSpec.describe PAS::System do
   # ********************************
   # Specs for the system constraints
   # ********************************
-  context 'returns a constraint list' do
+  context 'when the constraints are retrieved' do
     before do
       @con_list = system.constraints
     end
 
-    it 'with 7 constraints' do
+    it 'has 7 constraints' do
       expect(@con_list.size).to eq(7)
     end
 
-    it 'containing WSP' do
+    it 'contains WSP' do
       expect(@con_list).to include(system.wsp)
     end
 
-    it 'containing MainLeft' do
+    it 'contains MainLeft' do
       expect(@con_list).to include(system.ml)
     end
 
-    it 'containing MainRight' do
+    it 'contains MainRight' do
       expect(@con_list).to include(system.mr)
     end
 
-    it 'containing NoLong' do
+    it 'contains NoLong' do
       expect(@con_list).to include(system.nolong)
     end
 
-    it 'containing Ident[stress]' do
+    it 'contains Ident[stress]' do
       expect(@con_list).to include(system.idstress)
     end
 
-    it 'containing Ident[length]' do
+    it 'contains Ident[length]' do
       expect(@con_list).to include(system.idlength)
     end
 
-    it 'containing Culm' do
+    it 'contains Culm' do
       expect(@con_list).to include(system.culm)
     end
   end

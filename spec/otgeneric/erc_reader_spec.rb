@@ -9,7 +9,7 @@ RSpec.describe OTGeneric::ErcReader do
   context 'with a header array and an array with 2 ERCs' do
     before do
       headers = ['', 'Con1', 'Con2', 'Con3']
-      data = [['E1', 'W', 'L', 'W'], ['E2', 'e', 'W', 'L']]
+      data = [%w[E1 W L W], %w[E2 e W L]]
       erc_reader = described_class.new
       @erc_list = erc_reader.arrays_to_erc_list(headers, data)
     end
@@ -27,7 +27,7 @@ RSpec.describe OTGeneric::ErcReader do
       expect(@erc_list.size).to eq(2)
     end
 
-    context 'the first returned ERC' do
+    context 'with the first returned ERC' do
       before do
         @erc1 = @erc_list.to_a[0]
       end
@@ -51,7 +51,7 @@ RSpec.describe OTGeneric::ErcReader do
       end
     end
 
-    context 'the second returned ERC' do
+    context 'with the second returned ERC' do
       before do
         @erc2 = @erc_list.to_a[1]
       end
@@ -75,7 +75,7 @@ RSpec.describe OTGeneric::ErcReader do
   context 'with some constraint names prefixed with F: ' do
     before do
       headers = ['', 'M:Con1', 'F:Con2', 'Con3']
-      data = [['E1', 'W', 'L', 'W'], ['E2', 'e', 'W', 'L']]
+      data = [%w[E1 W L W], %w[E2 e W L]]
       erc_reader = described_class.new
       @erc_list = erc_reader.arrays_to_erc_list(headers, data)
     end

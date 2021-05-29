@@ -326,6 +326,6 @@ class Word
   # Returns a string containing string versions of the morphword
   # and the candidate of the word.
   def to_s
-    input.morphword.to_s + ' ' + @candidate.to_s
+    input.morphword.to_s << ' ' << @candidate.to_s
   end
 end

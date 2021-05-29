@@ -1,4 +1,3 @@
-# Hooks for the Cucumber scenarios.
+# frozen_string_literal: true
 
-Before do
-end
+# Hooks for the Cucumber scenarios.

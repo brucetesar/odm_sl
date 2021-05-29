@@ -36,7 +36,7 @@ RSpec.describe ODL::LexicalEntryGenerator do
     end
 
     it 'numbers the morphemes' do
-      expect(@entries.map { |le| le.morpheme.label }).to eq ['r1', 'r2']
+      expect(@entries.map { |le| le.morpheme.label }).to eq %w[r1 r2]
     end
 
     it 'generates entries with the underlying forms' do
@@ -73,7 +73,7 @@ RSpec.describe ODL::LexicalEntryGenerator do
     end
 
     it 'numbers the morphemes' do
-      expect(@entries.map { |le| le.morpheme.label }).to eq ['s6', 's7']
+      expect(@entries.map { |le| le.morpheme.label }).to eq %w[s6 s7]
     end
 
     it 'generates entries with the underlying forms' do

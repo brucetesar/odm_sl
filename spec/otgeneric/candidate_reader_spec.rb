@@ -7,8 +7,8 @@ require 'otgeneric/candidate_reader'
 
 RSpec.describe OTGeneric::CandidateReader do
   context 'with an array with three constraints' do
-    let(:con_list) { ['Con1', 'Con2', 'Con3'] }
-    let(:data_row) { ['in1', 'out11', '0', '3', '2'] }
+    let(:con_list) { %w[Con1 Con2 Con3] }
+    let(:data_row) { %w[in1 out11 0 3 2] }
 
     before do
       @cand_reader = described_class.new
@@ -37,7 +37,7 @@ RSpec.describe OTGeneric::CandidateReader do
     end
 
     context 'with a data row with two violation columns' do
-      let(:row_too_short) { ['in2', 'out21', '2', '1'] }
+      let(:row_too_short) { %w[in2 out21 2 1] }
 
       it 'raises an exception' do
         expect { @cand_reader.convert_array_to_candidate(row_too_short) }.to\
@@ -48,7 +48,7 @@ RSpec.describe OTGeneric::CandidateReader do
     end
 
     context 'with a data row with four violation columns' do
-      let(:row_too_long) { ['in2', 'out21', '2', '1', '0', '3'] }
+      let(:row_too_long) { %w[in2 out21 2 1 0 3] }
 
       it 'raises an exception' do
         expect { @cand_reader.convert_array_to_candidate(row_too_long) }.to\
@@ -59,7 +59,7 @@ RSpec.describe OTGeneric::CandidateReader do
     end
 
     context 'with a non-numeric violation count' do
-      let(:row_nonnum) { ['in2', 'out21', '2', 'J', '0'] }
+      let(:row_nonnum) { %w[in2 out21 2 J 0] }
 
       it 'raises an exception' do
         expect { @cand_reader.convert_array_to_candidate(row_nonnum) }.to\

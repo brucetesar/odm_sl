@@ -127,8 +127,7 @@ RSpec.describe OTLearn::MrcdSingle do
     end
 
     it 'returns the created pairs' do
-      expect(@mrcd_single.added_pairs.member?(wl_pair1)).to be true
-      expect(@mrcd_single.added_pairs.member?(wl_pair2)).to be true
+      expect(@mrcd_single.added_pairs).to contain_exactly(wl_pair1, wl_pair2)
     end
 
     it 'is consistent' do

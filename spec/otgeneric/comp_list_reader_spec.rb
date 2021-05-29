@@ -56,7 +56,7 @@ RSpec.describe OTGeneric::CompListReader do
     let(:cand22) { double('candidate 22') }
 
     before do
-      headers = ['Input', 'Output', 'Con1', 'Con2', 'Con3']
+      headers = %w[Input Output Con1 Con2 Con3]
       data = [row1, row2, row3, row4, row5]
       # initialize the test dummy candidates
       allow(candidate_reader).to receive(:constraints=)

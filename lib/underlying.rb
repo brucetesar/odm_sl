@@ -10,7 +10,9 @@ class Underlying < Array
   # Returns an empty Underlying object.
   # :call-seq:
   #   new() -> underlying
-  def initialize; end
+  def initialize
+    super
+  end
 
   # Returns a deep copy duplicate of the underlying form, containing
   # a duplicate of each of the correspondence elements of the original.

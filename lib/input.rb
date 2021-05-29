@@ -35,6 +35,7 @@ class Input < Array
   # by the #each_feature() method.
   def initialize(morphword: MorphWord.new, ui_corr: UICorrespondence.new,
                  feat_inst_class: FeatureInstance)
+    super()
     @morphword = morphword
     @ui_corr = ui_corr
     @feature_instance_class = feat_inst_class

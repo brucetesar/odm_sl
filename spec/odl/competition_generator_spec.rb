@@ -46,7 +46,7 @@ RSpec.describe ODL::CompetitionGenerator do
     end
 
     it 'generates two competitions' do
-      expect(@competitions).to eq [:comp1, :comp2]
+      expect(@competitions).to eq %i[comp1 comp2]
     end
   end
 end

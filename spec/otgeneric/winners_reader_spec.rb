@@ -24,7 +24,7 @@ RSpec.describe OTGeneric::WinnersReader do
 
   context 'with an array with one winner' do
     before do
-      data = [['in1', 'out11']]
+      data = [%w[in1 out11]]
       comp_list = [[cand11, cand12], [cand21, cand22]]
       @win_reader = described_class.new
       @win_reader.competitions = comp_list
@@ -46,7 +46,7 @@ RSpec.describe OTGeneric::WinnersReader do
 
   context 'with an array with two winners' do
     before do
-      data = [['in1', 'out12'], ['in2', 'out21']]
+      data = [%w[in1 out12], %w[in2 out21]]
       comp_list = [[cand11, cand12], [cand21, cand22]]
       @win_reader = described_class.new
       @win_reader.competitions = comp_list
@@ -76,7 +76,7 @@ RSpec.describe OTGeneric::WinnersReader do
 
   context 'with a winner with input with no corresponding competition' do
     before do
-      @data = [['in1', 'out12'], ['in3', 'out31']]
+      @data = [%w[in1 out12], %w[in3 out31]]
       comp_list = [[cand11, cand12], [cand21, cand22]]
       @win_reader = described_class.new
       @win_reader.competitions = comp_list
@@ -91,7 +91,7 @@ RSpec.describe OTGeneric::WinnersReader do
 
   context 'with a winner with no output in its competition' do
     before do
-      @data = [['in1', 'out12'], ['in2', 'out31']]
+      @data = [%w[in1 out12], %w[in2 out31]]
       comp_list = [[cand11, cand12], [cand21, cand22]]
       @win_reader = described_class.new
       @win_reader.competitions = comp_list

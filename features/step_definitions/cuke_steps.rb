@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 # Author: Bruce Tesar
-# 
 
 Given(/^that file "([^"]*)" does not exist$/) do |filename|
   File.delete(filename) if File.exist?(filename)
