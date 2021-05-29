@@ -12,7 +12,8 @@ RSpec.describe Word do
   let(:candidate) { double('candidate') }
   let(:input) { double('input') }
   let(:output) { double('output') }
-  before(:example) do
+
+  before do
     allow(candidate_class).to receive(:new).and_return(candidate)
     allow(system).to receive(:constraints)
     allow(candidate).to receive(:input).and_return(input)
@@ -20,14 +21,17 @@ RSpec.describe Word do
     allow(router).to receive(:word=)
   end
 
-  context 'given empty input and output' do
-    before(:example) do
-      @word = Word.new(system, input, output,
-                       candidate_class: candidate_class, corr_router: router)
+  context 'with empty input and output' do
+    before do
+      @word = described_class.new(system, input, output,
+                                  candidate_class: candidate_class,
+                                  corr_router: router)
     end
+
     it 'gives the input' do
       expect(@word.input).to eq input
     end
+
     it 'gives the output' do
       expect(@word.output).to eq output
     end
@@ -44,7 +48,8 @@ RSpec.describe Word do
     let(:uf_finst2) { double('UF feature instance 2') }
     let(:uf_value1) { double('uf_value1') }
     let(:uf_value2) { double('uf_value2') }
-    before(:example) do
+
+    before do
       allow(input).to receive(:each_feature).and_yield(finst_1) \
                                             .and_yield(finst_2)
       allow(finst_1).to receive(:feature).and_return(in_feat1)
@@ -57,50 +62,62 @@ RSpec.describe Word do
                                                    .and_return(uf_finst1)
       allow(router).to receive(:uf_feat_corr_of_in).with(finst_2)\
                                                    .and_return(uf_finst2)
-      @word = Word.new(system, input, output,
-                       candidate_class: candidate_class, corr_router: router)
+      @word = described_class.new(system, input, output,
+                                  candidate_class: candidate_class,
+                                  corr_router: router)
       allow(@word).to receive(:eval)
     end
-    context 'sync_with_lexicon!' do
-      before(:example) do
+
+    context 'when calling sync_with_lexicon!' do
+      before do
         allow(uf_finst1).to receive(:value).and_return(uf_value1)
         allow(uf_finst2).to receive(:value).and_return(uf_value2)
         allow(finst_1).to receive(:value=)
         allow(finst_2).to receive(:value=)
         @ret_value = @word.sync_with_lexicon!
       end
+
       it 'assigns the first input feature its corresponding UF value' do
         expect(finst_1).to have_received(:value=).with(uf_value1)
       end
+
       it 'assigns the second input feature its corresponding UF value' do
         expect(finst_2).to have_received(:value=).with(uf_value2)
       end
+
       it 're-evaluates the constraint violations' do
         expect(@word).to have_received(:eval)
       end
+
       it 'returns a reference to the word' do
         expect(@ret_value).to eq @word
       end
     end
-    context '#match_input_to_output!' do
-      before(:example) do
+
+    context 'when calling #match_input_to_output!' do
+      before do
         allow(out_finst2).to receive(:value).and_return(out_value2)
         allow(finst_2).to receive(:value=).with(out_value2)
         @ret_value = @word.match_input_to_output!
       end
+
       it 'assigns the unset feature the value of the output correspondent' do
         expect(finst_2).to have_received(:value=).with(out_value2)
       end
+
       it 're-evaluates the constraint violations' do
         expect(@word).to have_received(:eval)
       end
+
       it 'returns a reference to the word' do
         expect(@ret_value).to eq @word
       end
     end
-    context '#mismatch_input_to_output!' do
+
+    context 'when calling #mismatch_input_to_output!' do
       let(:unset_feat_oppout_value) { double('unset_feat_oppout_value') }
-      before(:example) do
+
+      before do
         allow(out_finst2).to receive(:value).and_return(out_value2)
         allow(finst_2).to receive(:value=).with(unset_feat_oppout_value)
         allow(in_feat2).to receive(:each_value)\
@@ -108,24 +125,29 @@ RSpec.describe Word do
           .and_yield(unset_feat_oppout_value)
         @ret_value = @word.mismatch_input_to_output!
       end
+
       it 'assigns the value opposite the output correspondent' do
         expect(finst_2).to\
           have_received(:value=).with(unset_feat_oppout_value)
       end
+
       it 're-evaluates the constraint violations' do
         expect(@word).to have_received(:eval)
       end
+
       it 'returns a reference to the word' do
         expect(@ret_value).to eq @word
       end
     end
+
     context 'with UI correspondence' do
       let(:ui_corr) { double('UI corr') }
       let(:uf_el1) { double('UF element 1') }
       let(:uf_el2) { double('UF element 2') }
       let(:in_el1) { double('UF element 1') }
       let(:in_el2) { double('UF element 2') }
-      before(:example) do
+
+      before do
         allow(input).to receive(:ui_corr).and_return(ui_corr)
         allow(ui_corr).to receive(:under_corr).with(in_el1).and_return(uf_el1)
         allow(ui_corr).to receive(:under_corr?).with(in_el1).and_return(true)
@@ -134,21 +156,27 @@ RSpec.describe Word do
         allow(ui_corr).to receive(:in_corr?).with(uf_el1).and_return(true)
         allow(ui_corr).to receive(:in_corr?).with(uf_el2).and_return(false)
       end
+
       it 'returns uf_el1 as correspondent of in_el1' do
         expect(@word.ui_under_corr(in_el1)).to eq uf_el1
       end
+
       it 'shows that in_el1 has a UF correspondent' do
         expect(@word.ui_under_corr?(in_el1)).to be true
       end
+
       it 'shows that in_el2 has no UF correspondent' do
         expect(@word.ui_under_corr?(in_el2)).to be false
       end
+
       it 'returns in_el1 as correspondent of uf_el1' do
         expect(@word.ui_in_corr(uf_el1)).to eq in_el1
       end
+
       it 'shows that uf_el1 has an input correspondent' do
         expect(@word.ui_in_corr?(uf_el1)).to be true
       end
+
       it 'shows that uf_el1 has no input correspondent' do
         expect(@word.ui_in_corr?(uf_el2)).to be false
       end
@@ -161,41 +189,49 @@ RSpec.describe Word do
     let(:suprabinary_feat_value1) { double('suprabinary_feat_value1') }
     let(:suprabinary_feat_value2) { double('suprabinary_feat_value2') }
     let(:suprabinary_feat_value3) { double('suprabinary_feat_value3') }
-    before(:example) do
+
+    before do
       allow(input).to receive(:each_feature).and_yield(finst_1)
       allow(finst_1).to receive(:feature).and_return(suprabinary_feat)
       allow(suprabinary_feat).to receive(:unset?).and_return(true)
-      @word = Word.new(system, input, output,
-                       candidate_class: candidate_class, corr_router: router)
+      @word = described_class.new(system, input, output,
+                                  candidate_class: candidate_class,
+                                  corr_router: router)
       allow(@word).to receive(:eval)
     end
-    context '#mismatch_input_to_output!' do
-      before(:example) do
+
+    context 'when calling #mismatch_input_to_output!' do
+      before do
         allow(suprabinary_feat).to receive(:each_value)\
           .and_yield(suprabinary_feat_value1)\
           .and_yield(suprabinary_feat_value2)\
           .and_yield(suprabinary_feat_value3)
       end
+
       it 'raises a RuntimeError indicating a suprabinary feature' do
         expect { @word.mismatch_input_to_output! }.to raise_error(RuntimeError)
       end
     end
   end
 
-  context 'given two words with distinct but equivalent candidates' do
+  context 'with two words with distinct but equivalent candidates' do
     let(:candidate2) { double('candidate2') }
     let(:input2) { double('input2') }
     let(:output2) { double('output2') }
-    before(:example) do
+
+    before do
       allow(candidate_class).to receive(:new).and_return(candidate, candidate2)
       allow(candidate2).to receive(:input).and_return(input2)
       allow(candidate2).to receive(:output).and_return(output2)
       allow(candidate).to receive(:==).with(candidate2).and_return(true)
-      @word1 = Word.new(system, input, output,
-                        candidate_class: candidate_class, corr_router: router)
-      @word2 = Word.new(system, input2, output2,
-                        candidate_class: candidate_class, corr_router: router)
+      @word1 = described_class.new(system, input, output,
+                                   candidate_class: candidate_class,
+                                   corr_router: router)
+      @word2 = described_class.new(system, input2, output2,
+                                   candidate_class: candidate_class,
+                                   corr_router: router)
     end
+
     it 'they are equivalent' do
       expect(@word1 == @word2).to be true
     end
@@ -203,7 +239,7 @@ RSpec.describe Word do
 
   # Because Word#dup constructs a new Word internally, the testing will
   # involve some other dependent classes.
-  context 'its duplicate' do
+  context 'with a duplicate' do
     let(:in_1) { double('in_1') }
     let(:in_2) { double('in_2') }
     let(:out_1) { double('out_1') }
@@ -212,7 +248,8 @@ RSpec.describe Word do
     let(:in_2_dup) { double('in_2_dup') }
     let(:out_1_dup) { double('out_1_dup') }
     let(:out_2_dup) { double('out_2_dup') }
-    before(:example) do
+
+    before do
       allow(in_1).to receive(:dup).and_return(in_1_dup)
       allow(in_2).to receive(:dup).and_return(in_2_dup)
       allow(out_1).to receive(:dup).and_return(out_1_dup)
@@ -222,79 +259,100 @@ RSpec.describe Word do
       allow(out_1).to receive(:==).with(out_1_dup).and_return(true)
       allow(out_2).to receive(:==).with(out_2_dup).and_return(true)
       allow(input).to receive(:morphword).and_return(nil)
-      @word = Word.new(system)
+      @word = described_class.new(system)
       @word.input << in_1 << in_2
       @word.output << out_1 << out_2
       @word.add_to_io_corr(in_1, out_1)
       @word.add_to_io_corr(in_2, out_2)
       @word_dup = @word.dup
     end
+
     it 'the two are not the same object' do
       expect(@word_dup).not_to equal @word
     end
+
     it 'the two are equivalent' do
       expect(@word_dup).to eq @word
     end
+
     it 'has dup input element 0' do
       expect(@word_dup.input[0]).to equal in_1_dup
     end
+
     it 'has dup input element 1' do
       expect(@word_dup.input[1]).to equal in_2_dup
     end
+
     it 'has dup output element 0' do
       expect(@word_dup.output[0]).to equal out_1_dup
     end
+
     it 'has dup output element 1' do
       expect(@word_dup.output[1]).to equal out_2_dup
     end
+
     it 'has corresponding first elements' do
       expect(@word_dup.io_out_corr(in_1_dup)).to equal out_1_dup
     end
+
     it 'has corresponding second elements' do
       expect(@word_dup.io_out_corr(in_2_dup)).to equal out_2_dup
     end
   end
 
-  context 'its dup_for_gen' do
+  context 'with its dup_for_gen' do
     let(:in_1) { double('in_1') }
     let(:in_2) { double('in_2') }
     let(:in_3) { double('in_3') }
     let(:out_1) { double('out_1') }
     let(:out_2) { double('out_2') }
-    before(:example) do
+
+    before do
       allow(input).to receive(:morphword).and_return(nil)
-      @word = Word.new(system)
+      @word = described_class.new(system)
       @word.input << in_1 << in_2 << in_3
       @word.output << out_1 << out_2
       @word.add_to_io_corr(in_1, out_1)
       @word.add_to_io_corr(in_2, out_2)
       @word_dup_gen = @word.dup_for_gen
     end
+
     it 'the two are not the same object' do
       expect(@word_dup_gen).not_to equal @word
     end
+
     it 'the two are equivalent' do
       expect(@word_dup_gen).to eq @word
     end
+
     it 'has the same input element 0' do
       expect(@word_dup_gen.input[0]).to equal in_1
     end
+
     it 'has the same input element 1' do
       expect(@word_dup_gen.input[1]).to equal in_2
     end
+
     it 'has no output correspondent for input element 3' do
       expect(@word_dup_gen.io_out_corr?(in_3)).to be false
     end
+
     it 'has the same output element 0' do
       expect(@word_dup_gen.output[0]).to equal out_1
     end
+
     it 'has the same output element 1' do
       expect(@word_dup_gen.output[1]).to equal out_2
     end
-    it 'has corresponding first elements' do
+
+    it 'input first element corresponds to output first element' do
       expect(@word_dup_gen.io_out_corr(in_1)).to equal out_1
+    end
+
+    it 'output first element corresponds to input first element' do
       expect(@word_dup_gen.io_in_corr(out_1)).to equal in_1
     end
+
     it 'has corresponding second elements' do
       expect(@word_dup_gen.io_out_corr(in_2)).to equal out_2
     end

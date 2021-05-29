@@ -23,12 +23,15 @@ RSpec.shared_examples 'equivalent sets' do
   it 'are equivalent' do
     expect(set1 == set2).to be true
   end
+
   it 'are not the same object' do
     expect(set1.equal?(set2)).not_to be true
   end
+
   it 'are eql' do
     expect(set1.eql?(set2)).to be true
   end
+
   it 'have the same hash value' do
     expect(set1.hash).to equal(set2.hash)
   end
@@ -38,39 +41,42 @@ RSpec.shared_examples 'non-equivalent sets' do
   it 'are not equivalent' do
     expect(set1 == set2).not_to be true
   end
+
   it 'are not the same object' do
     expect(set1.equal?(set2)).not_to be true
   end
+
   it 'are not eql' do
     expect(set1.eql?(set2)).not_to be true
   end
+
   it 'do not have the same hash value' do
     expect(set1.hash).not_to equal(set2.hash)
   end
 end
 
 RSpec.describe Set do
-  context 'distinct sets' do
-    before(:each) do
-      @sh1 = Set.new
-      @sh2 = Set.new
+  context 'with distinct sets' do
+    before do
+      @sh1 = described_class.new
+      @sh2 = described_class.new
     end
 
-    context 'each with no members' do
+    context 'with no members' do
       it_behaves_like 'equivalent sets' do
         let(:set1) { @sh1 }
         let(:set2) { @sh2 }
       end
     end
 
-    context "each with 'foobar'" do
+    context "with 'foobar'" do
       it_behaves_like 'equivalent sets' do
         let(:set1) { @sh1.add 'foobar' }
         let(:set2) { @sh2.add 'foobar' }
       end
     end
 
-    context "one with 'foo' and one with 'bar'" do
+    context "with 'foo' for one and 'bar' for the other" do
       it_behaves_like 'non-equivalent sets' do
         let(:set1) { @sh1.add 'foo' }
         let(:set2) { @sh2.add 'bar' }
