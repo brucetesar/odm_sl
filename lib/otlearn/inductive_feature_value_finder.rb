@@ -14,26 +14,21 @@ module OTLearn
   # make the word mismatch-consistent. This class works in support of
   # inductive learning, in particular in support of Fewest Set Features.
   class InductiveFeatureValueFinder
-    # Determines if a set of outputs are consistent with a grammar.
-    attr_accessor :consistency_checker
-
-    # Search object containing #find_unset_features_in_words
-    attr_accessor :word_search
-
     # Returns a new inductive feature value finder.
     # :call-seq:
     #   new -> finder
     #--
-    # Named parameter _fv_pair_class_ is a dependency injection used for
-    # testing.
-    def initialize(fv_pair_class: nil)
-      @consistency_checker = nil
-      @word_search = nil
+    # Named parameters _consistency_checker, _word_search_, and
+    # _fv_pair_class_ are dependency injections used for testing.
+    def initialize(consistency_checker: nil, word_search: nil,
+                   fv_pair_class: nil)
+      @consistency_checker = consistency_checker
+      @word_search = word_search
       @fv_pair_class = fv_pair_class
     end
 
-    # If any of the components has not been externally assigned, then
-    # assign its default value.
+    # Assign default values to any dependencies that have not been assigned
+    # via the constructor.
     def check_defaults
       @consistency_checker ||= ConsistencyChecker.new
       @word_search ||= WordSearch.new
@@ -71,7 +66,7 @@ module OTLearn
       # Find all unset features, then find which ones are successful
       # (render the winner mismatch-consistent).
       unset_uf_features =
-        word_search.find_unset_features_in_words([winner_dup], grammar)
+        @word_search.find_unset_features_in_words([winner_dup], grammar)
       consistent_feature_val_list =
         consistent_feature_values(winner_dup, unset_uf_features,
                                   grammar, test_result)
@@ -119,7 +114,7 @@ module OTLearn
       # pair combining the target unset feature and its output-derived value.
       # Return nil if the output list is inconsistent with the grammar.
       val_pair = nil
-      if consistency_checker.mismatch_consistent?(output_list, grammar)
+      if @consistency_checker.mismatch_consistent?(output_list, grammar)
         val_pair = @fv_pair_class.new(ufeat, ufeat.value)
       end
       # In any event, unset the temporarily set feature.

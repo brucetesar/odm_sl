@@ -35,9 +35,9 @@ RSpec.describe OTLearn::InductiveFeatureValueFinder do
   let(:fv2) { instance_double(FeatureValuePair, 'feature_value2') }
 
   before do
-    @finder = described_class.new(fv_pair_class: fv_pair_class)
-    @finder.consistency_checker = consistency_checker
-    @finder.word_search = word_search
+    @finder = described_class.new(consistency_checker: consistency_checker,
+                                  word_search: word_search,
+                                  fv_pair_class: fv_pair_class)
     allow(test_result).to receive(:success_winners).and_return([])
     allow(fv_pair_class).to receive(:new).with(unset_feature1, out_value1)\
                                          .and_return(fv1)
