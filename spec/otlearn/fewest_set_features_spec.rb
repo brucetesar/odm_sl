@@ -10,6 +10,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
   let(:output_list) { double('output_list') }
   let(:grammar) { double('grammar') }
   let(:prior_result) { double('prior_result') }
+  let(:feature_value_finder) { double('feature_value_finder') }
   let(:para_erc_learner) { double('para_erc_learner') }
   let(:consistency_checker) { double('consistency_checker') }
   let(:fv_pair_class) { double('FeatureValuePair class') }
@@ -83,9 +84,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
                                         .and_return(true)
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class\
-          .new(consistency_checker: consistency_checker,
-               fv_pair_class: fv_pair_class, word_search: word_search)
+          described_class.new(consistency_checker: consistency_checker,
+                              fv_pair_class: fv_pair_class,
+                              word_search: word_search,
+                              feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -125,7 +127,8 @@ RSpec.describe OTLearn::FewestSetFeatures do
         fewest_set_features =
           described_class.new(consistency_checker: consistency_checker,
                               fv_pair_class: fv_pair_class,
-                              word_search: word_search)
+                              word_search: word_search,
+                              feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -158,9 +161,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
           receive(:mismatch_consistent?).and_return(true, false)
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class\
-          .new(consistency_checker: consistency_checker,
-               fv_pair_class: fv_pair_class, word_search: word_search)
+          described_class.new(consistency_checker: consistency_checker,
+                              fv_pair_class: fv_pair_class,
+                              word_search: word_search,
+                              feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -198,9 +202,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
           receive(:mismatch_consistent?).and_return(false, true)
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class\
-          .new(consistency_checker: consistency_checker,
-               fv_pair_class: fv_pair_class, word_search: word_search)
+          described_class.new(consistency_checker: consistency_checker,
+                              fv_pair_class: fv_pair_class,
+                              word_search: word_search,
+                              feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -242,9 +247,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect do
           # actually construct the test object, and inject the test dependencies
           fewest_set_features =
-            described_class\
-            .new(consistency_checker: consistency_checker,
-                 fv_pair_class: fv_pair_class, word_search: word_search)
+            described_class.new(consistency_checker: consistency_checker,
+                                fv_pair_class: fv_pair_class,
+                                word_search: word_search,
+                                feature_value_finder: feature_value_finder)
           fewest_set_features.para_erc_learner = para_erc_learner
           @substep =
             fewest_set_features.run(output_list, grammar, prior_result)
@@ -326,11 +332,12 @@ RSpec.describe OTLearn::FewestSetFeatures do
           .with([fw_output1], grammar).and_return(false)
         allow(consistency_checker).to receive(:mismatch_consistent?)\
           .with([fw_output2], grammar).and_return(true)
-        # actually construct the test object, and inject the test dependencies
+        # construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class\
-          .new(consistency_checker: consistency_checker,
-               fv_pair_class: fv_pair_class, word_search: word_search)
+          described_class.new(consistency_checker: consistency_checker,
+                              fv_pair_class: fv_pair_class,
+                              word_search: word_search,
+                              feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -365,9 +372,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
           .with([fw_output2], grammar).and_return(true)
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class\
-          .new(consistency_checker: consistency_checker,
-               fv_pair_class: fv_pair_class, word_search: word_search)
+          described_class.new(consistency_checker: consistency_checker,
+                              fv_pair_class: fv_pair_class,
+                              word_search: word_search,
+                              feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end

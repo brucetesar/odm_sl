@@ -6,6 +6,7 @@ require 'otlearn/consistency_checker'
 require 'feature_value_pair'
 require 'word_search'
 require 'otlearn/learning_exceptions'
+require 'otlearn/inductive_feature_value_finder'
 require 'otlearn/paradigm_erc_learning'
 require 'otlearn/fsf_substep'
 
@@ -43,10 +44,12 @@ module OTLearn
     #   feature-value pairs. Used for testing (dependency injection).
     # * word_search: search object containing #find_unset_features_in_words.
     def initialize(consistency_checker: nil, fv_pair_class: nil,
-                   word_search: nil)
+                   word_search: nil, feature_value_finder: nil)
       @consistency_checker = consistency_checker || ConsistencyChecker.new
       @fv_pair_class = fv_pair_class || FeatureValuePair
       @word_search = word_search || WordSearch.new
+      @feature_value_finder = feature_value_finder ||
+                              InductiveFeatureValueFinder.new
       @para_erc_learner = ParadigmErcLearning.new
     end
 
