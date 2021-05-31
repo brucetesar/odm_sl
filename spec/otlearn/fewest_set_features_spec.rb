@@ -3,7 +3,6 @@
 # Author: Bruce Tesar
 
 require 'otlearn/fewest_set_features'
-require 'otlearn/learning_exceptions'
 
 RSpec.describe OTLearn::FewestSetFeatures do
   let(:output_list) { double('output_list') }
@@ -11,9 +10,6 @@ RSpec.describe OTLearn::FewestSetFeatures do
   let(:prior_result) { double('prior_result') }
   let(:feature_value_finder) { double('feature_value_finder') }
   let(:para_erc_learner) { double('para_erc_learner') }
-  let(:consistency_checker) { double('consistency_checker') }
-  let(:fv_pair_class) { double('FeatureValuePair class') }
-  let(:word_search) { double('word_search') }
   let(:pkg1) { double('package 1') }
   let(:pkg2) { double('package 2') }
 
@@ -37,6 +33,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
       allow(fv_pair2).to receive(:feature_instance).and_return(unset_feat2)
       allow(fv_pair1).to receive(:set_to_alt_value)
       allow(fv_pair2).to receive(:set_to_alt_value)
+      allow(pkg1).to receive(:winner).and_return(failed_winner)
+      allow(pkg1).to receive(:values).and_return([fv_pair1])
+      allow(pkg2).to receive(:winner).and_return(failed_winner)
+      allow(pkg2).to receive(:values).and_return([fv_pair2])
     end
 
     context 'with one consistent unset feature' do
@@ -44,14 +44,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
         allow(feature_value_finder).to receive(:run)\
           .with(failed_winner, grammar, prior_result)\
           .and_return([pkg1])
-        allow(pkg1).to receive(:winner).and_return(failed_winner)
-        allow(pkg1).to receive(:values).and_return([fv_pair1])
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class.new(consistency_checker: consistency_checker,
-                              fv_pair_class: fv_pair_class,
-                              word_search: word_search,
-                              feature_value_finder: feature_value_finder)
+          described_class.new(feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -85,10 +80,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
           .and_return([])
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class.new(consistency_checker: consistency_checker,
-                              fv_pair_class: fv_pair_class,
-                              word_search: word_search,
-                              feature_value_finder: feature_value_finder)
+          described_class.new(feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -115,16 +107,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
         allow(feature_value_finder).to receive(:run)\
           .with(failed_winner, grammar, prior_result)\
           .and_return([pkg1, pkg2])
-        allow(pkg1).to receive(:winner).and_return(failed_winner)
-        allow(pkg1).to receive(:values).and_return([fv_pair1])
-        allow(pkg2).to receive(:winner).and_return(failed_winner)
-        allow(pkg2).to receive(:values).and_return([fv_pair2])
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class.new(consistency_checker: consistency_checker,
-                              fv_pair_class: fv_pair_class,
-                              word_search: word_search,
-                              feature_value_finder: feature_value_finder)
+          described_class.new(feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -170,6 +155,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
       allow(fv_pair2).to receive(:feature_instance).and_return(unset_feat2)
       allow(fv_pair1).to receive(:set_to_alt_value)
       allow(fv_pair2).to receive(:set_to_alt_value)
+      allow(pkg1).to receive(:winner).and_return(failed_winner1)
+      allow(pkg1).to receive(:values).and_return([fv_pair1])
+      allow(pkg2).to receive(:winner).and_return(failed_winner2)
+      allow(pkg2).to receive(:values).and_return([fv_pair2])
     end
 
     context 'with the first failed winner inconsistent' do
@@ -180,14 +169,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
         allow(feature_value_finder).to receive(:run)\
           .with(failed_winner2, grammar, prior_result)\
           .and_return([pkg2])
-        allow(pkg2).to receive(:winner).and_return(failed_winner2)
-        allow(pkg2).to receive(:values).and_return([fv_pair2])
         # construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class.new(consistency_checker: consistency_checker,
-                              fv_pair_class: fv_pair_class,
-                              word_search: word_search,
-                              feature_value_finder: feature_value_finder)
+          described_class.new(feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
@@ -222,14 +206,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
         allow(feature_value_finder).to receive(:run)\
           .with(failed_winner2, grammar, prior_result)\
           .and_return([])
-        allow(pkg1).to receive(:winner).and_return(failed_winner1)
-        allow(pkg1).to receive(:values).and_return([fv_pair1])
         # actually construct the test object, and inject the test dependencies
         fewest_set_features =
-          described_class.new(consistency_checker: consistency_checker,
-                              fv_pair_class: fv_pair_class,
-                              word_search: word_search,
-                              feature_value_finder: feature_value_finder)
+          described_class.new(feature_value_finder: feature_value_finder)
         fewest_set_features.para_erc_learner = para_erc_learner
         @substep = fewest_set_features.run(output_list, grammar, prior_result)
       end
