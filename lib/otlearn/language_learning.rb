@@ -133,8 +133,6 @@ module OTLearn
       yield
     rescue RuntimeError => e
       handle_exception(rterror_msg(e, label))
-    rescue LearnEx => e
-      handle_exception(learnex_msg(e, label))
     end
     private :error_protected_execution
 
@@ -154,19 +152,5 @@ module OTLearn
       "Error with #{label}: #{exception}"
     end
     private :rterror_msg
-
-    # Returns the warning message for a LearnEx exception, which is
-    # raised by FewestSetFeatures (FSF) when more than one unset
-    # feature can resolve inconsistency for a word on its own (the learner
-    # currently doesn't know how to choose).
-    def learnex_msg(exception, label)
-      msg1 = 'FSF: more than one matching feature passes error testing.'
-      # Report the feature-value-pairs which are causing learning
-      # to crash.
-      msg2 = 'The following feature-value pairs pass'
-      msg3 = exception.consistent_feature_value_list.to_s
-      "#{label}: #{msg1}\n#{msg2}:\n#{msg3}"
-    end
-    private :learnex_msg
   end
 end
