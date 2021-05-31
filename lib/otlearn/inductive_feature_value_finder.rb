@@ -59,6 +59,8 @@ module OTLearn
 
     # Returns an array of packages, each containing the winner and a
     # minimal set of successful feature values.
+    # :call-seq:
+    #   run(winner, grammar, test_result) -> array
     def run(winner, grammar, test_result)
       check_defaults
       # Duplicate the winner, so that the input can be altered.
