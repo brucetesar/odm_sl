@@ -74,141 +74,42 @@ module OTLearn
     # :call-seq:
     #   run(output_list, grammar, prior_result) -> substep
     def run(output_list, grammar, prior_result)
-      @failed_winner = nil
-      @newly_set_features = []
-      @grammar = grammar
-      @prior_result = prior_result
-      # Check the failed winners until one is found that can succeed by
-      # setting one feature.
-      @prior_result.failed_winners.each do |failed_winner|
-        @failed_winner = failed_winner
-        # find a feature that can rescue the failed winner.
-        find_and_set_feature
-        # Check for any new ranking information based on the newly set
-        # features. NOTE: currently, only one feature can be newly set,
-        # but it is stored in the list newly_set_features.
-        @newly_set_features.each do |feat|
-          @para_erc_learner.run(feat, @grammar, output_list)
-        end
-        break unless @newly_set_features.empty?
+      # Find all of the feature instance sets that can render a failed
+      # winner mismatch-consistent.
+      success_instances = []
+      prior_result.failed_winners.each do |failed_winner|
+        success_instances.concat\
+          @feature_value_finder.run(failed_winner, grammar, prior_result)
       end
-      @failed_winner = nil if @newly_set_features.empty?
-      FsfSubstep.new(@newly_set_features, @failed_winner)
+      # Choose a solution
+      winner, soln_features = choose_solution(success_instances)
+      return FsfSubstep.new([], nil) if soln_features.empty?
+
+      # Adopt the solution
+      newly_set_features = adopt_solution(soln_features, grammar, output_list)
+      FsfSubstep.new(newly_set_features, winner)
     end
 
-    # Find a previously unset feature of failed_winner such that setting
-    # the feature to match its surface correspondent results in the winner
-    # succeeding (consistent with all of the winners that passed
-    # error-testing).
-    #
-    # Returns the newly set FeatureValuePair, or nil if none were found.
-    def find_and_set_feature
-      # Look for a feature that can make failed_winner succeed.
-      # If one is found, store the successful FeatureValuePair.
-      fv_pair = select_most_restrictive_uf
-      # If a feature was found, set it in the lexicon, and
-      # add it to the list of newly set features.
-      unless fv_pair.nil?
-        fv_pair.set_to_alt_value # Set the feature permanently.
-        @newly_set_features << fv_pair.feature_instance
-      end
-      fv_pair
-    end
-    private :find_and_set_feature
+    def choose_solution(instances)
+      return [nil, []] if instances.empty?
 
-    # Finds the unset underlying form feature of failed_winner that,
-    # when assigned a value matching its output correspondent,
-    # makes failed_winner consistent with the success winners. Consistency
-    # is evaluated with respect to the grammar with its lexicon augmented
-    # to include the tested underlying feature value, and with the other
-    # unset features given input values opposite of their output values.
-    #
-    # Returns the successful underlying feature (and value) if exactly
-    # one of them succeeds. The return value is a FeatureValuePair:
-    # the underlying feature instance and its successful value (the one
-    # matching its output correspondent in the previously failed winner).
-    #
-    # Returns nil if none of the features succeeds.
-    #
-    # Raises a LearnEx exception if more than one feature succeeds.
-    def select_most_restrictive_uf
-      # Parse the failed winner's outputs with the grammar to generate
-      # distinct candidates in correspondence with the lexicon of the
-      # grammar.
-      output = @failed_winner.output
-      failed_winner_dup = @grammar.parse_output(output)
-      # Find the unset underlying feature instances
-      unset_uf_features =
-        @word_search.find_unset_features_in_words([failed_winner_dup],
-                                                  @grammar)
-      # Find unset features of failed winner that are consistent when set.
-      consistent_feature_val_list =
-        consistent_feature_values(failed_winner_dup, unset_uf_features)
-      # Return: nil if no successful values, val_pair if one successful
-      # value. Raise a LearnEx exception if more than one successful
-      # value is found.
-      case consistent_feature_val_list.size
-      when 0
-        nil # nil if no successful value was found
-      when 1
-        consistent_feature_val_list.first
-      else
-        raise LearnEx.new(consistent_feature_val_list),
-              'More than one single matching feature passes error testing.'
-      end
+      chosen = instances.first
+      [chosen.winner, chosen.values]
     end
-    private :select_most_restrictive_uf
+    private :choose_solution
 
-    # Tests the unset feature _ufeat_ of _tested_winner_ (a testing copy of
-    # failed_winner) by assigning, in the lexicon, the unset feature to the
-    # value matching its surface realization in tested_winner, and then
-    # running a mismatch consistency check on tested_winner jointly with
-    # all of the previously successful winners.
-    # If the check comes back consistent, then the feature is successful.
-    # In any event, the tested feature is unset at the end of the test.
-    #
-    # Returns a feature-value pair (the feature, along with the value
-    # matching the surface realization in tested_winner) if the feature
-    # is successful. Returns nil if the feature is not successful.
-    def test_unset_feature(tested_winner, ufeat)
-      # set (temporarily) the tested feature to the value of its output
-      # correspondent.
-      ufeat.value = tested_winner.out_feat_corr_of_uf(ufeat).value
-      # Add the tested winner to (a dup of) the list of success winners.
-      word_list = @prior_result.success_winners.dup
-      word_list << tested_winner
-      # Check the list of words for consistency, using the main grammar,
-      # with each word's unset features mismatching their output
-      # correspondents. If result is consistent, add the UF value to the
-      # list.
-      output_list = word_list.map(&:output)
-      val_pair = nil
-      if @consistency_checker.mismatch_consistent?(output_list, @grammar)
-        val_pair = @fv_pair_class.new(ufeat, ufeat.value)
+    def adopt_solution(soln_features, grammar, output_list)
+      newly_set_features = []
+      soln_features.each do |fv_pair|
+        fv_pair.set_to_alt_value # set the feature permanently
+        newly_set_features << fv_pair.feature_instance
       end
-      # Unset the tested feature in any event.
-      ufeat.unset
-      # return the val_pair if it worked, or nil if it didn't
-      val_pair
-    end
-    private :test_unset_feature
-
-    # Assign, in turn, each unset feature to match its output
-    # correspondent. Then test the modified failed winner along with
-    # the success winners for collective consistency with the grammar.
-    # Returns an array of feature value pairs of the failed winner
-    # that are each independently consistent when set.
-    # :call-seq:
-    #   consistent_feature_values(failed_winner, unset_uf_features) -> array
-    def consistent_feature_values(failed_winner, unset_uf_features)
-      consistent_feature_val_list = []
-      unset_uf_features.each do |ufeat|
-        ufeat_val_pair = test_unset_feature(failed_winner, ufeat)
-        consistent_feature_val_list << ufeat_val_pair \
-          unless ufeat_val_pair.nil?
+      # Check for any new ranking information based on the newly set
+      # features.
+      newly_set_features.each do |feat|
+        @para_erc_learner.run(feat, grammar, output_list)
       end
-      consistent_feature_val_list
     end
-    private :consistent_feature_values
+    private :adopt_solution
   end
 end
