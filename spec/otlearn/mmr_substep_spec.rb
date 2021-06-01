@@ -10,9 +10,11 @@ RSpec.describe OTLearn::MmrSubstep do
   let(:new_pairs) { double('new_pairs') }
   let(:failed_winner) { double('failed_winner') }
   let(:change_flag) { double('change_flag') }
+  let(:failed_winner_list) { [failed_winner] }
 
   before do
-    @substep = described_class.new(new_pairs, failed_winner, change_flag)
+    @substep = described_class.new(new_pairs, failed_winner, change_flag,
+                                   failed_winner_list)
   end
 
   it 'indicates a subtype of MaxMismatchRanking' do
@@ -29,5 +31,9 @@ RSpec.describe OTLearn::MmrSubstep do
 
   it 'returns the grammar change flag' do
     expect(@substep.changed?).to eq change_flag
+  end
+
+  it 'returns a list of all failed winners' do
+    expect(@substep.failed_winner_list).to contain_exactly(failed_winner)
   end
 end

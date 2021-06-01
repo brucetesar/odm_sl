@@ -46,8 +46,8 @@ module OTLearn
     end
 
     # Executes the Max Mismatch Ranking algorithm.
-    # * output_list is the list of outputs of *consistent*
-    #    failed winners that are candidates for use in MMR.
+    # * output_list is the list of outputs of *consistent* failed winners
+    #   that are candidates for use in MMR.
     # * grammar is the current grammar of the learner.
     # The learner chooses a single consistent failed winner from the list.
     # For that failed winner, the learner takes the input with all
@@ -59,27 +59,43 @@ module OTLearn
     # :call-seq:
     #   run(output_list, grammar) -> substep
     def run(output_list, grammar)
-      failed_winner = choose_failed_winner(output_list, grammar)
-      mrcd_result = @erc_learner.run([failed_winner], grammar)
+      failed_winners = outputs_to_mismatch_words(output_list, grammar)
+      chosen_winner = choose_failed_winner(failed_winners)
+      mrcd_result = @erc_learner.run([chosen_winner], grammar)
       changed = mrcd_result.any_change?
-      unless changed
-        msg1 = 'MMR: A failed consistent winner'
-        msg2 = 'did not provide new ranking information.'
-        @msg_output.puts "#{msg1} #{msg2}"
-      end
+      write_no_new_info_msg unless changed
       newly_added_wl_pairs = mrcd_result.added_pairs
-      MmrSubstep.new(newly_added_wl_pairs, failed_winner, changed)
+      MmrSubstep.new(newly_added_wl_pairs, chosen_winner, changed,
+                     failed_winners)
     end
+
+    # Converts each output to a full Word with mismatched input.
+    # Returns an array of words.
+    def outputs_to_mismatch_words(output_list, grammar)
+      output_list.map do |output|
+        winner = grammar.parse_output(output)
+        winner.mismatch_input_to_output!
+        winner
+      end
+    end
+    private :outputs_to_mismatch_words
 
     # Choose, from among the consistent failed winners, the failed winner to
     # use with MMR. Returns a full word with the input initialized so that
     # set features match the lexicon and unset features mismatch the output.
-    def choose_failed_winner(output_list, grammar)
-      chosen_output = output_list.first
-      chosen_winner = grammar.parse_output(chosen_output)
-      chosen_winner.mismatch_input_to_output!
-      chosen_winner
+    def choose_failed_winner(winner_list)
+      winner_list.first
     end
     private :choose_failed_winner
+
+    # Write a message to $stdout, indicating that the selected failed winner
+    # did not provide any new ranking information.
+    def write_no_new_info_msg
+      msg1 = 'MMR: A failed consistent winner'
+      msg2 = 'did not provide new ranking information.'
+      @msg_output.puts "#{msg1} #{msg2}"
+      nil
+    end
+    private :write_no_new_info_msg
   end
 end

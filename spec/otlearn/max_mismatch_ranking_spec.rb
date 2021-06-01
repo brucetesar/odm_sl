@@ -2,6 +2,7 @@
 
 # Author: Morgan Moyer / Bruce Tesar
 
+require 'rspec'
 require 'otlearn/max_mismatch_ranking'
 require 'stringio'
 
