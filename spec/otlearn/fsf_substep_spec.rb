@@ -9,11 +9,13 @@ require 'otlearn/otlearn'
 RSpec.describe OTLearn::FsfSubstep do
   let(:newly_set_feature) { double('newly_set_feature') }
   let(:failed_winner) { double('failed_winner') }
+  let(:success_instances) { double('success_instances') }
 
   context 'with no newly set features' do
     before do
       set_features = []
-      @substep = described_class.new(set_features, failed_winner)
+      @substep = described_class.new(set_features, failed_winner,
+                                     success_instances)
     end
 
     it 'indicates a subtype of FewestSetFeatures' do
@@ -28,6 +30,10 @@ RSpec.describe OTLearn::FsfSubstep do
       expect(@substep.failed_winner).to eq failed_winner
     end
 
+    it 'returns the list of successful feature instances' do
+      expect(@substep.success_instances).to eq success_instances
+    end
+
     it 'indicates that the grammar has not changed' do
       expect(@substep.changed?).to be false
     end
@@ -36,7 +42,8 @@ RSpec.describe OTLearn::FsfSubstep do
   context 'with one newly set feature' do
     before do
       set_features = [newly_set_feature]
-      @substep = described_class.new(set_features, failed_winner)
+      @substep = described_class.new(set_features, failed_winner,
+                                     success_instances)
     end
 
     it 'indicates a subtype of FewestSetFeatures' do
@@ -49,6 +56,10 @@ RSpec.describe OTLearn::FsfSubstep do
 
     it 'returns the failed winner' do
       expect(@substep.failed_winner).to eq failed_winner
+    end
+
+    it 'returns the list of successful feature instances' do
+      expect(@substep.success_instances).to eq success_instances
     end
 
     it 'indicates that the grammar has changed' do

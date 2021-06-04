@@ -65,13 +65,13 @@ module OTLearn
           @feature_value_finder.run(failed_winner, grammar, prior_result)
       end
       # If no solutions were found, return a substep indicating so.
-      return FsfSubstep.new([], nil) if success_instances.empty?
+      return FsfSubstep.new([], nil, []) if success_instances.empty?
 
       # Choose a solution
       chosen = choose_solution(success_instances)
       # Adopt the solution
       newly_set_features = adopt_solution(chosen.values, grammar, output_list)
-      FsfSubstep.new(newly_set_features, chosen.winner)
+      FsfSubstep.new(newly_set_features, chosen.winner, success_instances)
     end
 
     # Chooses, from among the unset feature value solutions, the one

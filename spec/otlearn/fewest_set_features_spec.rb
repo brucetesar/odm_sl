@@ -59,6 +59,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.failed_winner).to equal failed_winner
       end
 
+      it 'determines all of the successful winner/feature pairs' do
+        expect(@substep.success_instances).to eq [pkg1]
+      end
+
       it 'only sets one feature' do
         expect(@substep.newly_set_features.size).to eq 1
       end
@@ -93,6 +97,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.failed_winner).to be_nil
       end
 
+      it 'determines all of the successful winner/feature pairs' do
+        expect(@substep.success_instances).to eq []
+      end
+
       it 'sets zero features' do
         expect(@substep.newly_set_features.size).to eq 0
       end
@@ -120,6 +128,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
 
       it 'determines the failed winner' do
         expect(@substep.failed_winner).to equal failed_winner
+      end
+
+      it 'determines all of the successful winner/feature pairs' do
+        expect(@substep.success_instances).to contain_exactly(pkg1, pkg2)
       end
 
       it 'only sets one feature' do
@@ -184,6 +196,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.failed_winner).to equal failed_winner2
       end
 
+      it 'determines all of the successful winner/feature pairs' do
+        expect(@substep.success_instances).to eq [pkg2]
+      end
+
       it 'only sets one feature' do
         expect(@substep.newly_set_features.size).to eq 1
       end
@@ -219,6 +235,10 @@ RSpec.describe OTLearn::FewestSetFeatures do
 
       it 'determines the failed winner' do
         expect(@substep.failed_winner).to equal failed_winner1
+      end
+
+      it 'determines all of the successful winner/feature pairs' do
+        expect(@substep.success_instances).to eq [pkg1]
       end
 
       it 'only sets one feature' do

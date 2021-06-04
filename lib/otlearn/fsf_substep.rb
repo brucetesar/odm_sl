@@ -20,13 +20,18 @@ module OTLearn
     # The failed winner that was used with FSF.
     attr_reader :failed_winner
 
+    # Array of all successful winner/feature instances
+    attr_reader :success_instances
+
     # Returns a new substep object for an Fewest Set Features substep.
     # :call-seq:
-    #   #FsfSubstep.new(newly_set_features, failed_winner) -> substep
-    def initialize(newly_set_features, failed_winner)
+    #   #FsfSubstep.new(newly_set_features, failed_winner, success_instances)
+    #   -> substep
+    def initialize(newly_set_features, failed_winner, success_instances)
       @subtype = FEWEST_SET_FEATURES
       @newly_set_features = newly_set_features
       @failed_winner = failed_winner
+      @success_instances = success_instances
     end
 
     # Returns true if FSF set at least one feature, false otherwise.
