@@ -68,7 +68,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
       end
 
       it 'sets the single unset feature' do
-        expect(@substep.newly_set_features[0]).to eq unset_feat1
+        expect(@substep.newly_set_features[0]).to eq fv_pair1
       end
 
       it 'checks for new ranking information for the unset feature' do
@@ -139,7 +139,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
       end
 
       it 'sets the single unset feature' do
-        expect(@substep.newly_set_features[0]).to eq unset_feat1
+        expect(@substep.newly_set_features[0]).to eq fv_pair1
       end
 
       it 'checks for new ranking information for the unset feature' do
@@ -205,7 +205,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
       end
 
       it 'sets the consistent unset feature' do
-        expect(@substep.newly_set_features[0]).to eq unset_feat2
+        expect(@substep.newly_set_features[0]).to eq fv_pair2
       end
 
       it 'checks for new ranking information for the unset feature' do
@@ -246,7 +246,7 @@ RSpec.describe OTLearn::FewestSetFeatures do
       end
 
       it 'sets the consistent unset feature' do
-        expect(@substep.newly_set_features[0]).to eq unset_feat1
+        expect(@substep.newly_set_features[0]).to eq fv_pair1
       end
 
       it 'checks for new ranking information for the unset feature' do

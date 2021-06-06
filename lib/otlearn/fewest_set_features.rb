@@ -57,7 +57,7 @@ module OTLearn
     # :call-seq:
     #   run(output_list, grammar, prior_result) -> substep
     def run(output_list, grammar, prior_result)
-      # Find all of the feature instance sets that can render a failed
+      # Find all of the feature/value pair sets that can render a failed
       # winner mismatch-consistent.
       success_instances = []
       prior_result.failed_winners.each do |failed_winner|
@@ -65,13 +65,13 @@ module OTLearn
           @feature_value_finder.run(failed_winner, grammar, prior_result)
       end
       # If no solutions were found, return a substep indicating so.
-      return FsfSubstep.new([], nil, []) if success_instances.empty?
+      return FsfSubstep.new(nil, []) if success_instances.empty?
 
       # Choose a solution
       chosen = choose_solution(success_instances)
       # Adopt the solution
-      newly_set_features = adopt_solution(chosen.values, grammar, output_list)
-      FsfSubstep.new(newly_set_features, chosen.winner, success_instances)
+      adopt_solution(chosen.values, grammar, output_list)
+      FsfSubstep.new(chosen, success_instances)
     end
 
     # Chooses, from among the unset feature value solutions, the one
