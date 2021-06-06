@@ -9,11 +9,10 @@ module OTLearn
   # of a Fewest Set Features learning step.
   class FsfImageMaker
     # Returns a new image maker for Fewest Set Features.
-    #--
-    # _sheet_class_ is a dependency injection used for testing.
-    #++
     # :call-seq:
     #   FsfImageMaker.new -> image_maker
+    #--
+    # _sheet_class_ is a dependency injection used for testing.
     def initialize(sheet_class: nil)
       @sheet_class = sheet_class || Sheet
     end
@@ -27,6 +26,7 @@ module OTLearn
       # indicate if the grammar was changed
       sheet[2, 1] = "Grammar Changed: #{fsf_step.changed?.to_s.upcase}"
       add_failed_winner_info(fsf_step, sheet)
+      add_candidate_info(fsf_step, sheet)
       sheet
     end
 
@@ -45,5 +45,23 @@ module OTLearn
       sheet.append(subsheet)
     end
     private :add_failed_winner_info
+
+    # Adds
+    # Returns nil.
+    def add_candidate_info(step, sheet)
+      candidates = step.success_instances
+      return nil if candidates.empty?
+
+      subsheet = @sheet_class.new
+      candidates.each_with_index do |cand, idx|
+        subsheet[1, 2] = 'Successful Features'
+        subsheet[2 + idx, 3] = cand.winner.morphword.to_s
+        subsheet[2 + idx, 4] = cand.winner.input.to_s
+        subsheet[2 + idx, 5] = cand.winner.output.to_s
+      end
+      sheet.append(subsheet)
+      nil
+    end
+    private :add_candidate_info
   end
 end

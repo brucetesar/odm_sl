@@ -13,23 +13,31 @@ RSpec.describe OTLearn::FsfImageMaker do
   let(:sheet_class) { double('sheet_class') }
   let(:sheet) { double('sheet') }
   let(:subsheet) { double('subsheet') }
+  let(:cand_subsheet) { double('cand_subsheet') }
 
   before do
     allow(failed_winner).to\
       receive(:morphword).and_return(failed_winner_morphword)
     allow(failed_winner).to receive(:input).and_return(failed_winner_input)
     allow(failed_winner).to receive(:output).and_return(failed_winner_output)
-    allow(sheet_class).to receive(:new).and_return(sheet, subsheet)
+    allow(sheet_class).to\
+      receive(:new).and_return(sheet, subsheet, cand_subsheet)
     allow(sheet).to receive(:[]=)
     allow(sheet).to receive(:append)
     allow(subsheet).to receive(:[]=)
+    allow(cand_subsheet).to receive(:[]=)
     @fsf_image_maker = described_class.new(sheet_class: sheet_class)
   end
 
   context 'with a step with a newly set feature' do
+    let(:package) { double('success feature package') }
+    let(:cand_list) { [package] }
+
     before do
       allow(fsf_step).to receive(:failed_winner).and_return(failed_winner)
       allow(fsf_step).to receive(:changed?).and_return(true)
+      allow(fsf_step).to receive(:success_instances).and_return(cand_list)
+      allow(package).to receive(:winner).and_return(failed_winner)
       @fsf_image = @fsf_image_maker.get_image(fsf_step)
     end
 
@@ -61,12 +69,32 @@ RSpec.describe OTLearn::FsfImageMaker do
       expect(subsheet).to\
         have_received(:[]=).with(1, 5, failed_winner_output)
     end
+
+    it 'appends the successful features subsheet' do
+      expect(@fsf_image).to have_received(:append).with(cand_subsheet)
+    end
+
+    it 'indicates the first candidate morphword on the subsheet' do
+      expect(cand_subsheet).to\
+        have_received(:[]=).with(2, 3, failed_winner_morphword)
+    end
+
+    it 'indicates the input of the first candidate morphword' do
+      expect(cand_subsheet).to\
+        have_received(:[]=).with(2, 4, failed_winner_input)
+    end
+
+    it 'indicates the output of the first candidate morphword' do
+      expect(cand_subsheet).to\
+        have_received(:[]=).with(2, 5, failed_winner_output)
+    end
   end
 
   context 'with a step without a newly set feature' do
     before do
       allow(fsf_step).to receive(:failed_winner).and_return(nil)
       allow(fsf_step).to receive(:changed?).and_return(false)
+      allow(fsf_step).to receive(:success_instances).and_return([])
       @fsf_image = @fsf_image_maker.get_image(fsf_step)
     end
 
@@ -102,6 +130,10 @@ RSpec.describe OTLearn::FsfImageMaker do
     it 'does not indicate the output of a failed winner' do
       expect(subsheet).not_to\
         have_received(:[]=).with(1, 5, failed_winner_output)
+    end
+
+    it 'does not append a successful features subsheet' do
+      expect(@fsf_image).not_to have_received(:append).with(cand_subsheet)
     end
   end
 end
