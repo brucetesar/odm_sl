@@ -33,31 +33,47 @@ module OTLearn
     # Adds info about the failed winner to the sheet
     def add_failed_winner_info(step, sheet)
       failed_winner = step.failed_winner
+      set_features = step.newly_set_features
       subsheet = @sheet_class.new
       if failed_winner.nil?
         subsheet[1, 2] = 'No failed winner set a feature.'
       else
-        subsheet[1, 2] = 'Failed Winner'
-        subsheet[1, 3] = failed_winner.morphword.to_s
-        subsheet[1, 4] = failed_winner.input.to_s
-        subsheet[1, 5] = failed_winner.output.to_s
+        subsheet[1, 2] = 'Chosen Feature'
+        write_winner_features(failed_winner, set_features, subsheet, 2)
       end
       sheet.append(subsheet)
     end
     private :add_failed_winner_info
 
-    # Adds
+    # Writes the elements of a _failed_winner_ and the associated
+    # feature/value pairs to consecutive column cells within _row_ of
+    # _subsheet_.
+    # Returns nil.
+    def write_winner_features(failed_winner, set_features, subsheet, row)
+      col = 1
+      subsheet[row, col += 1] = failed_winner.morphword.to_s
+      subsheet[row, col += 1] = failed_winner.input.to_s
+      subsheet[row, col += 1] = failed_winner.output.to_s
+      set_features.each do |fv_pair|
+        subsheet[row, col += 1] = fv_pair.feature_instance.morpheme.to_s
+        subsheet[row, col += 1] = fv_pair.feature_instance.feature.type.to_s
+        subsheet[row, col += 1] = fv_pair.alt_value.to_s
+      end
+      nil
+    end
+    private :write_winner_features
+
+    # Adds information about the successful feature sets to the sheet.
     # Returns nil.
     def add_candidate_info(step, sheet)
       candidates = step.success_instances
       return nil if candidates.empty?
 
       subsheet = @sheet_class.new
+      subsheet[1, 2] = 'Successful Features'
       candidates.each_with_index do |cand, idx|
-        subsheet[1, 2] = 'Successful Features'
-        subsheet[2 + idx, 3] = cand.winner.morphword.to_s
-        subsheet[2 + idx, 4] = cand.winner.input.to_s
-        subsheet[2 + idx, 5] = cand.winner.output.to_s
+        row = 2 + idx
+        write_winner_features(cand.winner, cand.values, subsheet, row)
       end
       sheet.append(subsheet)
       nil
