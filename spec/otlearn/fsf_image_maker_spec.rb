@@ -3,6 +3,7 @@
 # Author: Bruce Tesar
 
 require 'otlearn/fsf_image_maker'
+require 'word_values_package'
 
 RSpec.describe OTLearn::FsfImageMaker do
   let(:fsf_step) { double('fsf_step') }
@@ -34,7 +35,8 @@ RSpec.describe OTLearn::FsfImageMaker do
   end
 
   context 'with a step with a newly set feature' do
-    let(:package) { double('success feature package') }
+    let(:package) \
+      { instance_double(WordValuesPackage, 'success feature package') }
     let(:cand_list) { [package] }
 
     before do
@@ -48,7 +50,7 @@ RSpec.describe OTLearn::FsfImageMaker do
       allow(fsf_step).to receive(:newly_set_features).and_return([fv_pair1])
       allow(fsf_step).to receive(:changed?).and_return(true)
       allow(fsf_step).to receive(:success_instances).and_return(cand_list)
-      allow(package).to receive(:winner).and_return(failed_winner)
+      allow(package).to receive(:word).and_return(failed_winner)
       allow(package).to receive(:values).and_return([fv_pair1])
       @fsf_image = @fsf_image_maker.get_image(fsf_step)
     end

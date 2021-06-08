@@ -25,15 +25,14 @@ module OTLearn
 
     # Returns a new substep object for a Fewest Set Features substep.
     # === Parameters
-    # * set_features - a set of word/feature packages, each package
-    #   representing a feature/value pair that was actually set, such that
-    #   the newly set features render the failed winner mismatch-consistent.
-    # * success_instancs - a list of all of the word/feature package
-    #   sets that are capable of rendering their contained word mismatch-
-    #   consistent.
+    # * set_features - a word/features package representing the features
+    #   that were actually set, rendering the failed winner contained in
+    #   the package mismatch-consistent.
+    # * success_instances - a list of all of the word/features packages
+    #   that are capable of rendering their contained failed winner
+    #   mismatch-consistent.
     # :call-seq:
-    #   #FsfSubstep.new(set_features, success_instances)
-    #   -> substep
+    #   new(set_features, success_instances) -> substep
     def initialize(set_features, success_instances)
       @subtype = FEWEST_SET_FEATURES
       if set_features.nil?
@@ -41,7 +40,7 @@ module OTLearn
         @failed_winner = nil
       else
         @newly_set_features = set_features.values
-        @failed_winner = set_features.winner
+        @failed_winner = set_features.word
       end
       @success_instances = success_instances
     end

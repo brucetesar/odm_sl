@@ -5,17 +5,21 @@
 require 'rspec'
 require 'otlearn/fsf_substep'
 require 'otlearn/otlearn'
+require 'word_values_package'
+require 'word'
+require 'feature_value_pair'
 
 RSpec.describe OTLearn::FsfSubstep do
-  let(:set_features) { double('set_features') }
-  let(:newly_set_fv_pair) { double('newly_set_fv_pair') }
+  let(:set_features) { instance_double(WordValuesPackage, 'set_features') }
+  let(:newly_set_fv_pair) \
+    { instance_double(FeatureValuePair, 'newly_set_fv_pair') }
   let(:newly_set_feature) { double('newly_set_feature') }
-  let(:failed_winner) { double('failed_winner') }
+  let(:failed_winner) { instance_double(Word, 'failed_winner') }
   let(:success_instances) { double('success_instances') }
 
   context 'with no newly set features' do
     before do
-      allow(set_features).to receive(:winner).and_return(failed_winner)
+      allow(set_features).to receive(:word).and_return(failed_winner)
       allow(set_features).to receive(:values).and_return([])
       @substep = described_class.new(set_features, success_instances)
     end
@@ -43,7 +47,7 @@ RSpec.describe OTLearn::FsfSubstep do
 
   context 'with one newly set feature' do
     before do
-      allow(set_features).to receive(:winner).and_return(failed_winner)
+      allow(set_features).to receive(:word).and_return(failed_winner)
       allow(set_features).to receive(:values).and_return([newly_set_fv_pair])
       allow(newly_set_fv_pair).to \
         receive(:feature_instance).and_return(newly_set_feature)

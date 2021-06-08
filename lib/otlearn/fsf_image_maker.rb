@@ -73,7 +73,7 @@ module OTLearn
       subsheet[1, 2] = 'Successful Features'
       candidates.each_with_index do |cand, idx|
         row = 2 + idx
-        write_winner_features(cand.winner, cand.values, subsheet, row)
+        write_winner_features(cand.word, cand.values, subsheet, row)
       end
       sheet.append(subsheet)
       nil

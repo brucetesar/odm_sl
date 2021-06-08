@@ -3,6 +3,8 @@
 # Author: Bruce Tesar
 
 require 'otlearn/fewest_set_features'
+require 'word'
+require 'word_values_package'
 
 RSpec.describe OTLearn::FewestSetFeatures do
   let(:output_list) { double('output_list') }
@@ -10,8 +12,8 @@ RSpec.describe OTLearn::FewestSetFeatures do
   let(:prior_result) { double('prior_result') }
   let(:feature_value_finder) { double('feature_value_finder') }
   let(:para_erc_learner) { double('para_erc_learner') }
-  let(:pkg1) { double('package 1') }
-  let(:pkg2) { double('package 2') }
+  let(:pkg1) { instance_double(WordValuesPackage, 'package 1') }
+  let(:pkg2) { instance_double(WordValuesPackage, 'package 2') }
 
   before do
     allow(para_erc_learner).to receive(:run)
@@ -19,11 +21,13 @@ RSpec.describe OTLearn::FewestSetFeatures do
 
   context 'with a failed winner' do
     # mocks of internal objects
-    let(:failed_winner) { double('failed_winner') }
+    let(:failed_winner) { instance_double(Word, 'failed_winner') }
     let(:unset_feat1) { double('unset_feature_1') }
     let(:unset_feat2) { double('unset_feature_2') }
-    let(:fv_pair1) { double('feature-value pair1') }
-    let(:fv_pair2) { double('feature-value pair2') }
+    let(:fv_pair1) \
+      { instance_double(FeatureValuePair, 'feature-value pair1') }
+    let(:fv_pair2) \
+      { instance_double(FeatureValuePair, 'feature-value pair2') }
 
     before do
       # set up prior_result to return a list with one failed winner
@@ -33,9 +37,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
       allow(fv_pair2).to receive(:feature_instance).and_return(unset_feat2)
       allow(fv_pair1).to receive(:set_to_alt_value)
       allow(fv_pair2).to receive(:set_to_alt_value)
-      allow(pkg1).to receive(:winner).and_return(failed_winner)
+      allow(pkg1).to receive(:word).and_return(failed_winner)
       allow(pkg1).to receive(:values).and_return([fv_pair1])
-      allow(pkg2).to receive(:winner).and_return(failed_winner)
+      allow(pkg2).to receive(:word).and_return(failed_winner)
       allow(pkg2).to receive(:values).and_return([fv_pair2])
     end
 
@@ -150,12 +154,14 @@ RSpec.describe OTLearn::FewestSetFeatures do
   end
 
   context 'with an unsuccessful failed winner and a successful one' do
-    let(:failed_winner1) { double('failed_winner1') }
-    let(:failed_winner2) { double('failed_winner2') }
+    let(:failed_winner1) { instance_double(Word, 'failed_winner1') }
+    let(:failed_winner2) { instance_double(Word, 'failed_winner2') }
     let(:unset_feat1) { double('unset_feature1') }
     let(:unset_feat2) { double('unset_feature2') }
-    let(:fv_pair1) { double('feature-value pair1') }
-    let(:fv_pair2) { double('feature-value pair2') }
+    let(:fv_pair1) \
+      { instance_double(FeatureValuePair, 'feature-value pair1') }
+    let(:fv_pair2) \
+      { instance_double(FeatureValuePair, 'feature-value pair2') }
 
     before do
       # set up prior_result
@@ -167,9 +173,9 @@ RSpec.describe OTLearn::FewestSetFeatures do
       allow(fv_pair2).to receive(:feature_instance).and_return(unset_feat2)
       allow(fv_pair1).to receive(:set_to_alt_value)
       allow(fv_pair2).to receive(:set_to_alt_value)
-      allow(pkg1).to receive(:winner).and_return(failed_winner1)
+      allow(pkg1).to receive(:word).and_return(failed_winner1)
       allow(pkg1).to receive(:values).and_return([fv_pair1])
-      allow(pkg2).to receive(:winner).and_return(failed_winner2)
+      allow(pkg2).to receive(:word).and_return(failed_winner2)
       allow(pkg2).to receive(:values).and_return([fv_pair2])
     end
 

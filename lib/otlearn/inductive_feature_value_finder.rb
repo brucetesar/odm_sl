@@ -5,6 +5,7 @@
 require 'otlearn/consistency_checker'
 require 'word_search'
 require 'feature_value_pair'
+require 'word_values_package'
 
 module OTLearn
   # An object of this class, when method #run is called, takes a winner
@@ -37,26 +38,6 @@ module OTLearn
     end
     private :check_defaults
 
-    # Packages together a failed winner with a list of feature-value pairs
-    # that, if set, would ensure that the winner was possibly optimal.
-    class WinnerValuePackage
-      # The winner rendered mismatch-consistent by setting feature value
-      # pairs.
-      attr_reader :winner
-
-      # The list of feature-value pairs rendering the winner
-      # mismatch-consistent.
-      attr_reader :values
-
-      # Returns a new winner/value package object.
-      # :call-seq:
-      #   new(winner, values) -> package
-      def initialize(winner, values)
-        @winner = winner
-        @values = values
-      end
-    end
-
     # Returns an array of packages, each containing the winner and a
     # minimal set of successful feature values.
     # :call-seq:
@@ -72,10 +53,10 @@ module OTLearn
       consistent_feature_val_list =
         consistent_feature_values(winner_dup, unset_uf_features,
                                   grammar, test_result)
-      # Return an array of WinnerValuePackage objects for the successful
+      # Return an array of WordValuesPackage objects for the successful
       # features.
       consistent_feature_val_list.map do |values|
-        WinnerValuePackage.new(winner, values)
+        WordValuesPackage.new(winner, values)
       end
     end
 

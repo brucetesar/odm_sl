@@ -79,7 +79,7 @@ RSpec.describe OTLearn::InductiveFeatureValueFinder do
     end
 
     it 'returns the failed winner' do
-      expect(@result[0].winner).to eq winner
+      expect(@result[0].word).to eq winner
     end
   end
 
@@ -116,7 +116,7 @@ RSpec.describe OTLearn::InductiveFeatureValueFinder do
     end
 
     it 'returns the failed winner' do
-      expect(@result[0].winner).to eq winner
+      expect(@result[0].word).to eq winner
     end
   end
 
@@ -139,7 +139,7 @@ RSpec.describe OTLearn::InductiveFeatureValueFinder do
     end
 
     it 'returns the failed winner for the first feature' do
-      expect(@result[0].winner).to eq winner
+      expect(@result[0].word).to eq winner
     end
 
     it 'returns the second successful feature value' do
@@ -147,7 +147,7 @@ RSpec.describe OTLearn::InductiveFeatureValueFinder do
     end
 
     it 'returns the failed winner for the second feature' do
-      expect(@result[1].winner).to eq winner
+      expect(@result[1].word).to eq winner
     end
   end
 end
