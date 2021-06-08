@@ -57,47 +57,45 @@ module OTLearn
     # :call-seq:
     #   run(output_list, grammar, prior_result) -> substep
     def run(output_list, grammar, prior_result)
-      # Find all of the feature/value pair sets that can render a failed
+      # Find all of the word/features packages that can render a failed
       # winner mismatch-consistent.
-      success_instances = []
+      consistent_packages = []
       prior_result.failed_winners.each do |failed_winner|
-        success_instances.concat\
+        consistent_packages.concat\
           @feature_value_finder.run(failed_winner, grammar, prior_result)
       end
       # If no solutions were found, return a substep indicating so.
-      return FsfSubstep.new(nil, []) if success_instances.empty?
+      return FsfSubstep.new(nil, []) if consistent_packages.empty?
 
-      # Choose a solution
-      chosen = choose_solution(success_instances)
-      # Adopt the solution
-      adopt_solution(chosen.values, grammar, output_list)
-      FsfSubstep.new(chosen, success_instances)
+      # Choose a consistent package.
+      chosen = choose_package(consistent_packages)
+      # Set the features of the package in the lexicon of the grammar.
+      adopt_feature_values(chosen.values, grammar, output_list)
+      FsfSubstep.new(chosen, consistent_packages)
     end
 
-    # Chooses, from among the unset feature value solutions, the one
+    # Chooses, from among the consistent word/features packages, the one
     # to actually adopt.
-    def choose_solution(instances)
+    def choose_package(instances)
       instances.first
     end
-    private :choose_solution
+    private :choose_package
 
-    # Sets the features to the values indicated by the solution, and check
-    # for any new paradigmatic ranking information from tne newly set
-    # features. Returns an array of feature instances for the newly set
-    # features.
-    def adopt_solution(soln_features, grammar, output_list)
-      newly_set_features = []
-      soln_features.each do |fv_pair|
-        fv_pair.set_to_alt_value # set the feature permanently
-        newly_set_features << fv_pair.feature_instance
+    # Sets the features to the values specified in the feature/value pairs,
+    # and checks for any new paradigmatic ranking information from the
+    # newly set features. Returns nil.
+    def adopt_feature_values(feature_values, grammar, output_list)
+      # set each package feature.
+      feature_values.each(&:set_to_alt_value)
+      # Check for any new ranking information from newly set features.
+      # This is done after all provided features have been set, to
+      # maximize the potential for finding additional information.
+      feature_values.each do |fv_pair|
+        @para_erc_learner.run(fv_pair.feature_instance, grammar,
+                              output_list)
       end
-      # Check for any new ranking information based on the newly set
-      # features.
-      newly_set_features.each do |feat|
-        @para_erc_learner.run(feat, grammar, output_list)
-      end
-      newly_set_features
+      nil
     end
-    private :adopt_solution
+    private :adopt_feature_values
   end
 end

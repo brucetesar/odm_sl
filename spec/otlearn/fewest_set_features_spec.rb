@@ -3,12 +3,13 @@
 # Author: Bruce Tesar
 
 require 'otlearn/fewest_set_features'
+require 'grammar'
 require 'word'
 require 'word_values_package'
 
 RSpec.describe OTLearn::FewestSetFeatures do
   let(:output_list) { double('output_list') }
-  let(:grammar) { double('grammar') }
+  let(:grammar) { instance_double(Grammar, 'grammar') }
   let(:prior_result) { double('prior_result') }
   let(:feature_value_finder) { double('feature_value_finder') }
   let(:para_erc_learner) { double('para_erc_learner') }
