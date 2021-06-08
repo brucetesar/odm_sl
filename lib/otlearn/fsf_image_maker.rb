@@ -30,18 +30,18 @@ module OTLearn
       sheet
     end
 
-    # Adds info about the failed winner to the sheet
+    # Adds info about the failed winner to the sheet. Returns nil.
     def add_failed_winner_info(step, sheet)
-      failed_winner = step.failed_winner
-      set_features = step.newly_set_features
+      package = step.chosen_package
+      return nil if package.nil?
+
       subsheet = @sheet_class.new
-      if failed_winner.nil?
-        subsheet[1, 2] = 'No failed winner set a feature.'
-      else
-        subsheet[1, 2] = 'Chosen Feature'
-        write_winner_features(failed_winner, set_features, subsheet, 2)
-      end
+      failed_winner = package.word
+      set_features = package.values
+      subsheet[1, 2] = 'Chosen Feature'
+      write_winner_features(failed_winner, set_features, subsheet, 2)
       sheet.append(subsheet)
+      nil
     end
     private :add_failed_winner_info
 
@@ -66,7 +66,7 @@ module OTLearn
     # Adds information about the successful feature sets to the sheet.
     # Returns nil.
     def add_candidate_info(step, sheet)
-      candidates = step.success_instances
+      candidates = step.consistent_packages
       return nil if candidates.empty?
 
       subsheet = @sheet_class.new

@@ -60,20 +60,20 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.changed?).to be true
       end
 
-      it 'determines the failed winner' do
-        expect(@substep.failed_winner).to equal failed_winner
+      it 'chooses a word/values package for setting' do
+        expect(@substep.chosen_package).to eq pkg1
       end
 
-      it 'determines all of the successful winner/feature pairs' do
-        expect(@substep.success_instances).to eq [pkg1]
+      it 'determines all of the consistent packages' do
+        expect(@substep.consistent_packages).to eq [pkg1]
       end
 
       it 'only sets one feature' do
-        expect(@substep.newly_set_features.size).to eq 1
+        expect(@substep.chosen_package.values.size).to eq 1
       end
 
       it 'sets the single unset feature' do
-        expect(@substep.newly_set_features[0]).to eq fv_pair1
+        expect(@substep.chosen_package.values[0]).to eq fv_pair1
       end
 
       it 'checks for new ranking information for the unset feature' do
@@ -98,16 +98,12 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.changed?).to be false
       end
 
-      it 'does not return a failed winner' do
-        expect(@substep.failed_winner).to be_nil
+      it 'indicates no package was chosen' do
+        expect(@substep.chosen_package).to be_nil
       end
 
-      it 'determines all of the successful winner/feature pairs' do
-        expect(@substep.success_instances).to eq []
-      end
-
-      it 'sets zero features' do
-        expect(@substep.newly_set_features.size).to eq 0
+      it 'returns an empty list of consistent packages' do
+        expect(@substep.consistent_packages).to be_empty
       end
 
       it 'does not check for new ranking information' do
@@ -131,20 +127,16 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.changed?).to be true
       end
 
-      it 'determines the failed winner' do
-        expect(@substep.failed_winner).to equal failed_winner
+      it 'chooses a consistent package' do
+        expect(@substep.chosen_package).to eq pkg1
       end
 
-      it 'determines all of the successful winner/feature pairs' do
-        expect(@substep.success_instances).to contain_exactly(pkg1, pkg2)
+      it 'determines all of the consistent packages' do
+        expect(@substep.consistent_packages).to contain_exactly(pkg1, pkg2)
       end
 
       it 'only sets one feature' do
-        expect(@substep.newly_set_features.size).to eq 1
-      end
-
-      it 'sets the single unset feature' do
-        expect(@substep.newly_set_features[0]).to eq fv_pair1
+        expect(@substep.chosen_package.values.size).to eq 1
       end
 
       it 'checks for new ranking information for the unset feature' do
@@ -199,20 +191,16 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.changed?).to be true
       end
 
-      it 'determines the failed winner' do
-        expect(@substep.failed_winner).to equal failed_winner2
+      it 'chooses a consistent package' do
+        expect(@substep.chosen_package).to eq pkg2
       end
 
-      it 'determines all of the successful winner/feature pairs' do
-        expect(@substep.success_instances).to eq [pkg2]
+      it 'determines all of the consistent packages' do
+        expect(@substep.consistent_packages).to contain_exactly(pkg2)
       end
 
       it 'only sets one feature' do
-        expect(@substep.newly_set_features.size).to eq 1
-      end
-
-      it 'sets the consistent unset feature' do
-        expect(@substep.newly_set_features[0]).to eq fv_pair2
+        expect(@substep.chosen_package.values.size).to eq 1
       end
 
       it 'checks for new ranking information for the unset feature' do
@@ -240,20 +228,16 @@ RSpec.describe OTLearn::FewestSetFeatures do
         expect(@substep.changed?).to be true
       end
 
-      it 'determines the failed winner' do
-        expect(@substep.failed_winner).to equal failed_winner1
+      it 'chooses a consistent package' do
+        expect(@substep.chosen_package).to eq pkg1
       end
 
-      it 'determines all of the successful winner/feature pairs' do
-        expect(@substep.success_instances).to eq [pkg1]
+      it 'determines all of the consistent packages' do
+        expect(@substep.consistent_packages).to contain_exactly(pkg1)
       end
 
       it 'only sets one feature' do
-        expect(@substep.newly_set_features.size).to eq 1
-      end
-
-      it 'sets the consistent unset feature' do
-        expect(@substep.newly_set_features[0]).to eq fv_pair1
+        expect(@substep.chosen_package.values.size).to eq 1
       end
 
       it 'checks for new ranking information for the unset feature' do
