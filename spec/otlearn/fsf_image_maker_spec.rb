@@ -5,27 +5,32 @@
 require 'otlearn/fsf_image_maker'
 require 'word_values_package'
 require 'otlearn/fsf_substep'
+require 'sheet'
+require 'feature'
+require 'feature_instance'
+require 'feature_value_pair'
 
 RSpec.describe OTLearn::FsfImageMaker do
   let(:fsf_step) { instance_double(OTLearn::FsfSubstep, 'fsf_step') }
-  let(:failed_winner) { double('failed_winner') }
-  let(:failed_winner_morphword) { 'failed_winner_morphword' }
-  let(:failed_winner_input) { 'failed_winner_input' }
-  let(:failed_winner_output) { 'failed_winner_output' }
-  let(:fv_pair1) { double('fv_pair1') }
-  let(:feature_instance1) { double('feature_instance1') }
+  let(:winner) { double('winner') }
+  let(:winner_morphword) { 'winner_morphword' }
+  let(:winner_input) { 'winner_input' }
+  let(:winner_output) { 'winner_output' }
+  let(:fv_pair1) { instance_double(FeatureValuePair, 'fv_pair1') }
+  let(:feature_instance1) \
+    { instance_double(FeatureInstance, 'feature_instance1') }
   let(:morph1) { 'morph1' }
-  let(:feature1) { double('feature1') }
+  let(:feature1) { instance_double(Feature, 'feature1') }
   let(:sheet_class) { double('sheet_class') }
-  let(:sheet) { double('sheet') }
-  let(:subsheet) { double('subsheet') }
-  let(:packages_subsheet) { double('packages_subsheet') }
+  let(:sheet) { instance_double(Sheet, 'sheet') }
+  let(:subsheet) { instance_double(Sheet, 'subsheet') }
+  let(:packages_subsheet) { instance_double(Sheet, 'packages_subsheet') }
 
   before do
-    allow(failed_winner).to\
-      receive(:morphword).and_return(failed_winner_morphword)
-    allow(failed_winner).to receive(:input).and_return(failed_winner_input)
-    allow(failed_winner).to receive(:output).and_return(failed_winner_output)
+    allow(winner).to\
+      receive(:morphword).and_return(winner_morphword)
+    allow(winner).to receive(:input).and_return(winner_input)
+    allow(winner).to receive(:output).and_return(winner_output)
     allow(sheet_class).to\
       receive(:new).and_return(sheet, subsheet, packages_subsheet)
     allow(sheet).to receive(:[]=)
@@ -49,7 +54,7 @@ RSpec.describe OTLearn::FsfImageMaker do
       allow(fsf_step).to receive(:chosen_package).and_return(package)
       allow(fsf_step).to receive(:changed?).and_return(true)
       allow(fsf_step).to receive(:consistent_packages).and_return([package])
-      allow(package).to receive(:word).and_return(failed_winner)
+      allow(package).to receive(:word).and_return(winner)
       allow(package).to receive(:values).and_return([fv_pair1])
       @fsf_image = @fsf_image_maker.get_image(fsf_step)
     end
@@ -70,17 +75,17 @@ RSpec.describe OTLearn::FsfImageMaker do
 
     it 'indicates the morphword of the chosen winner' do
       expect(subsheet).to\
-        have_received(:[]=).with(2, 2, failed_winner_morphword)
+        have_received(:[]=).with(2, 2, winner_morphword)
     end
 
     it 'indicates the input of the chosen winner' do
       expect(subsheet).to\
-        have_received(:[]=).with(2, 3, failed_winner_input)
+        have_received(:[]=).with(2, 3, winner_input)
     end
 
     it 'indicates the output of the chosen winner' do
       expect(subsheet).to\
-        have_received(:[]=).with(2, 4, failed_winner_output)
+        have_received(:[]=).with(2, 4, winner_output)
     end
 
     it 'indicates the newly set feature' do
@@ -94,17 +99,17 @@ RSpec.describe OTLearn::FsfImageMaker do
 
     it 'indicates the morphword of the first consistent winner' do
       expect(packages_subsheet).to\
-        have_received(:[]=).with(2, 2, failed_winner_morphword)
+        have_received(:[]=).with(2, 2, winner_morphword)
     end
 
     it 'indicates the input of the first consistent winner' do
       expect(packages_subsheet).to\
-        have_received(:[]=).with(2, 3, failed_winner_input)
+        have_received(:[]=).with(2, 3, winner_input)
     end
 
     it 'indicates the output of the first consistent winner' do
       expect(packages_subsheet).to\
-        have_received(:[]=).with(2, 4, failed_winner_output)
+        have_received(:[]=).with(2, 4, winner_output)
     end
   end
 

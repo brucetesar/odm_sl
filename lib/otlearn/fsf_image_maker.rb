@@ -25,59 +25,56 @@ module OTLearn
       sheet[1, 1] = 'Fewest Set Features'
       # indicate if the grammar was changed
       sheet[2, 1] = "Grammar Changed: #{fsf_step.changed?.to_s.upcase}"
-      add_failed_winner_info(fsf_step, sheet)
-      add_candidate_info(fsf_step, sheet)
+      unless fsf_step.chosen_package.nil?
+        add_chosen_package_info(fsf_step.chosen_package, sheet)
+        add_consistent_package_info(fsf_step.consistent_packages, sheet)
+      end
       sheet
     end
 
     # Adds info about the failed winner to the sheet. Returns nil.
-    def add_failed_winner_info(step, sheet)
-      package = step.chosen_package
-      return nil if package.nil?
-
+    def add_chosen_package_info(package, sheet)
       subsheet = @sheet_class.new
-      failed_winner = package.word
-      set_features = package.values
+      winner = package.word
+      features = package.values
       subsheet[1, 2] = 'Chosen Feature'
-      write_winner_features(failed_winner, set_features, subsheet, 2)
+      write_winner_features(winner, features, subsheet, 2)
       sheet.append(subsheet)
       nil
     end
-    private :add_failed_winner_info
+    private :add_chosen_package_info
 
-    # Writes the elements of a _failed_winner_ and the associated
-    # feature/value pairs to consecutive column cells within _row_ of
-    # _subsheet_.
+    # Adds information about the consistent packages to the sheet.
     # Returns nil.
-    def write_winner_features(failed_winner, set_features, subsheet, row)
-      col = 1
-      subsheet[row, col += 1] = failed_winner.morphword.to_s
-      subsheet[row, col += 1] = failed_winner.input.to_s
-      subsheet[row, col += 1] = failed_winner.output.to_s
-      set_features.each do |fv_pair|
-        subsheet[row, col += 1] = fv_pair.feature_instance.morpheme.to_s
-        subsheet[row, col += 1] = fv_pair.feature_instance.feature.type.to_s
-        subsheet[row, col += 1] = fv_pair.alt_value.to_s
-      end
-      nil
-    end
-    private :write_winner_features
-
-    # Adds information about the successful feature sets to the sheet.
-    # Returns nil.
-    def add_candidate_info(step, sheet)
-      candidates = step.consistent_packages
-      return nil if candidates.empty?
-
+    def add_consistent_package_info(packages, sheet)
       subsheet = @sheet_class.new
       subsheet[1, 2] = 'Successful Features'
-      candidates.each_with_index do |cand, idx|
+      packages.each_with_index do |cand, idx|
         row = 2 + idx
         write_winner_features(cand.word, cand.values, subsheet, row)
       end
       sheet.append(subsheet)
       nil
     end
-    private :add_candidate_info
+    private :add_consistent_package_info
+
+    # Writes the elements of the _winner_ and the associated _features_
+    # (feature/value pairs) to consecutive column cells within _row_ of
+    # _subsheet_.
+    # Returns nil.
+    def write_winner_features(winner, features, subsheet, row)
+      col = 1 # the elements will begin in column 2.
+      subsheet[row, col += 1] = winner.morphword.to_s
+      subsheet[row, col += 1] = winner.input.to_s
+      subsheet[row, col += 1] = winner.output.to_s
+      features.each do |fv_pair|
+        f_inst = fv_pair.feature_instance
+        subsheet[row, col += 1] = f_inst.morpheme.to_s
+        subsheet[row, col += 1] = f_inst.feature.type.to_s
+        subsheet[row, col += 1] = fv_pair.alt_value.to_s
+      end
+      nil
+    end
+    private :write_winner_features
   end
 end
