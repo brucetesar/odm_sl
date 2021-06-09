@@ -23,19 +23,18 @@ RSpec.describe OTLearn::FsfImageMaker do
   let(:feature1) { instance_double(Feature, 'feature1') }
   let(:sheet_class) { double('sheet_class') }
   let(:sheet) { instance_double(Sheet, 'sheet') }
-  let(:subsheet) { instance_double(Sheet, 'subsheet') }
+  let(:chosen_subsheet) { instance_double(Sheet, 'chosen_subsheet') }
   let(:packages_subsheet) { instance_double(Sheet, 'packages_subsheet') }
 
   before do
-    allow(winner).to\
-      receive(:morphword).and_return(winner_morphword)
+    allow(winner).to receive(:morphword).and_return(winner_morphword)
     allow(winner).to receive(:input).and_return(winner_input)
     allow(winner).to receive(:output).and_return(winner_output)
     allow(sheet_class).to\
-      receive(:new).and_return(sheet, subsheet, packages_subsheet)
+      receive(:new).and_return(sheet, chosen_subsheet, packages_subsheet)
     allow(sheet).to receive(:[]=)
     allow(sheet).to receive(:append)
-    allow(subsheet).to receive(:[]=)
+    allow(chosen_subsheet).to receive(:[]=)
     allow(packages_subsheet).to receive(:[]=)
     @fsf_image_maker = described_class.new(sheet_class: sheet_class)
   end
@@ -60,37 +59,45 @@ RSpec.describe OTLearn::FsfImageMaker do
     end
 
     it 'indicates the type of substep' do
-      expect(@fsf_image).to\
+      expect(@fsf_image).to \
         have_received(:[]=).with(1, 1, 'Fewest Set Features')
     end
 
     it 'indicates that FSF changed the grammar' do
-      expect(@fsf_image).to\
+      expect(@fsf_image).to \
         have_received(:[]=).with(2, 1, 'Grammar Changed: TRUE')
     end
 
     it 'appends the chosen package subsheet' do
-      expect(@fsf_image).to have_received(:append).with(subsheet)
+      expect(@fsf_image).to have_received(:append).with(chosen_subsheet)
     end
 
     it 'indicates the morphword of the chosen winner' do
-      expect(subsheet).to\
+      expect(chosen_subsheet).to \
         have_received(:[]=).with(2, 2, winner_morphword)
     end
 
     it 'indicates the input of the chosen winner' do
-      expect(subsheet).to\
+      expect(chosen_subsheet).to \
         have_received(:[]=).with(2, 3, winner_input)
     end
 
     it 'indicates the output of the chosen winner' do
-      expect(subsheet).to\
+      expect(chosen_subsheet).to \
         have_received(:[]=).with(2, 4, winner_output)
     end
 
-    it 'indicates the newly set feature' do
-      expect(subsheet).to \
-        have_received(:[]=).with(2, 5, morph1)
+    it 'indicates the newly set feature morpheme' do
+      expect(chosen_subsheet).to have_received(:[]=).with(2, 5, morph1)
+    end
+
+    it 'indicates the newly set feature type' do
+      expect(chosen_subsheet).to \
+        have_received(:[]=).with(2, 6, 'feature_type')
+    end
+
+    it 'indicates the newly set feature value' do
+      expect(chosen_subsheet).to have_received(:[]=).with(2, 7, 'alt_value')
     end
 
     it 'appends the consistent packages subsheet' do
@@ -98,18 +105,31 @@ RSpec.describe OTLearn::FsfImageMaker do
     end
 
     it 'indicates the morphword of the first consistent winner' do
-      expect(packages_subsheet).to\
+      expect(packages_subsheet).to \
         have_received(:[]=).with(2, 2, winner_morphword)
     end
 
     it 'indicates the input of the first consistent winner' do
-      expect(packages_subsheet).to\
+      expect(packages_subsheet).to \
         have_received(:[]=).with(2, 3, winner_input)
     end
 
     it 'indicates the output of the first consistent winner' do
-      expect(packages_subsheet).to\
+      expect(packages_subsheet).to \
         have_received(:[]=).with(2, 4, winner_output)
+    end
+
+    it 'indicates the first consistent feature morpheme' do
+      expect(packages_subsheet).to have_received(:[]=).with(2, 5, morph1)
+    end
+
+    it 'indicates the first consistent feature type' do
+      expect(packages_subsheet).to \
+        have_received(:[]=).with(2, 6, 'feature_type')
+    end
+
+    it 'indicates the first consistent feature value' do
+      expect(packages_subsheet).to have_received(:[]=).with(2, 7, 'alt_value')
     end
   end
 
@@ -122,17 +142,17 @@ RSpec.describe OTLearn::FsfImageMaker do
     end
 
     it 'indicates the type of substep' do
-      expect(@fsf_image).to\
+      expect(@fsf_image).to \
         have_received(:[]=).with(1, 1, 'Fewest Set Features')
     end
 
     it 'indicates that FSF did not change the grammar' do
-      expect(@fsf_image).to\
+      expect(@fsf_image).to \
         have_received(:[]=).with(2, 1, 'Grammar Changed: FALSE')
     end
 
     it 'does not append a chosen package subsheet' do
-      expect(@fsf_image).not_to have_received(:append).with(subsheet)
+      expect(@fsf_image).not_to have_received(:append).with(chosen_subsheet)
     end
 
     it 'does not append a consistent pakages subsheet' do
