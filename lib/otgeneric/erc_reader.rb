@@ -35,8 +35,7 @@ module OTGeneric
     # Returns an array of constraints.
     def convert_headers_to_constraints(headers)
       constraints = []
-      con_headers = headers[1..-1] # all but first cell
-      con_headers.each do |head|
+      headers[1..].each do |head| # all but first cell
         # A Faith constraint starts with "F:"
         con_type = if /^F:/ =~ head
                      Constraint::FAITH
@@ -56,18 +55,28 @@ module OTGeneric
       data.each do |row|
         erc = Erc.new(constraints)
         erc.label = row[0]
-        evals = row[1..-1] # all but first column
-        evals.each_with_index do |eval, i|
-          if eval == 'W'
-            erc.set_w(constraints[i])
-          elsif eval == 'L'
-            erc.set_l(constraints[i])
-          end
-        end
+        evals = row[1..] # all but first column
+        assign_constraint_evals(evals, erc, constraints)
         erc_list.add(erc)
       end
       erc_list
     end
     private :convert_data_to_ercs
+
+    # Assigns the constraint evaluations for an ERC. Returns nil.
+    def assign_constraint_evals(evals, erc, constraints)
+      evals.each_with_index do |eval, i|
+        case eval
+        when 'W'
+          erc.set_w(constraints[i])
+        when 'L'
+          erc.set_l(constraints[i])
+        else
+          # constraint is 'e' by default, no need to set it.
+        end
+      end
+      nil
+    end
+    private :assign_constraint_evals
   end
 end
