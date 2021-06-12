@@ -14,10 +14,10 @@ module OTLearn
     # :call-seq:
     #   ContrastPairLearningImageMaker.new -> image_maker
     #--
-    # grammar_test_image_maker and sheet_class are dependency injections
+    # gtest_image_maker and sheet_class are dependency injections
     # used for testing.
-    def initialize(grammar_test_image_maker: nil, sheet_class: nil)
-      @grammar_test_image_maker = grammar_test_image_maker || \
+    def initialize(gtest_image_maker: nil, sheet_class: nil)
+      @grammar_test_image_maker = gtest_image_maker || \
                                   GrammarTestImageMaker.new
       @sheet_class = sheet_class || Sheet
     end

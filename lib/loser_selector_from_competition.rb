@@ -37,7 +37,8 @@ class LoserSelectorFromCompetition
   # If no informative loser is found, it returns nil.
   #
   # :call-seq:
-  #   select_loser_from_competition(winner, competition, ranking_info) -> candidate or nil
+  #   select_loser_from_competition(winner, competition, ranking_info)
+  #   -> candidate or nil
   def select_loser_from_competition(winner, competition, ranking_info)
     competition.each do |candidate|
       compare_code = @comparer.more_harmonic(winner, candidate,

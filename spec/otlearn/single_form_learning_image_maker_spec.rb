@@ -13,7 +13,7 @@ require 'otlearn/single_form_learning_image_maker'
 # messages writing values to the sheet.
 RSpec.describe OTLearn::SingleFormLearningImageMaker do
   let(:sf_step) { double('sf learning step') }
-  let(:grammar_test_image_maker) { double('grammar_test_image_maker') }
+  let(:grammar_test_image_maker) { double('gtest_image_maker') }
   let(:test_result) { double('test_result') }
   let(:test_image) { double('test_image') }
   let(:sheet_class) { double('sheet_class') }

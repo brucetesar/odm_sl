@@ -6,11 +6,6 @@ require 'morpheme'
 
 # A lexicon is a list of lexical entries.
 class Lexicon < Array
-  # Returns new lexicon object.
-  # :call-seq:
-  #   new() -> lexicon
-  def initialize; end
-
   # Returns a duplicate copy of the lexicon. The copy of the lexicon contains
   # duplicated copies of the lexical entries of the lexicon. Altering a lexical
   # entry in the duplicate will not alter the corresponding lexical entry

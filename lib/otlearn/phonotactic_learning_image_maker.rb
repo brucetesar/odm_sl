@@ -14,7 +14,7 @@ module OTLearn
     # :call-seq:
     #   new -> image_maker
     #--
-    # grammar_test_image_maker and sheet_class are dependency injections
+    # gtest_image_maker and sheet_class are dependency injections
     # used for testing.
     def initialize(grammar_test_image_maker: nil, sheet_class: nil)
       @grammar_test_image_maker = grammar_test_image_maker || \

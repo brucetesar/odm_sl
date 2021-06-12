@@ -18,7 +18,7 @@ RSpec.describe OTLearn::InductionLearningImageMaker do
   let(:fsf_image) { double('fsf_image') }
   let(:mmr_image_maker) { double('mmr_image_maker') }
   let(:mmr_image) { double('mmr_image') }
-  let(:grammar_test_image_maker) { double('grammar_test_image_maker') }
+  let(:grammar_test_image_maker) { double('gtest_image_maker') }
   let(:test_result) { double('test_result') }
   let(:test_image) { double('test_image') }
   let(:sheet_class) { double('sheet_class') }

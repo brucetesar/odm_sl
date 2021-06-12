@@ -6,21 +6,21 @@ require 'otlearn/contrast_pair_learning_image_maker'
 
 RSpec.describe OTLearn::ContrastPairLearningImageMaker do
   let(:cp_step) { double('cp_step') }
-  let(:grammar_test_image_maker) { double('grammar_test_image_maker') }
+  let(:gtest_image_maker) { double('gtest_image_maker') }
   let(:test_result) { double('test_result') }
   let(:test_image) { double('test_image') }
   let(:sheet_class) { double('sheet_class') }
   let(:sheet) { double('sheet') }
 
   before do
-    allow(grammar_test_image_maker).to\
+    allow(gtest_image_maker).to\
       receive(:get_image).with(test_result).and_return(test_image)
     allow(cp_step).to receive(:test_result).and_return(test_result)
     allow(sheet_class).to receive(:new).and_return(sheet)
     allow(sheet).to receive(:[]=)
     allow(sheet).to receive(:append)
     @cp_image_maker = described_class\
-                      .new(grammar_test_image_maker: grammar_test_image_maker,
+                      .new(gtest_image_maker: gtest_image_maker,
                            sheet_class: sheet_class)
   end
 
@@ -62,7 +62,7 @@ RSpec.describe OTLearn::ContrastPairLearningImageMaker do
     end
 
     it 'constructs a grammar test image' do
-      expect(grammar_test_image_maker).to have_received(:get_image)
+      expect(gtest_image_maker).to have_received(:get_image)
     end
 
     it 'adds the test result image' do
@@ -88,7 +88,7 @@ RSpec.describe OTLearn::ContrastPairLearningImageMaker do
     end
 
     it 'does not construct a grammar test image' do
-      expect(grammar_test_image_maker).not_to have_received(:get_image)
+      expect(gtest_image_maker).not_to have_received(:get_image)
     end
 
     it 'does not add a test result image' do
