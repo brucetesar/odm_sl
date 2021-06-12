@@ -351,28 +351,29 @@ RSpec.describe Input do
 
   # Methods like << often return self, so that calls can be stacked.
   # Make sure that Input follows that expected behavior for these methods.
-  context 'when the callee (self) is returned' do
+  context 'when newly created' do
     before do
       @input = described_class.new
     end
 
-    it 'when #<< is called' do
+    it 'returns self when #<< is called' do
       @result = (@input << 's1')
       expect(@result).to equal @input
     end
 
-    it 'when #push is called' do
+    it 'returns self when #push is called' do
       @result = (@input.push 's1')
       expect(@result).to equal @input
     end
 
-    it 'when #each is called' do
+    it 'returns self when #each is called' do
       @input << 's1'
-      @result = @input.each { |_x| nil }
+      sink = [] # so the block to #each does something simple.
+      @result = @input.each { |x| sink << x }
       expect(@result).to equal @input
     end
 
-    it 'when #each_index is called' do
+    it 'returns self when #each_index is called' do
       @input << 's1'
       @result = @input.each_index { |_x| nil }
       expect(@result).to equal @input
