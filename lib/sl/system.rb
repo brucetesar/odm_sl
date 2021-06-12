@@ -229,12 +229,12 @@ module SL
     def initialize_constraints
       @nolong = Constraint.new('NoLong', MARK) do |cand|
         cand.output.inject(0) do |sum, syl|
-          if syl.long? then sum + 1 else sum end
+          syl.long? ? sum + 1 : sum
         end
       end
       @wsp = Constraint.new('WSP', MARK) do |cand|
         cand.output.inject(0) do |sum, syl|
-          if syl.long? && syl.unstressed? then sum + 1 else sum end
+          syl.long? && syl.unstressed? ? sum + 1 : sum
         end
       end
       @ml = Constraint.new('ML', MARK) do |cand|
