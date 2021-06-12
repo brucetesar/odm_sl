@@ -7,13 +7,6 @@
 #
 # Underlying subclasses from Array, and so inherits a variety of methods.
 class Underlying < Array
-  # Returns an empty Underlying object.
-  # :call-seq:
-  #   new() -> underlying
-  def initialize
-    super
-  end
-
   # Returns a deep copy duplicate of the underlying form, containing
   # a duplicate of each of the correspondence elements of the original.
   # :call-seq:
