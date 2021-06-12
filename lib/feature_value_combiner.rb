@@ -43,7 +43,7 @@ class FeatureValueCombiner
     else
       # Compute the cartesian product of the lists of possible values
       # of the features.
-      values[0].product(*values[1..-1])
+      values[0].product(*values[1..])
     end
   end
 end
