@@ -4,6 +4,7 @@
 
 require 'singleton'
 require 'sl/syllable'
+require 'sl/gen'
 require 'constraint'
 require 'input'
 require 'ui_correspondence'
@@ -73,6 +74,7 @@ module SL
 
     # Creates and freezes the constraints and the constraint list.
     def initialize
+      @gen = Gen.new(self)
       initialize_constraints
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
@@ -113,52 +115,7 @@ module SL
     # returns the candidates in an array. All candidates share the same input
     # object. The outputs may also share some of their syllable objects.
     def gen(input)
-      # full input, but empty output, io_corr
-      start_rep = Word.new(self, input)
-      start_rep.output.morphword = input.morphword
-      # create two lists of partial candidates, distinguished by whether or
-      # not they contain a syllable with main stress.
-      no_stress_yet = [start_rep]
-      main_stress_assigned = []
-
-      # for each input segment, add it to the output in all possible ways,
-      # creating new partial candidates
-      input.each do |isyl|
-        # copy the partial candidate lists to old_*, reset the lists to empty.
-        old_no_stress_yet = no_stress_yet
-        old_main_stress_assigned = main_stress_assigned
-        no_stress_yet = []
-        main_stress_assigned = []
-        # iterate over old_no_stress_yet, for each member create a new candidate
-        # for each of the ways of adding the next syllable.
-        old_no_stress_yet.each do |w|
-          no_stress_yet <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_main_stress.set_short }
-          no_stress_yet <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_main_stress.set_long }
-        end
-        # iterate over old_main_stress_assigned, for each member create
-        # a new candidate for each of the ways of adding the next syllable.
-        old_main_stress_assigned.each do |w|
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
-        end
-      end
-
-      # Put actual candidates into an array, calling eval on each to set
-      # the constraint violations.
-      candidates = []
-      main_stress_assigned.each do |c|
-        c.eval
-        candidates.push(c)
-      end
-      candidates
+      @gen.run(input)
     end
 
     # Constructs a full structural description for the given output using the
