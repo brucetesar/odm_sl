@@ -89,19 +89,6 @@ class MorphWord
     self
   end
 
-  # Returns a duplicate of the morphword.
-  # :call-seq:
-  #   dup() -> morph_word
-  #--
-  # Uses protected methods #word= and #root_added=, to gain assignment
-  # access to those internal fields in the duplicate.
-  def dup
-    copy = MorphWord.new
-    copy.word = @word.dup
-    copy.root_added = @root_added
-    copy
-  end
-
   # Returns true if the two morph_words consist of equivalent
   # morphemes in the identical sequence.
   # Equivalent to eql?(other).
@@ -134,18 +121,27 @@ class MorphWord
     self == other
   end
 
+  # Returns a duplicate of the morphword.
+  # :call-seq:
+  #   dup() -> morph_word
+  #--
+  # Uses protected methods #word= and #root_added=, to gain assignment
+  # access to those internal fields in the duplicate.
+  def dup
+    copy = MorphWord.new
+    copy.word = @word.dup
+    copy.root_added = @root_added
+    copy
+  end
+
   # Sets the root_added flag to the parameter _boolean_.
   # Protected: used in #dup.
-  def root_added=(boolean)
-    @root_added = boolean
-  end
+  attr_writer :root_added # :nodoc:
   protected :root_added=
 
   # Sets the word array to the parameter _word_.
   # Protected: used in #dup.
-  def word=(word)
-    @word = word
-  end
+  attr_writer :word # :nodoc:
   protected :word=
 
   # Returns a string representation of the morphemes in order, separated
