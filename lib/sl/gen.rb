@@ -26,46 +26,50 @@ module SL
       start_rep.output.morphword = input.morphword
       # create two lists of partial candidates, distinguished by whether or
       # not they contain a syllable with main stress.
-      no_stress_yet = [start_rep]
-      main_stress_assigned = []
+      no_stress = [start_rep]
+      main_stressed = []
       # for each input segment, add it to the output in all possible ways,
       # creating new partial candidates
       input.each do |isyl|
-        # copy the partial candidate lists to old_*, reset the lists to empty.
-        old_no_stress_yet = no_stress_yet
-        old_main_stress_assigned = main_stress_assigned
-        no_stress_yet = []
-        main_stress_assigned = []
-        # iterate over old_no_stress_yet, for each member create a new candidate
-        # for each of the ways of adding the next syllable.
-        old_no_stress_yet.each do |w|
-          no_stress_yet <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_main_stress.set_short }
-          no_stress_yet <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_main_stress.set_long }
-        end
-        # iterate over old_main_stress_assigned, for each member create
+        # copy the lists to old_*, reset the lists to empty.
+        old_no_stress = no_stress
+        old_main_stressed = main_stressed
+        no_stress = []
+        main_stressed = []
+        # iterate over old_no_stress, for each member create a new
+        # candidate for each of the ways of adding the next syllable.
+        extend_no_stress(isyl, old_no_stress, no_stress, main_stressed)
+        # iterate over old_main_stressed, for each member create
         # a new candidate for each of the ways of adding the next syllable.
-        old_main_stress_assigned.each do |w|
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
-        end
+        extend_stressed(isyl, old_main_stressed, main_stressed)
       end
-      # Put actual candidates into an array, calling eval on each to set
-      # the constraint violations.
-      candidates = []
-      main_stress_assigned.each do |c|
-        c.eval
-        candidates.push(c)
-      end
-      candidates
+      # Set the constraint violations for each candidate, return array.
+      main_stressed.each(&:eval)
     end
+
+    def extend_no_stress(isyl, base_reps, no_stress, main_stressed)
+      base_reps.each do |word|
+        no_stress <<
+          extend_word_output(word, isyl) { |s| s.set_unstressed.set_short }
+        main_stressed <<
+          extend_word_output(word, isyl) { |s| s.set_main_stress.set_short }
+        no_stress <<
+          extend_word_output(word, isyl) { |s| s.set_unstressed.set_long }
+        main_stressed <<
+          extend_word_output(word, isyl) { |s| s.set_main_stress.set_long }
+      end
+    end
+    private :extend_no_stress
+
+    def extend_stressed(isyl, base_reps, main_stressed)
+      base_reps.each do |word|
+        main_stressed <<
+          extend_word_output(word, isyl) { |s| s.set_unstressed.set_short }
+        main_stressed <<
+          extend_word_output(word, isyl) { |s| s.set_unstressed.set_long }
+      end
+    end
+    private :extend_stressed
 
     # Takes a word partial description (full input, partial output), along
     # with a reference to the next input syllable to have a correspondent
