@@ -245,24 +245,5 @@ module SL
       list << @idlength
       list
     end
-
-    # Takes a word partial description (full input, partial output), along
-    # with a reference to the next input syllable to have a correspondent
-    # added to the output. A copy of the word, containing the new output
-    # syllable as an output correspondent to the input syllable, is
-    # returned.
-    #
-    # The new output syllable is formed by duplicating the input syllable
-    # (to copy morpheme info, etc.), and then the output syllable is passed
-    # to the block parameter, which sets the feature values for the new
-    # output syllable. The new output syllable is added to the end of
-    # the output, and a new IO correspondence pair is added.
-    def extend_word_output(word, in_syl)
-      new_w = word.dup_for_gen
-      out_syl = yield(in_syl.dup) # block sets features of new output syl.
-      new_w.output << out_syl
-      new_w.add_to_io_corr(in_syl, out_syl)
-      new_w
-    end
   end
 end
