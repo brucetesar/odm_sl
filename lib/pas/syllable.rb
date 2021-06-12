@@ -117,9 +117,9 @@ module PAS
       self
     end
 
-    # Set the morpheme that this syllable is affiliated with to _m_.
-    def set_morpheme(m)
-      @morpheme = m
+    # Set the morpheme that this syllable is affiliated with to _morph_.
+    def set_morpheme(morph)
+      @morpheme = morph
       self
     end
 

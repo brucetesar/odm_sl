@@ -56,10 +56,8 @@ class Word
     @io_corr.add_corr(in_el, out_el)
   end
 
-  # Returns a reference to the IO correspondence of this word.
-  def io_corr
-    @io_corr
-  end
+  # The IO correspondence of this word.
+  attr_reader :io_corr # :nodoc:
   protected :io_corr
 
   # Returns the input correspondent of _out_element_.
@@ -300,11 +298,9 @@ class Word
     input.morphword
   end
 
-  # Returns the candidate internal to the word.
+  # The candidate internal to the word.
   # Used in defining #==().
-  def candidate
-    @candidate
-  end
+  attr_reader :candidate # :nodoc:
   protected :candidate
 
   # Two words are equivalent if their underlying Candidates are equivalent
