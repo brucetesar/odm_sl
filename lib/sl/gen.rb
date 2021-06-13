@@ -47,6 +47,9 @@ module SL
       main_stressed.each(&:eval)
     end
 
+    # Incorporates the next input syllable _isyl_ by adding it onto
+    # partial candidates that do not yet have a main stress assigned.
+    # Returns nil.
     def extend_no_stress(isyl, base_reps, no_stress, main_stressed)
       base_reps.each do |word|
         no_stress <<
@@ -58,9 +61,13 @@ module SL
         main_stressed <<
           extend_word_output(word, isyl) { |s| s.set_main_stress.set_long }
       end
+      nil
     end
     private :extend_no_stress
 
+    # Incorporates the next input syllable _isyl_ by adding it onto
+    # partial candidates that already have a main stress assigned.
+    # Returns nil.
     def extend_stressed(isyl, base_reps, main_stressed)
       base_reps.each do |word|
         main_stressed <<
@@ -68,6 +75,7 @@ module SL
         main_stressed <<
           extend_word_output(word, isyl) { |s| s.set_unstressed.set_long }
       end
+      nil
     end
     private :extend_stressed
 
