@@ -54,9 +54,10 @@ class Constraint
   # Pre-computes a boolean indicating if the constraint is a markedness
   # constraint or not.
   def check_constraint_type(type)
-    if type == MARK
+    case type
+    when MARK
       @markedness = true
-    elsif type == FAITH
+    when FAITH
       @markedness = false
     else
       raise "Type must be either MARK or FAITH, cannot be #{type}"
