@@ -2,6 +2,8 @@
 
 # Author: Bruce Tesar / Morgan Moyer
 
+require 'constraint'
+
 module PAS
   # The markedness constraint Culm assesses one violation if the candidate
   # lacks a main stress; 0 violations otherwise.

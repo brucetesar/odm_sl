@@ -4,6 +4,7 @@
 
 require 'rspec'
 require 'sl/main_left'
+require 'constraint'
 require 'sl/syllable'
 require 'candidate'
 

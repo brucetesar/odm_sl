@@ -4,6 +4,7 @@
 
 require 'rspec'
 require 'pas/culm'
+require 'constraint'
 require 'candidate'
 require 'output'
 

@@ -2,6 +2,8 @@
 
 # Author: Bruce Tesar
 
+require 'constraint'
+
 module SL
   # The markedness constraint MainRight assesses one violation for each
   # syllable that follows a main stress syllable. If the word has no

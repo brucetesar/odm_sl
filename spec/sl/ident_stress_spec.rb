@@ -4,10 +4,14 @@
 
 require 'rspec'
 require 'sl/ident_stress'
+require 'constraint'
 require 'sl/syllable'
 
 module SL
   RSpec.describe IdentStress do
+    # Cannot make word an instance double, because Word delegates many
+    # methods to an internal Candidate object, and #instance_double
+    # cannot follow the delegation (it's not statically defined).
     let(:word) { double('word') }
     let(:syli1) { instance_double(Syllable, 'syli1') }
     let(:syli2) { instance_double(Syllable, 'syli2') }

@@ -2,6 +2,8 @@
 
 # Author: Bruce Tesar
 
+require 'constraint'
+
 module SL
   # The faithfulness constraint IdentLength assesses one violation for
   # each pair of IO-corresponding syllables that has differing values

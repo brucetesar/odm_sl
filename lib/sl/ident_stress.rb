@@ -2,6 +2,8 @@
 
 # Author: Bruce Tesar
 
+require 'constraint'
+
 module SL
   # The faithfulness constraint IdentStress assesses one violation for
   # each pair of IO-corresponding syllables where one or the other but

@@ -4,6 +4,7 @@
 
 require 'rspec'
 require 'sl/wsp'
+require 'constraint'
 require 'sl/syllable'
 require 'candidate'
 

@@ -2,6 +2,8 @@
 
 # Author: Bruce Tesar
 
+require 'constraint'
+
 module SL
   # The markedness constraint WSP assesses one violation for each output
   # syllable with a long vowel that is unstressed.
