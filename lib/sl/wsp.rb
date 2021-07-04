@@ -14,7 +14,7 @@ module SL
 
     # Returns a Wsp object.
     # :call-seq:
-    #   new -> wsp
+    #   new -> constraint_content
     def initialize
       @name = 'WSP'
       @type = Constraint::MARK

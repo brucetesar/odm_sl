@@ -15,7 +15,7 @@ module SL
 
     # Returns a MainRight object.
     # :call-seq:
-    #   new -> main_right
+    #   new -> constraint_content
     def initialize
       @name = 'MR'
       @type = Constraint::MARK

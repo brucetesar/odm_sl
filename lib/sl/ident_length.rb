@@ -15,7 +15,7 @@ module SL
 
     # Returns an IdentLength object.
     # :call-seq:
-    #   new -> ident_length
+    #   new -> constraint_content
     def initialize
       @name = 'IDLength'
       @type = Constraint::FAITH

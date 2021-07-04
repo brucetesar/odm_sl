@@ -15,7 +15,7 @@ module SL
 
     # Returns a MainLeft object.
     # :call-seq:
-    #   new -> main_left
+    #   new -> constraint_content
     def initialize
       @name = 'ML'
       @type = Constraint::MARK

@@ -15,7 +15,7 @@ module SL
 
     # Returns an IdentStress object.
     # :call-seq:
-    #   new -> ident_stress
+    #   new -> constraint_content
     def initialize
       @name = 'IDStress'
       @type = Constraint::FAITH

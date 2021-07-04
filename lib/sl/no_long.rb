@@ -16,7 +16,7 @@ module SL
 
     # Returns a NoLong object.
     # :call-seq:
-    #   new -> no_long
+    #   new -> constraint_content
     def initialize
       @name = 'NoLong'
       @type = Constraint::MARK
