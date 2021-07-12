@@ -6,6 +6,12 @@ require 'singleton'
 require 'sl/syllable'
 require 'sl/gen'
 require 'constraint'
+require 'sl/no_long'
+require 'sl/wsp'
+require 'sl/main_left'
+require 'sl/main_right'
+require 'sl/ident_stress'
+require 'sl/ident_length'
 require 'input'
 require 'ui_correspondence'
 require 'word'
@@ -184,54 +190,12 @@ module SL
     # This defines the constraints, and stores each in the appropriate
     # class variable.
     def initialize_constraints
-      @nolong = Constraint.new('NoLong', MARK) do |cand|
-        cand.output.inject(0) do |sum, syl|
-          syl.long? ? sum + 1 : sum
-        end
-      end
-      @wsp = Constraint.new('WSP', MARK) do |cand|
-        cand.output.inject(0) do |sum, syl|
-          syl.long? && syl.unstressed? ? sum + 1 : sum
-        end
-      end
-      @ml = Constraint.new('ML', MARK) do |cand|
-        viol_count = 0
-        cand.output.each do |syl|
-          break if syl.main_stress?
-
-          viol_count += 1
-        end
-        viol_count
-      end
-      @mr = Constraint.new('MR', MARK) do |cand|
-        viol_count = 0
-        stress_found = false
-        cand.output.each do |syl|
-          viol_count += 1 if stress_found
-          stress_found = true if syl.main_stress?
-        end
-        viol_count
-      end
-      @idstress = Constraint.new('IDStress', FAITH) do |cand|
-        viol_count = 0
-        cand.input.each do |in_syl|
-          unless in_syl.stress_unset?
-            out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if in_syl.main_stress? != out_syl.main_stress?
-          end
-        end
-        viol_count
-      end
-      @idlength = Constraint.new('IDLength', FAITH) do |cand|
-        viol_count = 0
-        cand.input.each do |in_syl|
-          unless in_syl.length_unset?
-            out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if in_syl.long? != out_syl.long?
-          end
-        end
-        viol_count
-      end
+      @nolong = Constraint.new('NoLong', MARK, NoLong.new)
+      @wsp = Constraint.new('WSP', MARK, Wsp.new)
+      @ml = Constraint.new('ML', MARK, MainLeft.new)
+      @mr = Constraint.new('MR', MARK, MainRight.new)
+      @idstress = Constraint.new('IDStress', FAITH, IdentStress.new)
+      @idlength = Constraint.new('IDLength', FAITH, IdentLength.new)
     end
 
     # Define the constraint list.

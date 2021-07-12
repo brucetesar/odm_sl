@@ -6,17 +6,16 @@ require 'rspec'
 require 'constraint'
 
 RSpec.describe Constraint do
-  context 'when markedness with name Constraint1' do
-    let(:cand1) { double('cand1') }
-    let(:cand2) { double('cand2') }
+  let(:cand1) { double('cand1') }
+  let(:cand2) { double('cand2') }
+  let(:content1) { double('content1') }
 
+  context 'when markedness with name Constraint1' do
     before do
+      allow(content1).to receive(:eval_candidate).and_return(2)
+      allow(content1).to receive(:eval_candidate).with(cand1).and_return(7)
       @constraint =
-        described_class.new('Constraint1', Constraint::MARK) do |cand|
-          viols = 2
-          viols = 7 if cand == cand1
-          viols
-        end
+        described_class.new('Constraint1', Constraint::MARK, content1)
     end
 
     it 'returns its name' do
@@ -46,9 +45,8 @@ RSpec.describe Constraint do
 
   context 'when faithfulness with name Cname' do
     before do
-      @constraint = described_class.new('Cname', Constraint::FAITH) do
-        return 0
-      end
+      allow(content1).to receive(:eval_candidate).and_return(0)
+      @constraint = described_class.new('Cname', Constraint::FAITH, content1)
     end
 
     it 'returns its name' do
@@ -109,12 +107,12 @@ RSpec.describe Constraint do
 
   context 'with a new Constraint with type set to OTHER' do
     it 'raises a RuntimeError' do
-      expect { described_class.new('FCon', 'OTHER') }.to\
+      expect { described_class.new('FCon', 'OTHER', nil) }.to\
         raise_error(RuntimeError)
     end
   end
 
-  context 'with a new constraint with no evaluation block' do
+  context 'with a new constraint with no content object' do
     before do
       @constraint = described_class.new('FCon', Constraint::MARK)
     end

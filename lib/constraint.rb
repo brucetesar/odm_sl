@@ -38,7 +38,7 @@ class Constraint
   # Raises a RuntimeError if _type_ is not one of the type constants.
   # :call-seq:
   #   Constraint.new(name, type) {|constraint| ... } -> constraint
-  def initialize(name, type, &eval)
+  def initialize(name, type, content = nil)
     @name = name.freeze
     @symbol = name.to_sym
     # The name should never change, so calculate the hash value of the
@@ -46,7 +46,7 @@ class Constraint
     @hash_value = @name.hash
     check_constraint_type(type)
     # store the evaluation function (passed as a code block)
-    @eval_function = eval
+    @eval_function = content
   end
 
   # Makes sure that _type_ is one of the constraint type constants;
@@ -105,7 +105,7 @@ class Constraint
       raise msg
     end
 
-    @eval_function.call(cand) # call the stored code block.
+    @eval_function.eval_candidate(cand) # call the stored code block.
   end
 
   # Returns a string of the constraint's name.
