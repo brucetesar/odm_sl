@@ -5,6 +5,13 @@
 require 'singleton'
 require 'pas/syllable'
 require 'constraint'
+require 'sl/no_long'
+require 'sl/wsp'
+require 'sl/main_left'
+require 'sl/main_right'
+require 'sl/ident_stress'
+require 'sl/ident_length'
+require 'pas/culm'
 require 'input'
 require 'ui_correspondence'
 require 'word'
@@ -54,30 +61,8 @@ module PAS
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
-    # Returns the markedness constraint NoLong.
-    attr_reader :nolong
-
-    # Returns the markedness constraint WSP.
-    attr_reader :wsp
-
-    # Returns the markedness constraint ML.
-    attr_reader :ml
-
-    # Returns the markedness constraint MR.
-    attr_reader :mr
-
-    # Returns the faithfulness constraint IDStress.
-    attr_reader :idstress
-
-    # Returns the faithfulness constraint IDLength.
-    attr_reader :idlength
-
-    # Returns the markedness constraint CULM
-    attr_reader :culm
-
     # Creates and freezes the constraints and the constraint list.
     def initialize
-      initialize_constraints
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
@@ -230,86 +215,20 @@ module PAS
       @data_generator.generate_competitions_1r1s
     end
 
-    private
-
-    # This defines the constraints, and stores each in the appropriate
-    # class variable.
-    def initialize_constraints
-      @nolong = Constraint.new('NoLong', MARK) do |cand|
-        cand.output.inject(0) do |sum, syl|
-          syl.long? ? sum + 1 : sum
-        end
-      end
-      @wsp = Constraint.new('WSP', MARK) do |cand|
-        cand.output.inject(0) do |sum, syl|
-          syl.long? && syl.unstressed? ? sum + 1 : sum
-        end
-      end
-      @ml = Constraint.new('ML', MARK) do |cand|
-        viol_count = 0
-        # only apply when there's a main stress in the cand
-        main_stress_found = cand.output.main_stress?
-        if main_stress_found
-          cand.output.each do |syl|
-            break if syl.main_stress?
-
-            viol_count += 1
-          end
-        end
-        viol_count
-      end
-      @mr = Constraint.new('MR', MARK) do |cand|
-        viol_count = 0
-        stress_found = false
-        cand.output.each do |syl|
-          viol_count += 1 if stress_found
-          stress_found = true if syl.main_stress?
-        end
-        viol_count
-      end
-      @idstress = Constraint.new('IDStress', FAITH) do |cand|
-        viol_count = 0
-        cand.input.each do |in_syl|
-          unless in_syl.stress_unset?
-            out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if in_syl.main_stress? != out_syl.main_stress?
-          end
-        end
-        viol_count
-      end
-      @idlength = Constraint.new('IDLength', FAITH) do |cand|
-        viol_count = 0
-        cand.input.each do |in_syl|
-          unless in_syl.length_unset?
-            out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if in_syl.long? != out_syl.long?
-          end
-        end
-        viol_count
-      end
-      # Gives a single violation to stress-less outputs.
-      @culm = Constraint.new('Culm', MARK) do |cand|
-        not_violated = cand.output.main_stress?
-        if not_violated
-          0
-        else
-          1
-        end
-      end
-    end
-
-    # Define the constraint list.
+    # Returns an array of the constraints. The content of six of the
+    # seven constraints comes from the SL linguistic system.
     def constraint_list
       list = []
-      list << @nolong
-      list << @wsp
-      list << @ml
-      list << @mr
-      list << @idstress
-      list << @idlength
-      list << @culm
+      list << Constraint.new(SL::NoLong.new)
+      list << Constraint.new(SL::Wsp.new)
+      list << Constraint.new(SL::MainLeft.new)
+      list << Constraint.new(SL::MainRight.new)
+      list << Constraint.new(SL::IdentStress.new)
+      list << Constraint.new(SL::IdentLength.new)
+      list << Constraint.new(PAS::Culm.new)
       list
     end
+    private :constraint_list
 
     # Takes a word partial description (full input, partial output), along with
     # a reference to the next input syllable to have a correspondent added

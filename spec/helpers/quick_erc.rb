@@ -4,6 +4,7 @@
 
 require 'erc'
 require 'constraint'
+require 'otgeneric/generic_constraint'
 
 # A compact, easy to define Erc class that is useful for testing.
 #
@@ -63,9 +64,9 @@ class QuickErc < Erc
   # name string that is the type code followed by the _id_.
   def construct_constraint(id, type)
     if type == 'F'
-      Constraint.new("F#{id}", Constraint::FAITH)
+      OTGeneric::GenericConstraint.new("F#{id}", Constraint::FAITH)
     else
-      Constraint.new("M#{id}", Constraint::MARK)
+      OTGeneric::GenericConstraint.new("M#{id}", Constraint::MARK)
     end
   end
   private :construct_constraint

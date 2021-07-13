@@ -2,7 +2,7 @@
 
 # Author: Bruce Tesar
 
-require 'constraint'
+require 'otgeneric/generic_constraint'
 require 'otgeneric/candidate_reader'
 
 module OTGeneric
@@ -42,7 +42,7 @@ module OTGeneric
                    else
                      Constraint::MARK
                    end
-        constraints << Constraint.new(head, con_type)
+        constraints << GenericConstraint.new(head, con_type)
       end
       constraints
     end

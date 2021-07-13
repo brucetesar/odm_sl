@@ -9,6 +9,7 @@ require 'compare_ctie'
 require 'compare_consistency'
 require 'loser_selector_from_competition'
 require 'constraint'
+require 'otgeneric/generic_constraint'
 require 'candidate'
 require 'erc'
 require 'erc_list'
@@ -45,10 +46,10 @@ RSpec.describe 'loser selection', :integration do
     consistency_comparer = CompareConsistency.new
     @consistency_selector =
       LoserSelectorFromCompetition.new(consistency_comparer)
-    @c1 = Constraint.new('c1', Constraint::MARK)
-    @c2 = Constraint.new('c2', Constraint::MARK)
-    @c3 = Constraint.new('c3', Constraint::MARK)
-    @c4 = Constraint.new('c4', Constraint::MARK)
+    @c1 = OTGeneric::GenericConstraint.new('c1', Constraint::MARK)
+    @c2 = OTGeneric::GenericConstraint.new('c2', Constraint::MARK)
+    @c3 = OTGeneric::GenericConstraint.new('c3', Constraint::MARK)
+    @c4 = OTGeneric::GenericConstraint.new('c4', Constraint::MARK)
     @constraint_list = [@c1, @c2, @c3, @c4]
     @winner = Candidate.new('input', 'winner', @constraint_list)
     @cand1 = Candidate.new('input', 'cand1', @constraint_list)

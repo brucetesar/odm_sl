@@ -4,19 +4,33 @@
 
 require 'rspec'
 require 'constraint'
+require 'support/named_constraint_shared_examples'
 
 RSpec.describe Constraint do
-  context 'when markedness with name Constraint1' do
-    let(:cand1) { double('cand1') }
-    let(:cand2) { double('cand2') }
+  let(:cand1) { double('cand1') }
+  let(:cand2) { double('cand2') }
+  let(:content) { double('content') }
+  let(:eq_content) { double('eq_content') }
+  let(:noteq_content) { double('noteq_content') }
 
+  context 'when markedness' do
     before do
+      allow(content).to receive(:name).and_return('Constraint1')
+      allow(content).to receive(:type).and_return(Constraint::MARK)
+      allow(content).to receive(:eval_candidate).and_return(2)
+      allow(content).to receive(:eval_candidate).with(cand1).and_return(7)
+      allow(eq_content).to receive(:name).and_return('Constraint1')
+      allow(eq_content).to receive(:type).and_return(Constraint::MARK)
+      allow(noteq_content).to receive(:name).and_return('NotCon1')
+      allow(noteq_content).to receive(:type).and_return(Constraint::MARK)
       @constraint =
-        described_class.new('Constraint1', Constraint::MARK) do |cand|
-          viols = 2
-          viols = 7 if cand == cand1
-          viols
-        end
+        described_class.new(content)
+    end
+
+    it_behaves_like 'named constraint' do
+      let(:con) { described_class.new(content) }
+      let(:eq_con) { described_class.new(eq_content) }
+      let(:noteq_con) { described_class.new(noteq_content) }
     end
 
     it 'returns its name' do
@@ -31,24 +45,35 @@ RSpec.describe Constraint do
       expect(@constraint.faithfulness?).to be false
     end
 
-    it 'returns a to_s string of Constraint1' do
+    it 'returns a to_s string of its name' do
       expect(@constraint.to_s).to eq('Constraint1')
     end
 
-    it 'assesses 7 violations to candidate cand1' do
+    it 'assesses violations to a candidate' do
       expect(@constraint.eval_candidate(cand1)).to eq(7)
     end
 
-    it 'assesses 2 violations to candidate cand2' do
+    it 'assesses different violations to a different candidate' do
       expect(@constraint.eval_candidate(cand2)).to eq(2)
     end
   end
 
-  context 'when faithfulness with name Cname' do
+  context 'when faithfulness' do
     before do
-      @constraint = described_class.new('Cname', Constraint::FAITH) do
-        return 0
-      end
+      allow(content).to receive(:name).and_return('Cname')
+      allow(content).to receive(:type).and_return(Constraint::FAITH)
+      allow(content).to receive(:eval_candidate).and_return(0)
+      allow(eq_content).to receive(:name).and_return('Cname')
+      allow(eq_content).to receive(:type).and_return(Constraint::FAITH)
+      allow(noteq_content).to receive(:name).and_return('NotCon')
+      allow(noteq_content).to receive(:type).and_return(Constraint::FAITH)
+      @constraint = described_class.new(content)
+    end
+
+    it_behaves_like 'named constraint' do
+      let(:con) { described_class.new(content) }
+      let(:eq_con) { described_class.new(eq_content) }
+      let(:noteq_con) { described_class.new(noteq_content) }
     end
 
     it 'returns its name' do
@@ -68,59 +93,15 @@ RSpec.describe Constraint do
     end
   end
 
-  context 'with a constraint' do
+  context 'with an invalid constraint type' do
     before do
-      @buddy1 = described_class.new('buddy', Constraint::MARK)
-      @buddy2 = described_class.new('buddy', Constraint::MARK)
-      @notbuddy = described_class.new('notbuddy', Constraint::MARK)
+      allow(content).to receive(:name).and_return('FCon')
+      allow(content).to receive(:type).and_return('OTHER')
+      allow(content).to receive(:eval_candidate).and_return(2)
     end
 
-    it 'is == to another constraint with the same name' do
-      expect(@buddy1 == @buddy2).to be true
-    end
-
-    it 'is eql? to another constraint with the same name' do
-      expect(@buddy1.eql?(@buddy2)).to be true
-    end
-
-    it 'has the same hash value as a same-named constraint' do
-      expect(@buddy1.hash).to eq(@buddy2.hash)
-    end
-
-    it 'is not == to a constraint with a different name' do
-      expect(@buddy1 == @notbuddy).to be false
-    end
-
-    it 'is not eql? to a constraint with a different name' do
-      expect(@buddy1.eql?(@notbuddy)).to be false
-    end
-
-    it 'does not have the same hash value as a diff-named constraint' do
-      expect(@buddy1.hash).not_to eq(@notbuddy.hash)
-    end
-  end
-
-  context 'with a new constraint set properly to MARK' do
-    it 'does not raise a RuntimeError' do
-      expect { described_class.new('FCon', Constraint::MARK) }.not_to\
-        raise_error
-    end
-  end
-
-  context 'with a new Constraint with type set to OTHER' do
     it 'raises a RuntimeError' do
-      expect { described_class.new('FCon', 'OTHER') }.to\
-        raise_error(RuntimeError)
-    end
-  end
-
-  context 'with a new constraint with no evaluation block' do
-    before do
-      @constraint = described_class.new('FCon', Constraint::MARK)
-    end
-
-    it 'raises an exception if used to evaluate a candidate' do
-      expect { @constraint.eval_candidate('cand') }.to\
+      expect { described_class.new(content) }.to\
         raise_error(RuntimeError)
     end
   end

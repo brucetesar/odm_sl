@@ -4,7 +4,14 @@
 
 require 'singleton'
 require 'sl/syllable'
+require 'sl/gen'
 require 'constraint'
+require 'sl/no_long'
+require 'sl/wsp'
+require 'sl/main_left'
+require 'sl/main_right'
+require 'sl/ident_stress'
+require 'sl/ident_length'
 require 'input'
 require 'ui_correspondence'
 require 'word'
@@ -53,28 +60,10 @@ module SL
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
-    # The markedness constraint NoLong.
-    attr_reader :nolong
-
-    # The markedness constraint WSP.
-    attr_reader :wsp
-
-    # The markedness constraint ML.
-    attr_reader :ml
-
-    # The markedness constraint MR.
-    attr_reader :mr
-
-    # The faithfulness constraint IDStress.
-    attr_reader :idstress
-
-    # The faithfulness constraint IDLength.
-    attr_reader :idlength
-
     # Creates and freezes the constraints and the constraint list.
     def initialize
-      initialize_constraints
-      @constraints = constraint_list # private method creating the list
+      @gen = Gen.new(self)
+      @constraints = constraint_list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
       @data_generator = initialize_data_generation
@@ -113,52 +102,7 @@ module SL
     # returns the candidates in an array. All candidates share the same input
     # object. The outputs may also share some of their syllable objects.
     def gen(input)
-      # full input, but empty output, io_corr
-      start_rep = Word.new(self, input)
-      start_rep.output.morphword = input.morphword
-      # create two lists of partial candidates, distinguished by whether or
-      # not they contain a syllable with main stress.
-      no_stress_yet = [start_rep]
-      main_stress_assigned = []
-
-      # for each input segment, add it to the output in all possible ways,
-      # creating new partial candidates
-      input.each do |isyl|
-        # copy the partial candidate lists to old_*, reset the lists to empty.
-        old_no_stress_yet = no_stress_yet
-        old_main_stress_assigned = main_stress_assigned
-        no_stress_yet = []
-        main_stress_assigned = []
-        # iterate over old_no_stress_yet, for each member create a new candidate
-        # for each of the ways of adding the next syllable.
-        old_no_stress_yet.each do |w|
-          no_stress_yet <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_main_stress.set_short }
-          no_stress_yet <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_main_stress.set_long }
-        end
-        # iterate over old_main_stress_assigned, for each member create
-        # a new candidate for each of the ways of adding the next syllable.
-        old_main_stress_assigned.each do |w|
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_short }
-          main_stress_assigned <<
-            extend_word_output(w, isyl) { |s| s.set_unstressed.set_long }
-        end
-      end
-
-      # Put actual candidates into an array, calling eval on each to set
-      # the constraint violations.
-      candidates = []
-      main_stress_assigned.each do |c|
-        c.eval
-        candidates.push(c)
-      end
-      candidates
+      @gen.run(input)
     end
 
     # Constructs a full structural description for the given output using the
@@ -222,90 +166,17 @@ module SL
       @data_generator.generate_competitions_1r1s
     end
 
-    private
-
-    # This defines the constraints, and stores each in the appropriate
-    # class variable.
-    def initialize_constraints
-      @nolong = Constraint.new('NoLong', MARK) do |cand|
-        cand.output.inject(0) do |sum, syl|
-          syl.long? ? sum + 1 : sum
-        end
-      end
-      @wsp = Constraint.new('WSP', MARK) do |cand|
-        cand.output.inject(0) do |sum, syl|
-          syl.long? && syl.unstressed? ? sum + 1 : sum
-        end
-      end
-      @ml = Constraint.new('ML', MARK) do |cand|
-        viol_count = 0
-        cand.output.each do |syl|
-          break if syl.main_stress?
-
-          viol_count += 1
-        end
-        viol_count
-      end
-      @mr = Constraint.new('MR', MARK) do |cand|
-        viol_count = 0
-        stress_found = false
-        cand.output.each do |syl|
-          viol_count += 1 if stress_found
-          stress_found = true if syl.main_stress?
-        end
-        viol_count
-      end
-      @idstress = Constraint.new('IDStress', FAITH) do |cand|
-        viol_count = 0
-        cand.input.each do |in_syl|
-          unless in_syl.stress_unset?
-            out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if in_syl.main_stress? != out_syl.main_stress?
-          end
-        end
-        viol_count
-      end
-      @idlength = Constraint.new('IDLength', FAITH) do |cand|
-        viol_count = 0
-        cand.input.each do |in_syl|
-          unless in_syl.length_unset?
-            out_syl = cand.io_out_corr(in_syl)
-            viol_count += 1 if in_syl.long? != out_syl.long?
-          end
-        end
-        viol_count
-      end
-    end
-
-    # Define the constraint list.
+    # Returns an array of the constraints.
     def constraint_list
       list = []
-      list << @nolong
-      list << @wsp
-      list << @ml
-      list << @mr
-      list << @idstress
-      list << @idlength
+      list << Constraint.new(NoLong.new)
+      list << Constraint.new(Wsp.new)
+      list << Constraint.new(MainLeft.new)
+      list << Constraint.new(MainRight.new)
+      list << Constraint.new(IdentStress.new)
+      list << Constraint.new(IdentLength.new)
       list
     end
-
-    # Takes a word partial description (full input, partial output), along
-    # with a reference to the next input syllable to have a correspondent
-    # added to the output. A copy of the word, containing the new output
-    # syllable as an output correspondent to the input syllable, is
-    # returned.
-    #
-    # The new output syllable is formed by duplicating the input syllable
-    # (to copy morpheme info, etc.), and then the output syllable is passed
-    # to the block parameter, which sets the feature values for the new
-    # output syllable. The new output syllable is added to the end of
-    # the output, and a new IO correspondence pair is added.
-    def extend_word_output(word, in_syl)
-      new_w = word.dup_for_gen
-      out_syl = yield(in_syl.dup) # block sets features of new output syl.
-      new_w.output << out_syl
-      new_w.add_to_io_corr(in_syl, out_syl)
-      new_w
-    end
+    private :constraint_list
   end
 end
