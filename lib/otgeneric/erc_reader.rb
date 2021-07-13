@@ -3,6 +3,7 @@
 # Author: Bruce Tesar
 
 require 'constraint'
+require 'otgeneric/generic_constraint'
 require 'erc_list'
 
 # Contains classes for a linguistic system read in entirely from
@@ -42,7 +43,7 @@ module OTGeneric
                    else
                      Constraint::MARK
                    end
-        constraints << Constraint.new(head, con_type)
+        constraints << OTGeneric::GenericConstraint.new(head, con_type)
       end
       constraints
     end
