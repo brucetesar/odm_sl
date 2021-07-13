@@ -190,12 +190,12 @@ module SL
     # This defines the constraints, and stores each in the appropriate
     # class variable.
     def initialize_constraints
-      @nolong = Constraint.new('NoLong', MARK, NoLong.new)
-      @wsp = Constraint.new('WSP', MARK, Wsp.new)
-      @ml = Constraint.new('ML', MARK, MainLeft.new)
-      @mr = Constraint.new('MR', MARK, MainRight.new)
-      @idstress = Constraint.new('IDStress', FAITH, IdentStress.new)
-      @idlength = Constraint.new('IDLength', FAITH, IdentLength.new)
+      @nolong = Constraint.new(NoLong.new)
+      @wsp = Constraint.new(Wsp.new)
+      @ml = Constraint.new(MainLeft.new)
+      @mr = Constraint.new(MainRight.new)
+      @idstress = Constraint.new(IdentStress.new)
+      @idlength = Constraint.new(IdentLength.new)
     end
 
     # Define the constraint list.

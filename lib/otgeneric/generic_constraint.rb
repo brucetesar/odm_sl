@@ -32,7 +32,9 @@ module OTGeneric
     #   new(name, type) -> constraint
     def initialize(name, type)
       content = GContent.new(name, type)
-      super(name, type, content)
+      # Pass the content object to the constructor of the superclass,
+      # Constraint.
+      super(content)
     end
   end
 end

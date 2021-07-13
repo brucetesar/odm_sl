@@ -9,23 +9,28 @@ require 'support/named_constraint_shared_examples'
 RSpec.describe Constraint do
   let(:cand1) { double('cand1') }
   let(:cand2) { double('cand2') }
-  let(:content1) { double('content1') }
+  let(:content) { double('content') }
+  let(:eq_content) { double('eq_content') }
+  let(:noteq_content) { double('noteq_content') }
 
   context 'when markedness' do
     before do
-      allow(content1).to receive(:eval_candidate).and_return(2)
-      allow(content1).to receive(:eval_candidate).with(cand1).and_return(7)
+      allow(content).to receive(:name).and_return('Constraint1')
+      allow(content).to receive(:type).and_return(Constraint::MARK)
+      allow(content).to receive(:eval_candidate).and_return(2)
+      allow(content).to receive(:eval_candidate).with(cand1).and_return(7)
+      allow(eq_content).to receive(:name).and_return('Constraint1')
+      allow(eq_content).to receive(:type).and_return(Constraint::MARK)
+      allow(noteq_content).to receive(:name).and_return('NotCon1')
+      allow(noteq_content).to receive(:type).and_return(Constraint::MARK)
       @constraint =
-        described_class.new('Constraint1', Constraint::MARK, content1)
+        described_class.new(content)
     end
 
     it_behaves_like 'named constraint' do
-      let(:con) \
-        { described_class.new('Constraint1', Constraint::MARK, content1) }
-      let(:eq_con) \
-        { described_class.new('Constraint1', Constraint::MARK, content1) }
-      let(:noteq_con) \
-        { described_class.new('NotCon1', Constraint::MARK, content1) }
+      let(:con) { described_class.new(content) }
+      let(:eq_con) { described_class.new(eq_content) }
+      let(:noteq_con) { described_class.new(noteq_content) }
     end
 
     it 'returns its name' do
@@ -55,17 +60,20 @@ RSpec.describe Constraint do
 
   context 'when faithfulness' do
     before do
-      allow(content1).to receive(:eval_candidate).and_return(0)
-      @constraint = described_class.new('Cname', Constraint::FAITH, content1)
+      allow(content).to receive(:name).and_return('Cname')
+      allow(content).to receive(:type).and_return(Constraint::FAITH)
+      allow(content).to receive(:eval_candidate).and_return(0)
+      allow(eq_content).to receive(:name).and_return('Cname')
+      allow(eq_content).to receive(:type).and_return(Constraint::FAITH)
+      allow(noteq_content).to receive(:name).and_return('NotCon')
+      allow(noteq_content).to receive(:type).and_return(Constraint::FAITH)
+      @constraint = described_class.new(content)
     end
 
     it_behaves_like 'named constraint' do
-      let(:con) \
-        { described_class.new('Constraint1', Constraint::FAITH, content1) }
-      let(:eq_con) \
-        { described_class.new('Constraint1', Constraint::FAITH, content1) }
-      let(:noteq_con) \
-        { described_class.new('NotCon1', Constraint::FAITH, content1) }
+      let(:con) { described_class.new(content) }
+      let(:eq_con) { described_class.new(eq_content) }
+      let(:noteq_con) { described_class.new(noteq_content) }
     end
 
     it 'returns its name' do
@@ -87,11 +95,13 @@ RSpec.describe Constraint do
 
   context 'with an invalid constraint type' do
     before do
-      allow(content1).to receive(:eval_candidate).and_return(2)
+      allow(content).to receive(:name).and_return('FCon')
+      allow(content).to receive(:type).and_return('OTHER')
+      allow(content).to receive(:eval_candidate).and_return(2)
     end
 
     it 'raises a RuntimeError' do
-      expect { described_class.new('FCon', 'OTHER', content1) }.to\
+      expect { described_class.new(content) }.to\
         raise_error(RuntimeError)
     end
   end

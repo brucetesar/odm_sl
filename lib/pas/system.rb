@@ -242,14 +242,14 @@ module PAS
     # This defines the constraints, and stores each in the appropriate
     # class variable.
     def initialize_constraints
-      @nolong = Constraint.new('NoLong', MARK, SL::NoLong.new)
-      @wsp = Constraint.new('WSP', MARK, SL::Wsp.new)
-      @ml = Constraint.new('ML', MARK, SL::MainLeft.new)
-      @mr = Constraint.new('MR', MARK, SL::MainRight.new)
-      @idstress = Constraint.new('IDStress', FAITH, SL::IdentStress.new)
-      @idlength = Constraint.new('IDLength', FAITH, SL::IdentLength.new)
+      @nolong = Constraint.new(SL::NoLong.new)
+      @wsp = Constraint.new(SL::Wsp.new)
+      @ml = Constraint.new(SL::MainLeft.new)
+      @mr = Constraint.new(SL::MainRight.new)
+      @idstress = Constraint.new(SL::IdentStress.new)
+      @idlength = Constraint.new(SL::IdentLength.new)
       # Gives a single violation to stress-less outputs.
-      @culm = Constraint.new('Culm', MARK, PAS::Culm.new)
+      @culm = Constraint.new(PAS::Culm.new)
     end
 
     # Define the constraint list.

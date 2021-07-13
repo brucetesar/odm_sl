@@ -28,25 +28,21 @@ class Constraint
 
   # Returns a new constraint object.
   # === Parameters
-  # * _name_ - the name of the constraint.
-  # * _type_ - type of constraint; must be one of the type constants.
-  #   * Constraint::FAITH    faithfulness constraint
-  #   * Constraint::MARK     markedness constraint
-  # * The block parameter is the violation evaluation function; it should
-  #   take, as a parameter, a candidate, and return the number of times
-  #   that candidate violates this constraint.
-  # Raises a RuntimeError if _type_ is not one of the type constants.
+  # * _content_ - the content of the constraint. It should respond to
+  #   methods #name, #type, and #eval_candidate.
+  # Raises a RuntimeError if _content_.type is not one of the type
+  # constants.
   # :call-seq:
-  #   Constraint.new(name, type) {|constraint| ... } -> constraint
-  def initialize(name, type, content)
-    @name = name.freeze
-    @symbol = name.to_sym
+  #   Constraint.new(content) -> constraint
+  def initialize(content)
+    @content = content
+    # Separately store the name, freeze it, and compute the symbol.
+    @name = @content.name.freeze
+    @symbol = @name.to_sym
     # The name should never change, so calculate the hash value of the
     # name once and store it.
     @hash_value = @name.hash
-    check_constraint_type(type)
-    # store the evaluation function (passed as a code block)
-    @eval_function = content
+    check_constraint_type(@content.type)
   end
 
   # Makes sure that _type_ is one of the constraint type constants;
@@ -99,13 +95,13 @@ class Constraint
   # Raises a RuntimeError if no evaluation function block was provided
   # at the time the constraint was constructed.
   def eval_candidate(cand)
-    unless @eval_function.respond_to? :eval_candidate
+    unless @content.respond_to? :eval_candidate
       msg = 'Constraint#eval_candidate: no evaluation function' \
             ' was provided but #eval_candidate was called.'
       raise msg
     end
 
-    @eval_function.eval_candidate(cand)
+    @content.eval_candidate(cand)
   end
 
   # Returns a string of the constraint's name.

@@ -5,6 +5,7 @@
 require 'rspec'
 require 'otgeneric/generic_constraint'
 require 'constraint'
+# RSpec adds spec/ to the $LOAD_PATH, so spec/support/ is visible.
 require 'support/named_constraint_shared_examples'
 
 module OTGeneric
@@ -14,12 +15,9 @@ module OTGeneric
     end
 
     it_behaves_like 'named constraint' do
-      let(:con) \
-        { described_class.new('Constraint1', Constraint::MARK) }
-      let(:eq_con) \
-        { described_class.new('Constraint1', Constraint::MARK) }
-      let(:noteq_con) \
-        { described_class.new('NotCon1', Constraint::MARK) }
+      let(:con) { described_class.new('Constraint1', Constraint::MARK) }
+      let(:eq_con) { described_class.new('Constraint1', Constraint::MARK) }
+      let(:noteq_con) { described_class.new('NotCon1', Constraint::MARK) }
     end
 
     it 'returns its name' do
