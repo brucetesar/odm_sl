@@ -63,7 +63,6 @@ module PAS
 
     # Creates and freezes the constraints and the constraint list.
     def initialize
-      initialize_constraints
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
@@ -216,33 +215,20 @@ module PAS
       @data_generator.generate_competitions_1r1s
     end
 
-    private
-
-    # This defines the constraints, and stores each in the appropriate
-    # class variable.
-    def initialize_constraints
-      @nolong = Constraint.new(SL::NoLong.new)
-      @wsp = Constraint.new(SL::Wsp.new)
-      @ml = Constraint.new(SL::MainLeft.new)
-      @mr = Constraint.new(SL::MainRight.new)
-      @idstress = Constraint.new(SL::IdentStress.new)
-      @idlength = Constraint.new(SL::IdentLength.new)
-      # Gives a single violation to stress-less outputs.
-      @culm = Constraint.new(PAS::Culm.new)
-    end
-
-    # Define the constraint list.
+    # Returns an array of the constraints. The content of six of the
+    # seven constraints comes from the SL linguistic system.
     def constraint_list
       list = []
-      list << @nolong
-      list << @wsp
-      list << @ml
-      list << @mr
-      list << @idstress
-      list << @idlength
-      list << @culm
+      list << Constraint.new(SL::NoLong.new)
+      list << Constraint.new(SL::Wsp.new)
+      list << Constraint.new(SL::MainLeft.new)
+      list << Constraint.new(SL::MainRight.new)
+      list << Constraint.new(SL::IdentStress.new)
+      list << Constraint.new(SL::IdentLength.new)
+      list << Constraint.new(PAS::Culm.new)
       list
     end
+    private :constraint_list
 
     # Takes a word partial description (full input, partial output), along with
     # a reference to the next input syllable to have a correspondent added

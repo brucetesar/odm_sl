@@ -63,8 +63,7 @@ module SL
     # Creates and freezes the constraints and the constraint list.
     def initialize
       @gen = Gen.new(self)
-      initialize_constraints
-      @constraints = constraint_list # private method creating the list
+      @constraints = constraint_list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
       @data_generator = initialize_data_generation
@@ -167,29 +166,17 @@ module SL
       @data_generator.generate_competitions_1r1s
     end
 
-    private
-
-    # This defines the constraints, and stores each in the appropriate
-    # class variable.
-    def initialize_constraints
-      @nolong = Constraint.new(NoLong.new)
-      @wsp = Constraint.new(Wsp.new)
-      @ml = Constraint.new(MainLeft.new)
-      @mr = Constraint.new(MainRight.new)
-      @idstress = Constraint.new(IdentStress.new)
-      @idlength = Constraint.new(IdentLength.new)
-    end
-
-    # Define the constraint list.
+    # Returns an array of the constraints.
     def constraint_list
       list = []
-      list << @nolong
-      list << @wsp
-      list << @ml
-      list << @mr
-      list << @idstress
-      list << @idlength
+      list << Constraint.new(NoLong.new)
+      list << Constraint.new(Wsp.new)
+      list << Constraint.new(MainLeft.new)
+      list << Constraint.new(MainRight.new)
+      list << Constraint.new(IdentStress.new)
+      list << Constraint.new(IdentLength.new)
       list
     end
+    private :constraint_list
   end
 end
