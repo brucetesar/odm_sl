@@ -61,27 +61,6 @@ module PAS
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
-    # Returns the markedness constraint NoLong.
-    attr_reader :nolong
-
-    # Returns the markedness constraint WSP.
-    attr_reader :wsp
-
-    # Returns the markedness constraint ML.
-    attr_reader :ml
-
-    # Returns the markedness constraint MR.
-    attr_reader :mr
-
-    # Returns the faithfulness constraint IDStress.
-    attr_reader :idstress
-
-    # Returns the faithfulness constraint IDLength.
-    attr_reader :idlength
-
-    # Returns the markedness constraint CULM
-    attr_reader :culm
-
     # Creates and freezes the constraints and the constraint list.
     def initialize
       initialize_constraints

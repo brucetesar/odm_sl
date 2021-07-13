@@ -60,24 +60,6 @@ module SL
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
-    # The markedness constraint NoLong.
-    attr_reader :nolong
-
-    # The markedness constraint WSP.
-    attr_reader :wsp
-
-    # The markedness constraint ML.
-    attr_reader :ml
-
-    # The markedness constraint MR.
-    attr_reader :mr
-
-    # The faithfulness constraint IDStress.
-    attr_reader :idstress
-
-    # The faithfulness constraint IDLength.
-    attr_reader :idlength
-
     # Creates and freezes the constraints and the constraint list.
     def initialize
       @gen = Gen.new(self)

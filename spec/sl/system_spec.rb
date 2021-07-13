@@ -28,260 +28,28 @@ RSpec.describe SL::System do
       expect(@con_list.size).to eq(6)
     end
 
-    it 'containins WSP' do
-      expect(@con_list).to include(system.wsp)
+    it 'contains WSP' do
+      expect(@con_list.any? { |c| c.name == 'WSP' }).to be true
     end
 
-    it 'containins MainLeft' do
-      expect(@con_list).to include(system.ml)
+    it 'contains MainLeft' do
+      expect(@con_list.any? { |c| c.name == 'ML' }).to be true
     end
 
     it 'contains MainRight' do
-      expect(@con_list).to include(system.mr)
+      expect(@con_list.any? { |c| c.name == 'MR' }).to be true
     end
 
     it 'contains NoLong' do
-      expect(@con_list).to include(system.nolong)
+      expect(@con_list.any? { |c| c.name == 'NoLong' }).to be true
     end
 
     it 'contains Ident[stress]' do
-      expect(@con_list).to include(system.idstress)
+      expect(@con_list.any? { |c| c.name == 'IDStress' }).to be true
     end
 
     it 'contains Ident[length]' do
-      expect(@con_list).to include(system.idlength)
-    end
-  end
-
-  context 'with a candidate' do
-    before do
-      @cand = double('candidate')
-      @input = []
-      @output = []
-      @io_corr = IOCorrespondence.new
-      allow(@cand).to receive(:input).and_return(@input)
-      allow(@cand).to receive(:output).and_return(@output)
-      allow(@cand).to receive(:io_out_corr)
-    end
-
-    context 'with /S:/[S:]' do
-      before do
-        # input syllable
-        @syli1 = instance_double(SL::Syllable, 'Syli1')
-        @input << @syli1
-        allow(@syli1).to receive(:long?).and_return(true)
-        allow(@syli1).to receive(:unstressed?).and_return(false)
-        allow(@syli1).to receive(:main_stress?).and_return(true)
-        allow(@syli1).to receive(:stress_unset?).and_return(false)
-        allow(@syli1).to receive(:length_unset?).and_return(false)
-        # output syllable
-        @sylo1 = instance_double(SL::Syllable, 'Sylo1')
-        @output << @sylo1
-        allow(@sylo1).to receive(:long?).and_return(true)
-        allow(@sylo1).to receive(:unstressed?).and_return(false)
-        allow(@sylo1).to receive(:main_stress?).and_return(true)
-        # IO correspondence
-        @io_corr.add_corr(@syli1, @sylo1)
-        allow(@cand).to receive(:io_out_corr).with(@syli1)\
-                                             .and_return(@sylo1)
-      end
-
-      it 'assigns 1 violation of NoLong' do
-        expect(system.nolong.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 0 violations of WSP' do
-        expect(system.wsp.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 0 violations of ML' do
-        expect(system.ml.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 0 violations of MR' do
-        expect(system.mr.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 0 violations of IDStress' do
-        expect(system.idstress.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 0 violations of IDLength' do
-        expect(system.idlength.eval_candidate(@cand)).to eq(0)
-      end
-    end
-
-    context 'with /s:/[S]' do
-      before do
-        # input syllable
-        @syli1 = instance_double(SL::Syllable, 'Syli1')
-        @input << @syli1
-        allow(@syli1).to receive(:long?).and_return(true)
-        allow(@syli1).to receive(:unstressed?).and_return(true)
-        allow(@syli1).to receive(:main_stress?).and_return(false)
-        allow(@syli1).to receive(:stress_unset?).and_return(false)
-        allow(@syli1).to receive(:length_unset?).and_return(false)
-        # output syllable
-        @sylo1 = instance_double(SL::Syllable, 'Sylo1')
-        @output << @sylo1
-        allow(@sylo1).to receive(:long?).and_return(false)
-        allow(@sylo1).to receive(:unstressed?).and_return(false)
-        allow(@sylo1).to receive(:main_stress?).and_return(true)
-        # IO correspondence
-        @io_corr.add_corr(@syli1, @sylo1)
-        allow(@cand).to receive(:io_out_corr).and_return(@sylo1)
-        allow(@cand).to receive(:io_in_corr).and_return(@syli1)
-      end
-
-      it 'assigns 0 violations of NoLong' do
-        expect(system.nolong.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 0 violations of WSP' do
-        expect(system.wsp.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 0 violations of ML' do
-        expect(system.ml.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 0 violations of MR' do
-        expect(system.mr.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 1 violation of IDStress' do
-        expect(system.idstress.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 1 violation of IDLength' do
-        expect(system.idlength.eval_candidate(@cand)).to eq(1)
-      end
-    end
-
-    context 'with /ss:/[Ss:]' do
-      before do
-        # input syllable 1
-        @syli1 = instance_double(SL::Syllable, 'Syli1')
-        @input << @syli1
-        allow(@syli1).to receive(:long?).and_return(false)
-        allow(@syli1).to receive(:unstressed?).and_return(true)
-        allow(@syli1).to receive(:main_stress?).and_return(false)
-        allow(@syli1).to receive(:stress_unset?).and_return(false)
-        allow(@syli1).to receive(:length_unset?).and_return(false)
-        # input syllable 2
-        @syli2 = instance_double(SL::Syllable, 'Syli2')
-        @input << @syli2
-        allow(@syli2).to receive(:long?).and_return(true)
-        allow(@syli2).to receive(:unstressed?).and_return(true)
-        allow(@syli2).to receive(:main_stress?).and_return(false)
-        allow(@syli2).to receive(:stress_unset?).and_return(false)
-        allow(@syli2).to receive(:length_unset?).and_return(false)
-        # output syllable 1
-        @sylo1 = instance_double(SL::Syllable, 'Sylo1')
-        @output << @sylo1
-        allow(@sylo1).to receive(:long?).and_return(false)
-        allow(@sylo1).to receive(:unstressed?).and_return(false)
-        allow(@sylo1).to receive(:main_stress?).and_return(true)
-        # output syllable 2
-        @sylo2 = instance_double(SL::Syllable, 'Sylo2')
-        @output << @sylo2
-        allow(@sylo2).to receive(:long?).and_return(true)
-        allow(@sylo2).to receive(:unstressed?).and_return(true)
-        allow(@sylo2).to receive(:main_stress?).and_return(false)
-        # IO correspondence
-        @io_corr.add_corr(@syli1, @sylo1).add_corr(@syli2, @sylo2)
-        allow(@cand).to receive(:io_out_corr).with(@syli1).and_return(@sylo1)
-        allow(@cand).to receive(:io_out_corr).with(@syli2).and_return(@sylo2)
-        allow(@cand).to receive(:io_in_corr).with(@sylo1).and_return(@syli1)
-        allow(@cand).to receive(:io_in_corr).with(@sylo2).and_return(@syli2)
-      end
-
-      it 'assigns 1 violation of NoLong' do
-        expect(system.nolong.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 1 violation of WSP' do
-        expect(system.wsp.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 0 violations of ML' do
-        expect(system.ml.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 1 violation of MR' do
-        expect(system.mr.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 1 violation of IDStress' do
-        expect(system.idstress.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 0 violations of IDLength' do
-        expect(system.idlength.eval_candidate(@cand)).to eq(0)
-      end
-    end
-
-    context 'with /s.s:/[s.S:]' do
-      before do
-        # input syllable 1
-        @syli1 = instance_double(SL::Syllable, 'Syli1')
-        @input << @syli1
-        allow(@syli1).to receive(:long?).and_return(false)
-        allow(@syli1).to receive(:unstressed?).and_return(true)
-        allow(@syli1).to receive(:main_stress?).and_return(false)
-        allow(@syli1).to receive(:stress_unset?).and_return(false)
-        allow(@syli1).to receive(:length_unset?).and_return(false)
-        # input syllable 2
-        @syli2 = instance_double(SL::Syllable, 'Syli2')
-        @input << @syli2
-        allow(@syli2).to receive(:long?).and_return(true)
-        allow(@syli2).to receive(:unstressed?).and_return(true)
-        allow(@syli2).to receive(:main_stress?).and_return(false)
-        allow(@syli2).to receive(:stress_unset?).and_return(false)
-        allow(@syli2).to receive(:length_unset?).and_return(false)
-        # output syllable 1
-        @sylo1 = instance_double(SL::Syllable, 'Sylo1')
-        @output << @sylo1
-        allow(@sylo1).to receive(:long?).and_return(false)
-        allow(@sylo1).to receive(:unstressed?).and_return(true)
-        allow(@sylo1).to receive(:main_stress?).and_return(false)
-        # output syllable 2
-        @sylo2 = instance_double(SL::Syllable, 'Sylo2')
-        @output << @sylo2
-        allow(@sylo2).to receive(:long?).and_return(true)
-        allow(@sylo2).to receive(:unstressed?).and_return(false)
-        allow(@sylo2).to receive(:main_stress?).and_return(true)
-        # IO correspondence
-        @io_corr.add_corr(@syli1, @sylo1).add_corr(@syli2, @sylo2)
-        allow(@cand).to receive(:io_out_corr).with(@syli1).and_return(@sylo1)
-        allow(@cand).to receive(:io_out_corr).with(@syli2).and_return(@sylo2)
-        allow(@cand).to receive(:io_in_corr).with(@sylo1).and_return(@syli1)
-        allow(@cand).to receive(:io_in_corr).with(@sylo2).and_return(@syli2)
-      end
-
-      it 'assigns 1 violation of NoLong' do
-        expect(system.nolong.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 0 violation of WSP' do
-        expect(system.wsp.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 1 violations of ML' do
-        expect(system.ml.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 0 violation of MR' do
-        expect(system.mr.eval_candidate(@cand)).to eq(0)
-      end
-
-      it 'assigns 1 violation of IDStress' do
-        expect(system.idstress.eval_candidate(@cand)).to eq(1)
-      end
-
-      it 'assigns 0 violations of IDLength' do
-        expect(system.idlength.eval_candidate(@cand)).to eq(0)
-      end
+      expect(@con_list.any? { |c| c.name == 'IDLength' }).to be true
     end
   end
 
