@@ -11,7 +11,7 @@ require_relative '../../lib/odl/resolver'
 require 'pas/system'
 require 'factorial_typology'
 
-system = PAS::System.instance
+system = PAS::System.new
 
 # Add a system-specific subdirectory in the data directory.
 data_dir = File.expand_path('pas', ODL::DATA_DIR)

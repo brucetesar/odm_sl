@@ -14,7 +14,7 @@ require 'sl/syllable'
 
 RSpec.describe SL::System do
   let(:gen) { double('gen') }
-  let(:system) { described_class.instance }
+  let(:system) { described_class.new }
 
   # ********************************
   # Specs for the system constraints

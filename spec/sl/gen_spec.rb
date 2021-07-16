@@ -9,7 +9,7 @@ require 'sl/syllable'
 require 'input'
 
 RSpec.describe SL::Gen do
-  let(:gen) { described_class.new(SL::System.instance) }
+  let(:gen) { described_class.new(SL::System.new) }
 
   # A real challenge with using test doubles here is the wide use of
   # #dup methods internally, on classes like Input and Syllable.

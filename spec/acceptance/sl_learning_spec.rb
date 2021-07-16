@@ -17,7 +17,7 @@ RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
     # Configure the learner factory
     factory = OTLearn::LanguageLearningFactory.new
     factory.para_mark_low.learn_consistent.test_consistent
-    factory.system = SL::System.instance
+    factory.system = SL::System.new
 
     # Create a new learner and runner for each language to be learned.
     # This avoids any possibility of cross-test interaction.

@@ -13,7 +13,7 @@ require 'io_correspondence'
 require 'pas/syllable'
 
 RSpec.describe PAS::System do
-  let(:system) { described_class.instance }
+  let(:system) { described_class.new }
 
   # ********************************
   # Specs for the system constraints

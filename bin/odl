@@ -71,7 +71,7 @@ else
   puts "Value must be one of #{system_values_string}"
   exit(1) # return failure error code
 end
-ling_system = system_module::System.instance
+ling_system = system_module::System.new
 
 # Define the possible values for certain argument types
 bias_values = %w[all_high faith_low mark_low]

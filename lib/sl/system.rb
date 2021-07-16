@@ -45,8 +45,6 @@ module SL
   # * UICorrespondence
   # * Word
   class System
-    include Singleton
-
     # Create local references to the constraint type constants.
     # This is strictly for convenience, so that the "Constraint::"
     # prefix doesn't have to appear in the constraint definitions below.

@@ -18,7 +18,7 @@ require 'labeled_object'
 RSpec.describe FactorialTypology, :acceptance do
   context 'when generating the typology for SL 1r1s' do
     # Generate the typology data
-    system = SL::System.instance
+    system = SL::System.new
     competition_list = system.generate_competitions_1r1s
     ft_result = described_class.new(competition_list)
     generated_data = ft_result.learning_data

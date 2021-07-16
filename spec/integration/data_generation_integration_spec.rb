@@ -12,7 +12,7 @@ require 'odl/competition_generator'
 require 'odl/stress_length_data_generator'
 
 RSpec.describe 'generating competitions for 1r1s', :integration do
-  let(:system) { SL::System.instance }
+  let(:system) { SL::System.new }
 
   before do
     element_generator = ODL::ElementGenerator.new(SL::Syllable)
