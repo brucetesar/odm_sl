@@ -61,8 +61,15 @@ class Constraint
   end
   private :check_constraint_type
 
-  # Two constraints are equivalent if their names are equivalent.
+  # Returns true if the self constraint has the same name as the _other_
+  # constraint.
+  # Returns false if the names are not the same, or if _other_ does not
+  # respond to the method #symbol (in which case, it cannot be a
+  # constraint).
   def ==(other)
+    # If _other_ does not respond to #symbol, it cannot be a constraint.
+    return false unless other.respond_to? :symbol
+
     # Comparing two symbols is faster than comparing two strings.
     @symbol == other.symbol
   end

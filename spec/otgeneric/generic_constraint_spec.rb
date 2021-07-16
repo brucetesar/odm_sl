@@ -18,6 +18,7 @@ module OTGeneric
       let(:con) { described_class.new('Constraint1', Constraint::MARK) }
       let(:eq_con) { described_class.new('Constraint1', Constraint::MARK) }
       let(:noteq_con) { described_class.new('NotCon1', Constraint::MARK) }
+      let(:not_a_con) { double('not_a_con') }
     end
 
     it 'returns its name' do

@@ -31,6 +31,7 @@ RSpec.describe Constraint do
       let(:con) { described_class.new(content) }
       let(:eq_con) { described_class.new(eq_content) }
       let(:noteq_con) { described_class.new(noteq_content) }
+      let(:not_a_con) { double('not_a_con') }
     end
 
     it 'returns its name' do
@@ -74,6 +75,7 @@ RSpec.describe Constraint do
       let(:con) { described_class.new(content) }
       let(:eq_con) { described_class.new(eq_content) }
       let(:noteq_con) { described_class.new(noteq_content) }
+      let(:not_a_con) { double('not_a_con') }
     end
 
     it 'returns its name' do
