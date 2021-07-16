@@ -2,7 +2,6 @@
 
 # Author: Bruce Tesar
 
-require 'singleton'
 require 'sl/syllable'
 require 'sl/gen'
 require 'constraint'
@@ -36,8 +35,6 @@ module SL
   # a phonological output for a morphological word into a full structural
   # description with respect to a given grammar.
   #
-  # This is a singleton class.
-  #
   # ===Non-injected Class Dependencies
   # * SL::Syllable
   # * Constraint
@@ -58,7 +55,9 @@ module SL
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
-    # Creates and freezes the constraints and the constraint list.
+    # Returns a new SL::System object.
+    # :call-seq:
+    #   new -> system
     def initialize
       @gen = Gen.new(self)
       @constraints = constraint_list

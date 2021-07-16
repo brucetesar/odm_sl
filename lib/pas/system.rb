@@ -2,7 +2,6 @@
 
 # Author: Morgan Moyer / Bruce Tesar
 
-require 'singleton'
 require 'pas/syllable'
 require 'constraint'
 require 'sl/no_long'
@@ -37,8 +36,6 @@ module PAS
   # method for parsing a phonological output for a morphological word into
   # a full structural description with respect to a given grammar.
   #
-  # This is a singleton class.
-  #
   # ===Non-injected Class Dependencies
   # * PAS::Syllable
   # * Constraint
@@ -59,7 +56,9 @@ module PAS
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
-    # Creates and freezes the constraints and the constraint list.
+    # Returns a new PAS::System object.
+    # :call-seq:
+    #   new -> system
     def initialize
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
