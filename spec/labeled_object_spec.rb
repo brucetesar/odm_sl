@@ -11,6 +11,7 @@ RSpec.describe LabeledObject do
   before do
     allow(myobject).to receive(:label)
     allow(myobject).to receive(:base_method).and_return(true)
+    allow(myobject).to receive(:to_s)
     @labeled_object = described_class.new(myobject)
   end
 
@@ -34,6 +35,11 @@ RSpec.describe LabeledObject do
     it 'does send :base_method to the base object' do
       @labeled_object.base_method
       expect(myobject).to have_received(:base_method)
+    end
+
+    it 'calls #to_s on the base object' do
+      @labeled_object.to_s
+      expect(myobject).to have_received(:to_s)
     end
   end
 

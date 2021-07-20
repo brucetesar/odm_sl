@@ -22,6 +22,14 @@ class LabeledObject
     @label = ''
   end
 
+  # Returns a string consisting of the label followed by the #to_s
+  # of the base object.
+  # :call-seq:
+  #   to_s -> str
+  def to_s
+    "#{label} #{base_obj.to_s}"
+  end
+
   # Returns a duplicate object. The duplicate contains a duplicate of the
   # base object, and a duplicate of the label.
   # :call-seq:
