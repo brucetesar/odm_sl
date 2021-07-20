@@ -231,7 +231,21 @@ class FactorialTypology
   def write_learning_data(data_dir, suffix)
     yml_file = File.join(data_dir, "outputs_typology_#{suffix}.yml")
     File.open(yml_file, 'w') do |f|
-      Psych.dump(learning_data, f)
+      f.write(Psych.dump(learning_data))
+    end
+    nil
+  end
+
+  # Write the winner candidates for each language of the typology to the
+  # data file _data_dir_/winners_typology_<_suffix_>.yml.
+  # Uses Psych to write to file in YAML format.
+  # :call-seq:
+  #   write_winner_objects(data_dir, suffix) -> nil
+  def write_winner_objects(data_dir, suffix)
+    # Write the winners of the typology
+    yml_file = File.join(data_dir, "winners_typology_#{suffix}.yml")
+    File.open(yml_file, 'w') do |f|
+      f.write(Psych.dump(winner_lists))
     end
     nil
   end
