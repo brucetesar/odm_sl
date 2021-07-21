@@ -27,7 +27,7 @@ class LabeledObject
   # :call-seq:
   #   to_s -> str
   def to_s
-    "#{label} #{base_obj.to_s}"
+    "#{label} #{base_obj}"
   end
 
   # Returns a duplicate object. The duplicate contains a duplicate of the
