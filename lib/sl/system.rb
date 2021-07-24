@@ -5,18 +5,14 @@
 require 'sl/syllable'
 require 'sl/gen'
 require 'sl/output_parser'
-require 'constraint'
 require 'sl/no_long'
 require 'sl/wsp'
 require 'sl/main_left'
 require 'sl/main_right'
 require 'sl/ident_stress'
 require 'sl/ident_length'
+require 'constraint'
 require 'input'
-require 'ui_correspondence'
-require 'word'
-require 'underlying'
-require 'lexical_entry'
 require 'odl/element_generator'
 require 'odl/underlying_form_generator'
 require 'odl/lexical_entry_generator'
@@ -37,19 +33,18 @@ module SL
   # description with respect to a given grammar.
   #
   # ===Non-injected Class Dependencies
-  # * SL::Syllable
+  # * The classes within the module SL.
   # * Constraint
   # * Input
-  # * UICorrespondence
-  # * Word
+  # * ElementGenerator
+  # * UnderlyingFormGenerator
+  # * LexicalEntryGenerator
+  # * CompetitionGenerator
+  # * StressLengthDataGenerator
   class System
-    # Create local references to the constraint type constants.
-    # This is strictly for convenience, so that the "Constraint::"
-    # prefix doesn't have to appear in the constraint definitions below.
-    # Note: done this way because constants cannot be aliased.
-
     # Indicates that a constraint is a markedness constraint.
     MARK = Constraint::MARK
+
     # Indicates that a constraint is a faithfulness constraint.
     FAITH = Constraint::FAITH
 
