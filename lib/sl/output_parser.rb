@@ -3,7 +3,6 @@
 # Author: Bruce Tesar
 
 require 'underlying'
-require 'sl/syllable'
 require 'lexical_entry'
 require 'word'
 
@@ -51,7 +50,10 @@ module SL
         under = Underlying.new
         # create a new UF syllable for each syllable of m in the output
         syls_of_m = output.find_all { |syl| syl.morpheme == m }
-        syls_of_m.each { |_x| under << Syllable.new.set_morpheme(m) }
+        syls_of_m.each do |_x|
+          # The correspondence element class is the syllable class.
+          under << @system.corr_element_class.new.set_morpheme(m)
+        end
         lexicon << LexicalEntry.new(m, under)
       end
       nil
@@ -63,19 +65,20 @@ module SL
       input = word.input
       output = word.output
       # Sanity check: 1-to-1 corresp. requires same sizes.
-      msg_s = "Input size #{input.size} != output size #{output.size}."
-      raise "OutputParser: #{msg_s}" if input.size != output.size
-
+      if input.size != output.size
+        raise "OutputParser: Input size #{input.size} != " \
+              "output size #{output.size}."
+      end
       # Iterate over successive input and output syllables, adding each
       # pair to the word's correspondence relation.
       input.each_with_index do |in_syl, idx|
         out_syl = output[idx]
         word.add_to_io_corr(in_syl, out_syl)
-        next unless in_syl.morpheme != out_syl.morpheme
-
-        msg1 = "Input syllable morph #{in_syl.morpheme.label} != "
-        msg2 = "output syllable morph #{out_syl.morpheme.label}"
-        raise "#{msg1}#{msg2}"
+        # Corresponding morphemes must be affiliated with the same morpheme.
+        if in_syl.morpheme != out_syl.morpheme
+          raise "Input syllable morph #{in_syl.morpheme.label} != " \
+                "output syllable morph #{out_syl.morpheme.label}"
+        end
       end
       nil
     end

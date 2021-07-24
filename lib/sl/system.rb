@@ -51,10 +51,15 @@ module SL
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
+    # The class of objects that are in correspondence relations, e.g.,
+    # the syllable class.
+    attr_reader :corr_element_class
+
     # Returns a new SL::System object.
     # :call-seq:
     #   new -> system
     def initialize
+      @corr_element_class = Syllable
       @gen = Gen.new(self)
       @constraints = constraint_list
       @constraints.each(&:freeze) # freeze the constraints

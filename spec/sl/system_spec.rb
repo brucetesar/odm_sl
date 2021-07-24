@@ -4,6 +4,7 @@
 
 require 'rspec'
 require 'sl/system'
+require 'sl/syllable'
 require 'lexical_entry'
 require 'morph_word'
 
@@ -11,6 +12,10 @@ module SL
   RSpec.describe System do
     let(:gen) { double('gen') }
     let(:system) { described_class.new }
+
+    it 'provides the correspondence element class' do
+      expect(system.corr_element_class).to eq Syllable
+    end
 
     # ********************************
     # Specs for the system constraints
