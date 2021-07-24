@@ -4,6 +4,7 @@
 
 require 'sl/syllable'
 require 'sl/gen'
+require 'sl/output_parser'
 require 'constraint'
 require 'sl/no_long'
 require 'sl/wsp'
@@ -63,6 +64,7 @@ module SL
       @constraints = constraint_list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
+      @output_parser = OutputParser.new(self)
       @data_generator = initialize_data_generation
     end
 
@@ -108,40 +110,7 @@ module SL
     # the number of syllables in the lexical entry of each morpheme doesn't
     # match the number of syllables for that morpheme in the output.
     def parse_output(output, lexicon)
-      mw = output.morphword
-      # If any morphemes aren't currently in the lexicon, create new
-      # entries, with the same number of syllables as in the output, and
-      # all features unset.
-      mw.each do |m|
-        next if lexicon.any? { |entry| entry.morpheme == m }
-
-        under = Underlying.new
-        # create a new UF syllable for each syllable of m in the output
-        syls_of_m = output.find_all { |syl| syl.morpheme == m }
-        syls_of_m.each { |_x| under << Syllable.new.set_morpheme(m) }
-        lexicon << LexicalEntry.new(m, under)
-      end
-      # Construct the input form
-      input = input_from_morphword(mw, lexicon)
-      word = Word.new(self, input, output)
-      # Sanity check: 1-to-1 corresp. requires same sizes.
-      msg_s = "Input size #{input.size} != output size #{output.size}."
-      raise "system.parse_output: #{msg_s}" if input.size != output.size
-
-      # create 1-to-1 IO correspondence
-      # Iterate over successive input and output syllables, adding each
-      # pair to the word's correspondence relation.
-      input.each_with_index do |in_syl, idx|
-        out_syl = output[idx]
-        word.add_to_io_corr(in_syl, out_syl)
-        next unless in_syl.morpheme != out_syl.morpheme
-
-        msg1 = "Input syllable morph #{in_syl.morpheme.label} != "
-        msg2 = "output syllable morph #{out_syl.morpheme.label}"
-        raise "#{msg1}#{msg2}"
-      end
-      word.eval # compute the number of violations of each constraint
-      word
+      @output_parser.parse_output(output, lexicon)
     end
 
     # Constructs and connects together the generators for
