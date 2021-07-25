@@ -5,12 +5,7 @@
 require 'rspec'
 require 'pas/system'
 require 'pas/syllable'
-require 'lexicon'
-require 'lexical_entry'
-require 'morph_word'
 require 'input'
-require 'output'
-require 'io_correspondence'
 
 module PAS
   RSpec.describe System do

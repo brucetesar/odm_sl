@@ -11,13 +11,9 @@ require 'sl/main_right'
 require 'sl/ident_stress'
 require 'sl/ident_length'
 require 'pas/culm'
-require 'input'
 require 'input_builder'
 require 'sl/output_parser'
-require 'ui_correspondence'
 require 'word'
-require 'underlying'
-require 'lexical_entry'
 require 'odl/element_generator'
 require 'odl/underlying_form_generator'
 require 'odl/lexical_entry_generator'
@@ -31,25 +27,31 @@ require 'odl/stress_length_data_generator'
 # (stressless outputs are possible).
 module PAS
   # Contains the core elements of the PAS (pitch accent stress) linguistic
-  # system. It defines the constraints of the system, provides the
-  # #gen(_input_) method generating the candidates for _input_, provides a
-  # method for constructing the phonological input corresponding to a
-  # morphological word with respect to a given grammar, and provides a
-  # method for parsing a phonological output for a morphological word into
-  # a full structural description with respect to a given grammar.
+  # system. It defines the constraints of the system, and provides key
+  # procedures:
+  # * #gen - generating the candidates for an input.
+  # * #input_from_morphword - constructs the phonological input
+  #   corresponding to a morphological word.
+  # * #parse_output - parses a phonological output into a full word
+  #   (structural description).
   #
   # ===Non-injected Class Dependencies
-  # * PAS::Syllable
+  # * The classes within the module PAS.
   # * Constraint
-  # * Input
-  # * UICorrespondence
-  # * Word
+  # * SL::NoLong
+  # * SL::Wsp
+  # * SL::MainLeft
+  # * SL::MainRight
+  # * SL::IdentStress
+  # * SL::IdentLength
+  # * InputBuilder
+  # * SL::OutputParser
+  # * ODL::ElementGenerator
+  # * ODL::UnderlyingFormGenerator
+  # * ODL::LexicalEntryGenerator
+  # * ODL::CompetitionGenerator
+  # * ODL::StressLengthDataGenerator
   class System
-    # Create local references to the constraint type constants.
-    # This is strictly for convenience, so that the "Constraint::"
-    # prefix doesn't have to appear in the constraint definitions below.
-    # Note: done this way because constants cannot be aliased.
-
     # Indicates that a constraint is a markedness constraint.
     MARK = Constraint::MARK
     # Indicates that a constraint is a faithfulness constraint.
@@ -81,6 +83,8 @@ module PAS
     # constructs the correspondence relation between the underlying forms
     # of the lexicon and the input, with an entry for each corresponding
     # pair of underlying/input syllables.
+    # :call-seq:
+    #   input_from_morphword(mwd, lexicon) -> input
     def input_from_morphword(mwd, lexicon)
       @input_builder.input_from_morphword(mwd, lexicon)
     end
@@ -141,11 +145,13 @@ module PAS
       candidates
     end
 
-    # Constructs a full structural description for the given output using the
-    # given lexicon. The constructed input will stand in
+    # Constructs a full structural description for the given output using
+    # the given lexicon. The constructed input will stand in
     # 1-to-1 IO correspondence with the output; an exception is thrown if
     # the number of syllables in the lexical entry of each morpheme doesn't
     # match the number of syllables for that morpheme in the output.
+    # :call-seq:
+    #   parse_output(output, lexicon) -> word
     def parse_output(output, lexicon)
       @output_parser.parse_output(output, lexicon)
     end
@@ -165,6 +171,8 @@ module PAS
     # Returns a list of competitions for all inputs consisting
     # of one root and one suffix, where all of the roots have one
     # syllable, and all of the suffixes have 1 syllable.
+    # :call-seq:
+    #   generate_competitions_1r1s -> arr
     def generate_competitions_1r1s
       @data_generator.generate_competitions_1r1s
     end
