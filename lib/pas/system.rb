@@ -12,6 +12,8 @@ require 'sl/ident_stress'
 require 'sl/ident_length'
 require 'pas/culm'
 require 'input'
+require 'input_builder'
+require 'sl/output_parser'
 require 'ui_correspondence'
 require 'word'
 require 'underlying'
@@ -56,13 +58,20 @@ module PAS
     # The list of constraints. The list is frozen, as are the constraints.
     attr_reader :constraints
 
+    # The class of objects that are in correspondence relations, e.g.,
+    # the syllable class.
+    attr_reader :corr_element_class
+
     # Returns a new PAS::System object.
     # :call-seq:
     #   new -> system
     def initialize
+      @corr_element_class = Syllable
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
+      @input_builder = InputBuilder.new
+      @output_parser = SL::OutputParser.new(self)
       @data_generator = initialize_data_generation
     end
 
@@ -73,26 +82,7 @@ module PAS
     # of the lexicon and the input, with an entry for each corresponding
     # pair of underlying/input syllables.
     def input_from_morphword(mwd, lexicon)
-      input = Input.new
-      input.morphword = mwd
-      mwd.each do |m| # for each morpheme in the morph_word, in order
-        lex_entry = lexicon.find { |entry| entry.morpheme == m }
-        raise "Morpheme #{m.label} has no lexical entry." if lex_entry.nil?
-
-        uf = lex_entry.uf
-        msg1 = "The lexical entry for morpheme #{m.label}"
-        msg2 = 'has no underlying form.'
-        raise "#{msg1} #{msg2}" if uf.nil?
-
-        uf.each do |syl|
-          in_syl = syl.dup
-          # add a duplicate of the underlying syllable to input.
-          input.push(in_syl)
-          # create a correspondence between underlying and input syllables.
-          input.ui_corr.add_corr(syl, in_syl)
-        end
-      end
-      input
+      @input_builder.input_from_morphword(mwd, lexicon)
     end
 
     # gen takes an input, generates all candidate words for that input, and
@@ -157,40 +147,7 @@ module PAS
     # the number of syllables in the lexical entry of each morpheme doesn't
     # match the number of syllables for that morpheme in the output.
     def parse_output(output, lexicon)
-      mw = output.morphword
-      # If any morphemes aren't currently in the lexicon, create new
-      # entries, with the same number of syllables as in the output, and
-      # all features unset.
-      mw.each do |m|
-        next if lexicon.any? { |entry| entry.morpheme == m }
-
-        under = Underlying.new
-        # create a new UF syllable for each syllable of m in the output
-        syls_of_m = output.find_all { |syl| syl.morpheme == m }
-        syls_of_m.each { |_x| under << Syllable.new.set_morpheme(m) }
-        lexicon << LexicalEntry.new(m, under)
-      end
-      # Construct the input form
-      input = input_from_morphword(mw, lexicon)
-      word = Word.new(self, input, output)
-      # Sanity check: 1-to-1 corresp. requires same sizes.
-      msg_s = "Input size #{input.size} != output size #{output.size}."
-      raise "system.parse_output: #{msg_s}" if input.size != output.size
-
-      # create 1-to-1 IO correspondence
-      # Iterate over successive input and output syllables, adding each
-      # pair to the word's correspondence relation.
-      input.each_with_index do |in_syl, idx|
-        out_syl = output[idx]
-        word.add_to_io_corr(in_syl, out_syl)
-        next unless in_syl.morpheme != out_syl.morpheme
-
-        msg1 = "Input syllable morph #{in_syl.morpheme.label} != "
-        msg2 = "output syllable morph #{out_syl.morpheme.label}"
-        raise "#{msg1}#{msg2}"
-      end
-      word.eval # compute the number of violations of each constraint
-      word
+      @output_parser.parse_output(output, lexicon)
     end
 
     # Constructs and connects together the generators for
