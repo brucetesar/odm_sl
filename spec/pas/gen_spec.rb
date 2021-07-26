@@ -30,7 +30,7 @@ module PAS
     # *** 1-Syllable Examples ***
     # ***************************
 
-    RSpec.shared_examples '1-syllable competition' do
+    RSpec.shared_examples 'PAS 1-syllable competition' do
       it 'generates a competition with 7 constraints' do
         expect(@competition[0].constraint_list.size).to eq(7)
       end
@@ -82,7 +82,7 @@ module PAS
         @competition = gen.run(input)
       end
 
-      include_examples '1-syllable competition'
+      include_examples 'PAS 1-syllable competition'
     end
 
     context 'with input /s./' do
@@ -93,14 +93,14 @@ module PAS
         @competition = gen.run(input)
       end
 
-      include_examples '1-syllable competition'
+      include_examples 'PAS 1-syllable competition'
     end
 
     # ***************************
     # *** 2-Syllable Examples ***
     # ***************************
 
-    RSpec.shared_examples '2-syllable competition' do
+    RSpec.shared_examples 'PAS 2-syllable competition' do
       it 'gen generates a competition with 7 constraints' do
         expect(@competition[0].constraint_list.size).to eq(7)
       end
@@ -170,7 +170,7 @@ module PAS
         @competition = gen.run(input)
       end
 
-      include_examples '2-syllable competition'
+      include_examples 'PAS 2-syllable competition'
     end
 
     context 'with input /S.s./' do
@@ -182,7 +182,7 @@ module PAS
         @competition = gen.run(input)
       end
 
-      include_examples '2-syllable competition'
+      include_examples 'PAS 2-syllable competition'
     end
   end
 end
