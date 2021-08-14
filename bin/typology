@@ -1,0 +1,76 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# Author: Bruce Tesar
+# Command line program for generating the typology of a linguistic system.
+
+# The resolver adds <project>/lib to the $LOAD_PATH.
+require_relative '../lib/odl/resolver'
+
+require 'optparse'
+require 'arg_checker'
+require 'factorial_typology'
+
+# define variables for option values
+list_options = false
+out_dir = '.' # default is current working directory
+
+# define the allowed command line options
+opts = OptionParser.new
+opts.banner = 'Usage: typology SYSTEM [options]'
+opts.on('-o', '--out_dir DIR', 'output directory name',
+        'Default: current working directory') { |val| out_dir = val }
+opts.on('-h', '--help', 'list the command line options')\
+  { list_options = true }
+
+# parse the actual command line
+rest = opts.parse(ARGV)
+
+# If the "list options" option is specified, print out the options
+# to STDOUT and exit (ignore any other options).
+if list_options
+  puts opts.to_s
+  exit(0)
+end
+
+# Get the SYSTEM argument
+system_values_string = %w[sl pas multi_stress].join(', ')
+system_val = rest.shift
+if system_val.nil?
+  puts 'ERROR: missing argument for linguistic system.'
+  puts "Value must be one of #{system_values_string}"
+  exit(1) # return failure error code
+end
+# Report any unused arguments
+puts "Unused arguments: #{rest.join(', ')}" unless rest.empty?
+
+# set the linguistic system
+case system_val
+when 'sl'
+  require 'sl/system'
+  system_module = SL
+when 'pas'
+  require 'pas/system'
+  system_module = PAS
+when 'multi_stress'
+  require 'multi_stress/system'
+  system_module = MultiStress
+else
+  puts "ERROR: invalid linguistic system #{system_val}"
+  puts "Value must be one of #{system_values_string}"
+  exit(1) # return failure error code
+end
+ling_system = system_module::System.new
+
+# Calculate the languages of the typology.
+puts "Calculating the #{system_module} typology."
+competition_list = ling_system.generate_competitions_1r1s
+ft_result = FactorialTypology.new(competition_list)
+
+# Write the typological results to report files.
+ft_result.write_to_files(out_dir, '1r1s')
+
+yml_file = File.join(out_dir, "#{system_val}_system.yml")
+File.open(yml_file, 'w') do |f|
+  f.write(Psych.dump(system_module))
+end

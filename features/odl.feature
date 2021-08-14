@@ -16,7 +16,7 @@ Feature: odl
     Then it should fail with:
       """
       ERROR: missing argument for linguistic system.
-      Value must be one of sl, pas
+      Value must be one of sl, pas, multi_stress
       """
 
   Scenario: Invalid linguistic system code provided
