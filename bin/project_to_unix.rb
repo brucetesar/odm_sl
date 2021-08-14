@@ -10,6 +10,7 @@
 require_relative '../lib/odl/resolver'
 
 require 'find'
+require 'fileutils'
 
 # Takes the string _str_, converts it to the universal newline
 # convention (regardless of what newline convention it originally was),
@@ -43,6 +44,7 @@ Find.find(SOURCE) do |path|
   Find.prune if File.basename(path) == 'tmp'
   Find.prune if File.basename(path) == '.gitignore'
   Find.prune if File.basename(path) == '.rspec'
+  Find.prune if File.basename(path) == '.rspec_status'
   Find.prune if File.basename(path) == 'LICENSE'
   Find.prune if File.basename(path) == 'README'
   Find.prune if File.basename(path) == 'Rakefile'
