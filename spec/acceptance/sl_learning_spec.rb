@@ -32,7 +32,7 @@ RSpec.describe OTLearn::LanguageLearningRunner, :acceptance do
     # the outputs, and verify that learning is successful.
     data_file = File.join(ODL::SPEC_DIR, 'fixtures', 'sl',
                           'outputs_typology_1r1s.yml')
-    fixture_data = Psych.load_file(data_file)
+    fixture_data = Psych.unsafe_load_file(data_file)
     fixture_data.each do |fix_lang|
       it "sucessfully learns #{fix_lang.label}" do
         result = @runner.run(fix_lang.label, fix_lang)

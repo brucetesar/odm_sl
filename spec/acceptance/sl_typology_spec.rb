@@ -25,7 +25,7 @@ RSpec.describe FactorialTypology, :acceptance do
     # Retrieve the fixture data
     fixture_file = File.join(ODL::SPEC_DIR, 'fixtures', 'sl',
                              'outputs_typology_1r1s.yml')
-    fixture_data = Psych.load_file(fixture_file)
+    fixture_data = Psych.unsafe_load_file(fixture_file)
 
     it 'generates the correct number of languages for SL 1r1s' do
       expect(generated_data.size).to eq fixture_data.size
