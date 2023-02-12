@@ -69,11 +69,11 @@ end
 # **************
 
 Cucumber::Rake::Task.new(:cucumber_text, 'Run Cucumber with text output') do |t|
-  t.cucumber_opts = '-f progress'
+  t.cucumber_opts = %w[-f progress]
 end
 
 Cucumber::Rake::Task.new(:cucumber_html, 'Generate cucumber HTML') do |t|
-  t.cucumber_opts = '-f html -o features/reports/cucumber_report.html'
+  t.cucumber_opts = %w[-f html -o features/reports/cucumber_report.html]
 end
 
 desc 'display cucumber in browser'
