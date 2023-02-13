@@ -4,6 +4,9 @@
 # Author: Bruce Tesar
 # Command line program for running ODL.
 
+# Set up the dependency environment (specified in Gemfile.lock)
+require 'bundler/setup'
+
 # The resolver adds <project>/lib to the $LOAD_PATH.
 require_relative '../lib/odl/resolver'
 
