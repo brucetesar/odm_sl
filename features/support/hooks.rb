@@ -4,8 +4,7 @@
 
 Before do
   # Make temporary directory for cltester.
-  lib_dir = File.expand_path('../..', __dir__)
-  @cltester_dir = File.expand_path('temp/cltester', lib_dir)
+  @cltester_dir = File.join(__dir__, '../..', 'temp/cltester')
   FileUtils.mkdir_p(@cltester_dir)
   # Change to the temporary directory
   Dir.chdir(@cltester_dir)
