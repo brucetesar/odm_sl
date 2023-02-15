@@ -34,5 +34,7 @@ end
 
 Then(/^STDOUT should be exactly:$/) do |expected|
   actual = File.read('cltester_STDOUT.txt')
+  # End expected with a newline, to match captured STDOUT.
+  expected = expected << "\n"
   expect(actual).to eq(expected)
 end

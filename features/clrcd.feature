@@ -6,14 +6,16 @@ Feature: clrcd
 
   Scenario: Print the command line options
     When I run `clrcd -?`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should contain:
       """
       Usage: clrcd [options]
       """
 
   Scenario: No input filename given
     When I run `clrcd`
-    Then it should fail with:
+    Then it should fail
+    And STDOUT should be exactly:
       """
       A filename for the ERCs must be given using option -e.
       To see all options, run: clrcd -?
@@ -26,7 +28,8 @@ Feature: clrcd
       erc1,W,L
       """
     When I run `clrcd -e support1.csv`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Consistent
       [Con1] [Con2]
@@ -38,7 +41,8 @@ Feature: clrcd
       ,Con1,Con2
       """
     When I run `clrcd -e empty_support.csv`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Consistent
       [Con1 Con2]
@@ -52,7 +56,8 @@ Feature: clrcd
       erc2,L,W
       """
     When I run `clrcd -e inconsistent_support.csv`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should contain:
       """
       Inconsistent
       """
@@ -64,7 +69,8 @@ Feature: clrcd
       erc1,W,L,W
       """
     When I run `clrcd --bias fl -e support2.csv`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Consistent
       [Con1] [Con2] [F:Con3]
@@ -77,7 +83,8 @@ Feature: clrcd
       erc1,W,L,W
       """
     When I run `clrcd -b ah -e support3.csv`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Consistent
       [Con1 F:Con3] [Con2]
@@ -90,7 +97,8 @@ Feature: clrcd
       erc1,W,L,W
       """
     When I run `clrcd -b ml -e support4.csv`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Consistent
       [F:Con3] [Con1 Con2]
