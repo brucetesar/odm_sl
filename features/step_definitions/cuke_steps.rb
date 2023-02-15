@@ -7,13 +7,6 @@ Given(/^that file "([^"]*)" does not exist$/) do |filename|
   expect(File.exist?(filename)).to be false
 end
 
-# When(/^I run "([^"]*)"$/) do |exec_file|
-#   # system() runs the given command in a subshell, returning
-#   # a boolean indicating if execution was successful or not.
-#   successful_run = system("ruby #{exec_file}")
-#   expect(successful_run).to be true
-# end
-
 Then(/^the file "([^"]*)" is produced$/) do |created_file|
   expect(File.exist?(created_file)).to be true
 end
