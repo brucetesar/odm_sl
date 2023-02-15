@@ -3,17 +3,8 @@ GEM
   specs:
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
-    aruba (2.1.0)
-      bundler (>= 1.17, < 3.0)
-      childprocess (>= 2.0, < 5.0)
-      contracts (>= 0.16.0, < 0.18.0)
-      cucumber (>= 4.0, < 9.0)
-      rspec-expectations (~> 3.4)
-      thor (~> 1.0)
     ast (2.4.2)
     builder (3.2.4)
-    childprocess (4.1.0)
-    contracts (0.17)
     cucumber (8.0.0)
       builder (~> 3.2, >= 3.2.4)
       cucumber-ci-environment (~> 9.0, >= 9.0.4)
@@ -94,14 +85,12 @@ GEM
     sync_enum (0.1.1)
     sys-uname (1.2.2)
       ffi (~> 1.1)
-    thor (1.2.1)
     unicode-display_width (2.4.2)
 
 PLATFORMS
   x64-mingw-ucrt
 
 DEPENDENCIES
-  aruba (>= 1.0.4)
   cucumber (>= 5)
   ffi (~> 1.14.2)
   launchy (~> 2.5)
