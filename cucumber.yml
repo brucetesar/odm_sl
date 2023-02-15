@@ -1,0 +1,3 @@
+# Suppress message about publishing cucumber reports online.
+
+default: --publish-quiet
