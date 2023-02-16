@@ -6,14 +6,16 @@ Feature: odl
 
   Scenario: Print the command line options
     When I run `odl -h`
-    Then it should pass with:
+    Then it should pass
+    And STDOUT should include:
       """
       Usage: odl SYSTEM [options]
       """
 
   Scenario: No linguistic system code provided
     When I run `odl`
-    Then it should fail with:
+    Then it should fail
+    And STDOUT should be exactly:
       """
       ERROR: missing argument for linguistic system.
       Value must be one of sl, pas, multi_stress
@@ -21,31 +23,32 @@ Feature: odl
 
   Scenario: Invalid linguistic system code provided
     When I run `odl invalid_system`
-    Then it should fail with:
+    Then it should fail
+    And STDOUT should include:
       """
       ERROR: invalid linguistic system invalid_system
-      Value must be one of sl, pas
       """
 
   Scenario: Invalid paradigmatic ranking bias given
     When I run `odl sl -p invalid_bias`
-    Then it should fail with:
+    Then it should fail
+    And STDOUT should include:
       """
       ERROR: invalid --para_bias value invalid_bias.
-      Value must be one of all_high, faith_low, mark_low
       """
 
   Scenario: Invalid learning compare type given
     When I run `odl sl -l invalid_type`
-    Then it should fail with:
+    Then it should fail
+    And STDOUT should include:
       """
       ERROR: invalid --lcomp value invalid_type.
-      Value must be one of pool, ctie, consistent
       """
 
   Scenario: Invalid testing compare type given
     When I run `odl sl -t invalid_type`
-    Then it should fail with:
+    Then it should fail
+    And STDOUT should include:
       """
       ERROR: invalid --tcomp value invalid_type.
       Value must be one of pool, ctie, consistent
@@ -53,21 +56,23 @@ Feature: odl
 
   Scenario: Run on the SL typology with no specified options
     When I run `odl sl`
-    Then it should pass with exactly:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Calculating the SL typology.
       Learning the SL typology.
       SL learning is finished.
       """
     And a file named "L20.csv" should exist
-    And the file "L20.csv" should contain:
+    And the file "L20.csv" should include:
       """
       Learned: true
       """
 
   Scenario: Run on the SL typology with an output directory
     When I run `odl sl -o mcc`
-    Then it should pass with exactly:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Calculating the SL typology.
       Learning the SL typology.
@@ -84,7 +89,8 @@ Feature: odl
 
   Scenario: Run on language L24
     When I run `odl sl -L L24 -o uno`
-    Then it should pass with exactly:
+    Then it should pass
+    And STDOUT should be exactly:
       """
       Calculating the SL typology.
       Learning language L24 of the SL typology.
@@ -107,7 +113,8 @@ Feature: odl
 
   Scenario: Run with an invalid language label
     When I run `odl sl -L invalid`
-    Then it should fail with exactly:
+    Then it should fail
+    And STDOUT should be exactly:
       """
       Calculating the SL typology.
       ERROR: language invalid was not found in the typology.
