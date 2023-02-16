@@ -11,9 +11,7 @@ require 'launchy'
 
 desc 'delete all files/directories in the temp dir'
 task :clear_temp do
-  Dir.glob('temp/*').each do |f|
-    rm_rf(f, verbose: false)
-  end
+  FileUtils.rm_r(Dir.glob('temp/*'), secure: true)
 end
 
 # ***********
