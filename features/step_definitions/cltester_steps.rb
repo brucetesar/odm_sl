@@ -51,15 +51,11 @@ end
 Then(/^(?:a|the) file(?: named)? "([^"]*)" should include:$/) \
   do |actual_file, expected|
   actual = File.read(actual_file)
-  # End expected with a newline.
-  expected = expected << "\n"
   expect(actual).to include(expected)
 end
 
 Then(/^(?:a|the) file(?: named)? "([^"]*)" should be exactly:$/) \
   do |actual_file, expected|
   actual = File.read(actual_file)
-  # End expected with a newline.
-  expected = expected << "\n"
   expect(actual).to eq(expected)
 end
