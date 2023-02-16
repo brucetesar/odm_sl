@@ -7,7 +7,7 @@ Feature: clmrcd
   Scenario: Print the command line options
     When I run `clmrcd -?`
     Then it should pass
-    And STDOUT should contain:
+    And STDOUT should include:
       """
       Usage: clmrcd [options]
       """

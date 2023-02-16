@@ -7,7 +7,7 @@ Feature: clrcd
   Scenario: Print the command line options
     When I run `clrcd -?`
     Then it should pass
-    And STDOUT should contain:
+    And STDOUT should include:
       """
       Usage: clrcd [options]
       """
@@ -57,7 +57,7 @@ Feature: clrcd
       """
     When I run `clrcd -e inconsistent_support.csv`
     Then it should pass
-    And STDOUT should contain:
+    And STDOUT should include:
       """
       Inconsistent
       """

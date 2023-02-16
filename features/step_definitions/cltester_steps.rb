@@ -5,6 +5,11 @@
 # previously used until it stopped being compatible with MS Windows.
 # Author: Bruce Tesar
 
+Given(/^that file "([^"]*)" does not exist$/) do |filename|
+  File.delete(filename) if File.exist?(filename)
+  expect(File.exist?(filename)).to be false
+end
+
 Given(/^(?:a|the) file(?: named)? "([^"]*)" with:$/) do |file_name,
   file_content|
   path = File.join(@cltester_dir, file_name)
@@ -19,6 +24,10 @@ When(/^I run `([^`]*)`$/) do |exec_file|
   @successful_run = system(cmd)
 end
 
+Then(/^(?:a|the) file(?: named)? "([^"]*)" should exist$/) do |created_file|
+  expect(File.exist?(created_file)).to be true
+end
+
 Then(/^it should (pass|fail)$/) do |pass_fail|
   if pass_fail == 'pass'
     expect(@successful_run).to be true
@@ -27,7 +36,7 @@ Then(/^it should (pass|fail)$/) do |pass_fail|
   end
 end
 
-Then(/^STDOUT should contain:$/) do |expected|
+Then(/^STDOUT should include:$/) do |expected|
   actual = File.read('cltester_STDOUT.txt')
   expect(actual).to include(expected)
 end
@@ -35,6 +44,22 @@ end
 Then(/^STDOUT should be exactly:$/) do |expected|
   actual = File.read('cltester_STDOUT.txt')
   # End expected with a newline, to match captured STDOUT.
+  expected = expected << "\n"
+  expect(actual).to eq(expected)
+end
+
+Then(/^(?:a|the) file(?: named)? "([^"]*)" should include:$/) \
+  do |actual_file, expected|
+  actual = File.read(actual_file)
+  # End expected with a newline.
+  expected = expected << "\n"
+  expect(actual).to include(expected)
+end
+
+Then(/^(?:a|the) file(?: named)? "([^"]*)" should be exactly:$/) \
+  do |actual_file, expected|
+  actual = File.read(actual_file)
+  # End expected with a newline.
   expected = expected << "\n"
   expect(actual).to eq(expected)
 end
