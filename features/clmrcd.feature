@@ -109,7 +109,7 @@ Feature: clmrcd
       [F:1] [M:1 M:2] [F:2]
       """
     And a file named "report.csv" should exist
-    And the file "report.csv" should contain:
+    And the file named "report.csv" should include:
       """
       ERC#,Input,Winner,Loser,F:1,M:1,M:2,F:2
       "",in1,out1,out2,W,W,L,
