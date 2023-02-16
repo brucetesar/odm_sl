@@ -9,7 +9,7 @@ Before do
   # Change to the temporary directory
   Dir.chdir(@cltester_dir)
   # Ensure the directory is clean
-  FileUtils.rm(Dir.glob('./*'))
+  FileUtils.rm_r(Dir.glob('./*'), secure: true)
   # Ensure that the global variable for run status is initialized false.
   @successful_run = false
 end
