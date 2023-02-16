@@ -26,7 +26,7 @@ class CsvOutput
   # Write the CSV-formatted image to the file named _destination_.
   # It writes the column headers as the first line.
   def write_to_file(destination)
-    @csv_class.open(destination, 'w', { write_headers: true }) do |csv|
+    @csv_class.open(destination, 'w', write_headers: true) do |csv|
       # Convert the csv image to an array, and send each row of the array
       # to CSV.
       @csv_image.to_a.each do |row|
