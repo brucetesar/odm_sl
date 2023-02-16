@@ -8,7 +8,7 @@ require 'stringio'
 
 RSpec.describe ArgChecker do
   let(:option_string) { '--opstr' }
-  # Use StringIO as a test mock for $stderr.
+  # Use StringIO as a test mock for $stdout.
   let(:err_output) { StringIO.new }
 
   before do

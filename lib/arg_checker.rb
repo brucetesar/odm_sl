@@ -10,8 +10,8 @@ class ArgChecker
   #   ArgChecker.new -> checker
   #--
   # err_output is a dependency injection used for testing. It is
-  # the IO channel to which error msgs are written (normally $stderr).
-  def initialize(err_output: $stderr)
+  # the IO channel to which error msgs are written (normally $stdout).
+  def initialize(err_output: $stdout)
     @err_output = err_output
   end
 
