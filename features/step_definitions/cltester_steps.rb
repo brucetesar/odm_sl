@@ -6,7 +6,7 @@
 # Author: Bruce Tesar
 
 Given(/^that file "([^"]*)" does not exist$/) do |filename|
-  File.delete(filename) if File.exist?(filename)
+  FileUtils.remove(filename)
   expect(File.exist?(filename)).to be false
 end
 
