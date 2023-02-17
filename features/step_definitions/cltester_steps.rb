@@ -24,8 +24,22 @@ When(/^I run `([^`]*)`$/) do |exec_file|
   @successful_run = system(cmd)
 end
 
-Then(/^(?:a|the) file(?: named)? "([^"]*)" should exist$/) do |created_file|
-  expect(File.exist?(created_file)).to be true
+Then(/^(?:a|the) file(?: named)? "([^"]*)" should (not )?exist$/) \
+  do |created_file, negated|
+  if negated
+    expect(File.exist?(created_file)).not_to be true
+  else
+    expect(File.exist?(created_file)).to be true
+  end
+end
+
+Then(/^(?:a|the) directory(?: named)? "([^"]*)" should (not )?exist$/) \
+  do |created_dir, negated|
+  if negated
+    expect(Dir.exist?(created_dir)).not_to be true
+  else
+    expect(Dir.exist?(created_dir)).to be true
+  end
 end
 
 Then(/^it should (pass|fail)$/) do |pass_fail|
