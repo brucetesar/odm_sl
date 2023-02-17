@@ -42,6 +42,17 @@ Then(/^(?:a|the) directory(?: named)? "([^"]*)" should (not )?exist$/) \
   end
 end
 
+Then(/^the following files should (not )?exist:$/) do |negated, files|
+  files = files.raw.flatten
+  files.each do |file|
+    if negated
+      expect(File.exist?(file)).not_to be true
+    else
+      expect(File.exist?(file)).to be true
+    end
+  end
+end
+
 Then(/^it should (pass|fail)$/) do |pass_fail|
   if pass_fail == 'pass'
     expect(@successful_run).to be true

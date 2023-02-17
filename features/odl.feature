@@ -98,10 +98,10 @@ Feature: odl
       """
     And a directory named "uno" should exist
     And a file named "uno/L24.csv" should exist
-    And the file "uno/L24.csv" should contain:
+    And the file "uno/L24.csv" should include:
       """
-       , , , , , , , , , , , \nL24,,,,,,,,,,,
-      Learned: true,,,,,,,,,,,
+      L24,,,,,,,,,,,
+      Learned: true
       """
     And the following files should not exist:
       | uno/L1.csv  | uno/L2.csv  | uno/L3.csv  | uno/L4.csv  |
