@@ -121,7 +121,7 @@ RSpec.describe PAS::Syllable do
   end
 
   it '#set_feature does not raise an invalid feature exception when'\
-       ' given an unset feature value' do
+     ' given an unset feature value' do
     expect { syllable.set_feature(PAS::Length::LENGTH, Feature::UNSET) }\
       .not_to raise_exception
   end

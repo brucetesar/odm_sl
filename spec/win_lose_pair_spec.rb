@@ -65,19 +65,19 @@ RSpec.describe WinLosePair do
     end
 
     it 'includes the input' do
-      expect(/input/ =~ @str_rep).not_to be nil
+      expect(/input/ =~ @str_rep).not_to be_nil
     end
 
     it 'includes the winner output' do
-      expect(/win-output/ =~ @str_rep).not_to be nil
+      expect(/win-output/ =~ @str_rep).not_to be_nil
     end
 
     it 'includes the loser output' do
-      expect(/lose-output/ =~ @str_rep).not_to be nil
+      expect(/lose-output/ =~ @str_rep).not_to be_nil
     end
 
     it 'includes the constraint preferences' do
-      expect(/C1:W C2:L/ =~ @str_rep).not_to be nil
+      expect(/C1:W C2:L/ =~ @str_rep).not_to be_nil
     end
   end
 

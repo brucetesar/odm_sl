@@ -95,7 +95,7 @@ RSpec.describe SL::Syllable do
 
     it 'get_feature raises an exception when given an invalid type' do
       msg = 'Syllable#get_feature(): ' \
-             'parameter not_a_type is not a valid feature type.'
+            'parameter not_a_type is not a valid feature type.'
       expect { syllable.get_feature('not_a_type') }.to \
         raise_error(RuntimeError, msg)
     end

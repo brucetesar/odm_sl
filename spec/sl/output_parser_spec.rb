@@ -74,7 +74,7 @@ module SL
             Syllable.new.set_unstressed.set_short.set_morpheme(r1)
           @out_syl2 =
             Syllable.new.set_main_stress.set_short.set_morpheme(s1)
-          @morphword = instance_double('Morphword')
+          @morphword = instance_double(MorphWord)
           allow(@morphword).to receive(:each).and_yield(r1).and_yield(s1)
           @output = Output.new << @out_syl1 << @out_syl2
           @output.morphword = @morphword
@@ -122,7 +122,7 @@ module SL
             Syllable.new.set_unstressed.set_short.set_morpheme(r1)
           @out_syl2 =
             Syllable.new.set_main_stress.set_short.set_morpheme(s1)
-          @morphword = instance_double('Morphword')
+          @morphword = instance_double(MorphWord)
           allow(@morphword).to receive(:each).and_yield(r1).and_yield(s1)
           @output = Output.new << @out_syl1 << @out_syl2
           @output.morphword = @morphword

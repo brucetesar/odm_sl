@@ -81,8 +81,9 @@ RSpec.describe OTLearn::MaxMismatchRanking do
     end
 
     it 'writes a console message' do
-      expect(msg_output.string).to eq 'MMR: A failed consistent winner' \
-        " did not provide new ranking information.\n"
+      expect(msg_output.string).to eq \
+        'MMR: A failed consistent winner did not provide new ranking' \
+        " information.\n"
     end
   end
 end

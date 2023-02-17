@@ -19,13 +19,13 @@ RSpec.describe Sheet do
     end
 
     it 'contains one empty cell' do
-      expect(@sheet[1, 1]).to be nil
+      expect(@sheet[1, 1]).to be_nil
     end
     # return nil for a cell outside the current sheet range
 
     it 'returns nil for cell(2,3)' do
-      cell = instance_double('Cell', row: 2, col: 3)
-      expect(@sheet.get_cell(cell)).to be nil
+      cell = instance_double(Cell, row: 2, col: 3)
+      expect(@sheet.get_cell(cell)).to be_nil
     end
 
     it 'contains all nil values' do
@@ -33,8 +33,8 @@ RSpec.describe Sheet do
     end
 
     it 'has nil in cell(1,1)' do
-      cell = instance_double('Cell', row: 1, col: 1)
-      expect(@sheet.get_cell(cell)).to be nil
+      cell = instance_double(Cell, row: 1, col: 1)
+      expect(@sheet.get_cell(cell)).to be_nil
     end
 
     context "with [3,2] = 'stuff'" do
@@ -51,11 +51,11 @@ RSpec.describe Sheet do
       end
 
       it 'has nil in [1,1]' do
-        expect(@sheet[1, 1]).to be nil
+        expect(@sheet[1, 1]).to be_nil
       end
 
       it 'does not have nil in [3,2]' do
-        expect(@sheet[3, 2]).not_to be nil
+        expect(@sheet[3, 2]).not_to be_nil
       end
 
       it "has value 'stuff' in [3,2]" do
@@ -67,19 +67,19 @@ RSpec.describe Sheet do
       end
 
       it "has value 'stuff' in cell(3,2)" do
-        cell = instance_double('Cell', row: 3, col: 2)
+        cell = instance_double(Cell, row: 3, col: 2)
         expect(@sheet.get_cell(cell)).to eq('stuff')
       end
 
       it 'has nil in cell(1,1)' do
-        cell = instance_double('Cell', row: 1, col: 1)
-        expect(@sheet.get_cell(cell)).to be nil
+        cell = instance_double(Cell, row: 1, col: 1)
+        expect(@sheet.get_cell(cell)).to be_nil
       end
     end
 
     context "with value 'stuff' put to cell (3,2)" do
       before do
-        @cell = instance_double('Cell', row: 3, col: 2)
+        @cell = instance_double(Cell, row: 3, col: 2)
         @sheet.put_cell(@cell, 'stuff')
       end
 
@@ -92,11 +92,11 @@ RSpec.describe Sheet do
       end
 
       it 'has nil in [1,1]' do
-        expect(@sheet[1, 1]).to be nil
+        expect(@sheet[1, 1]).to be_nil
       end
 
       it 'does not have nil in [3,2]' do
-        expect(@sheet[3, 2]).not_to be nil
+        expect(@sheet[3, 2]).not_to be_nil
       end
 
       it "has value 'stuff' in [3,2]" do
@@ -260,23 +260,23 @@ RSpec.describe Sheet do
 
   context 'with Cell (4,1)' do
     before do
-      @cell = instance_double('Cell', row: 4, col: 1)
+      @cell = instance_double(Cell, row: 4, col: 1)
     end
 
     it 'has a cell translation, with respect to (5,5), of (8,5)' do
-      ref_cell = instance_double('Cell', row: 5, col: 5)
+      ref_cell = instance_double(Cell, row: 5, col: 5)
       expect(described_class.translate_cell(@cell, ref_cell)).to \
         eq(Cell.new(8, 5))
     end
 
     it 'has a cell translation, with respect to (1,1), of (4,1)' do
-      ref_cell = instance_double('Cell', row: 1, col: 1)
+      ref_cell = instance_double(Cell, row: 1, col: 1)
       expect(described_class.translate_cell(@cell, ref_cell)).to \
         eq(Cell.new(4, 1))
     end
 
     it 'has a cell translation, with respect to (6,3), of (9,3)' do
-      ref_cell = instance_double('Cell', row: 6, col: 3)
+      ref_cell = instance_double(Cell, row: 6, col: 3)
       expect(described_class.translate_cell(@cell, ref_cell)).to \
         eq(Cell.new(9, 3))
     end
@@ -289,7 +289,7 @@ RSpec.describe Sheet do
 
     context 'when sheet [[11,12],[13,14]] is put with reference cell (2,1)' do
       before do
-        @ref_cell = instance_double('Cell', row: 2, col: 1)
+        @ref_cell = instance_double(Cell, row: 2, col: 1)
         @source_sheet = described_class.new_from_a([[11, 12], [13, 14]])
         @sheet.put_range_to_cell(@ref_cell, @source_sheet)
       end
@@ -349,17 +349,17 @@ RSpec.describe Sheet do
 
   context 'with Cell (7,4)' do
     before do
-      @cell = instance_double('Cell', row: 7, col: 4)
+      @cell = instance_double(Cell, row: 7, col: 4)
     end
 
     it 'is located, in reference frame starting (1,1), at (7,4)' do
-      ref_cell = instance_double('Cell', row: 1, col: 1)
+      ref_cell = instance_double(Cell, row: 1, col: 1)
       expect(described_class.relative_to_cell(@cell, ref_cell)).to \
         eq(Cell.new(7, 4))
     end
 
     it 'is located, in reference frame starting (2,3), at (6,2)' do
-      ref_cell = instance_double('Cell', row: 2, col: 3)
+      ref_cell = instance_double(Cell, row: 2, col: 3)
       expect(described_class.relative_to_cell(@cell, ref_cell)).to \
         eq(Cell.new(6, 2))
     end
