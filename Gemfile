@@ -5,7 +5,6 @@ source 'https://rubygems.org'
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'cucumber', '>= 5'
-gem 'ffi', '~> 1.14.2'
 gem 'launchy', '~> 2.5'
 gem 'psych', '~> 5.1'
 gem 'rake', '~> 12.3.3'
