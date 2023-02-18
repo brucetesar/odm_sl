@@ -30,7 +30,7 @@ RSpec.describe CsvInput do
     end
 
     it 'returns a data array of all strings' do
-      expect(@csv_input.data[0]).to all be_a_kind_of(String)
+      expect(@csv_input.data[0]).to all be_a(String)
     end
 
     it 'returns an array of arrays of the data' do

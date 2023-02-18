@@ -58,7 +58,7 @@ RSpec.describe Rcd do
     end
 
     it 'returns an ErcList of ERCs passed in' do
-      expect(@rcd.erc_list).to be_a_kind_of(ErcList)
+      expect(@rcd.erc_list).to be_a(ErcList)
     end
 
     it 'returns an ErcList with a list of the constraints' do

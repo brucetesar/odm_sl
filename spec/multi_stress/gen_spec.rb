@@ -44,7 +44,7 @@ module MultiStress
           let(:word) { @competition.find { |w| w.output.to_s == out_str } }
 
           it 'is generated' do
-            expect(word).not_to be nil
+            expect(word).not_to be_nil
           end
 
           it 'has input == to the original input' do
@@ -117,7 +117,7 @@ module MultiStress
           let(:word) { @competition.find { |w| w.output.to_s == out_str } }
 
           it 'is generated' do
-            expect(word).not_to be nil
+            expect(word).not_to be_nil
           end
 
           it 'has input == to the original input' do

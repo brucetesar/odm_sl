@@ -25,7 +25,7 @@ RSpec.describe LoserSelectorFromCompetition do
     end
 
     it 'returns nil' do
-      expect(@loser).to be nil
+      expect(@loser).to be_nil
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe LoserSelectorFromCompetition do
     end
 
     it 'returns nil' do
-      expect(@loser).to be nil
+      expect(@loser).to be_nil
     end
   end
 
@@ -85,7 +85,7 @@ RSpec.describe LoserSelectorFromCompetition do
     end
 
     it 'returns nil' do
-      expect(@loser).to be nil
+      expect(@loser).to be_nil
     end
   end
 

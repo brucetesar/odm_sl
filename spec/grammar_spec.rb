@@ -37,7 +37,7 @@ RSpec.describe Grammar do
     end
 
     it 'returns nil when a lexical entry is requested' do
-      expect(@grammar.get_uf(morph)).to eq(nil)
+      expect(@grammar.get_uf(morph)).to be_nil
     end
 
     context 'when duplicated with dup' do

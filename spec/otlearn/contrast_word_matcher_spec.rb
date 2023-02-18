@@ -94,7 +94,7 @@ RSpec.describe OTLearn::ContrastWordMatcher do
   end
 
   context 'when reference contains multiple occurrences of the target' \
-  ' morpheme' do
+          ' morpheme' do
     before do
       @ref_mw = [m1, m3, m1]
       @other_mw = [m4, m3, m2]
@@ -103,7 +103,7 @@ RSpec.describe OTLearn::ContrastWordMatcher do
 
     it 'raises a RuntimeError' do
       msg = 'ContrastWordMatcher#match: target word cannot appear multiple'\
-      ' times'
+            ' times'
       expect { @matcher.match(@ref_mw, @target_morph, @other_mw) }.to\
         raise_error(RuntimeError, msg)
     end

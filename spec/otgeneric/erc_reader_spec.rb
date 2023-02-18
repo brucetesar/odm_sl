@@ -72,7 +72,7 @@ RSpec.describe OTGeneric::ErcReader do
     end
   end
 
-  context 'with some constraint names prefixed with F: ' do
+  context 'with some constraint names prefixed with F:' do
     before do
       headers = ['', 'M:Con1', 'F:Con2', 'Con3']
       data = [%w[E1 W L W], %w[E2 e W L]]

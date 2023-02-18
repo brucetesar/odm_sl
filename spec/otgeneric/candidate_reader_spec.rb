@@ -43,7 +43,7 @@ RSpec.describe OTGeneric::CandidateReader do
         expect { @cand_reader.convert_array_to_candidate(row_too_short) }.to\
           raise_error(RuntimeError,
                       'Candidate /in2/[out21] has 2 violation counts' \
-                        ', headers have 3 constraints.')
+                      ', headers have 3 constraints.')
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe OTGeneric::CandidateReader do
         expect { @cand_reader.convert_array_to_candidate(row_too_long) }.to\
           raise_error(RuntimeError,
                       'Candidate /in2/[out21] has 4 violation counts' \
-                        ', headers have 3 constraints.')
+                      ', headers have 3 constraints.')
       end
     end
 
@@ -65,8 +65,8 @@ RSpec.describe OTGeneric::CandidateReader do
         expect { @cand_reader.convert_array_to_candidate(row_nonnum) }.to\
           raise_error(RuntimeError,
                       'Candidate /in2/[out21] has' \
-                        ' non-numeric violation value J' \
-                        ' for constraint Con2.')
+                      ' non-numeric violation value J' \
+                      ' for constraint Con2.')
       end
     end
   end

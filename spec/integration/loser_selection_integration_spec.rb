@@ -220,14 +220,14 @@ RSpec.describe 'loser selection', :integration do
       loser = @pool_selector.select_loser_from_competition(@winner,
                                                            @competition,
                                                            @erc_list)
-      expect(loser).to be nil
+      expect(loser).to be_nil
     end
 
     it 'Ctie selects no loser' do
       loser = @ctie_selector.select_loser_from_competition(@winner,
                                                            @competition,
                                                            @erc_list)
-      expect(loser).to be nil
+      expect(loser).to be_nil
     end
 
     it 'Consistency selects no loser' do
@@ -235,7 +235,7 @@ RSpec.describe 'loser selection', :integration do
         @consistency_selector.select_loser_from_competition(@winner,
                                                             @competition,
                                                             @erc_list)
-      expect(loser).to be nil
+      expect(loser).to be_nil
     end
   end
 end
