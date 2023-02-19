@@ -96,11 +96,12 @@ class ComparerFactory
   # :call-seq:
   #   build -> comparer
   def build
-    if @compare_type == :pool
+    case @compare_type
+    when :pool
       ComparePool.new(Ranker.new(rcd_runner))
-    elsif @compare_type == :ctie
+    when :ctie
       CompareCtie.new(Ranker.new(rcd_runner))
-    elsif @compare_type == :consistent
+    when :consistent
       CompareConsistency.new
     else
       raise 'ComparerFactory: no valid compare type has been set.'
@@ -110,11 +111,12 @@ class ComparerFactory
   # Returns a new RCD runner, which uses the currently set ranking bias.
   # Raises a RuntimeError if no ranking bias has been set.
   def rcd_runner
-    bias = if @ranking_bias == :faith_low
+    bias = case @ranking_bias
+           when :faith_low
              OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
-           elsif @ranking_bias == :mark_low
+           when :mark_low
              OTLearn::RankingBiasSomeLow.new(OTLearn::MarkLow.new)
-           elsif @ranking_bias == :all_high
+           when :all_high
              RankingBiasAllHigh.new
            else
              no_bias_error

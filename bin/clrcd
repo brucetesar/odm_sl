@@ -30,9 +30,10 @@ opts.on('-e FILENAME', 'ERCs filename') { |val| erc_filename = val.strip }
 opts.on('-b BIAS', '--bias BIAS', 'ranking bias', '  fl = faith low',
         '  ml = mark low', '  ah = all high (DEFAULT)')\
   do |val|
-    ranking_bias = if val == 'fl'
+    ranking_bias = case val
+                   when 'fl'
                      OTLearn::RankingBiasSomeLow.new(OTLearn::FaithLow.new)
-                   elsif val == 'ml'
+                   when 'ml'
                      OTLearn::RankingBiasSomeLow.new(OTLearn::MarkLow.new)
                    else
                      RankingBiasAllHigh.new

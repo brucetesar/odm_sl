@@ -75,6 +75,4 @@ ft_result.write_to_files(out_dir, '1r1s')
 
 # Write the linguistic system objects to a YML file
 yml_file = File.join(out_dir, "#{system_val}_system.yml")
-File.open(yml_file, 'w') do |f|
-  f.write(Psych.dump(system_module))
-end
+File.write(yml_file, Psych.dump(system_module))

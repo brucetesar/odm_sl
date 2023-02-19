@@ -94,7 +94,7 @@ module OTLearn
     # If there are no consistent values, then an exception is raised.
     def process_consistent_values(consistent_values, f_uf_instance,
                                   set_feature_list)
-      if consistent_values.size.zero?
+      if consistent_values.empty?
         raise "No feature value for #{f_uf_instance} is consistent."
       end
       return false if consistent_values.size > 1

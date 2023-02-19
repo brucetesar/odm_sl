@@ -10,14 +10,14 @@ require 'preference_image_maker'
 # of each constraint on each erc.
 class CtImageMaker
   # The sheet index of the header row
-  HEADER_ROW = 1 #:nodoc:
+  HEADER_ROW = 1 # :nodoc:
 
   # The sheet indices of the erc information columns.
-  LABEL_COL = 1 #:nodoc:
-  INPUT_COL = LABEL_COL + 1 #:nodoc:
-  WINNER_COL = INPUT_COL + 1 #:nodoc:
-  LOSER_COL = WINNER_COL + 1 #:nodoc:
-  FIRST_CONSTRAINT_COL = LOSER_COL + 1 #:nodoc:
+  LABEL_COL = 1 # :nodoc:
+  INPUT_COL = LABEL_COL + 1 # :nodoc:
+  WINNER_COL = INPUT_COL + 1 # :nodoc:
+  LOSER_COL = WINNER_COL + 1 # :nodoc:
+  FIRST_CONSTRAINT_COL = LOSER_COL + 1 # :nodoc:
 
   # Returns a new comparative tableau image maker.
   #--
@@ -46,7 +46,7 @@ class CtImageMaker
 
   # Put the column headings in the header row of the sheet.
   def construct_column_headings(sheet)
-    sheet[HEADER_ROW, LABEL_COL] = "ERC\#"
+    sheet[HEADER_ROW, LABEL_COL] = 'ERC#'
     sheet[HEADER_ROW, INPUT_COL] = 'Input'
     sheet[HEADER_ROW, WINNER_COL] = 'Winner'
     sheet[HEADER_ROW, LOSER_COL] = 'Loser'

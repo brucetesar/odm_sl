@@ -26,7 +26,7 @@ RSpec::Core::RakeTask.new(:spec_unit) do |t|
 end
 
 desc 'run RSpec unit specs (not acceptance)'
-task spec: [:clear_temp, :spec_unit]
+task spec: %i[clear_temp spec_unit]
 
 desc '' # undocumented, so won't appear in default raketask list
 RSpec::Core::RakeTask.new(:spec_acceptance_tests) do |t|
@@ -34,7 +34,7 @@ RSpec::Core::RakeTask.new(:spec_acceptance_tests) do |t|
 end
 
 desc 'run RSpec acceptance specs'
-task spec_acceptance: [:clear_temp, :spec_acceptance_tests]
+task spec_acceptance: %i[clear_temp spec_acceptance_tests]
 
 desc 'run RSpec wip specs'
 RSpec::Core::RakeTask.new(:spec_wip_tests) do |t|
@@ -112,7 +112,7 @@ end
 spec = Gem::Specification.new do |s|
   s.name = 'odm_sl'
   s.version = '0.0.1'
-  s.extra_rdoc_files = ['README', 'LICENSE']
+  s.extra_rdoc_files = %w[README LICENSE]
   s.summary = 'Your summary here'
   s.description = s.summary
   s.author = ''

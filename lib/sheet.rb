@@ -14,7 +14,7 @@ class Sheet
   # The number of columns in the sheet.
   attr_reader :col_count
 
-  ONE_CELL_RANGE = CellRange.new(1, 1, 1, 1) #:nodoc:
+  ONE_CELL_RANGE = CellRange.new(1, 1, 1, 1) # :nodoc:
 
   # Returns a sheet with only one cell, which contains the value nil.
   def initialize
