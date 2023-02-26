@@ -37,6 +37,7 @@ class CsvOutput
 
   # Writes the page image to the csv image, leaving the first row
   # as a header row filled with blanks.
+  # TODO: eliminate the extra first row (not using NetBeans anymore).
   def construct_csv_image
     # Put the image in row 2, leaving row 1 as a header row.
     @csv_image.put_range(2, 1, @page_image)
