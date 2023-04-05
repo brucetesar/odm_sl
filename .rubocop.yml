@@ -17,6 +17,9 @@ Style/StringLiteralsInInterpolation:
 Layout/LineLength:
   Max: 80
 
+Metrics/ClassLength:
+  Max: 150
+
 Metrics/MethodLength:
   Max: 15
 
@@ -30,6 +33,9 @@ Metrics/BlockLength:
     - RSpec.describe
     - before
     - context
+
+Metrics/ModuleLength:
+  Enabled: false
 
 RSpec/InstanceVariable:
   Enabled: false

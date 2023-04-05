@@ -140,18 +140,30 @@ module SL
     # a short syllable with an unset stress feature would be represented
     # "?.".
     def to_s
-      stress_s = if main_stress? then 'S'
-                 elsif unstressed? then 's'
-                 elsif stress_unset? then '?'
-                 else 'stress_nodef'
-                 end
-      length_s = if short? then '.'
-                 elsif long? then ':'
-                 elsif length_unset? then '?'
-                 else 'length_nodef'
-                 end
-      "#{stress_s}#{length_s}"
+      "#{stress_to_s}#{length_to_s}"
     end
+
+    # Returns a single character string representation of the syllable's
+    # stress feature.
+    def stress_to_s
+      return 'S' if main_stress?
+      return 's' if unstressed?
+      return '?' if stress_unset?
+
+      'stress_not_defined'
+    end
+    private :stress_to_s
+
+    # Returns a single character string representation of the syllable's
+    # length feature.
+    def length_to_s
+      return '.' if short?
+      return ':' if long?
+      return '?' if length_unset?
+
+      'length_not_defined'
+    end
+    private :length_to_s
 
     # Constructs a string representation of the syllable suitable for use
     # with GraphViz (for constructing lattice diagrams). Differs from
@@ -163,23 +175,45 @@ module SL
     #   an unaccented a instead of s for an unstressed vowel.
     # * It uses no symbol to represent short vowel length instead of ".".
     def to_gv
-      base = if morpheme.root? then 'p'
-             elsif morpheme.suffix? then 'k'
-             elsif morpheme.prefix? then 't'
-             else 'morpheme_type_not_defined'
-             end
-      stress_s = if main_stress? then 'á'
-                 elsif unstressed? then 'a'
-                 elsif stress_unset? then '?'
-                 else 'stress_type_not_defined'
-                 end
-      length_s = if short? then ''
-                 elsif long? then ':'
-                 elsif length_unset? then '?'
-                 else 'length_type_not_defined'
-                 end
-      "#{base}#{stress_s}#{length_s}"
+      "#{morpheme_to_gv}#{stress_to_gv}#{length_to_gv}"
     end
+
+    # Returns a single character string representation of the morpheme
+    # type of the morpheme containing this syllable. The character
+    # is of a type used for putting PAKA style string output suitable
+    # for use with GraphViz.
+    def morpheme_to_gv
+      return 'p' if morpheme.root?
+      return 'k' if morpheme.suffix?
+      return 't' if morpheme.prefix?
+
+      'morpheme_type_not_defined'
+    end
+    private :morpheme_to_gv
+
+    # Returns a string representation of the syllable's stress feature.
+    # The string is suitable for use in graph diagrams generated with
+    # GraphViz.
+    def stress_to_gv
+      return 'á' if main_stress?
+      return 'a' if unstressed?
+      return '?' if stress_unset?
+
+      'stress_type_not_defined'
+    end
+    private :stress_to_gv
+
+    # Returns a string representation of the syllable's length feature.
+    # The string is suitable for use in graph diagrams generated with
+    # GraphViz.
+    def length_to_gv
+      return '' if short?
+      return ':' if long?
+      return '?' if length_unset?
+
+      'length_type_not_defined'
+    end
+    private :length_to_gv
 
     # Iterator over the features of the syllable.
     def each_feature # :yields: feature
