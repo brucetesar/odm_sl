@@ -4,7 +4,7 @@
 
 require 'rspec'
 require 'pas/system'
-require 'pas/syllable'
+require 'sl/syllable'
 require 'input'
 
 module PAS
@@ -12,7 +12,7 @@ module PAS
     let(:system) { described_class.new }
 
     it 'provides the correspondence element class' do
-      expect(system.corr_element_class).to eq Syllable
+      expect(system.corr_element_class).to eq SL::Syllable
     end
 
     # ********************************

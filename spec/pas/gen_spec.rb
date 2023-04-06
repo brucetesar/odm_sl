@@ -5,7 +5,7 @@
 require 'rspec'
 require 'pas/gen'
 require 'pas/system'
-require 'pas/syllable'
+require 'sl/syllable'
 require 'input'
 
 module PAS
@@ -14,8 +14,8 @@ module PAS
     let(:morph1) { 'morph1' }
     let(:morph2) { 'morph2' }
     let(:morphword) { 'morphword' }
-    let(:syl1) { Syllable.new }
-    let(:syl2) { Syllable.new }
+    let(:syl1) { SL::Syllable.new }
+    let(:syl2) { SL::Syllable.new }
     let(:input) { Input.new }
 
     # A real challenge with using test doubles here is the wide use of
