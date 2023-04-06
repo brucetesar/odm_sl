@@ -117,7 +117,7 @@ module PAS
     # basic representational elements. Returns a data generator,
     # which is used to generate sets of competitions.
     def initialize_data_generation
-      element_generator = ODL::ElementGenerator.new(@corr_element_class)
+      element_generator = ODL::ElementGenerator.new(corr_element_class)
       uf_generator = ODL::UnderlyingFormGenerator.new(element_generator)
       lexentry_generator = ODL::LexicalEntryGenerator.new(uf_generator)
       comp_generator = ODL::CompetitionGenerator.new(self)
