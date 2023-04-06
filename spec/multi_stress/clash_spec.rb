@@ -7,15 +7,15 @@ require 'multi_stress/clash'
 require 'constraint'
 require 'candidate'
 require 'output'
-require 'pas/syllable'
+require 'sl/syllable'
 
 module MultiStress
   RSpec.describe Clash do
     let(:candidate) { instance_double(Candidate, 'candidate') }
     let(:output) { instance_double(Output, 'output') }
-    let(:syl0) { instance_double(PAS::Syllable, 'syl0') }
-    let(:syl1) { instance_double(PAS::Syllable, 'syl1') }
-    let(:syl2) { instance_double(PAS::Syllable, 'syl2') }
+    let(:syl0) { instance_double(SL::Syllable, 'syl0') }
+    let(:syl1) { instance_double(SL::Syllable, 'syl1') }
+    let(:syl2) { instance_double(SL::Syllable, 'syl2') }
 
     before do
       allow(candidate).to receive(:output).and_return(output)

@@ -4,7 +4,7 @@
 
 require 'rspec'
 require 'multi_stress/system'
-require 'pas/syllable'
+require 'sl/syllable'
 require 'input'
 
 module MultiStress
@@ -12,7 +12,7 @@ module MultiStress
     let(:system) { described_class.new }
 
     it 'provides the correspondence element class' do
-      expect(system.corr_element_class).to eq PAS::Syllable
+      expect(system.corr_element_class).to eq SL::Syllable
     end
 
     # ********************************

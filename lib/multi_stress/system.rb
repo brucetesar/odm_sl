@@ -2,7 +2,7 @@
 
 # Author: Bruce Tesar
 
-require 'pas/syllable'
+require 'sl/syllable'
 require 'multi_stress/gen'
 require 'constraint'
 require 'sl/no_long'
@@ -69,7 +69,7 @@ module MultiStress
     # :call-seq:
     #   new -> system
     def initialize
-      @corr_element_class = PAS::Syllable
+      @corr_element_class = SL::Syllable
       @gen = Gen.new(self)
       @constraints = constraint_list # private method creating the list
       @constraints.each(&:freeze) # freeze the constraints
@@ -116,7 +116,7 @@ module MultiStress
     # basic representational elements. Returns a data generator,
     # which is used to generate sets of competitions.
     def initialize_data_generation
-      element_generator = ODL::ElementGenerator.new(PAS::Syllable)
+      element_generator = ODL::ElementGenerator.new(SL::Syllable)
       uf_generator = ODL::UnderlyingFormGenerator.new(element_generator)
       lexentry_generator = ODL::LexicalEntryGenerator.new(uf_generator)
       comp_generator = ODL::CompetitionGenerator.new(self)
