@@ -4,7 +4,7 @@
 
 require 'sl/syllable'
 require 'multi_stress/gen'
-require 'constraint'
+require 'sl/output_parser'
 require 'sl/no_long'
 require 'sl/wsp'
 require 'sl/main_left'
@@ -13,23 +13,21 @@ require 'sl/ident_stress'
 require 'sl/ident_length'
 require 'pas/culm'
 require 'multi_stress/clash'
+require 'constraint'
 require 'input_builder'
-require 'sl/output_parser'
-require 'word'
 require 'odl/element_generator'
 require 'odl/underlying_form_generator'
 require 'odl/lexical_entry_generator'
 require 'odl/competition_generator'
 require 'odl/stress_length_data_generator'
 
-# Module Clash contains the linguistic system elements defining the
-# Clash linguistic system. Clash builds words from syllables,
-# where each syllable has two vocalic features: stress and (vowel)
-# length. Each output has at zero or more stress-bearing syllables.
+# Module MultiStress contains the linguistic system elements defining the
+# MultiStress linguistic system. MultiStress builds words from syllables,
+# where each syllable has two vocalic features: stress and (vowel) length.
+# Each output has zero or more stress-bearing syllables.
 module MultiStress
-  # Contains the core elements of the Clash linguistic
-  # system. It defines the constraints of the system, and provides key
-  # procedures:
+  # Contains the core elements of the MultiStress linguistic system.
+  # It defines the constraints of the system, and provides key procedures:
   # * #gen - generating the candidates for an input.
   # * #input_from_morphword - constructs the phonological input
   #   corresponding to a morphological word.
@@ -37,15 +35,15 @@ module MultiStress
   #   (structural description).
   #
   # ===Non-injected Class Dependencies
-  # * The classes within the module Clash.
+  # * The classes within the module MultiStress.
   # * Constraint
+  # * InputBuilder
   # * SL::NoLong
   # * SL::Wsp
   # * SL::MainLeft
   # * SL::MainRight
   # * SL::IdentStress
   # * SL::IdentLength
-  # * InputBuilder
   # * SL::OutputParser
   # * ODL::ElementGenerator
   # * ODL::UnderlyingFormGenerator
@@ -65,13 +63,13 @@ module MultiStress
     # the syllable class.
     attr_reader :corr_element_class
 
-    # Returns a new Clash::System object.
+    # Returns a new MultiStress::System object.
     # :call-seq:
     #   new -> system
     def initialize
       @corr_element_class = SL::Syllable
       @gen = Gen.new(self)
-      @constraints = constraint_list # private method creating the list
+      @constraints = constraint_list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
       @input_builder = InputBuilder.new
@@ -112,18 +110,6 @@ module MultiStress
       @output_parser.parse_output(output, lexicon)
     end
 
-    # Constructs and connects together the generators for
-    # basic representational elements. Returns a data generator,
-    # which is used to generate sets of competitions.
-    def initialize_data_generation
-      element_generator = ODL::ElementGenerator.new(SL::Syllable)
-      uf_generator = ODL::UnderlyingFormGenerator.new(element_generator)
-      lexentry_generator = ODL::LexicalEntryGenerator.new(uf_generator)
-      comp_generator = ODL::CompetitionGenerator.new(self)
-      ODL::StressLengthDataGenerator.new(lexentry_generator, comp_generator)
-    end
-    private :initialize_data_generation
-
     # Returns a list of competitions for all inputs consisting
     # of one root and one suffix, where all of the roots have one
     # syllable, and all of the suffixes have 1 syllable.
@@ -132,6 +118,18 @@ module MultiStress
     def generate_competitions_1r1s
       @data_generator.generate_competitions_1r1s
     end
+
+    # Constructs and connects together the generators for
+    # basic representational elements. Returns a data generator,
+    # which is used to generate sets of competitions.
+    def initialize_data_generation
+      element_generator = ODL::ElementGenerator.new(corr_element_class)
+      uf_generator = ODL::UnderlyingFormGenerator.new(element_generator)
+      lexentry_generator = ODL::LexicalEntryGenerator.new(uf_generator)
+      comp_generator = ODL::CompetitionGenerator.new(self)
+      ODL::StressLengthDataGenerator.new(lexentry_generator, comp_generator)
+    end
+    private :initialize_data_generation
 
     # Returns an array of the constraints. The content of six of the
     # eight constraints comes from the SL linguistic system.
