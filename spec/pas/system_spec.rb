@@ -5,7 +5,6 @@
 require 'rspec'
 require 'pas/system'
 require 'sl/syllable'
-require 'input'
 
 module PAS
   RSpec.describe System do
