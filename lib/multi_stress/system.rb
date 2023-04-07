@@ -13,12 +13,10 @@ require 'multi_stress/clash'
 # Each output has zero or more stress-bearing syllables.
 module MultiStress
   # Contains the core elements of the MultiStress linguistic system.
-  # It defines the constraints of the system, and provides key procedures:
-  # * #gen - generating the candidates for an input.
-  # * #input_from_morphword - constructs the phonological input
-  #   corresponding to a morphological word.
-  # * #parse_output - parses a phonological output into a full word
-  #   (structural description).
+  # MultiStress::System is a subclass of PAS::System, and differs only in
+  # the GEN function (it generates candidates with multiple output
+  # stresses) and in having one additional constraint, Clash.
+  # The public interface is completely inherited from PAS::System.
   #
   # ===Non-injected Class Dependencies
   # * MultiStress::Gen

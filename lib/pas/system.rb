@@ -14,16 +14,11 @@ require 'pas/culm'
 # (stressless outputs are possible).
 module PAS
   # Contains the core elements of the PAS (pitch accent stress) linguistic
-  # system. It defines the constraints of the system, and provides key
-  # procedures:
-  # * #gen - generating the candidates for an input.
-  # * #input_from_morphword - constructs the phonological input
-  #   corresponding to a morphological word.
-  # * #parse_output - parses a phonological output into a full word
-  #   (structural description).
+  # system.
   # PAS::System is a subclass of SL::System, and differs only in the GEN
   # function (it generates candidates with no output stress) and in having
   # one additional constraint, Culm.
+  # The public interface is completely inherited from SL::System.
   #
   # ===Non-injected Class Dependencies
   # * PAS::Gen
