@@ -51,7 +51,7 @@ if list_options
 end
 
 # Get the SYSTEM argument
-system_values_string = %w[sl pas multi_stress].join(', ')
+system_values_string = %w[sl pas multi_stress clash_lapse].join(', ')
 system_val = rest.shift
 if system_val.nil?
   puts 'ERROR: missing argument for linguistic system.'
@@ -72,6 +72,9 @@ when 'pas'
 when 'multi_stress'
   require 'multi_stress/system'
   system_module = MultiStress
+when 'clash_lapse'
+  require 'clash_lapse/system'
+  system_module = ClashLapse
 else
   puts "ERROR: invalid linguistic system #{system_val}"
   puts "Value must be one of #{system_values_string}"
