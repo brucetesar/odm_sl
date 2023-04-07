@@ -21,6 +21,9 @@ module PAS
   #   corresponding to a morphological word.
   # * #parse_output - parses a phonological output into a full word
   #   (structural description).
+  # PAS::System is a subclass of SL::System, and differs only in the GEN
+  # function (it generates candidates with no output stress) and in having
+  # one additional constraint, Culm.
   #
   # ===Non-injected Class Dependencies
   # * PAS::Gen
@@ -28,15 +31,7 @@ module PAS
   # * Constraint
   # * SL::System
   class System < SL::System
-    # Returns a new PAS::System object.
-    # :call-seq:
-    #   new -> system
-    def initialize
-      super # initialize parent class component (SL::System)
-      @gen = gen_instance # Use PAS::Gen.
-    end
-
-    # Returns a new instance of PAS::Gen, the GEN function for PAS.
+    # Returns a new instance of PAS::Gen, the GEN function for system PAS.
     # It is initialized with a reference to the current system object.
     def gen_instance
       Gen.new(self)

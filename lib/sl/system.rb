@@ -60,7 +60,7 @@ module SL
     #   new -> system
     def initialize
       @corr_element_class = Syllable
-      @gen = Gen.new(self)
+      @gen = gen_instance
       @constraints = constraint_list
       @constraints.each(&:freeze) # freeze the constraints
       @constraints.freeze # freeze the constraint list
@@ -110,6 +110,13 @@ module SL
     def generate_competitions_1r1s
       @data_generator.generate_competitions_1r1s
     end
+
+    # Returns a new instance of SL::Gen, the GEN function for system SL.
+    # It is initialized with a reference to the current system object.
+    def gen_instance
+      Gen.new(self)
+    end
+    private :gen_instance
 
     # Constructs and connects together the generators for
     # basic representational elements. Returns a data generator,
