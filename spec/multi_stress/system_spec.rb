@@ -5,7 +5,6 @@
 require 'rspec'
 require 'multi_stress/system'
 require 'sl/syllable'
-require 'input'
 
 module MultiStress
   RSpec.describe System do
