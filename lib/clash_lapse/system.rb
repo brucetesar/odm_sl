@@ -21,6 +21,17 @@ module ClashLapse
   # * Constraint
   # * MultiStress::System
   class System < MultiStress::System
+    # Returns a list of competitions for all inputs consisting
+    # of one root and one suffix, where all of the roots have two
+    # syllables, and all of the suffixes have 1 syllable.
+    # :call-seq:
+    #   generate_competitions_2r1s -> arr
+    #--
+    # TODO: create a parameterized #generate_competitions method for all System classes.
+    def generate_competitions_2r1s
+      @data_generator.generate_competitions_2r1s
+    end
+
     # Returns an array of the constraints. Eight of the nine constraints
     # come from the MultiStress linguistic system.
     def constraint_list

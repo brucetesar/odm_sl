@@ -62,6 +62,23 @@ module ODL
       @comp_generator.competitions(words, lexicon)
     end
 
+    # Temporary method to generate words with roots of both 1 and 2
+    # syllables, in combination with 1-syllable suffixes.
+    # TODO: replace with a parameterized #generate_competitions method.
+    def generate_competitions_2r1s
+      # generate the morphemes
+      roots = @lexentry_generator.lexical_entries(2, ROOT, 0)
+      suffixes = @lexentry_generator.lexical_entries(1, SUFFIX, 0)
+      # create a temporary lexicon, adding all lexical entries.
+      lexicon = @lexicon_class.new
+      roots.each { |root_le| lexicon.add(root_le) }
+      suffixes.each { |suf_le| lexicon.add(suf_le) }
+      # Construct morphwords for each root+suffix combination
+      words = combine_morphemes(roots, suffixes)
+      # Generate a competition for each morphword; return a list of them.
+      @comp_generator.competitions(words, lexicon)
+    end
+
     # Constructs all root+suffix combinations of _roots_ and _suffixes_,
     # representing each combination as a morphword. Returns an array
     # of morphwords.
