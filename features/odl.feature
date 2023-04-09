@@ -18,7 +18,7 @@ Feature: odl
     And STDOUT should be exactly:
       """
       ERROR: missing argument for linguistic system.
-      Value must be one of sl, pas, multi_stress
+      Value must be one of sl, pas, multi_stress, clash_lapse
       """
 
   Scenario: Invalid linguistic system code provided

@@ -103,7 +103,11 @@ tcomp_type = "test_#{tcomp_string}".to_sym
 
 # Calculate the languages of the typology.
 puts "Calculating the #{system_module} typology."
-competition_list = ling_system.generate_competitions_1r1s
+competition_list = if system_val == 'clash_lapse'
+                     ling_system.generate_competitions_2r1s
+                   else
+                     ling_system.generate_competitions_1r1s
+                   end
 ft_result = FactorialTypology.new(competition_list)
 lang_list = ft_result.learning_data
 

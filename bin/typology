@@ -70,11 +70,17 @@ ling_system = system_module::System.new
 
 # Calculate the languages of the typology.
 puts "Calculating the #{system_module} typology."
-competition_list = ling_system.generate_competitions_1r1s
+if system_val == 'clash_lapse'
+  competition_list = ling_system.generate_competitions_2r1s
+  morphtype_dir = '2r1s'
+else
+  competition_list = ling_system.generate_competitions_1r1s
+  morphtype_dir = '1r1s'
+end
 ft_result = FactorialTypology.new(competition_list)
 
 # Write the typological results to report files.
-ft_result.write_to_files(out_dir, '1r1s')
+ft_result.write_to_files(out_dir, morphtype_dir)
 
 # Write the linguistic system objects to a YML file
 yml_file = File.join(out_dir, "#{system_val}_system.yml")
