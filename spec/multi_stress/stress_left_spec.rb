@@ -26,7 +26,7 @@ RSpec.describe MultiStress::StressLeft do
     expect(@content.type).to eq Constraint::MARK
   end
 
-  context 'when a 2-syl candidate' do
+  context 'with a 2-syl candidate' do
     before do
       # output is expected to implement the Enumerable interface,
       # accepting iterators like #each and #each_with_index.
@@ -68,7 +68,7 @@ RSpec.describe MultiStress::StressLeft do
     end
   end
 
-  context 'when a 3-syl candidate' do
+  context 'with a 3-syl candidate' do
     before do
       output = [syl1, syl2, syl3]
       allow(candidate).to receive(:output).and_return(output)
