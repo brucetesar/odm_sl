@@ -28,11 +28,22 @@ module SL
     # :call-seq:
     #   eval_candidate(cand) -> int
     def eval_candidate(cand)
+      output = cand.output
       viol_count = 0
-      stress_found = false
-      cand.output.each do |syl|
-        viol_count += 1 if stress_found
-        stress_found = true if syl.main_stress?
+      rightmost_idx = output.length - 1
+      idx = rightmost_idx
+      # Loop over the syllables of the output, right-to-left.
+      # A negative index means the left edge of the word has been
+      # reached, so there is no main stress in the output.
+      until idx.negative?
+        if output[idx].main_stress?
+          # violations = number of syllables to the right of main stress.
+          viol_count = rightmost_idx - idx
+          # break out of the loop; syls to left of main stress are irrelevant.
+          break
+        end
+        # Decrement to the next syllable to the left.
+        idx -= 1
       end
       viol_count
     end
