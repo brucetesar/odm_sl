@@ -27,57 +27,87 @@ module SL
       expect(@content.type).to eq Constraint::MARK
     end
 
-    context 'when a 2-syl candidate has initial main stress' do
+    context 'with a 2-syl candidate' do
       before do
-        allow(syl1).to receive(:main_stress?).and_return(true)
-        allow(syl2).to receive(:main_stress?).and_return(false)
         output = [syl1, syl2]
         allow(candidate).to receive(:output).and_return(output)
       end
 
-      it 'assesses 1 violation' do
-        expect(@content.eval_candidate(candidate)).to eq 1
+      context 'with initial main stress' do
+        before do
+          allow(syl1).to receive(:main_stress?).and_return(true)
+          allow(syl2).to receive(:main_stress?).and_return(false)
+        end
+
+        it 'assesses 1 violation' do
+          expect(@content.eval_candidate(candidate)).to eq 1
+        end
+      end
+
+      context 'with final main stress' do
+        before do
+          allow(syl1).to receive(:main_stress?).and_return(false)
+          allow(syl2).to receive(:main_stress?).and_return(true)
+        end
+
+        it 'assesses 0 violations' do
+          expect(@content.eval_candidate(candidate)).to eq 0
+        end
       end
     end
 
-    context 'when a 2-syl candidate has final main stress' do
+    context 'with a 3-syl candidate' do
       before do
-        allow(syl1).to receive(:main_stress?).and_return(false)
-        allow(syl2).to receive(:main_stress?).and_return(true)
-        output = [syl1, syl2]
-        allow(candidate).to receive(:output).and_return(output)
-      end
-
-      it 'assesses 0 violations' do
-        expect(@content.eval_candidate(candidate)).to eq 0
-      end
-    end
-
-    context 'when a 3-syl candidate has initial main stress' do
-      before do
-        allow(syl1).to receive(:main_stress?).and_return(true)
-        allow(syl2).to receive(:main_stress?).and_return(false)
-        allow(syl3).to receive(:main_stress?).and_return(false)
         output = [syl1, syl2, syl3]
         allow(candidate).to receive(:output).and_return(output)
       end
 
-      it 'assesses 2 violations' do
-        expect(@content.eval_candidate(candidate)).to eq 2
-      end
-    end
+      context 'with initial main stress' do
+        before do
+          allow(syl1).to receive(:main_stress?).and_return(true)
+          allow(syl2).to receive(:main_stress?).and_return(false)
+          allow(syl3).to receive(:main_stress?).and_return(false)
+        end
 
-    context 'when a 3-syl candidate has no stress' do
-      before do
-        allow(syl1).to receive(:main_stress?).and_return(false)
-        allow(syl2).to receive(:main_stress?).and_return(false)
-        allow(syl3).to receive(:main_stress?).and_return(false)
-        output = [syl1, syl2, syl3]
-        allow(candidate).to receive(:output).and_return(output)
+        it 'assesses 2 violations' do
+          expect(@content.eval_candidate(candidate)).to eq 2
+        end
       end
 
-      it 'assesses 0 violations' do
-        expect(@content.eval_candidate(candidate)).to eq 0
+      context 'with final main stress' do
+        before do
+          allow(syl1).to receive(:main_stress?).and_return(false)
+          allow(syl2).to receive(:main_stress?).and_return(false)
+          allow(syl3).to receive(:main_stress?).and_return(true)
+        end
+
+        it 'assesses 0 violations' do
+          expect(@content.eval_candidate(candidate)).to eq 0
+        end
+      end
+
+      context 'with penultimate main stress' do
+        before do
+          allow(syl1).to receive(:main_stress?).and_return(false)
+          allow(syl2).to receive(:main_stress?).and_return(true)
+          allow(syl3).to receive(:main_stress?).and_return(false)
+        end
+
+        it 'assesses 1 violation' do
+          expect(@content.eval_candidate(candidate)).to eq 1
+        end
+      end
+
+      context 'with no stress' do
+        before do
+          allow(syl1).to receive(:main_stress?).and_return(false)
+          allow(syl2).to receive(:main_stress?).and_return(false)
+          allow(syl3).to receive(:main_stress?).and_return(false)
+        end
+
+        it 'assesses 0 violations' do
+          expect(@content.eval_candidate(candidate)).to eq 0
+        end
       end
     end
   end
