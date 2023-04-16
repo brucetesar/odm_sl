@@ -5,6 +5,8 @@
 require 'pas/system'
 require 'multi_stress/gen'
 require 'constraint'
+require 'multi_stress/stress_left'
+require 'multi_stress/stress_right'
 require 'multi_stress/clash'
 
 # Module MultiStress contains the linguistic system elements defining the
@@ -32,11 +34,17 @@ module MultiStress
     end
     private :gen_instance
 
-    # Returns an array of the constraints. Seven of the eight constraints
-    # come from the PAS linguistic system.
+    # Returns an array of the constraints.
     def constraint_list
-      list = super # Get the constraints of the parent class.
-      # Add the additional constraint Clash.
+      list = []
+      list << Constraint.new(SL::NoLong.new)
+      list << Constraint.new(SL::Wsp.new)
+      list << Constraint.new(SL::IdentStress.new)
+      list << Constraint.new(SL::IdentLength.new)
+      list << Constraint.new(PAS::Culm.new)
+      # The three constraints defined within MultiStress.
+      list << Constraint.new(StressLeft.new)
+      list << Constraint.new(StressRight.new)
       list << Constraint.new(Clash.new)
       list
     end

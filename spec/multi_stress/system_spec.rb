@@ -30,12 +30,12 @@ module MultiStress
         expect(@con_list.any? { |c| c.name == 'WSP' }).to be true
       end
 
-      it 'contains MainLeft' do
-        expect(@con_list.any? { |c| c.name == 'ML' }).to be true
+      it 'contains StressLeft' do
+        expect(@con_list.any? { |c| c.name == 'SL' }).to be true
       end
 
-      it 'contains MainRight' do
-        expect(@con_list.any? { |c| c.name == 'MR' }).to be true
+      it 'contains StressRight' do
+        expect(@con_list.any? { |c| c.name == 'SR' }).to be true
       end
 
       it 'contains NoLong' do
