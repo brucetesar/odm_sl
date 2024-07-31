@@ -37,6 +37,9 @@ Metrics/BlockLength:
 Metrics/ModuleLength:
   Enabled: false
 
+RSpec/IndexedLet:
+  Enabled: false  # stop telling me not to use examples like [1,2,3].
+
 RSpec/InstanceVariable:
   Enabled: false
 
