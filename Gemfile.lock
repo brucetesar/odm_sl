@@ -5,6 +5,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     builder (3.2.4)
+    csv (3.3.2)
     cucumber (8.0.0)
       builder (~> 3.2, >= 3.2.4)
       cucumber-ci-environment (~> 9.0, >= 9.0.4)
@@ -91,7 +92,7 @@ GEM
     rubocop-rspec_rails (2.29.1)
       rubocop (~> 1.61)
     ruby-progressbar (1.13.0)
-    stringio (3.0.5)
+    stringio (3.1.2)
     sync_enum (0.1.1)
     sys-uname (1.2.2)
       ffi (~> 1.1)
@@ -102,6 +103,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  csv (>= 3.3)
   cucumber (>= 5)
   launchy (~> 2.5)
   psych (~> 5.1)
@@ -113,4 +115,4 @@ DEPENDENCIES
   sync_enum (~> 0.1)
 
 BUNDLED WITH
-   2.4.6
+   2.6.3
