@@ -46,6 +46,7 @@ RSpec::Core::RakeTask.new(:spec_html) do |t|
   t.rspec_opts = '-f html -o spec/reports/rspec_report.html'
 end
 
+# TODO: add a dependency task to ensure that folder spec/reports exists.
 desc 'display all RSpec specs in a browser'
 task spec_in_browser: [:spec_html] do
   # Display the rspec report in the system's default browser.
@@ -74,6 +75,7 @@ Cucumber::Rake::Task.new(:cucumber_html, 'Generate cucumber HTML') do |t|
   t.cucumber_opts = %w[-f html -o features/reports/cucumber_report.html]
 end
 
+# TODO: add a dependency task to ensure that folder features/reports exists.
 desc 'display cucumber in browser'
 task cucumber_in_browser: [:cucumber_html] do
   # Display the cucumber report in the system's default browser.
