@@ -59,9 +59,8 @@ end
 
 require 'rubocop/rake_task'
 
-RuboCop::RakeTask.new do |task|
-  task.requires << 'rubocop-rspec'
-end
+# By default, task name is :rubocop, description is "Run Rubocop"
+RuboCop::RakeTask.new
 
 # **************
 # Cucumber Tasks

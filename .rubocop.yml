@@ -1,6 +1,6 @@
-require:
-  - rubocop-rspec
+plugins:
   - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
   TargetRubyVersion: 2.6
@@ -48,6 +48,3 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/VerifiedDoubles:
   Enabled: false
-
-RSpec/FilePath:
-  SpecSuffixOnly: true
